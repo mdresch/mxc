@@ -92,6 +92,22 @@ struct Cli {
     #[arg(long = "sandbox-id", requires = "operation")]
     sandbox_id: Option<String>,
 
+    /// Hyper-V backend-private operation: pause/resume/checkpoint/rollback,
+    /// entirely outside the 5-phase state-aware lifecycle (provision/start/
+    /// exec/stop/deprovision). See `hyperv_lifecycle::backend_ops`. Requires
+    /// --hyperv-sandbox-id; checkpoint and restore additionally require
+    /// --hyperv-checkpoint-name.
+    #[arg(long = "hyperv-op", value_enum, conflicts_with = "operation")]
+    hyperv_op: Option<HypervOp>,
+
+    /// Sandbox targeted by --hyperv-op.
+    #[arg(long = "hyperv-sandbox-id", requires = "hyperv_op")]
+    hyperv_sandbox_id: Option<String>,
+
+    /// Checkpoint name for --hyperv-op checkpoint|restore.
+    #[arg(long = "hyperv-checkpoint-name", requires = "hyperv_op")]
+    hyperv_checkpoint_name: Option<String>,
+
     /// Path to diagnostic log file (appends, creates if missing)
     #[arg(long = "log-file")]
     log_file: Option<String>,
@@ -239,6 +255,19 @@ impl From<CliOperation> for wxc_common::state_aware_request::Phase {
             CliOperation::Deprovision => Self::Deprovision,
         }
     }
+}
+
+/// Hyper-V backend-private operation selected by `--hyperv-op`. Deliberately
+/// not a `Phase` or `CliOperation` variant: these never touch the shared
+/// 5-phase lifecycle contract — see `hyperv_lifecycle::backend_ops`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum HypervOp {
+    Pause,
+    Resume,
+    ForcePoweroff,
+    Checkpoint,
+    Restore,
+    ListCheckpoints,
 }
 
 fn parse_cli() -> Cli {
@@ -1048,6 +1077,84 @@ fn install_dacl_ctrl_handler() {
     let _ = unsafe { SetConsoleCtrlHandler(Some(dacl_ctrl_handler), true) };
 }
 
+/// Run a `--hyperv-op` request and return the process exit code. Prints a
+/// single `{"result": ...}` or `{"error": ...}` JSON line to stdout,
+/// matching the lifecycle envelope convention.
+fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
+    #[cfg(all(target_os = "windows", feature = "hyperv"))]
+    {
+        let Some(sandbox_id) = cli.hyperv_sandbox_id.as_deref() else {
+            println!(
+                "{}",
+                error_envelope_string(&MxcError::malformed_request(
+                    "--hyperv-sandbox-id is required with --hyperv-op"
+                ))
+            );
+            return 1;
+        };
+        let checkpoint_name = || -> Result<&str, MxcError> {
+            cli.hyperv_checkpoint_name.as_deref().ok_or_else(|| {
+                MxcError::malformed_request(
+                    "--hyperv-checkpoint-name is required with --hyperv-op checkpoint|restore",
+                )
+            })
+        };
+        let result: Result<serde_json::Value, MxcError> = match op {
+            HypervOp::Pause => {
+                hyperv_lifecycle::backend_ops::pause(sandbox_id).map(|()| serde_json::json!({}))
+            }
+            HypervOp::Resume => {
+                hyperv_lifecycle::backend_ops::resume(sandbox_id).map(|()| serde_json::json!({}))
+            }
+            HypervOp::ForcePoweroff => hyperv_lifecycle::backend_ops::force_poweroff(sandbox_id)
+                .map(|()| serde_json::json!({})),
+            HypervOp::Checkpoint => checkpoint_name().and_then(|name| {
+                hyperv_lifecycle::backend_ops::checkpoint(sandbox_id, name)
+                    .map(|()| serde_json::json!({}))
+            }),
+            HypervOp::Restore => checkpoint_name().and_then(|name| {
+                hyperv_lifecycle::backend_ops::restore(sandbox_id, name)
+                    .map(|()| serde_json::json!({}))
+            }),
+            HypervOp::ListCheckpoints => {
+                hyperv_lifecycle::backend_ops::list_checkpoints(sandbox_id).map(|snapshots| {
+                    serde_json::json!({
+                        "checkpoints": snapshots
+                            .into_iter()
+                            .map(|s| serde_json::json!({
+                                "name": s.name,
+                                "creationTime": s.creation_time,
+                            }))
+                            .collect::<Vec<_>>()
+                    })
+                })
+            }
+        };
+        match result {
+            Ok(value) => {
+                println!("{}", serde_json::json!({ "result": value }));
+                0
+            }
+            Err(error) => {
+                println!("{}", error_envelope_string(&error));
+                1
+            }
+        }
+    }
+    #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+    {
+        let _ = (op, cli);
+        println!(
+            "{}",
+            error_envelope_string(&MxcError::backend_unavailable(
+                "the Hyper-V backend is not available in this build (requires Windows with the \
+                 `hyperv` feature)"
+            ))
+        );
+        1
+    }
+}
+
 fn main() {
     let cli = parse_cli().normalize_named_config_command();
 
@@ -1058,6 +1165,15 @@ fn main() {
         );
         process::exit(outcome.emit());
     }
+
+    // Hyper-V backend-private pause/resume/checkpoint/rollback. Dispatched
+    // here, before any config decoding or `Phase` conversion: these never
+    // construct a `ParsedStateAwareRequest` or touch the shared lifecycle
+    // dispatch path at all. See `hyperv_lifecycle::backend_ops`.
+    if let Some(op) = cli.hyperv_op {
+        process::exit(run_hyperv_op(op, &cli));
+    }
+
     // Decode the request source (file path / base64) once, up front.
     let decoded_config: Option<Result<String, RequestInputError>> = decode_config_input_once(&cli);
 

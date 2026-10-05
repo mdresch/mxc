@@ -1,0 +1,19 @@
+[package]
+name = "hyperv_lifecycle"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "StatefulSandboxBackend implementation for the hyperv containment backend: real, standalone Hyper-V VMs with persistent state, pause/resume, and checkpoint/rollback."
+
+[dependencies]
+hyperv_common = { workspace = true }
+wxc_common = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true }
+
+[dev-dependencies]
+tempfile.workspace = true

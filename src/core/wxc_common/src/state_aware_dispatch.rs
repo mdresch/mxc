@@ -212,6 +212,7 @@ pub(crate) fn backend_from_prefix(prefix: &str) -> Result<ContainmentBackend, Mx
         "iso" => Ok(ContainmentBackend::IsolationSession),
         "wsb" => Ok(ContainmentBackend::WindowsSandbox),
         "wslc" => Ok(ContainmentBackend::Wslc),
+        "hv" => Ok(ContainmentBackend::HyperV),
         // Future state-aware backends extend this list.
         other => Err(MxcError::unsupported_containment(format!(
             "no state-aware backend registered for prefix {:?}",

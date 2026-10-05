@@ -3,6 +3,8 @@ members = [
     "backends/process_container/common",
     "backends/bubblewrap/common",
     "backends/hyperlight/common",
+    "backends/hyperv/common",
+    "backends/hyperv/lifecycle",
     "backends/isolation_session/bindings",
     "backends/isolation_session/common",
     "backends/lxc/common",
@@ -72,6 +74,8 @@ clap = { version = "4", features = ["derive"] }
 flatbuffers = "25"
 getrandom = "0.2"
 hyperlight_common = { path = "backends/hyperlight/common" }
+hyperv_common = { path = "backends/hyperv/common" }
+hyperv_lifecycle = { path = "backends/hyperv/lifecycle" }
 isolation_session_bindings = { path = "backends/isolation_session/bindings" }
 isolation_session_common = { path = "backends/isolation_session/common" }
 learning_mode_core = { path = "core/learning_mode_core" }

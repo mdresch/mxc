@@ -332,6 +332,7 @@ Privacy information can be found at https://privacy.microsoft.com and in the Mic
 | [docs/seatbelt/seatbelt-backend.md](docs/seatbelt/seatbelt-backend.md) | Seatbelt backend (macOS) |
 | [docs/windows-sandbox/windows-sandbox.md](docs/windows-sandbox/windows-sandbox.md) | Windows Sandbox backend |
 | [docs/hyperlight/hyperlight-backend.md](docs/hyperlight/hyperlight-backend.md) | Hyperlight backend (Linux, Windows) |
+| [docs/hyperv/hyperv-state-aware.md](docs/hyperv/hyperv-state-aware.md) | Hyper-V state-aware backend (Windows) |
 | [docs/state-aware-lifecycle/mxc-state-aware-sandbox-api.md](docs/state-aware-lifecycle/mxc-state-aware-sandbox-api.md) | State-aware sandbox lifecycle API |
 | [docs/telemetry/telemetry.md](docs/telemetry/telemetry.md) | TraceLogging telemetry architecture |
 | [docs/telemetry/telemetry-consent-design.md](docs/telemetry/telemetry-consent-design.md) | Telemetry consent contract |

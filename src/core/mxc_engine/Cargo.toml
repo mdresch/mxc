@@ -27,6 +27,7 @@ windows_sandbox_lifecycle = { workspace = true }
 isolation_session_common = { workspace = true, optional = true }
 isolation_session_bindings = { workspace = true, optional = true }
 wslc_common = { workspace = true, optional = true }
+hyperv_lifecycle = { workspace = true, optional = true }
 # Elevated PLM guardian client, used to adapt process_container_common's
 # GuardedCaptureFactory/GuardedCaptureSession DI traits (guarded-WPR
 # captureDenials fallback) without process_container_common depending on plm
@@ -58,6 +59,7 @@ isolation_session = [
     "dep:isolation_session_bindings",
     "dep:isolation_session_common",
 ]
+hyperv = ["dep:hyperv_lifecycle"]
 # Forwards the test-executor-only ProcessContainer tier override.
 force-tier-testing = ["process_container_common/force-tier-testing"]
 # Forwards process_container_common/tier2_bfs. OFF by default; see process_container_common/Cargo.toml.

@@ -46,6 +46,10 @@ pub enum Containment {
     IsolationSession,
     /// Unprivileged Linux bubblewrap sandbox.
     Bubblewrap,
+    /// Real, standalone Hyper-V VM (experimental; state-aware only, no
+    /// one-shot execution).
+    #[serde(rename = "hyperv")]
+    HyperV,
 }
 
 impl Containment {
@@ -62,6 +66,7 @@ impl Containment {
             "seatbelt" | "macos_sandbox" => Self::Seatbelt,
             "isolation_session" => Self::IsolationSession,
             "bubblewrap" => Self::Bubblewrap,
+            "hyperv" => Self::HyperV,
             _ => return None,
         })
     }

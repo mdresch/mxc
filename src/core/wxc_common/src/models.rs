@@ -39,6 +39,10 @@ pub enum ContainmentBackend {
     /// Isolation Session — process isolation via the IsolationSession API.
     #[serde(rename = "isolation_session")]
     IsolationSession,
+    /// Hyper-V — real, standalone Hyper-V VMs with persistent state and
+    /// backend-private pause/resume + checkpoint/rollback. State-aware only
+    /// (no one-shot surface); experimental, requires --experimental.
+    HyperV,
     /// macOS Seatbelt sandbox backend.
     /// Implemented on top of the OS-bundled sandbox facility (Apple's
     /// internal codename for the App Sandbox / `sandbox-exec` machinery
@@ -64,6 +68,7 @@ impl ContainmentBackend {
             ContainmentBackend::IsolationSession => "isolation_session",
             ContainmentBackend::Seatbelt => "seatbelt",
             ContainmentBackend::Bubblewrap => "bubblewrap",
+            ContainmentBackend::HyperV => "hyperv",
         }
     }
 
@@ -79,6 +84,7 @@ impl ContainmentBackend {
             ContainmentBackend::Seatbelt => Some("seatbelt"),
             ContainmentBackend::IsolationSession => Some("isolationSession"),
             ContainmentBackend::Hyperlight => Some("hyperlight"),
+            ContainmentBackend::HyperV => Some("hyperv"),
             ContainmentBackend::Bubblewrap
             | ContainmentBackend::MicroVm
             | ContainmentBackend::Vm => None,
@@ -131,6 +137,7 @@ impl From<crate::wire::Containment> for ContainmentBackend {
             W::Seatbelt => Self::Seatbelt,
             W::IsolationSession => Self::IsolationSession,
             W::Bubblewrap => Self::Bubblewrap,
+            W::HyperV => Self::HyperV,
         }
     }
 }
@@ -289,6 +296,30 @@ pub struct WslcProvisionConfig {
     pub image: Option<String>,
     /// Local image tarball to import instead of pulling an image.
     pub image_tar_path: Option<String>,
+}
+
+/// Runtime-owned state-aware provision config for the Hyper-V backend.
+///
+/// `base_image_path` is required by the exact contract; this type keeps it
+/// `Option` like every other state-aware provision config (absent/empty
+/// values must round-trip distinctly through `CommonRequestIR`), with the
+/// backend re-validating its presence. Image authoring (sysprep, DISM,
+/// Packer) is an operator prerequisite — MXC only provisions a differencing
+/// disk off the supplied parent VHDX.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct HypervProvisionConfig {
+    /// Path to the operator-supplied parent VHDX/VHD.
+    pub base_image_path: Option<String>,
+    /// Windows Credential Manager target name to resolve the PowerShell
+    /// Direct guest credential from (`cmdkey /generic:<target> ...`). The
+    /// secret itself never appears here or anywhere on the wire.
+    pub guest_credential_target: Option<String>,
+    /// VM generation (1 or 2). The backend defaults to 2 when absent.
+    pub generation: Option<u8>,
+    /// Guest startup memory in bytes. The backend chooses a default when absent.
+    pub memory_startup_bytes: Option<u64>,
+    /// Virtual processor count. The backend chooses a default when absent.
+    pub cpu_count: Option<u32>,
 }
 
 /// Configuration specific to the LXC container backend.

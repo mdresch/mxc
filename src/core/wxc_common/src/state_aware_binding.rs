@@ -7,7 +7,8 @@
 //! Binding neither parses configuration nor supplies backend defaults.
 
 use crate::models::{
-    ContainmentBackend, ExecutionRequest, IsolationSessionProvisionConfig, WslcProvisionConfig,
+    ContainmentBackend, ExecutionRequest, HypervProvisionConfig, IsolationSessionProvisionConfig,
+    WslcProvisionConfig,
 };
 use crate::mxc_error::MxcError;
 use crate::state_aware_backend::StatefulSandboxBackend;
@@ -212,6 +213,26 @@ where
     BoundStateAwareRequest::bind(parsed, ContainmentBackend::Wslc, "wslc", |provision| {
         match provision {
             StateAwareProvision::Wslc(config) => Ok(config),
+            other => Err(incompatible_payload(&other.containment(), B::BACKEND_KEY)),
+        }
+    })
+}
+
+/// Bind a Hyper-V operation, leaving `baseImagePath` presence/defaulting to
+/// the backend's own `validate_provision`.
+pub fn bind_hyperv<B>(parsed: ParsedStateAwareRequest) -> Result<BoundStateAwareRequest<B>, MxcError>
+where
+    B: StatefulSandboxBackend<
+        ProvisionConfig = HypervProvisionConfig,
+        StartConfig = (),
+        ExecConfig = (),
+        StopConfig = (),
+        DeprovisionConfig = (),
+    >,
+{
+    BoundStateAwareRequest::bind(parsed, ContainmentBackend::HyperV, "hv", |provision| {
+        match provision {
+            StateAwareProvision::HyperV(config) => Ok(config),
             other => Err(incompatible_payload(&other.containment(), B::BACKEND_KEY)),
         }
     })

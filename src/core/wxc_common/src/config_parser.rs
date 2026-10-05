@@ -520,6 +520,10 @@ fn deserialize_development_request(
                     deserialize_development_root(json, "WSLC provision", "1.1", true)
                         .map(ProvisionRequest::Wslc)
                 }
+                Containment::HyperV => {
+                    deserialize_development_root(json, "Hyper-V provision", "1.1", true)
+                        .map(ProvisionRequest::HyperV)
+                }
             }?;
             Ok(Request::Provision(request))
         }
@@ -1230,6 +1234,7 @@ fn state_aware_containment_from_id(sandbox_id: &str) -> Option<wire::Containment
         "wslc" => Some(wire::Containment::Wslc),
         "wsb" => Some(wire::Containment::WindowsSandbox),
         "iso" => Some(wire::Containment::IsolationSession),
+        "hv" => Some(wire::Containment::HyperV),
         _ => None,
     }
 }
@@ -1247,6 +1252,7 @@ fn requested_sandbox_kind(c: Option<&wire::Containment>) -> &'static str {
         Some(wire::Containment::Seatbelt) => "seatbelt",
         Some(wire::Containment::IsolationSession) => "isolation_session",
         Some(wire::Containment::Bubblewrap) => "bubblewrap",
+        Some(wire::Containment::HyperV) => "hyperv",
     }
 }
 
@@ -1968,6 +1974,7 @@ fn normalize_state_aware(
                     StateAwareProvision::IsolationSession(_) => wire::Containment::IsolationSession,
                     StateAwareProvision::WindowsSandbox => wire::Containment::WindowsSandbox,
                     StateAwareProvision::Wslc(_) => wire::Containment::Wslc,
+                    StateAwareProvision::HyperV(_) => wire::Containment::HyperV,
                 }),
                 StateAwareOperation::Start { .. }
                 | StateAwareOperation::Exec { .. }
@@ -2149,6 +2156,15 @@ mod tests {
         IsolationSession(Option<Option<String>>),
         WindowsSandbox,
         Wslc(Option<(Option<String>, Option<String>)>),
+        HyperV(
+            Option<(
+                Option<String>,
+                Option<String>,
+                Option<u8>,
+                Option<u64>,
+                Option<u32>,
+            )>,
+        ),
     }
 
     impl From<&MxcRequest> for RequestSnapshot {
@@ -2173,6 +2189,17 @@ mod tests {
                             StateAwareProvision::Wslc(config) => {
                                 ProvisionSnapshot::Wslc(config.as_ref().map(|config| {
                                     (config.image.clone(), config.image_tar_path.clone())
+                                }))
+                            }
+                            StateAwareProvision::HyperV(config) => {
+                                ProvisionSnapshot::HyperV(config.as_ref().map(|config| {
+                                    (
+                                        config.base_image_path.clone(),
+                                        config.guest_credential_target.clone(),
+                                        config.generation,
+                                        config.memory_startup_bytes,
+                                        config.cpu_count,
+                                    )
                                 }))
                             }
                         }),

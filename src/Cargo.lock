@@ -1067,6 +1067,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "hyperv_common"
+version = "0.9.0"
+dependencies = [
+ "base64 0.22.1",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "windows",
+]
+
+[[package]]
+name = "hyperv_lifecycle"
+version = "0.9.0"
+dependencies = [
+ "anyhow",
+ "hyperv_common",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "windows",
+ "wxc_common",
+]
+
+[[package]]
 name = "iana-time-zone"
 version = "0.1.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1632,6 +1656,7 @@ dependencies = [
  "bwrap_common",
  "getrandom 0.2.17",
  "hyperlight_common",
+ "hyperv_lifecycle",
  "isolation_session_bindings",
  "isolation_session_common",
  "learning_mode_core",
@@ -3321,6 +3346,7 @@ dependencies = [
  "anyhow",
  "clap",
  "hyperlight_common",
+ "hyperv_lifecycle",
  "learning_mode_core",
  "mxc_build_common",
  "mxc_engine",

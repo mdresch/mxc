@@ -150,6 +150,10 @@ const V1_1_ROOTS: &[ContractRequestRoot] = &[
         schema_definition: "WslcProvisionRequest",
     },
     ContractRequestRoot {
+        fixture_directory: "hyperv_provision",
+        schema_definition: "HypervProvisionRequest",
+    },
+    ContractRequestRoot {
         fixture_directory: "start",
         schema_definition: "StartRequest",
     },

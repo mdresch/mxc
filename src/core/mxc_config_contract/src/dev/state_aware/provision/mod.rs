@@ -15,14 +15,18 @@ pub enum ProvisionRequest {
     WindowsSandbox(WindowsSandboxProvisionRequest),
     /// A WSLC provision request.
     Wslc(WslcProvisionRequest),
+    /// A Hyper-V provision request.
+    HyperV(HypervProvisionRequest),
 }
 
 mod containment;
+mod hyperv;
 mod isolation_session;
 mod windows_sandbox;
 mod wslc;
 
 pub use containment::{probe_containment, Containment, ContainmentProbeError};
+pub use hyperv::{HypervContainment, HypervProvision, HypervProvisionRequest, StateAwareHyperv};
 pub use isolation_session::{
     IsolationSessionContainment, IsolationSessionNetwork, IsolationSessionNetworkAllow,
     IsolationSessionNetworkEgress, IsolationSessionNetworkIngress, IsolationSessionProvision,
