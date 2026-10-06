@@ -126,13 +126,35 @@ ipcMain.handle('get-temp-policy', () => {
   return loadSdkV1().getTemporaryFilesPolicy();
 });
 
+function sanitizePolicy(policy: any): any {
+  if (policy && typeof policy === 'object') {
+    const copy = { ...policy };
+    delete copy.version;
+    if (copy.network && ('allowOutbound' in copy.network || 'defaultPolicy' in copy.network || 'proxy' in copy.network)) {
+      const { allowOutbound, defaultPolicy, proxy, ...rest } = copy.network;
+      copy.network = { ...rest, egress: { default: 'allow' } };
+      if (proxy) {
+        if (proxy.url) {
+          copy.runtimeConfig = { ...(copy.runtimeConfig || {}), networkProxy: proxy.url };
+        } else if (proxy.localhost) {
+          copy.runtimeConfig = { ...(copy.runtimeConfig || {}), networkProxy: `http://127.0.0.1:${proxy.localhost}` };
+        } else if (proxy.builtinTestServer) {
+          copy.runtimeConfig = { ...(copy.runtimeConfig || {}), networkProxy: 'http://127.0.0.1:8888' };
+        }
+      }
+    }
+    return copy;
+  }
+  return policy;
+}
+
 // IPC: Simple mode — spawnSandbox(script, policy)
 ipcMain.handle('run-sandbox', (_event, scriptText: string, policyJson: string, debug: boolean, experimental: boolean) => {
   killActivePty();
   const sdkV1 = loadSdkV1();
 
   try {
-    const policy = JSON.parse(policyJson);
+    const policy = sanitizePolicy(JSON.parse(policyJson));
     const ptyProcess = sdkV1.spawnSandbox(scriptText, policy, {
       debug,
       experimental,
@@ -152,7 +174,7 @@ ipcMain.handle('run-sandbox-advanced', (_event, scriptText: string, policyJson: 
   const sdkV1 = loadSdkV1();
 
   try {
-    const policy = JSON.parse(policyJson);
+    const policy = sanitizePolicy(JSON.parse(policyJson));
     const config = sdkV1.createConfigFromPolicy(policy);
     config.process!.commandLine = scriptText;
     const ptyProcess = sdk.spawnSandboxFromConfig(config, {
@@ -171,12 +193,12 @@ ipcMain.handle('run-sandbox-advanced', (_event, scriptText: string, policyJson: 
 ipcMain.handle('kill-sandbox', () => {
   killActivePty();
   return { success: true };
-});
+  });
 
 // IPC: Validate policy — returns the generated ContainerConfig
 ipcMain.handle('validate-policy', (_event, policyJson: string) => {
   try {
-    const policy = JSON.parse(policyJson);
+    const policy = sanitizePolicy(JSON.parse(policyJson));
     const config = loadSdkV1().createConfigFromPolicy(policy);
     return { valid: true, config: JSON.stringify(config, null, 2) };
   } catch (err: any) {
