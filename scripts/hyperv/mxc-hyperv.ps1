@@ -306,7 +306,20 @@ function mxc-info {
     Invoke-MxcPowerShell "Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, LastBootUpTime, FreePhysicalMemory"
 }
 
+# Open interactive Graphical Desktop (Hyper-V Virtual Machine Connection)
+function Open-MxcVMConnect {
+    param([string]$SandboxId)
+    $id = Get-MxcActiveSandboxId -ExplicitId $SandboxId
+    $token = $id -replace '^hv:', ''
+    $vmName = "mxc-hv-$token"
+    Write-Host "Opening Virtual Machine Connection for $vmName..." -ForegroundColor Cyan
+    Start-Process "vmconnect.exe" -ArgumentList "localhost", $vmName
+}
+Set-Alias -Name mxc-gui -Value Open-MxcVMConnect -Scope Global
+Set-Alias -Name mxg -Value Open-MxcVMConnect -Scope Global
+
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
+Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
 Write-Host "  mxc-pause / mxp        Fast suspend (~5s)"
@@ -318,6 +331,7 @@ Write-Host "  mxc-services           Guest Hyper-V integration services"
 Write-Host "  mxc-ps                 Top CPU processes in guest"
 Write-Host "  mxc-info               Guest OS and uptime information"
 Write-Host "  mxc-logs               Recent system warnings and errors in guest"
+
 
 
 
