@@ -36,7 +36,18 @@ impl CommandLineContext {
     /// `process.commandLine`.
     pub fn for_backend(backend: &ContainmentBackend) -> Self {
         match backend {
-            ContainmentBackend::IsolationSession | ContainmentBackend::WindowsSandbox => {
+            ContainmentBackend::IsolationSession
+            | ContainmentBackend::WindowsSandbox
+            | ContainmentBackend::HyperV => {
+                // HyperV's own exec primitive runs `cmd.exe /c <command>`
+                // inside the guest over PowerShell Direct, so this matches
+                // its quoting discipline. Rough edge, not a blocker: the
+                // guest-side scriptblock is PowerShell syntax, not `cmd.exe`
+                // or POSIX-shell syntax, and none of the three existing
+                // contexts models that exactly — this CLI-argv-join path is
+                // a convenience for ad hoc invocations, not the primary
+                // state-aware JSON path, where `process.commandLine` is
+                // supplied directly as a full command string.
                 Self::WindowsCommandProcessor
             }
             ContainmentBackend::Wslc

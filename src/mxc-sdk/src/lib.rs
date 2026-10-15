@@ -150,6 +150,12 @@ pub use backend_modules::bubblewrap::common as bwrap_common;
 #[cfg(all(feature = "hyperlight", target_arch = "x86_64"))]
 pub use backend_modules::hyperlight::common as hyperlight_common;
 #[doc(hidden)]
+#[cfg(all(target_os = "windows", feature = "hyperv"))]
+pub use backend_modules::hyperv::common as hyperv_common;
+#[doc(hidden)]
+#[cfg(all(target_os = "windows", feature = "hyperv"))]
+pub use backend_modules::hyperv::lifecycle as hyperv_lifecycle;
+#[doc(hidden)]
 #[cfg(all(target_os = "windows", feature = "isolation_session"))]
 pub use backend_modules::isolation_session::bindings as isolation_session_bindings;
 #[doc(hidden)]

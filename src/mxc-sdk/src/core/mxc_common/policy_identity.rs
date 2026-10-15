@@ -78,7 +78,7 @@ use serde_json::{Map, Value};
 
 use crate::mxc_common::hashing::sha256_hex;
 use crate::mxc_common::models::{
-    ExecutionRequest, IsolationSessionProvisionConfig, WslcProvisionConfig,
+    ExecutionRequest, HypervProvisionConfig, IsolationSessionProvisionConfig, WslcProvisionConfig,
 };
 use crate::mxc_common::state_aware_operation::{StateAwareOperation, StateAwareProvision};
 
@@ -166,10 +166,50 @@ fn state_aware_config_projection(operation: &StateAwareOperation) -> Value {
             }
             Value::Object(config)
         }
+        StateAwareOperation::Provision(StateAwareProvision::HyperV(Some(
+            HypervProvisionConfig {
+                base_image_path,
+                guest_credential_target,
+                generation,
+                memory_startup_bytes,
+                cpu_count,
+            },
+        ))) => {
+            let mut config = Map::new();
+            if let Some(base_image_path) = base_image_path {
+                config.insert(
+                    "baseImagePath".into(),
+                    Value::String(base_image_path.clone()),
+                );
+            }
+            // A Credential Manager *target name*, never the secret itself —
+            // safe under this module's "free of credential material"
+            // invariant (see the module doc comment).
+            if let Some(guest_credential_target) = guest_credential_target {
+                config.insert(
+                    "guestCredentialTarget".into(),
+                    Value::String(guest_credential_target.clone()),
+                );
+            }
+            if let Some(generation) = generation {
+                config.insert("generation".into(), Value::from(*generation));
+            }
+            if let Some(memory_startup_bytes) = memory_startup_bytes {
+                config.insert(
+                    "memoryStartupBytes".into(),
+                    Value::from(*memory_startup_bytes),
+                );
+            }
+            if let Some(cpu_count) = cpu_count {
+                config.insert("cpuCount".into(), Value::from(*cpu_count));
+            }
+            Value::Object(config)
+        }
         StateAwareOperation::Provision(
             StateAwareProvision::IsolationSession(None)
             | StateAwareProvision::WindowsSandbox
-            | StateAwareProvision::Wslc(None),
+            | StateAwareProvision::Wslc(None)
+            | StateAwareProvision::HyperV(None),
         ) => Value::Null,
         // Sandbox IDs are not policy and can contain account identities.
         StateAwareOperation::Start {

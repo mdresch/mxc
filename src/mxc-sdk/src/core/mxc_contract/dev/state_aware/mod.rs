@@ -66,6 +66,7 @@ pub use deprovision::{DeprovisionPhase, DeprovisionRequest};
 pub use exec::{ExecPhase, ExecRequest};
 pub use phase::{probe_phase, Phase, PhaseProbeError};
 pub use provision::{probe_containment, Containment, ContainmentProbeError};
+pub use provision::{HypervContainment, HypervProvision, HypervProvisionRequest, StateAwareHyperv};
 pub use provision::{
     IsolationSessionContainment, IsolationSessionNetwork, IsolationSessionNetworkAllow,
     IsolationSessionNetworkEgress, IsolationSessionNetworkIngress, IsolationSessionProvision,

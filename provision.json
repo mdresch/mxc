@@ -1,0 +1,14 @@
+{
+  "$schema": "https://mxc.azureedge.net/schemas/development/mxc.json",
+  "version": "1.1.0-alpha",
+  "containment": "hyperv",
+  "hyperv": {
+    "provision": {
+      "baseImagePath": "C:\\HyperV\\BaseImages\\win11-golden.vhdx",
+      "guestCredentialTarget": "mxc-guest",
+      "generation": 2,
+      "memoryStartupBytes": 4294967296,
+      "cpuCount": 2
+    }
+  }
+}
