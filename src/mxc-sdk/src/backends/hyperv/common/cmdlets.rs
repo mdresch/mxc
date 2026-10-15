@@ -276,9 +276,10 @@ pub fn invoke_command_in_vm(
 fn credential_preamble(credential: &GuestCredential) -> String {
     format!(
         "$pwUtf16 = [Console]::In.ReadLine()\n\
-         $securePw = ConvertTo-SecureString -String \
-         ([System.Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($pwUtf16))) \
-         -AsPlainText -Force\n\
+         $plainPw = [System.Text.Encoding]::Unicode.GetString([Convert]::FromBase64String($pwUtf16))\n\
+         $securePw = New-Object System.Security.SecureString\n\
+         for ($i = 0; $i -lt $plainPw.Length; $i++) {{ $securePw.AppendChar($plainPw[$i]) }}\n\
+         $securePw.MakeReadOnly()\n\
          $cred = New-Object System.Management.Automation.PSCredential({username}, $securePw)",
         username = ps_single_quote(&credential.username),
     )
