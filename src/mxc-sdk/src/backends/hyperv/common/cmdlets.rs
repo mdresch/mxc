@@ -111,6 +111,15 @@ pub fn set_vm_processor(vm_name: &str, cpu_count: u32) -> Result<(), PowerShellE
     run_powershell(&script).map(|_| ())
 }
 
+pub fn enable_guest_service_interface(vm_name: &str) -> Result<(), PowerShellError> {
+    let script = format!(
+        "Enable-VMIntegrationService -VMName {} -Name 'Guest Service Interface' | Out-Null",
+        ps_single_quote(vm_name),
+    );
+    run_powershell(&script).map(|_| ())
+}
+
+
 pub fn start_vm(vm_name: &str) -> Result<(), PowerShellError> {
     run_powershell(&format!(
         "Start-VM -Name {} | Out-Null",

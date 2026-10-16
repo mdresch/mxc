@@ -191,6 +191,12 @@ impl StatefulSandboxBackend for HypervRunner {
             return Err(map_powershell_error("set VM processor count", e));
         }
 
+        if let Err(e) = hyperv_common::cmdlets::enable_guest_service_interface(&vm_name) {
+            cleanup_partial_provision(&vm_name, &child_disk_path, true);
+            return Err(map_powershell_error("enable guest service interface", e));
+        }
+
+
         let record = HypervSandboxRecord::new_provisioned(
             sandbox_id.clone(),
             vm_name.clone(),
