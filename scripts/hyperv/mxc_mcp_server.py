@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+from typing import Dict, List, Tuple
 
 try:
     from mcp.server.fastmcp import FastMCP as MCPServer
@@ -47,7 +48,7 @@ def _get_vm_name(sandbox_id: str) -> str:
     return f"mxc-hv-{token}"
 
 
-def _diff_file(rel_path: str, guest_bytes: bytes) -> str:
+def _diff_file(rel_path: str, guest_bytes: bytes, is_new: bool = False) -> str:
     """Generate a unified diff between host file and guest modified file."""
     if b"\x00" in guest_bytes[:4096]:
         return f"Binary file {rel_path} changed in guest.\n"
@@ -55,7 +56,7 @@ def _diff_file(rel_path: str, guest_bytes: bytes) -> str:
     host_file = os.path.join(REPO_ROOT, rel_path)
     guest_text = guest_bytes.decode("utf-8-sig", errors="replace").splitlines(keepends=True)
 
-    if os.path.exists(host_file):
+    if not is_new and os.path.exists(host_file):
         with open(host_file, "r", encoding="utf-8-sig", errors="replace") as f:
             host_text = f.readlines()
         from_file = f"a/{rel_path}"
@@ -67,6 +68,107 @@ def _diff_file(rel_path: str, guest_bytes: bytes) -> str:
     diff = list(difflib.unified_diff(host_text, guest_text, fromfile=from_file, tofile=to_file))
     return "".join(diff)
 
+
+def _diff_deleted_file(rel_path: str) -> str:
+    """Generate a unified diff representing a deleted file."""
+    host_file = os.path.join(REPO_ROOT, rel_path)
+    if not os.path.exists(host_file):
+        return ""
+    with open(host_file, "r", encoding="utf-8-sig", errors="replace") as f:
+        host_text = f.readlines()
+    from_file = f"a/{rel_path}"
+    to_file = "/dev/null"
+    diff = list(difflib.unified_diff(host_text, [], fromfile=from_file, tofile=to_file))
+    return "".join(diff)
+
+
+def _get_guest_changes(guest_dir: str, sandbox_id: str) -> Tuple[Dict[str, bytes], Dict[str, bytes], List[str], str]:
+    """Scan guest workspace against .sync_manifest.json and return (added, modified, deleted, error)."""
+    scan_script = (
+        f"$target_dir = '{guest_dir}'; "
+        f"$manifest_path = \"$target_dir\\.sync_manifest.json\"; "
+        f"if (-not (Test-Path $manifest_path)) {{ 'NO_MANIFEST'; exit }}; "
+        f"$manifest = Get-Content $manifest_path -Raw | ConvertFrom-Json; "
+        f"$current = @{{}}; "
+        f"Get-ChildItem -Path $target_dir -Recurse -File | Where-Object {{ "
+        f"    $_.FullName -notmatch '\\\\(target|bin|obj|\\.git|node_modules)\\\\' -and "
+        f"    $_.Extension -notin @('.dll', '.pdb', '.cache', '.exe', '.tar', '.gz') -and "
+        f"    $_.Name -ne '.sync_manifest.json' "
+        f"}} | ForEach-Object {{ "
+        f"    $rel = $_.FullName.Substring($target_dir.Length).TrimStart('\\'); "
+        f"    $current[$rel] = $_ "
+        f"}}; "
+        f"foreach ($rel in $current.Keys) {{ "
+        f"    $f = $current[$rel]; "
+        f"    $m = $manifest.$rel; "
+        f"    if ($null -eq $m) {{ "
+        f"        $b64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($f.FullName)); "
+        f"        Write-Output ('===ADDED:' + $rel); "
+        f"        Write-Output $b64; "
+        f"    }} elseif ($f.Length -ne $m.l -or $f.LastWriteTimeUtc.Ticks -ne $m.t) {{ "
+        f"        $b64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($f.FullName)); "
+        f"        Write-Output ('===MODIFIED:' + $rel); "
+        f"        Write-Output $b64; "
+        f"    }} "
+        f"}}; "
+        f"foreach ($prop in $manifest.PSObject.Properties) {{ "
+        f"    $rel = $prop.Name; "
+        f"    if (-not $current.ContainsKey($rel)) {{ "
+        f"        Write-Output ('===DELETED:' + $rel); "
+        f"    }} "
+        f"}}"
+    )
+
+    res = execute_command(scan_script, sandbox_id)
+    if "NO_MANIFEST" in res:
+        return {}, {}, [], "No sync baseline found. Please run sync_workspace_to_guest first."
+
+    added: Dict[str, bytes] = {}
+    modified: Dict[str, bytes] = {}
+    deleted: List[str] = []
+
+    lines = res.splitlines()
+    curr_action = None
+    curr_rel = None
+    curr_b64: List[str] = []
+
+    def _flush():
+        nonlocal curr_action, curr_rel, curr_b64
+        if curr_action and curr_rel:
+            if curr_action in ("ADDED", "MODIFIED"):
+                try:
+                    payload = base64.b64decode("".join(curr_b64))
+                    if curr_action == "ADDED":
+                        added[curr_rel] = payload
+                    else:
+                        modified[curr_rel] = payload
+                except Exception as e:
+                    pass
+            elif curr_action == "DELETED":
+                deleted.append(curr_rel)
+        curr_action = None
+        curr_rel = None
+        curr_b64 = []
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith("===ADDED:"):
+            _flush()
+            curr_action = "ADDED"
+            curr_rel = line[len("===ADDED:"):]
+        elif line.startswith("===MODIFIED:"):
+            _flush()
+            curr_action = "MODIFIED"
+            curr_rel = line[len("===MODIFIED:"):]
+        elif line.startswith("===DELETED:"):
+            _flush()
+            deleted.append(line[len("===DELETED:"):])
+        elif curr_action in ("ADDED", "MODIFIED"):
+            if not line.startswith("[Exit Code:") and not line.startswith("{"):
+                curr_b64.append(line)
+
+    _flush()
+    return added, modified, deleted, ""
 
 
 @mcp.tool()
@@ -96,12 +198,17 @@ def create_checkpoint(name: str, sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
 
 @mcp.tool()
 def rollback_checkpoint(name: str, sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
-    """Restore the Hyper-V sandbox back to a named checkpoint to undo broken state."""
-    return _run_wxc([
+    """Restore the Hyper-V sandbox back to a named checkpoint to undo broken state.
+    Automatically resynchronizes VM guest clock with host time upon completion.
+    """
+    res = _run_wxc([
         "--hyperv-op", "restore",
         "--hyperv-sandbox-id", sandbox_id,
         "--hyperv-checkpoint-name", name
     ])
+    # Force guest clock resync to prevent timestamp skew after rollback
+    execute_command("Start-Service w32time -ErrorAction SilentlyContinue; w32tm /resync /force -ErrorAction SilentlyContinue", sandbox_id)
+    return res
 
 
 @mcp.tool()
@@ -133,8 +240,8 @@ def sync_workspace_to_guest(
     sandbox_id: str = DEFAULT_SANDBOX_ID
 ) -> str:
     """Synchronize host workspace files into the guest VM virtual disk (VHDX) via Hyper-V VMBus Copy-VMFile.
-    Uses native tar.exe with exclusions (.git, target, node_modules, corpus) for sub-second packaging and transfer.
-    Also creates a baseline .sync_time marker in the guest.
+    Uses native tar.exe with exclusions (.git, target, bin, obj, node_modules) for sub-second packaging and transfer.
+    Generates a full baseline file manifest (.sync_manifest.json) in the guest to track additions, modifications, and deletions.
     """
     vm_name = _get_vm_name(sandbox_id)
     source_path = os.path.join(REPO_ROOT, source_subdir) if source_subdir else REPO_ROOT
@@ -143,7 +250,7 @@ def sync_workspace_to_guest(
         archive_path = tmp.name
 
     try:
-        # Use native tar.exe on Windows for ~400ms packaging excluding build output
+        # Use native tar.exe on Windows for fast packaging excluding build output
         tar_cmd = [
             "tar.exe",
             "--exclude=target",
@@ -182,15 +289,25 @@ def sync_workspace_to_guest(
         if res.returncode != 0:
             return f"[Error copying archive to guest]: {res.stderr.strip()}"
 
-        # Extract inside guest, stamp baseline sync time, and clean up archive
+        # Extract inside guest, clean up archive, and generate baseline .sync_manifest.json
         ps_extract = (
-            f"if (-not (Test-Path '{target_dir}')) {{ New-Item -ItemType Directory -Path '{target_dir}' -Force }}; "
-            f"tar.exe -xzf '{guest_archive}' -C '{target_dir}'; "
-            f"Set-Content -Path '{target_dir}\\.sync_time' -Value (Get-Date).ToUniversalTime().ToString('o'); "
-            f"Remove-Item '{guest_archive}' -Force"
+            f"$target_dir = '{target_dir}'; "
+            f"if (-not (Test-Path $target_dir)) {{ New-Item -ItemType Directory -Path $target_dir -Force }}; "
+            f"tar.exe -xzf '{guest_archive}' -C $target_dir; "
+            f"Remove-Item '{guest_archive}' -Force; "
+            f"$manifest = @{{}}; "
+            f"Get-ChildItem -Path $target_dir -Recurse -File | Where-Object {{ "
+            f"    $_.FullName -notmatch '\\\\(target|bin|obj|\\.git|node_modules)\\\\' -and "
+            f"    $_.Extension -notin @('.dll', '.pdb', '.cache', '.exe', '.tar', '.gz') -and "
+            f"    $_.Name -ne '.sync_manifest.json' "
+            f"}} | ForEach-Object {{ "
+            f"    $rel = $_.FullName.Substring($target_dir.Length).TrimStart('\\'); "
+            f"    $manifest[$rel] = @{{ l = $_.Length; t = $_.LastWriteTimeUtc.Ticks }} "
+            f"}}; "
+            f"$manifest | ConvertTo-Json -Compress | Set-Content -Path \"$target_dir\\.sync_manifest.json\" -Encoding utf8"
         )
         extract_res = execute_command(ps_extract, sandbox_id)
-        return f"Successfully synchronized workspace to guest directory '{target_dir}'.\n{extract_res}"
+        return f"Successfully synchronized workspace and generated baseline manifest in '{target_dir}'.\n{extract_res}"
     finally:
         if os.path.exists(archive_path):
             os.remove(archive_path)
@@ -201,68 +318,88 @@ def export_diff_from_guest(
     guest_dir: str = "C:\\workspace",
     sandbox_id: str = DEFAULT_SANDBOX_ID
 ) -> str:
-    """Generate a clean unified git diff of all changes made inside the guest workspace compared to host workspace.
-    Scans for files created or modified since sync_workspace_to_guest and returns standard unified diff format.
+    """Generate a clean unified git diff of all changes (additions, modifications, and deletions)
+    made inside the guest workspace compared to host workspace. Uses the baseline manifest to prevent timestamp skew.
     """
-    scan_script = (
-        f"$syncFile = '{guest_dir}\\.sync_time'; "
-        f"if (-not (Test-Path $syncFile)) {{ 'NO_SYNC_TIME'; exit }}; "
-        f"$syncTime = [DateTime]::Parse((Get-Content $syncFile)); "
-        f"$files = Get-ChildItem -Path '{guest_dir}' -Recurse -File | "
-        f"  Where-Object {{ $_.Name -ne '.sync_time' -and "
-        f"    $_.FullName -notmatch '\\\\(target|bin|obj|\\.git|node_modules)\\\\' -and "
-        f"    $_.Extension -notin @('.dll', '.pdb', '.cache', '.exe', '.tar', '.gz') -and "
-        f"    $_.LastWriteTimeUtc -gt $syncTime }}; "
-        f"if (-not $files) {{ 'NO_CHANGES'; exit }}; "
-        f"foreach ($f in $files) {{ "
-        f"  $rel = $f.FullName.Substring('{guest_dir}'.Length).TrimStart('\\'); "
-        f"  $b64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($f.FullName)); "
-        f"  Write-Output ('===FILE:' + $rel); "
-        f"  Write-Output $b64; "
-        f"}}"
-    )
+    added, modified, deleted, err = _get_guest_changes(guest_dir, sandbox_id)
+    if err:
+        return err
 
-    res = execute_command(scan_script, sandbox_id)
-    if "NO_SYNC_TIME" in res:
-        return "No sync baseline found. Please run sync_workspace_to_guest first before checking diffs."
-    if "NO_CHANGES" in res:
+    if not added and not modified and not deleted:
         return "No differences between guest workspace and host workspace."
 
-    lines = res.splitlines()
-    diffs = []
-    curr_rel = None
-    curr_b64 = []
+    diffs: List[str] = []
 
-    for line in lines:
-        line = line.strip()
-        if line.startswith("===FILE:"):
-            if curr_rel and curr_b64:
-                try:
-                    file_bytes = base64.b64decode("".join(curr_b64))
-                    diff = _diff_file(curr_rel, file_bytes)
-                    if diff:
-                        diffs.append(diff)
-                except Exception as e:
-                    diffs.append(f"Error diffing {curr_rel}: {e}")
-            curr_rel = line[len("===FILE:"):]
-            curr_b64 = []
-        elif curr_rel:
-            if not line.startswith("[Exit Code:") and not line.startswith("{"):
-                curr_b64.append(line)
+    for rel, b in added.items():
+        diff = _diff_file(rel, b, is_new=True)
+        if diff:
+            diffs.append(diff)
 
-    if curr_rel and curr_b64:
-        try:
-            file_bytes = base64.b64decode("".join(curr_b64))
-            diff = _diff_file(curr_rel, file_bytes)
-            if diff:
-                diffs.append(diff)
-        except Exception as e:
-            diffs.append(f"Error diffing {curr_rel}: {e}")
+    for rel, b in modified.items():
+        diff = _diff_file(rel, b, is_new=False)
+        if diff:
+            diffs.append(diff)
+
+    for rel in deleted:
+        diff = _diff_deleted_file(rel)
+        if diff:
+            diffs.append(diff)
 
     if not diffs:
-        return "No file content differences detected."
+        return "No text content differences detected."
 
-    return "\n".join(diffs)
+    return "".join(diffs)
+
+
+@mcp.tool()
+def apply_guest_changes_to_host(
+    guest_dir: str = "C:\\workspace",
+    sandbox_id: str = DEFAULT_SANDBOX_ID,
+    dry_run: bool = False
+) -> str:
+    """Apply verified changes from inside the guest workspace directly to the host workspace.
+    Supports file additions, modifications, and deletions losslessly without CRLF/LF mismatch.
+    Set dry_run=True to preview the file operations before applying.
+    """
+    added, modified, deleted, err = _get_guest_changes(guest_dir, sandbox_id)
+    if err:
+        return err
+
+    if not added and not modified and not deleted:
+        return "No guest changes to apply to host."
+
+    report: List[str] = []
+    prefix = "[Dry Run] Would apply:" if dry_run else "Successfully applied:"
+    report.append(prefix)
+
+    # Process Additions
+    for rel, content in added.items():
+        target_path = os.path.join(REPO_ROOT, rel)
+        if not dry_run:
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+            with open(target_path, "wb") as f:
+                f.write(content)
+        report.append(f"  + Added:    {rel} ({len(content)} bytes)")
+
+    # Process Modifications
+    for rel, content in modified.items():
+        target_path = os.path.join(REPO_ROOT, rel)
+        if not dry_run:
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+            with open(target_path, "wb") as f:
+                f.write(content)
+        report.append(f"  ~ Modified: {rel} ({len(content)} bytes)")
+
+    # Process Deletions
+    for rel in deleted:
+        target_path = os.path.join(REPO_ROOT, rel)
+        if not dry_run and os.path.exists(target_path):
+            os.remove(target_path)
+        report.append(f"  - Deleted:  {rel}")
+
+    summary = f"\nTotal: {len(added)} added, {len(modified)} modified, {len(deleted)} deleted."
+    report.append(summary)
+    return "\n".join(report)
 
 
 if __name__ == "__main__":
