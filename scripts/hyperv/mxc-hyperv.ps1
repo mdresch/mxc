@@ -318,13 +318,69 @@ function Open-MxcVMConnect {
 Set-Alias -Name mxc-gui -Value Open-MxcVMConnect -Scope Global
 Set-Alias -Name mxg -Value Open-MxcVMConnect -Scope Global
 
+# --- Speculative Execution & Workspace Sync Tools ---
+
+function mxc-sync {
+    param([string]$SandboxId)
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    Write-Host "Synchronizing workspace to guest sandbox $sb..." -ForegroundColor Cyan
+    Push-Location $Script:RepoRoot
+    try {
+        python -c "import sys; sys.path.insert(0, r'$Script:RepoRoot'); import scripts.hyperv.mxc_mcp_server as s; print(s.sync_workspace_to_guest(sandbox_id='$sb'))"
+    } finally {
+        Pop-Location
+    }
+}
+
+function mxc-diff {
+    param([string]$SandboxId)
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    Push-Location $Script:RepoRoot
+    try {
+        python -c "import sys; sys.path.insert(0, r'$Script:RepoRoot'); import scripts.hyperv.mxc_mcp_server as s; print(s.export_diff_from_guest(sandbox_id='$sb'))"
+    } finally {
+        Pop-Location
+    }
+}
+
+function mxc-apply {
+    param(
+        [switch]$DryRun,
+        [string]$SandboxId
+    )
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    $dryStr = if ($DryRun) { "True" } else { "False" }
+    Push-Location $Script:RepoRoot
+    try {
+        python -c "import sys; sys.path.insert(0, r'$Script:RepoRoot'); import scripts.hyperv.mxc_mcp_server as s; print(s.apply_guest_changes_to_host(sandbox_id='$sb', dry_run=$dryStr))"
+    } finally {
+        Pop-Location
+    }
+}
+
+function mxc-health {
+    param([string]$SandboxId)
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    Invoke-MxcGuest -SandboxId $sb powershell -ExecutionPolicy Bypass -File "C:\workspace\scripts\hyperv\guest_health.ps1"
+}
+
+Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
+Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
+Set-Alias -Name mxapply -Value mxc-apply -Scope Global
+Set-Alias -Name mxh     -Value mxc-health -Scope Global
+
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
+Write-Host "  mxc-sync / mxsync      Sync host workspace into guest & record baseline"
+Write-Host "  mxc-diff / mxdiff      Export unified diff of guest changes vs host"
+Write-Host "  mxc-apply / mxapply    Apply guest changes to host (use -DryRun to preview)"
+Write-Host "  mxc-health / mxh       Guest diagnostic probe (CPU, RAM, Services, Disk)"
 Write-Host "  mxc-pause / mxp        Fast suspend (~5s)"
 Write-Host "  mxc-resume / mxr       Fast resume (~4s)"
 Write-Host "  mxc-checkpoint / mxc   Create named snapshot"
+Write-Host "  mxc-restore            Roll back VM state to a named snapshot"
 Write-Host "  mxc-checkpoints / mxcl List snapshots"
 Write-Host "  mxc-ip                 Guest IP & network configuration"
 Write-Host "  mxc-services           Guest Hyper-V integration services"
