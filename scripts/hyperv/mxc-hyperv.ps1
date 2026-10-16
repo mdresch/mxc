@@ -433,10 +433,43 @@ function mxc-session-status {
     mxc-pool-status
 }
 
+function mxc-screenshot {
+    param(
+        [string]$SandboxId,
+        [int]$Width = 0,
+        [int]$Height = 0,
+        [string]$OutputPath,
+        [switch]$Open
+    )
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    $script = Join-Path $PSScriptRoot "capture_screenshot.ps1"
+    $params = @{
+        VmName = $sb
+    }
+    if ($Width -gt 0) { $params["Width"] = $Width }
+    if ($Height -gt 0) { $params["Height"] = $Height }
+    if ($OutputPath) { $params["OutputPath"] = $OutputPath }
+    if ($Open) { $params["Open"] = $true }
+
+    Write-Host "Capturing live screenshot of $sb from Hyper-V video buffer..." -ForegroundColor Cyan
+    $raw = & $script @params | ConvertFrom-Json
+    if ($raw.success) {
+        Write-Host "Screenshot captured successfully ($($raw.width)x$($raw.height), $($raw.fileSizeBytes) bytes):" -ForegroundColor Green
+        Write-Host "  Path: $($raw.path)" -ForegroundColor Yellow
+        if ($raw.isPowerSave) {
+            Write-Host "  [Notice]: VM video adapter is in power-saving mode (switch to Basic Session in vmconnect for live console)." -ForegroundColor DarkYellow
+        }
+        return $raw.path
+    } else {
+        Write-Host "Failed to capture screenshot: $($raw.error)" -ForegroundColor Red
+    }
+}
+
 Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
 Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
 Set-Alias -Name mxapply -Value mxc-apply -Scope Global
 Set-Alias -Name mxh     -Value mxc-health -Scope Global
+Set-Alias -Name mxshot  -Value mxc-screenshot -Scope Global
 Set-Alias -Name mxpool  -Value mxc-pool-status -Scope Global
 Set-Alias -Name mxpl    -Value mxc-pool-lease -Scope Global
 Set-Alias -Name mxpr    -Value mxc-pool-release -Scope Global
@@ -444,6 +477,7 @@ Set-Alias -Name mxss    -Value mxc-session-status -Scope Global
 
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
+Write-Host "  mxc-screenshot / mxshot Capture live PNG screenshot from Hyper-V video buffer"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
 Write-Host "  mxc-pool-status / mxpool View warm standby pool members & readiness"

@@ -586,5 +586,60 @@ def session_status() -> str:
     return f"{active_str}\n\nPool Status:\n{status_raw}"
 
 
+@mcp.tool()
+def capture_screenshot(
+    sandbox_id: str = "auto",
+    width: Optional[int] = None,
+    height: Optional[int] = None,
+    save_path: Optional[str] = None
+) -> str:
+    """Capture a live PNG screenshot of the Hyper-V guest desktop buffer.
+    Reads directly from the host-side Hyper-V synthetic video framebuffer via WMI
+    without requiring any network connection or guest-side agents.
+
+    Args:
+        sandbox_id: Target MXC Hyper-V sandbox ID (defaults to 'auto', which uses active session or fallback).
+        width: Optional custom width in pixels (defaults to guest native resolution, e.g. 1024).
+        height: Optional custom height in pixels (defaults to guest native resolution, e.g. 768).
+        save_path: Optional host path to save PNG image. If omitted, saves to a timestamped file
+                   in scripts/hyperv/screenshots/ and returns the absolute file path and resolution metadata.
+    """
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    vm_name = _get_vm_name(target_sb)
+    script_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "capture_screenshot.ps1"))
+
+    cmd = [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", script_path,
+        "-VmName", vm_name,
+    ]
+    if width:
+        cmd.extend(["-Width", str(width)])
+    if height:
+        cmd.extend(["-Height", str(height)])
+    if save_path:
+        cmd.extend(["-OutputPath", save_path])
+
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    if res.returncode != 0:
+        return f"[Error capturing screenshot]: {res.stderr.strip() or res.stdout.strip()}"
+
+    output = res.stdout.strip()
+    payload = _extract_json_payload(output)
+    if payload and payload.get("success"):
+        path = payload.get("path")
+        w = payload.get("width")
+        h = payload.get("height")
+        size = payload.get("fileSizeBytes")
+        power_save = payload.get("isPowerSave")
+        note = ""
+        if power_save:
+            note = "\n[Notice]: VM video adapter is in power-saving/disconnected mode (Enhanced Session in vmconnect may blank synthetic framebuffer)."
+        return f"Successfully captured screenshot ({w}x{h}, {size} bytes):\nPath: {path}{note}"
+    return output
+
+
 if __name__ == "__main__":
     mcp.run()

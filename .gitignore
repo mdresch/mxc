@@ -60,3 +60,7 @@ output
 # Python
 __pycache__/
 *.pyc
+
+# Hyper-V screenshots
+scripts/hyperv/screenshots/
+
