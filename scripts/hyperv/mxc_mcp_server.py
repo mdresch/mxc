@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+import uuid
 from typing import Dict, List, Tuple
 
 try:
@@ -172,18 +173,49 @@ def _get_guest_changes(guest_dir: str, sandbox_id: str) -> Tuple[Dict[str, bytes
 
 
 @mcp.tool()
-def execute_command(command: str, sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
+def execute_command(
+    command: str,
+    sandbox_id: str = DEFAULT_SANDBOX_ID,
+    disposable: bool = False
+) -> str:
     """Execute a shell or PowerShell command inside the isolated MXC Hyper-V guest VM.
     Passes command via Base64 UTF-16LE EncodedCommand to eliminate quoting and pipe parsing issues.
+
+    Args:
+        command: The command or script to execute inside the guest VM.
+        sandbox_id: Target MXC Hyper-V sandbox ID (defaults to active sandbox).
+        disposable: If True, creates an ephemeral checkpoint before execution and automatically
+                    rolls back VM state and cleans up the snapshot in a finally block, leaving zero residue.
     """
-    b64 = base64.b64encode(command.encode("utf-16le")).decode("ascii")
-    return _run_wxc([
-        "--operation", "exec",
-        "--container-id", sandbox_id,
-        EXEC_JSON,
-        "--",
-        "powershell.exe", "-NoProfile", "-EncodedCommand", b64
-    ])
+    disp_checkpoint = None
+    if disposable:
+        disp_checkpoint = f"mxc-disp-{uuid.uuid4().hex[:8]}"
+        ckpt_res = create_checkpoint(disp_checkpoint, sandbox_id)
+        if "[Exit Code: 0]" not in ckpt_res:
+            return f"[Error creating disposable checkpoint]: {ckpt_res}"
+
+    try:
+        b64 = base64.b64encode(command.encode("utf-16le")).decode("ascii")
+        return _run_wxc([
+            "--operation", "exec",
+            "--container-id", sandbox_id,
+            EXEC_JSON,
+            "--",
+            "powershell.exe", "-NoProfile", "-EncodedCommand", b64
+        ])
+    finally:
+        if disp_checkpoint:
+            rollback_checkpoint(disp_checkpoint, sandbox_id)
+            vm_name = _get_vm_name(sandbox_id)
+            subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    f"Get-VMSnapshot -VMName '{vm_name}' -Name '{disp_checkpoint}' -ErrorAction SilentlyContinue | Remove-VMSnapshot -Confirm:$false",
+                ],
+                capture_output=True,
+            )
 
 
 @mcp.tool()

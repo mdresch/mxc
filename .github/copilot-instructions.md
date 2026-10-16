@@ -8,3 +8,5 @@ When executing shell commands, running tests, or installing packages, ALWAYS use
 5. If an experiment corrupts the environment, call `rollback_checkpoint` to reset in ~2 seconds (clock is automatically resynced).
 6. Once tests pass inside the guest, call `export_diff_from_guest` to review the verified unified git diff.
 7. Call `apply_guest_changes_to_host` (with `dry_run=False`) to losslessly apply additions, modifications, and deletions directly to the host repository.
+
+- **Ephemeral Execution**: For risky package installs, untrusted scripts, or experimental runs where you want guaranteed zero state pollution, pass `disposable=True` to `execute_command`. The sandbox automatically snapshots before running and rolls back state and cleans up the snapshot upon completion.
