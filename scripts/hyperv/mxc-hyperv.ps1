@@ -423,6 +423,16 @@ function mxc-pool-replenish {
     }
 }
 
+function mxc-session-status {
+    if ($global:MXC_DEFAULT_SANDBOX) {
+        Write-Host "Active Leased Session: $($global:MXC_DEFAULT_SANDBOX)" -ForegroundColor Green
+    } else {
+        $detected = Get-MxcActiveSandboxId
+        Write-Host "No active leased session. Auto-detected fallback sandbox: $detected" -ForegroundColor Cyan
+    }
+    mxc-pool-status
+}
+
 Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
 Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
 Set-Alias -Name mxapply -Value mxc-apply -Scope Global
@@ -430,6 +440,7 @@ Set-Alias -Name mxh     -Value mxc-health -Scope Global
 Set-Alias -Name mxpool  -Value mxc-pool-status -Scope Global
 Set-Alias -Name mxpl    -Value mxc-pool-lease -Scope Global
 Set-Alias -Name mxpr    -Value mxc-pool-release -Scope Global
+Set-Alias -Name mxss    -Value mxc-session-status -Scope Global
 
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
@@ -438,6 +449,7 @@ Write-Host "  mxc-status / mxs       View active sandboxes & health"
 Write-Host "  mxc-pool-status / mxpool View warm standby pool members & readiness"
 Write-Host "  mxc-pool-lease / mxpl  Instant checkout of a warm VM (<300ms)"
 Write-Host "  mxc-pool-release / mxpr Return leased VM back to pool & reset baseline"
+Write-Host "  mxc-session-status / mxss View active leased session & pool status"
 Write-Host "  mxc-sync / mxsync      Sync host workspace into guest & record baseline"
 Write-Host "  mxc-diff / mxdiff      Export unified diff of guest changes vs host"
 Write-Host "  mxc-apply / mxapply    Apply guest changes to host (use -DryRun to preview)"

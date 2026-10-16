@@ -1,12 +1,13 @@
 import base64
 import difflib
+import json
 import os
 import shutil
 import subprocess
 import tarfile
 import tempfile
 import uuid
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 try:
     from mcp.server.fastmcp import FastMCP as MCPServer
@@ -21,6 +22,71 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 WXC_BIN = os.path.normpath(os.path.join(REPO_ROOT, "src", "target", "debug", "wxc-exec.exe"))
 EXEC_JSON = os.path.normpath(os.path.join(REPO_ROOT, "exec.json"))
 DEFAULT_SANDBOX_ID = os.environ.get("MXC_SANDBOX_ID", "hv:a7df7452")
+
+# Active session sandbox ID (persists across multi-step agent actions until released)
+_ACTIVE_SESSION_SANDBOX: Optional[str] = None
+
+
+def _extract_json_payload(output: str) -> Optional[dict]:
+    """Extract and parse JSON object from command output."""
+    for line in output.splitlines():
+        line = line.strip()
+        if line.startswith("{") and line.endswith("}"):
+            try:
+                return json.loads(line)
+            except Exception:
+                pass
+    try:
+        start = output.find("{")
+        end = output.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            return json.loads(output[start : end + 1])
+    except Exception:
+        pass
+    return None
+
+
+def _lease_from_pool(lease_holder: str = "mcp-agent") -> Tuple[Optional[str], str]:
+    """Attempt to lease a VM from the standby pool in <300ms. Returns (sandbox_id, error_message)."""
+    raw = _run_wxc(["--hyperv-op", "pool-lease", "--pool-lease-holder", lease_holder])
+    if "[Exit Code: 0]" in raw:
+        payload = _extract_json_payload(raw)
+        if payload and "result" in payload and "sandboxId" in payload["result"]:
+            return payload["result"]["sandboxId"], ""
+    payload = _extract_json_payload(raw)
+    err = "Unknown error leasing from pool"
+    if payload and "error" in payload:
+        err = payload["error"].get("message", err)
+    return None, err
+
+
+def _release_to_pool(sandbox_id: str) -> Tuple[bool, str]:
+    """Release a leased VM back to the standby pool. Returns (success, message)."""
+    raw = _run_wxc(["--hyperv-op", "pool-release", "--hyperv-sandbox-id", sandbox_id])
+    return ("[Exit Code: 0]" in raw), raw
+
+
+def _resolve_sandbox_id(requested_id: Optional[str] = "auto") -> str:
+    """Resolve target sandbox ID:
+    1. If explicit ID provided (not 'auto' or empty), use it.
+    2. If an active session sandbox is bound, use it.
+    3. Try auto-leasing a pre-warmed VM from the pool.
+    4. Fall back to DEFAULT_SANDBOX_ID.
+    """
+    global _ACTIVE_SESSION_SANDBOX
+    if requested_id and requested_id != "auto":
+        return requested_id
+
+    if _ACTIVE_SESSION_SANDBOX:
+        return _ACTIVE_SESSION_SANDBOX
+
+    # Attempt auto-lease from standby pool
+    leased_id, _ = _lease_from_pool("mcp-auto-session")
+    if leased_id:
+        _ACTIVE_SESSION_SANDBOX = leased_id
+        return leased_id
+
+    return DEFAULT_SANDBOX_ID
 
 
 def _run_wxc(args: list[str], timeout: int = 120) -> str:
@@ -175,7 +241,7 @@ def _get_guest_changes(guest_dir: str, sandbox_id: str) -> Tuple[Dict[str, bytes
 @mcp.tool()
 def execute_command(
     command: str,
-    sandbox_id: str = DEFAULT_SANDBOX_ID,
+    sandbox_id: str = "auto",
     disposable: bool = False
 ) -> str:
     """Execute a shell or PowerShell command inside the isolated MXC Hyper-V guest VM.
@@ -183,14 +249,32 @@ def execute_command(
 
     Args:
         command: The command or script to execute inside the guest VM.
-        sandbox_id: Target MXC Hyper-V sandbox ID (defaults to active sandbox).
-        disposable: If True, creates an ephemeral checkpoint before execution and automatically
-                    rolls back VM state and cleans up the snapshot in a finally block, leaving zero residue.
+        sandbox_id: Target MXC Hyper-V sandbox ID (defaults to 'auto', which binds to active session or pool).
+        disposable: If True, provides zero-residue execution. If a pool VM is available, leases it on-the-fly
+                    and recycles it in a finally block; otherwise creates an ephemeral checkpoint and rolls back.
     """
+    # If disposable mode with 'auto' sandbox, try on-the-fly pool lease with guaranteed recycle
+    if disposable and (sandbox_id == "auto" or not sandbox_id):
+        disp_id, _ = _lease_from_pool("mcp-disposable")
+        if disp_id:
+            try:
+                b64 = base64.b64encode(command.encode("utf-16le")).decode("ascii")
+                return _run_wxc([
+                    "--operation", "exec",
+                    "--container-id", disp_id,
+                    EXEC_JSON,
+                    "--",
+                    "powershell.exe", "-NoProfile", "-EncodedCommand", b64
+                ])
+            finally:
+                _release_to_pool(disp_id)
+
+    # Standard execution path (or fallback for disposable on fixed sandbox)
+    target_sb = _resolve_sandbox_id(sandbox_id)
     disp_checkpoint = None
     if disposable:
         disp_checkpoint = f"mxc-disp-{uuid.uuid4().hex[:8]}"
-        ckpt_res = create_checkpoint(disp_checkpoint, sandbox_id)
+        ckpt_res = create_checkpoint(disp_checkpoint, target_sb)
         if "[Exit Code: 0]" not in ckpt_res:
             return f"[Error creating disposable checkpoint]: {ckpt_res}"
 
@@ -198,15 +282,15 @@ def execute_command(
         b64 = base64.b64encode(command.encode("utf-16le")).decode("ascii")
         return _run_wxc([
             "--operation", "exec",
-            "--container-id", sandbox_id,
+            "--container-id", target_sb,
             EXEC_JSON,
             "--",
             "powershell.exe", "-NoProfile", "-EncodedCommand", b64
         ])
     finally:
         if disp_checkpoint:
-            rollback_checkpoint(disp_checkpoint, sandbox_id)
-            vm_name = _get_vm_name(sandbox_id)
+            rollback_checkpoint(disp_checkpoint, target_sb)
+            vm_name = _get_vm_name(target_sb)
             subprocess.run(
                 [
                     "powershell",
@@ -219,43 +303,47 @@ def execute_command(
 
 
 @mcp.tool()
-def create_checkpoint(name: str, sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
+def create_checkpoint(name: str, sandbox_id: str = "auto") -> str:
     """Save a fast Hyper-V checkpoint before attempting risky refactors or package installs."""
+    target_sb = _resolve_sandbox_id(sandbox_id)
     return _run_wxc([
         "--hyperv-op", "checkpoint",
-        "--hyperv-sandbox-id", sandbox_id,
+        "--hyperv-sandbox-id", target_sb,
         "--hyperv-checkpoint-name", name
     ])
 
 
 @mcp.tool()
-def rollback_checkpoint(name: str, sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
+def rollback_checkpoint(name: str, sandbox_id: str = "auto") -> str:
     """Restore the Hyper-V sandbox back to a named checkpoint to undo broken state.
     Automatically resynchronizes VM guest clock with host time upon completion.
     """
+    target_sb = _resolve_sandbox_id(sandbox_id)
     res = _run_wxc([
         "--hyperv-op", "restore",
-        "--hyperv-sandbox-id", sandbox_id,
+        "--hyperv-sandbox-id", target_sb,
         "--hyperv-checkpoint-name", name
     ])
     # Force guest clock resync to prevent timestamp skew after rollback
-    execute_command("Start-Service w32time -ErrorAction SilentlyContinue; w32tm /resync /force -ErrorAction SilentlyContinue", sandbox_id)
+    execute_command("Start-Service w32time -ErrorAction SilentlyContinue; w32tm /resync /force -ErrorAction SilentlyContinue", target_sb)
     return res
 
 
 @mcp.tool()
-def list_checkpoints(sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
+def list_checkpoints(sandbox_id: str = "auto") -> str:
     """List all available checkpoints for the active MXC Hyper-V sandbox."""
+    target_sb = _resolve_sandbox_id(sandbox_id)
     return _run_wxc([
         "--hyperv-op", "list-checkpoints",
-        "--hyperv-sandbox-id", sandbox_id
+        "--hyperv-sandbox-id", target_sb
     ])
 
 
 @mcp.tool()
-def inspect_status(sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
+def inspect_status(sandbox_id: str = "auto") -> str:
     """View VM power state, assigned RAM, uptime, and integration heartbeat."""
-    vm_name = _get_vm_name(sandbox_id)
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    vm_name = _get_vm_name(target_sb)
     ps_cmd = (
         f"Get-VM '{vm_name}' | Select-Object Name, State, "
         f"@{{N='MemoryMB';E={{[math]::Round($_.MemoryAssigned/1MB,0)}}}}, Uptime | Format-List; "
@@ -269,13 +357,14 @@ def inspect_status(sandbox_id: str = DEFAULT_SANDBOX_ID) -> str:
 def sync_workspace_to_guest(
     source_subdir: str = "",
     target_dir: str = "C:\\workspace",
-    sandbox_id: str = DEFAULT_SANDBOX_ID
+    sandbox_id: str = "auto"
 ) -> str:
     """Synchronize host workspace files into the guest VM virtual disk (VHDX) via Hyper-V VMBus Copy-VMFile.
     Uses native tar.exe with exclusions (.git, target, bin, obj, node_modules) for sub-second packaging and transfer.
     Generates a full baseline file manifest (.sync_manifest.json) in the guest to track additions, modifications, and deletions.
     """
-    vm_name = _get_vm_name(sandbox_id)
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    vm_name = _get_vm_name(target_sb)
     source_path = os.path.join(REPO_ROOT, source_subdir) if source_subdir else REPO_ROOT
 
     with tempfile.NamedTemporaryFile(suffix=".tar.gz", delete=False) as tmp:
@@ -309,7 +398,7 @@ def sync_workspace_to_guest(
         # Copy archive to guest via native wxc-exec Rust backend operation
         copy_res = _run_wxc([
             "--hyperv-op", "copy-file",
-            "--hyperv-sandbox-id", sandbox_id,
+            "--hyperv-sandbox-id", target_sb,
             "--hyperv-source-path", archive_path,
             "--hyperv-dest-path", guest_archive,
         ])
@@ -333,8 +422,8 @@ def sync_workspace_to_guest(
             f"}}; "
             f"$manifest | ConvertTo-Json -Compress | Set-Content -Path \"$target_dir\\.sync_manifest.json\" -Encoding utf8"
         )
-        extract_res = execute_command(ps_extract, sandbox_id)
-        return f"Successfully synchronized workspace and generated baseline manifest in '{target_dir}'.\n{extract_res}"
+        extract_res = execute_command(ps_extract, target_sb)
+        return f"Successfully synchronized workspace and generated baseline manifest in '{target_dir}' (sandbox: {target_sb}).\n{extract_res}"
     finally:
         if os.path.exists(archive_path):
             os.remove(archive_path)
@@ -343,17 +432,18 @@ def sync_workspace_to_guest(
 @mcp.tool()
 def export_diff_from_guest(
     guest_dir: str = "C:\\workspace",
-    sandbox_id: str = DEFAULT_SANDBOX_ID
+    sandbox_id: str = "auto"
 ) -> str:
     """Generate a clean unified git diff of all changes (additions, modifications, and deletions)
     made inside the guest workspace compared to host workspace. Uses the baseline manifest to prevent timestamp skew.
     """
-    added, modified, deleted, err = _get_guest_changes(guest_dir, sandbox_id)
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    added, modified, deleted, err = _get_guest_changes(guest_dir, target_sb)
     if err:
         return err
 
     if not added and not modified and not deleted:
-        return "No differences between guest workspace and host workspace."
+        return f"No differences between guest workspace ({target_sb}) and host workspace."
 
     diffs: List[str] = []
 
@@ -381,23 +471,24 @@ def export_diff_from_guest(
 @mcp.tool()
 def apply_guest_changes_to_host(
     guest_dir: str = "C:\\workspace",
-    sandbox_id: str = DEFAULT_SANDBOX_ID,
+    sandbox_id: str = "auto",
     dry_run: bool = False
 ) -> str:
     """Apply verified changes from inside the guest workspace directly to the host workspace.
     Supports file additions, modifications, and deletions losslessly without CRLF/LF mismatch.
     Set dry_run=True to preview the file operations before applying.
     """
-    added, modified, deleted, err = _get_guest_changes(guest_dir, sandbox_id)
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    added, modified, deleted, err = _get_guest_changes(guest_dir, target_sb)
     if err:
         return err
 
     if not added and not modified and not deleted:
-        return "No guest changes to apply to host."
+        return f"No guest changes in {target_sb} to apply to host."
 
     report: List[str] = []
     prefix = "[Dry Run] Would apply:" if dry_run else "Successfully applied:"
-    report.append(prefix)
+    report.append(f"{prefix} (source: {target_sb})")
 
     # Process Additions
     for rel, content in added.items():
@@ -438,29 +529,61 @@ def pool_status() -> str:
 @mcp.tool()
 def pool_lease(lease_holder: str = "agent") -> str:
     """Instantly lease a pre-warmed Hyper-V sandbox VM from the standby pool in <300ms.
-    Returns the leased sandbox ID (e.g. hv:p1a2b3c4).
+    Sets it as the active session sandbox and returns the leased sandbox ID (e.g. hv:p1a2b3c4).
     """
-    return _run_wxc([
-        "--hyperv-op", "pool-lease",
-        "--pool-lease-holder", lease_holder,
-    ])
+    global _ACTIVE_SESSION_SANDBOX
+    leased_id, err = _lease_from_pool(lease_holder)
+    if leased_id:
+        _ACTIVE_SESSION_SANDBOX = leased_id
+        return f"Successfully leased sandbox '{leased_id}' in <300ms. Set as active session sandbox."
+    return f"[Error leasing from pool]: {err}"
 
 
 @mcp.tool()
-def pool_release(sandbox_id: str) -> str:
+def pool_release(sandbox_id: str = "auto") -> str:
     """Return a leased sandbox VM back to the standby pool.
     Instantly restores it to clean baseline snapshot, suspends it, and marks it Ready.
+    If sandbox_id is 'auto', releases the active session sandbox.
     """
-    return _run_wxc([
-        "--hyperv-op", "pool-release",
-        "--hyperv-sandbox-id", sandbox_id,
-    ])
+    global _ACTIVE_SESSION_SANDBOX
+    target_id = _ACTIVE_SESSION_SANDBOX if (sandbox_id == "auto" or not sandbox_id) else sandbox_id
+    if not target_id:
+        return "No sandbox ID specified and no active session sandbox to release."
+
+    success, raw = _release_to_pool(target_id)
+    if success and _ACTIVE_SESSION_SANDBOX == target_id:
+        _ACTIVE_SESSION_SANDBOX = None
+        return f"Successfully returned '{target_id}' to standby pool and cleared active session."
+    return raw
 
 
 @mcp.tool()
 def pool_replenish() -> str:
     """Replenish the standby pool by provisioning and warming up VMs up to the configured target size."""
     return _run_wxc(["--hyperv-op", "pool-replenish"])
+
+
+@mcp.tool()
+def session_acquire(lease_holder: str = "agent") -> str:
+    """Acquire an isolated Hyper-V sandbox session from the warm pool.
+    Subsequent commands will automatically run inside this session until session_release() is called.
+    """
+    return pool_lease(lease_holder)
+
+
+@mcp.tool()
+def session_release() -> str:
+    """Release the current active session sandbox back to the pool (cleans state and suspends)."""
+    return pool_release("auto")
+
+
+@mcp.tool()
+def session_status() -> str:
+    """Check the currently bound session sandbox and pool availability."""
+    global _ACTIVE_SESSION_SANDBOX
+    status_raw = pool_status()
+    active_str = f"Active session sandbox: {_ACTIVE_SESSION_SANDBOX or f'None (fallback: {DEFAULT_SANDBOX_ID})'}"
+    return f"{active_str}\n\nPool Status:\n{status_raw}"
 
 
 if __name__ == "__main__":
