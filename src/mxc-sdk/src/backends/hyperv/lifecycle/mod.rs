@@ -12,6 +12,7 @@ pub mod backend_ops;
 pub mod control_plane;
 pub mod error;
 pub mod image;
+pub mod pool;
 pub mod state_aware;
 
 #[allow(unused_imports)]

@@ -429,5 +429,39 @@ def apply_guest_changes_to_host(
     return "\n".join(report)
 
 
+@mcp.tool()
+def pool_status() -> str:
+    """View the live status of the warm standby VM pool (ready, leased, target size, members)."""
+    return _run_wxc(["--hyperv-op", "pool-status"])
+
+
+@mcp.tool()
+def pool_lease(lease_holder: str = "agent") -> str:
+    """Instantly lease a pre-warmed Hyper-V sandbox VM from the standby pool in <300ms.
+    Returns the leased sandbox ID (e.g. hv:p1a2b3c4).
+    """
+    return _run_wxc([
+        "--hyperv-op", "pool-lease",
+        "--pool-lease-holder", lease_holder,
+    ])
+
+
+@mcp.tool()
+def pool_release(sandbox_id: str) -> str:
+    """Return a leased sandbox VM back to the standby pool.
+    Instantly restores it to clean baseline snapshot, suspends it, and marks it Ready.
+    """
+    return _run_wxc([
+        "--hyperv-op", "pool-release",
+        "--hyperv-sandbox-id", sandbox_id,
+    ])
+
+
+@mcp.tool()
+def pool_replenish() -> str:
+    """Replenish the standby pool by provisioning and warming up VMs up to the configured target size."""
+    return _run_wxc(["--hyperv-op", "pool-replenish"])
+
+
 if __name__ == "__main__":
     mcp.run()

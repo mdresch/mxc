@@ -110,6 +110,22 @@ struct Cli {
     #[arg(long = "hyperv-dest-path", requires = "hyperv_op")]
     hyperv_dest_path: Option<String>,
 
+    /// Target size for --hyperv-op pool-config.
+    #[arg(long = "pool-target-size", requires = "hyperv_op")]
+    pool_target_size: Option<usize>,
+
+    /// Base image path for --hyperv-op pool-config.
+    #[arg(long = "pool-base-image", requires = "hyperv_op")]
+    pool_base_image: Option<String>,
+
+    /// Guest credential target for --hyperv-op pool-config.
+    #[arg(long = "pool-credential-target", requires = "hyperv_op")]
+    pool_credential_target: Option<String>,
+
+    /// Lease holder tag for --hyperv-op pool-lease.
+    #[arg(long = "pool-lease-holder", requires = "hyperv_op")]
+    pool_lease_holder: Option<String>,
+
     /// Path to diagnostic log file (appends, creates if missing)
     #[arg(long = "log-file")]
     log_file: Option<String>,
@@ -270,6 +286,12 @@ enum HypervOp {
     Restore,
     ListCheckpoints,
     CopyFile,
+    PoolStatus,
+    PoolConfig,
+    PoolReplenish,
+    PoolLease,
+    PoolRelease,
+    PoolDrain,
 }
 
 fn parse_cli() -> Cli {
@@ -1055,14 +1077,10 @@ fn install_dacl_ctrl_handler() {
 fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
     #[cfg(all(target_os = "windows", feature = "hyperv"))]
     {
-        let Some(sandbox_id) = cli.hyperv_sandbox_id.as_deref() else {
-            println!(
-                "{}",
-                error_envelope_string(&MxcError::malformed_request(
-                    "--hyperv-sandbox-id is required with --hyperv-op"
-                ))
-            );
-            return 1;
+        let require_sandbox_id = || -> Result<&str, MxcError> {
+            cli.hyperv_sandbox_id.as_deref().ok_or_else(|| {
+                MxcError::malformed_request("--hyperv-sandbox-id is required for this --hyperv-op")
+            })
         };
         let checkpoint_name = || -> Result<&str, MxcError> {
             cli.hyperv_checkpoint_name.as_deref().ok_or_else(|| {
@@ -1071,51 +1089,90 @@ fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
                 )
             })
         };
-        let result: Result<serde_json::Value, MxcError> = match op {
-            HypervOp::Pause => {
-                mxc_sdk::hyperv_lifecycle::backend_ops::pause(sandbox_id).map(|()| serde_json::json!({}))
-            }
-            HypervOp::Resume => {
-                mxc_sdk::hyperv_lifecycle::backend_ops::resume(sandbox_id).map(|()| serde_json::json!({}))
-            }
-            HypervOp::ForcePoweroff => mxc_sdk::hyperv_lifecycle::backend_ops::force_poweroff(sandbox_id)
-                .map(|()| serde_json::json!({})),
-            HypervOp::Checkpoint => checkpoint_name().and_then(|name| {
-                mxc_sdk::hyperv_lifecycle::backend_ops::checkpoint(sandbox_id, name)
-                    .map(|()| serde_json::json!({}))
-            }),
-            HypervOp::Restore => checkpoint_name().and_then(|name| {
-                mxc_sdk::hyperv_lifecycle::backend_ops::restore(sandbox_id, name)
-                    .map(|()| serde_json::json!({}))
-            }),
-            HypervOp::ListCheckpoints => {
-                mxc_sdk::hyperv_lifecycle::backend_ops::list_checkpoints(sandbox_id).map(|snapshots| {
-                    serde_json::json!({
-                        "checkpoints": snapshots
-                            .into_iter()
-                            .map(|s| serde_json::json!({
-                                "name": s.name,
-                                "creationTime": s.creation_time,
-                            }))
-                            .collect::<Vec<_>>()
+        let result: Result<serde_json::Value, MxcError> = (|| -> Result<serde_json::Value, MxcError> {
+            match op {
+                HypervOp::Pause => {
+                    let id = require_sandbox_id()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::pause(id).map(|()| serde_json::json!({}))
+                }
+                HypervOp::Resume => {
+                    let id = require_sandbox_id()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::resume(id).map(|()| serde_json::json!({}))
+                }
+                HypervOp::ForcePoweroff => {
+                    let id = require_sandbox_id()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::force_poweroff(id)
+                        .map(|()| serde_json::json!({}))
+                }
+                HypervOp::Checkpoint => {
+                    let id = require_sandbox_id()?;
+                    let name = checkpoint_name()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::checkpoint(id, name)
+                        .map(|()| serde_json::json!({}))
+                }
+                HypervOp::Restore => {
+                    let id = require_sandbox_id()?;
+                    let name = checkpoint_name()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::restore(id, name)
+                        .map(|()| serde_json::json!({}))
+                }
+                HypervOp::ListCheckpoints => {
+                    let id = require_sandbox_id()?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::list_checkpoints(id).map(|snapshots| {
+                        serde_json::json!({
+                            "checkpoints": snapshots
+                                .into_iter()
+                                .map(|s| serde_json::json!({
+                                    "name": s.name,
+                                    "creationTime": s.creation_time,
+                                }))
+                                .collect::<Vec<_>>()
+                        })
                     })
-                })
+                }
+                HypervOp::CopyFile => {
+                    let id = require_sandbox_id()?;
+                    let source = cli.hyperv_source_path.as_deref().ok_or_else(|| {
+                        MxcError::malformed_request(
+                            "--hyperv-source-path is required with --hyperv-op copy-file",
+                        )
+                    })?;
+                    let dest = cli.hyperv_dest_path.as_deref().ok_or_else(|| {
+                        MxcError::malformed_request(
+                            "--hyperv-dest-path is required with --hyperv-op copy-file",
+                        )
+                    })?;
+                    mxc_sdk::hyperv_lifecycle::backend_ops::copy_file_to_guest(id, source, dest)
+                        .map(|()| serde_json::json!({}))
+                }
+                HypervOp::PoolStatus => mxc_sdk::hyperv_lifecycle::pool::get_pool_status()
+                    .map(|report| serde_json::to_value(report).unwrap_or_default()),
+                HypervOp::PoolConfig => {
+                    let target_size = cli
+                        .pool_target_size
+                        .unwrap_or(mxc_sdk::hyperv_lifecycle::pool::DEFAULT_POOL_TARGET_SIZE);
+                    let base_image = cli.pool_base_image.as_deref().unwrap_or("");
+                    let cred = cli.pool_credential_target.clone();
+                    mxc_sdk::hyperv_lifecycle::pool::configure_pool(target_size, base_image, cred)
+                        .map(|report| serde_json::to_value(report).unwrap_or_default())
+                }
+                HypervOp::PoolReplenish => mxc_sdk::hyperv_lifecycle::pool::replenish_pool()
+                    .map(|report| serde_json::to_value(report).unwrap_or_default()),
+                HypervOp::PoolLease => {
+                    let holder = cli.pool_lease_holder.as_deref();
+                    mxc_sdk::hyperv_lifecycle::pool::lease_from_pool(holder)
+                        .map(|sandbox_id| serde_json::json!({ "sandboxId": sandbox_id }))
+                }
+                HypervOp::PoolRelease => {
+                    let id = require_sandbox_id()?;
+                    mxc_sdk::hyperv_lifecycle::pool::release_to_pool(id)
+                        .map(|()| serde_json::json!({}))
+                }
+                HypervOp::PoolDrain => {
+                    mxc_sdk::hyperv_lifecycle::pool::drain_pool().map(|()| serde_json::json!({}))
+                }
             }
-            HypervOp::CopyFile => (|| {
-                let source = cli.hyperv_source_path.as_deref().ok_or_else(|| {
-                    MxcError::malformed_request(
-                        "--hyperv-source-path is required with --hyperv-op copy-file",
-                    )
-                })?;
-                let dest = cli.hyperv_dest_path.as_deref().ok_or_else(|| {
-                    MxcError::malformed_request(
-                        "--hyperv-dest-path is required with --hyperv-op copy-file",
-                    )
-                })?;
-                mxc_sdk::hyperv_lifecycle::backend_ops::copy_file_to_guest(sandbox_id, source, dest)
-                    .map(|()| serde_json::json!({}))
-            })(),
-        };
+        })();
         match result {
             Ok(value) => {
                 println!("{}", serde_json::json!({ "result": value }));

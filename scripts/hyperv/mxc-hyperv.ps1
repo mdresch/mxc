@@ -364,15 +364,80 @@ function mxc-health {
     Invoke-MxcGuest -SandboxId $sb powershell -ExecutionPolicy Bypass -File "C:\workspace\scripts\hyperv\guest_health.ps1"
 }
 
+# --- Warm Standby Pool Operations ---
+
+function mxc-pool-status {
+    Ensure-MxcExecBinary
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-status | ConvertFrom-Json
+    if ($raw.result) {
+        $res = $raw.result
+        Write-Host "Warm Standby VM Pool (Target: $($res.target_size), Ready: $($res.ready_count), Leased: $($res.leased_count), Total: $($res.total_members))" -ForegroundColor Cyan
+        if ($res.members.Count -gt 0) {
+            $res.members | Format-Table -Property token, sandbox_id, status, leased_to, vm_name -AutoSize
+        } else {
+            Write-Host "  Pool is empty. Run 'mxc-pool-replenish' to warm up standby VMs." -ForegroundColor DarkGray
+        }
+    } else {
+        Write-Host "Error querying pool status: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
+function mxc-pool-lease {
+    param([string]$Holder = "operator")
+    Ensure-MxcExecBinary
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-lease --pool-lease-holder $Holder | ConvertFrom-Json
+    if ($raw.result -and $raw.result.sandboxId) {
+        $global:MXC_DEFAULT_SANDBOX = $raw.result.sandboxId
+        Write-Host "Successfully leased $($raw.result.sandboxId) from standby pool in <300ms!" -ForegroundColor Green
+        Write-Host "Set default sandbox to $($global:MXC_DEFAULT_SANDBOX)." -ForegroundColor Cyan
+        return $raw.result.sandboxId
+    } else {
+        Write-Host "Failed to lease VM from pool: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
+function mxc-pool-release {
+    param([string]$SandboxId)
+    Ensure-MxcExecBinary
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    Write-Host "Releasing $sb back to standby pool (resetting to clean baseline snapshot)..." -ForegroundColor Cyan
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-release --hyperv-sandbox-id $sb | ConvertFrom-Json
+    if ($raw.result) {
+        Write-Host "Successfully returned $sb to standby pool." -ForegroundColor Green
+        if ($global:MXC_DEFAULT_SANDBOX -eq $sb) {
+            $global:MXC_DEFAULT_SANDBOX = $null
+        }
+    } else {
+        Write-Host "Failed to release VM: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
+function mxc-pool-replenish {
+    Ensure-MxcExecBinary
+    Write-Host "Replenishing standby pool to configured target size..." -ForegroundColor Cyan
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-replenish | ConvertFrom-Json
+    if ($raw.result) {
+        Write-Host "Standby pool replenished. Total members: $($raw.result.total_members)" -ForegroundColor Green
+    } else {
+        Write-Host "Failed to replenish pool: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
 Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
 Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
 Set-Alias -Name mxapply -Value mxc-apply -Scope Global
 Set-Alias -Name mxh     -Value mxc-health -Scope Global
+Set-Alias -Name mxpool  -Value mxc-pool-status -Scope Global
+Set-Alias -Name mxpl    -Value mxc-pool-lease -Scope Global
+Set-Alias -Name mxpr    -Value mxc-pool-release -Scope Global
 
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
+Write-Host "  mxc-pool-status / mxpool View warm standby pool members & readiness"
+Write-Host "  mxc-pool-lease / mxpl  Instant checkout of a warm VM (<300ms)"
+Write-Host "  mxc-pool-release / mxpr Return leased VM back to pool & reset baseline"
 Write-Host "  mxc-sync / mxsync      Sync host workspace into guest & record baseline"
 Write-Host "  mxc-diff / mxdiff      Export unified diff of guest changes vs host"
 Write-Host "  mxc-apply / mxapply    Apply guest changes to host (use -DryRun to preview)"
