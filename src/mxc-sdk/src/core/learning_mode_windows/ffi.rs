@@ -583,6 +583,7 @@ mod tests {
         result
     }
 
+    #[allow(deprecated)]
     unsafe extern "system" fn fake_stop(_: HANDLE, _: *const u16) -> HRESULT {
         STOP_CALLS.fetch_add(1, Ordering::SeqCst);
         if STOP_FAILURES_REMAINING

@@ -274,20 +274,15 @@ def sync_workspace_to_guest(
 
         guest_archive = "C:\\transfer_workspace.tar.gz"
 
-        # Ensure Guest Service Interface is enabled
-        subprocess.run(
-            ["powershell", "-NoProfile", "-Command", f"Enable-VMIntegrationService -VMName '{vm_name}' -Name 'Guest Service Interface' -ErrorAction SilentlyContinue"],
-            capture_output=True
-        )
-
-        # Copy archive to guest via Copy-VMFile over VMBus
-        ps_copy = (
-            f"Copy-VMFile -VMName '{vm_name}' -SourcePath '{archive_path}' "
-            f"-DestinationPath '{guest_archive}' -CreateFullPath -FileSource Host -Force"
-        )
-        res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_copy], capture_output=True, text=True)
-        if res.returncode != 0:
-            return f"[Error copying archive to guest]: {res.stderr.strip()}"
+        # Copy archive to guest via native wxc-exec Rust backend operation
+        copy_res = _run_wxc([
+            "--hyperv-op", "copy-file",
+            "--hyperv-sandbox-id", sandbox_id,
+            "--hyperv-source-path", archive_path,
+            "--hyperv-dest-path", guest_archive,
+        ])
+        if "[Exit Code: 0]" not in copy_res:
+            return f"[Error copying archive to guest via wxc-exec]: {copy_res}"
 
         # Extract inside guest, clean up archive, and generate baseline .sync_manifest.json
         ps_extract = (

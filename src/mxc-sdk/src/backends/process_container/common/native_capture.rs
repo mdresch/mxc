@@ -240,6 +240,7 @@ mod tests {
         result
     }
 
+    #[allow(deprecated)]
     unsafe extern "system" fn fake_stop(_: HANDLE, _: *const u16) -> HRESULT {
         record("stop");
         if STOP_FAILURES_REMAINING

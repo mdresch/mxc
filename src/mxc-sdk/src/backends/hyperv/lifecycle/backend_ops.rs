@@ -16,6 +16,7 @@
 //! flags and `mxc_ffi` functions (see `wxc::main` and `mxc_ffi::hyperv`),
 //! never through `Phase`/`state_aware_dispatch`/`state_aware_binding`.
 
+use std::path::Path;
 use std::time::Duration;
 
 use super::super::common as hyperv_common;
@@ -150,6 +151,41 @@ pub fn list_checkpoints(sandbox_id: &str) -> Result<Vec<VmSnapshotInfo>, MxcErro
         .map_err(|e| map_powershell_error("list-checkpoints (Get-VMSnapshot)", e))
 }
 
+/// Copy a file from the host filesystem into the guest VM filesystem via Hyper-V VMBus integration.
+/// Requires the sandbox to be in the `Started` state.
+pub fn copy_file_to_guest(
+    sandbox_id: &str,
+    host_source_path: &Path,
+    guest_dest_path: &str,
+) -> Result<(), MxcError> {
+    if !host_source_path.exists() {
+        return Err(MxcError::malformed_request(format!(
+            "host source path {host_source_path:?} does not exist"
+        )));
+    }
+    if guest_dest_path.trim().is_empty() {
+        return Err(MxcError::malformed_request(
+            "guest destination path must not be empty",
+        ));
+    }
+    let token = extract_token(sandbox_id)?;
+    let _lock = TransitionLock::acquire(token, TRANSITION_LOCK_TIMEOUT)
+        .map_err(|e| MxcError::backend_error(format!("{e}")))?;
+    let record = read_record_or_not_provisioned(token, sandbox_id)?;
+    if record.state != HypervSandboxState::Started {
+        return Err(MxcError::not_started(format!(
+            "sandbox {sandbox_id} is not started; file copy requires a running VM"
+        )));
+    }
+    hyperv_common::cmdlets::copy_file_to_guest(
+        &record.vm_name,
+        host_source_path,
+        guest_dest_path,
+        true,
+    )
+    .map_err(|e| map_powershell_error("copy file to guest (Copy-VMFile)", e))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -252,5 +288,20 @@ mod tests {
         assert_eq!(err.code, MxcErrorCode::NotStarted);
 
         control_plane::set_state_aware_root_for_test(None);
+    }
+
+    #[test]
+    fn copy_file_rejects_missing_source_path() {
+        let err = copy_file_to_guest("hv:abcd1234", Path::new("C:\\nonexistent_file_mxc_test.txt"), "C:\\dest.txt")
+            .unwrap_err();
+        assert_eq!(err.code, MxcErrorCode::MalformedRequest);
+    }
+
+    #[test]
+    fn copy_file_rejects_blank_dest_path() {
+        let temp = tempfile::NamedTempFile::new().unwrap();
+        let err = copy_file_to_guest("hv:abcd1234", temp.path(), "   ")
+            .unwrap_err();
+        assert_eq!(err.code, MxcErrorCode::MalformedRequest);
     }
 }

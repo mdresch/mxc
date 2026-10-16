@@ -119,6 +119,22 @@ pub fn enable_guest_service_interface(vm_name: &str) -> Result<(), PowerShellErr
     run_powershell(&script).map(|_| ())
 }
 
+pub fn copy_file_to_guest(
+    vm_name: &str,
+    host_source_path: &Path,
+    guest_dest_path: &str,
+    create_full_path: bool,
+) -> Result<(), PowerShellError> {
+    let script = format!(
+        "Copy-VMFile -VMName {} -SourcePath {} -DestinationPath {} -FileSource Host {} | Out-Null",
+        ps_single_quote(vm_name),
+        ps_single_quote(&host_source_path.to_string_lossy()),
+        ps_single_quote(guest_dest_path),
+        if create_full_path { "-CreateFullPath" } else { "" }
+    );
+    run_powershell(&script).map(|_| ())
+}
+
 
 pub fn start_vm(vm_name: &str) -> Result<(), PowerShellError> {
     run_powershell(&format!(

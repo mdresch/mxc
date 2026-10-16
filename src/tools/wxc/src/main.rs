@@ -102,6 +102,14 @@ struct Cli {
     #[arg(long = "hyperv-checkpoint-name", requires = "hyperv_op")]
     hyperv_checkpoint_name: Option<String>,
 
+    /// Host source path for --hyperv-op copy-file.
+    #[arg(long = "hyperv-source-path", requires = "hyperv_op")]
+    hyperv_source_path: Option<std::path::PathBuf>,
+
+    /// Guest destination path for --hyperv-op copy-file.
+    #[arg(long = "hyperv-dest-path", requires = "hyperv_op")]
+    hyperv_dest_path: Option<String>,
+
     /// Path to diagnostic log file (appends, creates if missing)
     #[arg(long = "log-file")]
     log_file: Option<String>,
@@ -261,6 +269,7 @@ enum HypervOp {
     Checkpoint,
     Restore,
     ListCheckpoints,
+    CopyFile,
 }
 
 fn parse_cli() -> Cli {
@@ -1092,6 +1101,20 @@ fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
                     })
                 })
             }
+            HypervOp::CopyFile => (|| {
+                let source = cli.hyperv_source_path.as_deref().ok_or_else(|| {
+                    MxcError::malformed_request(
+                        "--hyperv-source-path is required with --hyperv-op copy-file",
+                    )
+                })?;
+                let dest = cli.hyperv_dest_path.as_deref().ok_or_else(|| {
+                    MxcError::malformed_request(
+                        "--hyperv-dest-path is required with --hyperv-op copy-file",
+                    )
+                })?;
+                mxc_sdk::hyperv_lifecycle::backend_ops::copy_file_to_guest(sandbox_id, source, dest)
+                    .map(|()| serde_json::json!({}))
+            })(),
         };
         match result {
             Ok(value) => {
