@@ -641,5 +641,64 @@ def capture_screenshot(
     return output
 
 
+@mcp.tool()
+def set_network(
+    enabled: bool = True,
+    switch_name: str = "Default Switch",
+    sandbox_id: str = "auto"
+) -> str:
+    """Connect or disconnect the guest VM virtual network adapter.
+    Enables internet/LAN access via 'Default Switch' (or custom switch), or isolates the VM in airgap mode.
+
+    Args:
+        enabled: True to connect network (internet enabled), False to disconnect (airgap mode).
+        switch_name: Virtual switch name to connect to (defaults to 'Default Switch').
+        sandbox_id: Target MXC Hyper-V sandbox ID (defaults to 'auto', which uses active session or fallback).
+    """
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    vm_name = _get_vm_name(target_sb)
+
+    if enabled:
+        ps_cmd = (
+            f"Connect-VMNetworkAdapter -VMName '{vm_name}' -SwitchName '{switch_name}'; "
+            f"Start-Sleep -Seconds 2; "
+            f"$a = Get-VMNetworkAdapter -VMName '{vm_name}'; "
+            f"$ips = ($a.IPAddresses | Where-Object {{ $_ -notlike '*:*' -and $_ -notlike '169.254.*' }}) -join ', '; "
+            f"[PSCustomObject]@{{ VMName = '{vm_name}'; Connected = $true; Switch = '{switch_name}'; IPv4 = $ips }} | ConvertTo-Json -Compress"
+        )
+    else:
+        ps_cmd = (
+            f"Disconnect-VMNetworkAdapter -VMName '{vm_name}'; "
+            f"[PSCustomObject]@{{ VMName = '{vm_name}'; Connected = $false; Switch = $null; Airgapped = $true }} | ConvertTo-Json -Compress"
+        )
+
+    res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True, text=True)
+    if res.returncode != 0:
+        return f"[Error setting network state]: {res.stderr.strip() or res.stdout.strip()}"
+    return res.stdout.strip()
+
+
+@mcp.tool()
+def get_network_status(sandbox_id: str = "auto") -> str:
+    """Check the live network connectivity, virtual switch, MAC address, and assigned IP of the guest VM."""
+    target_sb = _resolve_sandbox_id(sandbox_id)
+    vm_name = _get_vm_name(target_sb)
+    ps_cmd = (
+        f"$a = Get-VMNetworkAdapter -VMName '{vm_name}'; "
+        f"[PSCustomObject]@{{ "
+        f"    VMName = '{vm_name}'; "
+        f"    Connected = $a.Connected; "
+        f"    Switch = if ($a.SwitchName) {{ $a.SwitchName }} else {{ 'None (Airgapped)' }}; "
+        f"    MacAddress = $a.MacAddress; "
+        f"    IPv4 = ($a.IPAddresses | Where-Object {{ $_ -notlike '*:*' -and $_ -notlike '169.254.*' }}) -join ', '; "
+        f"    AllIPs = $a.IPAddresses -join ', ' "
+        f"}} | ConvertTo-Json -Compress"
+    )
+    res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True, text=True)
+    if res.returncode != 0:
+        return f"[Error getting network status]: {res.stderr.strip() or res.stdout.strip()}"
+    return res.stdout.strip()
+
+
 if __name__ == "__main__":
     mcp.run()

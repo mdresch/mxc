@@ -465,11 +465,70 @@ function mxc-screenshot {
     }
 }
 
+function mxc-net-enable {
+    param(
+        [string]$SandboxId,
+        [string]$SwitchName = "Default Switch"
+    )
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    $vmName = if ($sb -like "hv:*") { "mxc-hv-" + $sb.Substring(3) } else { $sb }
+    Write-Host "Connecting network adapter on $vmName to virtual switch '$SwitchName'..." -ForegroundColor Cyan
+    try {
+        Connect-VMNetworkAdapter -VMName $vmName -SwitchName $SwitchName -ErrorAction Stop
+        Start-Sleep -Seconds 2
+        $adapter = Get-VMNetworkAdapter -VMName $vmName
+        $ipDisplay = if ($ip) { $ip } else { "pending DHCP..." }
+        Write-Host "Network enabled on $vmName (Switch: $SwitchName, IP: $ipDisplay)" -ForegroundColor Green
+    } catch {
+        Write-Host "Failed to connect network adapter: $_" -ForegroundColor Red
+    }
+}
+
+function mxc-net-disable {
+    param(
+        [string]$SandboxId
+    )
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    $vmName = if ($sb -like "hv:*") { "mxc-hv-" + $sb.Substring(3) } else { $sb }
+    Write-Host "Disconnecting network adapter on $vmName (airgap isolation)..." -ForegroundColor Cyan
+    try {
+        Disconnect-VMNetworkAdapter -VMName $vmName -ErrorAction Stop
+        Write-Host "Network disabled on $vmName. Airgap restored." -ForegroundColor Green
+    } catch {
+        Write-Host "Failed to disconnect network adapter: $_" -ForegroundColor Red
+    }
+}
+
+function mxc-net-status {
+    param(
+        [string]$SandboxId
+    )
+    $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    $vmName = if ($sb -like "hv:*") { "mxc-hv-" + $sb.Substring(3) } else { $sb }
+    $adapter = Get-VMNetworkAdapter -VMName $vmName
+    if (-not $adapter) {
+        Write-Host "No network adapter found for $vmName." -ForegroundColor Red
+        return
+    }
+    $status = [PSCustomObject]@{
+        VMName     = $vmName
+        Connected  = $adapter.Connected
+        SwitchName = if ($adapter.SwitchName) { $adapter.SwitchName } else { "(Disconnected - Airgapped)" }
+        MacAddress = $adapter.MacAddress
+        IPv4       = ($adapter.IPAddresses | Where-Object { $_ -notlike "*:*" -and $_ -notlike "169.254.*" }) -join ", "
+        AllIPs     = $adapter.IPAddresses -join ", "
+    }
+    $status | Format-List
+}
+
 Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
 Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
 Set-Alias -Name mxapply -Value mxc-apply -Scope Global
 Set-Alias -Name mxh     -Value mxc-health -Scope Global
 Set-Alias -Name mxshot  -Value mxc-screenshot -Scope Global
+Set-Alias -Name mxnet   -Value mxc-net-enable -Scope Global
+Set-Alias -Name mxair   -Value mxc-net-disable -Scope Global
+Set-Alias -Name mxnets  -Value mxc-net-status -Scope Global
 Set-Alias -Name mxpool  -Value mxc-pool-status -Scope Global
 Set-Alias -Name mxpl    -Value mxc-pool-lease -Scope Global
 Set-Alias -Name mxpr    -Value mxc-pool-release -Scope Global
@@ -478,6 +537,9 @@ Set-Alias -Name mxss    -Value mxc-session-status -Scope Global
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
 Write-Host "  mxc-screenshot / mxshot Capture live PNG screenshot from Hyper-V video buffer"
+Write-Host "  mxc-net-enable / mxnet Connect VM to Default Switch (enable internet)"
+Write-Host "  mxc-net-disable / mxair Disconnect VM from network (airgap isolation)"
+Write-Host "  mxc-net-status / mxnets View VM network adapter connection, switch & IP"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
 Write-Host "  mxc-pool-status / mxpool View warm standby pool members & readiness"
