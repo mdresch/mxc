@@ -306,6 +306,9 @@ pub fn replenish_pool() -> Result<PoolStatusReport, MxcError> {
         hyperv_common::cmdlets::start_vm(&vm_name)
             .map_err(|e| map_powershell_error("pool start VM", e))?;
 
+        // 2b. Wait for guest OS to finish booting and establish heartbeat
+        let _ = hyperv_common::cmdlets::wait_for_heartbeat(&vm_name, 60);
+
         // 3. Take clean baseline snapshot
         hyperv_common::cmdlets::checkpoint_vm(&vm_name, CLEAN_BASELINE_SNAPSHOT)
             .map_err(|e| map_powershell_error("pool baseline checkpoint", e))?;

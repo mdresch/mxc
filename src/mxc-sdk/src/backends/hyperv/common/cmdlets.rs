@@ -144,6 +144,21 @@ pub fn start_vm(vm_name: &str) -> Result<(), PowerShellError> {
     .map(|_| ())
 }
 
+pub fn wait_for_heartbeat(vm_name: &str, timeout_secs: u64) -> Result<(), PowerShellError> {
+    let script = format!(
+        "$deadline = (Get-Date).AddSeconds({timeout_secs}); \
+         while ((Get-Date) -lt $deadline) {{ \
+             $hb = (Get-VMIntegrationService -VMName {vm} -Name Heartbeat -ErrorAction SilentlyContinue).PrimaryStatusDescription; \
+             if ($hb -eq 'OK') {{ exit 0 }} \
+             Start-Sleep -Milliseconds 500 \
+         }}; \
+         exit 1",
+        timeout_secs = timeout_secs,
+        vm = ps_single_quote(vm_name)
+    );
+    run_powershell(&script).map(|_| ())
+}
+
 pub fn save_vm(vm_name: &str) -> Result<(), PowerShellError> {
     run_powershell(&format!(
         "Save-VM -Name {} | Out-Null",
