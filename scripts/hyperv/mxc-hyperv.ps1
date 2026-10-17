@@ -126,6 +126,21 @@ function Invoke-MxcGuest {
 }
 Set-Alias -Name mxc-exec -Value Invoke-MxcGuest -Scope Global
 
+function Invoke-MxcGuestPs {
+    [CmdletBinding()]
+    param(
+        [string]$SandboxId,
+        [Parameter(Mandatory = $true, Position = 0, ValueFromRemainingArguments = $true)]
+        [string[]]$ScriptBlockText
+    )
+    $text = $ScriptBlockText -join ' '
+    $bytes = [System.Text.Encoding]::Unicode.GetBytes($text)
+    $b64 = [Convert]::ToBase64String($bytes)
+    Invoke-MxcGuest -SandboxId $SandboxId powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $b64
+}
+Set-Alias -Name mxc-exec-ps -Value Invoke-MxcGuestPs -Scope Global
+Set-Alias -Name mxps -Value Invoke-MxcGuestPs -Scope Global
+
 function Get-MxcStatus {
     param([string]$SandboxId)
 
@@ -541,6 +556,7 @@ Write-Host "  mxc-net-enable / mxnet Connect VM to Default Switch (enable intern
 Write-Host "  mxc-net-disable / mxair Disconnect VM from network (airgap isolation)"
 Write-Host "  mxc-net-status / mxnets View VM network adapter connection, switch & IP"
 Write-Host "  mxc-exec / mx <cmd>    Run command inside guest (e.g. mx whoami)"
+Write-Host "  mxc-exec-ps / mxps <ps> Run PowerShell script block inside guest via EncodedCommand"
 Write-Host "  mxc-status / mxs       View active sandboxes & health"
 Write-Host "  mxc-pool-status / mxpool View warm standby pool members & readiness"
 Write-Host "  mxc-pool-lease / mxpl  Instant checkout of a warm VM (<300ms)"

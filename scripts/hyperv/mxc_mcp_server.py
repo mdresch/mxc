@@ -1,3 +1,4 @@
+import argparse
 import base64
 import difflib
 import json
@@ -701,4 +702,43 @@ def get_network_status(sandbox_id: str = "auto") -> str:
 
 
 if __name__ == "__main__":
-    mcp.run()
+    parser = argparse.ArgumentParser(description="MXC Hyper-V MCP Server")
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "sse", "streamable-http"],
+        default="stdio",
+        help="MCP transport mode: stdio (default), sse, or streamable-http",
+    )
+    parser.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="Host IP to bind for network transports (default: 0.0.0.0)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to bind for network transports (default: 8000)",
+    )
+    parser.add_argument(
+        "--sse-path",
+        default="/sse",
+        help="SSE endpoint path (default: /sse)",
+    )
+    parser.add_argument(
+        "--message-path",
+        default="/messages/",
+        help="SSE messages endpoint path (default: /messages/)",
+    )
+    args = parser.parse_args()
+
+    if args.transport == "stdio":
+        mcp.run("stdio")
+    elif args.transport == "sse":
+        print(f"[*] Starting MXC Hyper-V MCP Server on http://{args.host}:{args.port}{args.sse_path}")
+        print(f"[*] SSE Message endpoint: http://{args.host}:{args.port}{args.message_path}")
+        mcp.run("sse", host=args.host, port=args.port, sse_path=args.sse_path, message_path=args.message_path)
+    elif args.transport == "streamable-http":
+        print(f"[*] Starting MXC Hyper-V MCP Server on http://{args.host}:{args.port} (streamable-http)")
+        mcp.run("streamable-http", host=args.host, port=args.port)
+
