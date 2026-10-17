@@ -701,6 +701,35 @@ def get_network_status(sandbox_id: str = "auto") -> str:
     return res.stdout.strip()
 
 
+try:
+    from starlette.requests import Request
+    from starlette.responses import JSONResponse
+
+    @mcp.custom_route("/health", methods=["GET"])
+    async def health_check(_request: Request) -> JSONResponse:
+        return JSONResponse({"status": "ok", "active_sandbox": _ACTIVE_SESSION_SANDBOX})
+
+    @mcp.custom_route("/call", methods=["POST"])
+    async def direct_tool_call(request: Request) -> JSONResponse:
+        try:
+            body = await request.json()
+            tool_name = body.get("name")
+            tool_args = body.get("arguments", {})
+            res = await mcp.call_tool(tool_name, tool_args)
+            content_list = []
+            for c in (res.content if hasattr(res, "content") else []):
+                if hasattr(c, "text"):
+                    content_list.append({"type": "text", "text": c.text})
+            return JSONResponse({"content": content_list})
+        except Exception as e:
+            return JSONResponse(
+                {"content": [{"type": "text", "text": json.dumps({"error": str(e)})}]},
+                status_code=500,
+            )
+except Exception:
+    pass
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="MXC Hyper-V MCP Server")
     parser.add_argument(

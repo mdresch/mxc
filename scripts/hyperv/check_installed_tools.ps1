@@ -25,3 +25,4 @@ Write-Host "Prettier:  $(prettier -v 2>$null)"
 
 $sb = Get-MxcActiveSandboxId
 mxc-exec-ps -SandboxId $sb $probeScript
+
