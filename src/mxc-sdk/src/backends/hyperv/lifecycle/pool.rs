@@ -24,7 +24,7 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 
 use super::super::common as hyperv_common;
-use super::control_plane::{self, HypervSandboxRecord, TransitionLock};
+use super::control_plane::{self, HypervSandboxRecord, HypervSandboxState, TransitionLock};
 use super::error::map_powershell_error;
 use super::state_aware::extract_token;
 use crate::mxc_common::id::mint_random_token;
@@ -309,6 +309,27 @@ pub fn replenish_pool() -> Result<PoolStatusReport, MxcError> {
         // 2b. Wait for guest OS to finish booting and establish heartbeat
         let _ = hyperv_common::cmdlets::wait_for_heartbeat(&vm_name, 60);
 
+        // 2c. Wait for PowerShell Direct (vmicvmsession / WinRM) to accept connections
+        // before capturing `pool-clean-baseline`, preventing mid-boot snapshots.
+        if let Some(target) = state.config.guest_credential_target.as_deref() {
+            if let Ok(cred) = hyperv_common::credential::resolve_guest_credential(target) {
+                let deadline = std::time::Instant::now() + Duration::from_secs(60);
+                while std::time::Instant::now() < deadline {
+                    if hyperv_common::cmdlets::invoke_command_in_vm(
+                        &vm_name,
+                        &cred,
+                        "exit 0",
+                        None,
+                    )
+                    .is_ok()
+                    {
+                        break;
+                    }
+                    std::thread::sleep(Duration::from_secs(2));
+                }
+            }
+        }
+
         // 3. Take clean baseline snapshot
         hyperv_common::cmdlets::checkpoint_vm(&vm_name, CLEAN_BASELINE_SNAPSHOT)
             .map_err(|e| map_powershell_error("pool baseline checkpoint", e))?;
@@ -367,7 +388,7 @@ pub fn lease_from_pool(lease_holder: Option<&str>) -> Result<String, MxcError> {
         MxcError::not_provisioned("standby pool is not initialized; call replenish_pool first")
     })?;
 
-    let (vm_name, leased_sandbox_id) = {
+    let (token, vm_name, leased_sandbox_id) = {
         let ready_member = state
             .members
             .iter_mut()
@@ -391,11 +412,22 @@ pub fn lease_from_pool(lease_holder: Option<&str>) -> Result<String, MxcError> {
                 .unwrap_or_default(),
         );
 
-        (member.vm_name.clone(), member.sandbox_id.clone())
+        (
+            member.token.clone(),
+            member.vm_name.clone(),
+            member.sandbox_id.clone(),
+        )
     };
 
     // Fast wake/resume
     let _ = hyperv_common::cmdlets::resume_vm(&vm_name);
+
+    // Transition sandbox record to Started so wxc-exec accepts commands immediately
+    if let Ok(Some(mut record)) = control_plane::read_sandbox_record(&token) {
+        record.state = HypervSandboxState::Started;
+        let _ = control_plane::write_sandbox_record(&token, &record);
+    }
+
     write_pool_state(&state)?;
 
     Ok(leased_sandbox_id)
@@ -434,7 +466,13 @@ pub fn release_to_pool(sandbox_id: &str) -> Result<(), MxcError> {
     // 2. Suspend/pause VM for standby
     let _ = hyperv_common::cmdlets::suspend_vm(&vm_name);
 
-    // 3. Mark ready
+    // 3. Transition sandbox record back to Provisioned while unleased in standby
+    if let Ok(Some(mut record)) = control_plane::read_sandbox_record(&token) {
+        record.state = HypervSandboxState::Provisioned;
+        let _ = control_plane::write_sandbox_record(&token, &record);
+    }
+
+    // 4. Mark ready
     if let Some(member) = state.members.iter_mut().find(|m| m.token == token) {
         member.status = PoolMemberStatus::Ready;
         member.leased_to = None;

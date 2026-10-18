@@ -536,6 +536,47 @@ function mxc-net-status {
     $status | Format-List
 }
 
+function mxc-images {
+    $regPath = Join-Path $PSScriptRoot "dev_harness\golden_image_registry.json"
+    if (-not (Test-Path $regPath)) {
+        Write-Host "Golden image registry not found at $regPath" -ForegroundColor Red
+        return
+    }
+    $reg = Get-Content $regPath -Raw | ConvertFrom-Json
+    Write-Host "MXC Golden Image Registry & Port-to-Image Catalog (Schema v$($reg.schema_version))" -ForegroundColor Cyan
+    $rows = foreach ($img in $reg.images) {
+        $exists = Test-Path $img.vhdx_path
+        $sizeStr = if ($exists) {
+            "$([math]::Round((Get-Item $img.vhdx_path).Length / 1GB, 2)) GB"
+        } elseif ($img.size_gb) {
+            "$($img.size_gb) GB"
+        } else {
+            "(Planned)"
+        }
+        $portStr = if ($img.ingress_route -and $img.ingress_route.listen_port) {
+            ":$($img.ingress_route.listen_port) -> :$($img.ingress_route.guest_port)"
+        } else {
+            "-"
+        }
+        $vmStr = if ($img.ingress_route -and $img.ingress_route.active_vm_name) {
+            $img.ingress_route.active_vm_name
+        } else {
+            "-"
+        }
+        [PSCustomObject]@{
+            ImageId     = $img.image_id
+            Status      = $img.status
+            OnDisk      = $exists
+            Size        = $sizeStr
+            IngressPort = $portStr
+            BoundVM     = $vmStr
+            Application = $img.application
+            VhdxPath    = $img.vhdx_path
+        }
+    }
+    $rows | Format-Table -AutoSize
+}
+
 Set-Alias -Name mxsync  -Value mxc-sync -Scope Global
 Set-Alias -Name mxdiff  -Value mxc-diff -Scope Global
 Set-Alias -Name mxapply -Value mxc-apply -Scope Global
@@ -548,8 +589,10 @@ Set-Alias -Name mxpool  -Value mxc-pool-status -Scope Global
 Set-Alias -Name mxpl    -Value mxc-pool-lease -Scope Global
 Set-Alias -Name mxpr    -Value mxc-pool-release -Scope Global
 Set-Alias -Name mxss    -Value mxc-session-status -Scope Global
+Set-Alias -Name mxi     -Value mxc-images -Scope Global
 
 Write-Host "MXC Hyper-V helpers loaded. Available commands:" -ForegroundColor Green
+Write-Host "  mxc-images / mxi       View Golden Image Registry & Port-to-Image Catalog"
 Write-Host "  mxc-gui / mxg          Open interactive VM graphical desktop (vmconnect)"
 Write-Host "  mxc-screenshot / mxshot Capture live PNG screenshot from Hyper-V video buffer"
 Write-Host "  mxc-net-enable / mxnet Connect VM to Default Switch (enable internet)"
@@ -576,6 +619,7 @@ Write-Host "  mxc-services           Guest Hyper-V integration services"
 Write-Host "  mxc-ps                 Top CPU processes in guest"
 Write-Host "  mxc-info               Guest OS and uptime information"
 Write-Host "  mxc-logs               Recent system warnings and errors in guest"
+
 
 
 

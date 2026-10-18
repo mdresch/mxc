@@ -1,0 +1,174 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated_utc": "2026-10-18T23:20:00Z",
+  "cluster_ready": true,
+  "storage_tiers": {
+    "nvme_hot_tier": "C:\\HyperV\\BaseImages",
+    "archive_capacity_tier": "F:\\HyperV\\BaseImages",
+    "cluster_shared_volume_template": "C:\\ClusterStorage\\Volume1\\HyperV\\BaseImages"
+  },
+  "images": [
+    {
+      "image_id": "img-os-ws2025-base",
+      "name": "Windows Server 2025 Golden OS Baseline",
+      "role": "os-foundation",
+      "application": "Windows Server 2025 Datacenter/Standard",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\winserv2025-golden.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": null,
+      "size_gb": 10.88,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows Server 2025 Core/Desktop",
+        "Hyper-V Integration Services (VMBus, PowerShell Direct, Time Sync)"
+      ],
+      "notes": "Clean, immutable OS parent image used to stamp new application/workload golden images (ADPA PoC, SIDPA Dev)."
+    },
+    {
+      "image_id": "img-os-win11-ent",
+      "name": "Windows 11 Enterprise Client Golden Baseline (Build 26300.9457)",
+      "role": "os-client-baseline",
+      "application": "Windows 11 Enterprise / Client (Build 26300)",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\win11-golden.vhdx",
+      "source_iso_path": "C:\\Users\\MennoDrescher\\Downloads\\Windows11_Client_x64_en-us_26300_9457.iso",
+      "parent_image_id": null,
+      "size_gb": 14.47,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows 11 Enterprise Client (x64 en-US Build 26300.9457)",
+        "Hyper-V Integration Services"
+      ],
+      "notes": "Windows 11 Enterprise client golden image located at C:\\HyperV\\BaseImages\\win11-golden.vhdx (built from Windows11_Client_x64_en-us_26300_9457.iso)."
+    },
+    {
+      "image_id": "img-mxc-dev-v2.3",
+      "name": "MXC Core Developer & JIT Test Harness Image",
+      "role": "mxc-development",
+      "application": "MXC SDK / wxc-exec / JIT Harness Prototype",
+      "status": "baked_ready",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-mxc-dev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": 39.25,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "mxc-dev-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8090,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": "mxc-hv-a7df7452",
+        "standby_vm_name": "mxc-hv-0b1e0d7e",
+        "guest_ip": "172.24.173.100"
+      },
+      "installed_stack": [
+        "Rust 1.94.1 + MSVC Build Tools 2022 + Windows SDK",
+        ".NET SDK 8.0.419",
+        "Python 3.14.3 + python-docx",
+        "Node.js v25.9.0",
+        "Git 2.53.0 + Scoop + hey HTTP load generator",
+        "Synced C:\\workspace (mxc repository)",
+        "Auto-start Scheduled Task: MXC-ADPA-MockService (:8080)"
+      ],
+      "notes": "Primary developer & benchmarking image for MXC control-plane engineering and JIT Scale-to-Zero verification."
+    },
+    {
+      "image_id": "img-adpa-poc-v1",
+      "name": "ADPA Production Proof-of-Concept Appliance",
+      "role": "poc-workload",
+      "application": "ADPA (Automated Data Processing Appliance)",
+      "status": "poc_planned",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-adpa-poc.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": null,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8091,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": "mxc-hv-0b1e0d7e",
+        "standby_vm_name": null,
+        "guest_ip": "172.24.175.141"
+      },
+      "egress_whitelist": [
+        "UDP/TCP 53 (Internal DNS)",
+        "UDP/TCP 88 (Active Directory Kerberos)",
+        "TCP 1433 (SQL Server)",
+        "TCP 5432 (PostgreSQL)",
+        "TCP 443 (Private S3/Blob Endpoints)"
+      ],
+      "installed_stack": [
+        "Windows Server 2025 Hardened Baseline",
+        "ADPA Service Daemon (:8080)",
+        "Hardware PRNG Re-Seed (BCryptGenRandom) + DB Pool Flush (ClearAllPools) + VMBus Clock Sync Hook"
+      ],
+      "notes": "Dedicated Proof-of-Concept image for ADPA. Requests arriving on Port 8091 wake only the ADPA VM pool."
+    },
+    {
+      "image_id": "img-sidpa-dev-v1",
+      "name": "SIDPA Development & Integration Appliance",
+      "role": "workload-development",
+      "application": "SIDPA (Secure Isolated Data Processing Appliance)",
+      "status": "in_development",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-sidpa-dev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-mxc-dev-v2.3",
+      "size_gb": null,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8092,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": null,
+        "standby_vm_name": null,
+        "guest_ip": null
+      },
+      "egress_whitelist": [
+        "UDP/TCP 53 (Internal DNS)",
+        "UDP/TCP 88 (Active Directory Kerberos)",
+        "TCP 1433 (SQL Server)",
+        "TCP 5432 (PostgreSQL)",
+        "TCP 443 (Private S3/Blob Endpoints)"
+      ],
+      "installed_stack": [
+        "SIDPA Application Runtime & SDKs",
+        "SIDPA Integration Test Suite",
+        "Hardware PRNG Re-Seed + DB Pool Flush + VMBus Clock Sync Hook (:8080/health)"
+      ],
+      "notes": "Dedicated image for developing and testing SIDPA in hardware-isolated ephemeral sessions. Requests on Port 8092 wake only the SIDPA VM pool."
+    }
+  ]
+}
