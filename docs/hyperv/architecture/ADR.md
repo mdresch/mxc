@@ -95,13 +95,13 @@ Cold-booting Windows Server takes 25–45 seconds. Pausing an active VM keeps gu
 
 ### Decision
 Implement the warm pool state as **Hyper-V Paused Instances**:
-* When dormant, VMs remain in Hyper-V `Paused` state.
-* The host hypervisor stops scheduling vCPU execution ticks (0.0% CPU usage).
-* Dynamic Memory allows the hypervisor to trim and page unneeded working set memory.
-* Resuming the VM via `Resume-VM` executes in **`<300ms`**.
+* When dormant, VMs remain in Hyper-V `Paused` state with instruction pointers frozen (`0.0% CPU`).
+* **Pre-Trimmed Working Set**: Rather than relying on the guest balloon driver to actively reclaim memory while its vCPUs are frozen (which is impossible when paused) or forcing host smart-paging/swap (which violates the `<300ms` resume SLA due to disk I/O page-ins), guest memory is aggressively trimmed and compacted **prior** to issuing `Suspend-VM` during pool replenishment and image baking. This locks each dormant instance into a lean static host RAM allocation ($\approx 1.0\text{ – }1.2\text{ GB}$).
+* Resuming the VM via `Resume-VM` executes in **`<300ms`** because physical memory pages remain resident in host RAM.
 
 ### Consequences
-* *Positive*: Sub-300ms wake times with 0.0% idle CPU overhead.
+* *Positive*: Guaranteed deterministic sub-300ms wake times with 0.0% idle CPU overhead.
+* *Trade-off*: Requires sizing host physical RAM to accommodate $K_{\text{ready}}$ warm paused instances without triggering host-level memory overcommit swap.
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (ADR-004): Two-Tier Hibernation Hierarchy (RAM Pause vs. NVMe Save-VM)**  
@@ -123,7 +123,11 @@ Execute all production sessions against a **transient differencing disk (`.avhdx
 * When an instance is leased, Hyper-V operates on an active differencing checkpoint anchored to the clean production baseline (`baseline-hot-ready`).
 * All disk writes during the session are captured exclusively in the `.avhdx` differencing layer.
 * Upon session release or inactivity timeout ($300\text{s}$), the differencing disk is discarded and the VM is reverted to the immutable baseline snapshot before returning to the warm standby pool.
-* Persistent business data is stored exclusively in external enterprise datastores (SQL Server, PostgreSQL, S3/Blob storage), guaranteeing that the compute instance remains 100% ephemeral.
+* **Internal Data Plane & Egress Whitelist**: Persistent business data is stored exclusively in external enterprise datastores (SQL Server, PostgreSQL, S3/Blob storage). To balance zero-trust network isolation with database persistence, the guest firewall implements a strict egress whitelist:
+  * Public Internet Egress: **Strictly Blocked** (Default Deny).
+  * Ingress Traffic: **Port `:8080` only**, restricted to the Ingress Reverse Proxy Gateway on the internal vSwitch.
+  * Egress Traffic: **Restricted to Internal Enterprise Datastore Subnets**: TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (S3 / Blob Storage Private Endpoints). All other outbound destinations are dropped and logged.
+
 
 ### Consequences
 * *Positive*: Zero post-session state drift and guaranteed eradication of any session residue.
@@ -145,16 +149,23 @@ While maintaining a single dormant instance in Paused RAM achieves sub-300ms wak
 
 ### Decision
 Implement an **Adaptive Low/High Watermark Standby Pool Manager** with proactive replenishment and predictive event-driven scaling:
-1. **Immediate Standby Replenishment (Low Watermark $K_{\text{min}}$)**: The control plane maintains a minimum target of ready-state instances (default $K_{\text{ready}} \ge 1$ or $2$). As soon as an instance is leased (`StandbyPaused` $\rightarrow$ `ActiveRunning`), an asynchronous background worker immediately promotes or warms the next instance from the baseline VHDX into `StandbyPaused` state so the standby buffer is never depleted.
-2. **Surge Velocity & Queue Depth Autoscaling (High Watermark $K_{\text{max}}$)**: If request arrival velocity exceeds threshold (e.g. $> 5\text{ req/s}$) or Ingress Buffer queue depth $> 0$, the ready pool target dynamically expands up to $K_{\text{max}}$ (e.g., 5–10 ready instances).
-3. **Requirement & Schedule-Driven Pre-Warming**: The pool manager exposes an API (`mxc-pool-warm --target prod-adpa --count 5`) allowing external schedulers, calendar triggers, or upstream batch orchestrators to pre-warm instances minutes before known workload peaks (e.g., market open, shift changes, end-of-day reconciliation).
-4. **Dynamic Cooldown & Graceful Reaping**: When traffic subsides and instances remain idle past the inactivity threshold ($300\text{s}$), surplus instances are systematically rolled back, differencing disks discarded, and VMs suspended or reclaimed back to baseline $K_{\text{min}}$, preserving host RAM.
+1. **Tiered Lifecycle States (`ColdProvisioned` $\rightarrow$ `StandbyPaused` $\rightarrow$ `ActiveRunning`)**:
+   * **`ColdProvisioned`**: Differencing disk `.avhdx` created and attached to VM container on NVMe, but memory is *not* committed to host RAM ($0\text{ MB}$ RAM). Used for background inventory.
+   * **`StandbyPaused`**: VM booted, working set pre-warmed, pre-trimmed, and frozen in Hyper-V Paused state ($\approx 1.0\text{ – }1.2\text{ GB}$ RAM, $0.0\%\text{ CPU}$). Resumes in $<300\text{ms}$.
+   * **`ActiveRunning`**: Unpaused and actively routing HTTP traffic.
+2. **Immediate Standby Replenishment (Low Watermark $K_{\text{min}}$)**: The control plane maintains a minimum target of ready-state instances (default $K_{\text{ready}} \ge 1$ or $2$). As soon as an instance is leased (`StandbyPaused` $\rightarrow$ `ActiveRunning`), an asynchronous background worker promotes a `ColdProvisioned` instance into `StandbyPaused` state in $\approx 1.5\text{s}$ in the background so the ready buffer is never depleted.
+3. **Surge Velocity & Queue Depth Autoscaling (High Watermark $K_{\text{max}}$)**: If request arrival velocity exceeds threshold (e.g. $> 5\text{ req/s}$) or Ingress Buffer queue depth $> 0$, the ready pool target dynamically expands up to $K_{\text{max}}$ (e.g., 5–10 ready instances).
+4. **Requirement & Schedule-Driven Pre-Warming**: The pool manager exposes an API (`mxc-pool-warm --target prod-adpa --count 5`) allowing external schedulers, calendar triggers, or upstream batch orchestrators to pre-warm instances minutes before known workload peaks (e.g., market open, shift changes, end-of-day reconciliation).
+5. **PRNG Entropy Re-Seeding on Wake**: Because sibling VMs restored from the same `baseline-hot-ready` checkpoint share identical kernel PRNG states, the guest service forcibly re-seeds its cryptographic random pool from hardware CPU instructions (`RDRAND` / `RDSEED` or `BCryptGenRandom` with `BCRYPT_RNG_USE_ENTROPY_IN_BUFFER`) upon receiving the initial wake signal, preventing duplicate UUIDs or nonce collisions.
+6. **Clock-Skew Synchronization Assertion**: To prevent TLS handshake, JWT validation, or Kerberos ticket failures due to stale snapshot timestamps, the guest health probe verifies that Hyper-V Time Synchronization (`VMICTimeSync`) has stepped the guest clock to host UTC time before reporting `HTTP 200 {"status": "healthy"}`.
+7. **Dynamic Cooldown & Graceful Reaping**: When traffic subsides and instances remain idle past the inactivity threshold ($300\text{s}$) with zero active open requests, surplus instances are systematically rolled back, differencing disks discarded, and VMs suspended or deallocated back to baseline $K_{\text{min}}$.
 
 ### Consequences
-* *Positive*: Seamless multi-tenant concurrency handling with zero queuing delay during traffic spikes; zero cold-boot delays even under burst conditions; predictable memory overhead bounded by $K_{\text{max}}$.
-* *Trade-off*: Burst expansion momentarily consumes additional host RAM ($\approx 1.2\text{ GB}$ per additional paused instance), which is automatically released upon idle cooldown via Dynamic Memory.
+* *Positive*: Seamless multi-tenant concurrency handling with zero queuing delay during traffic spikes; zero cold-boot delays; cryptographic security against PRNG entropy duplication; zero clock-skew authentication errors.
+* *Trade-off*: Burst expansion momentarily consumes additional host RAM ($\approx 1.0\text{ – }1.2\text{ GB}$ per additional paused instance), which is reclaimed back to disk upon idle cooldown.
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (ADR-006): AI-Driven Predictive Ingress Forecasting**  
 > Train an on-host lightweight time-series model (e.g., ONNX-based ARIMA or temporal transformer) analyzing historical request telemetry to automatically pre-warm pools 60 seconds ahead of anticipated demand cycles with zero manual scheduling.
+
 

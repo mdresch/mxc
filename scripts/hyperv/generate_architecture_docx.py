@@ -204,15 +204,11 @@ def add_styled_table(doc, headers, rows):
     doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
 
-def generate_master_add():
-    doc = init_doc(
-        "Architecture Design Document (ADD)",
-        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes for Enterprise Applications (ADPA / SIDPA)"
-    )
+def build_add_content(doc):
     add_h1(doc, "1. Executive Summary")
     add_body(doc, "This Architecture Design Document (ADD) defines the unified enterprise specification for running production-grade services—specifically ADPA (Automated Dynamic Process Automation) and SIDPA (Secured Intelligent Data Processing Application)—inside hardware-isolated Windows Server 2025 Type-1 Hyper-V micro-instances.")
-    add_body(doc, "When no client requests are active, production VMs remain suspended in RAM (Paused), consuming 0.0% CPU cycles and releasing paged memory via Hyper-V Dynamic Memory.", "• 0% Idle Resource Footprint: ")
-    add_body(doc, "An intelligent Ingress Gateway buffers incoming client HTTP requests, triggers hardware unpause via the MXC control plane in <300ms, verifies socket readiness, and proxies the payload with zero perceptible cold-start delay (<600ms Time to First Byte).", "• Sub-Second Wake-on-Request: ")
+    add_body(doc, "When no client requests are active, production VMs remain suspended in RAM (Paused), consuming 0.0% CPU cycles with a lean, pre-trimmed static working set (~1.0–1.2 GB).", "• 0% Idle Resource Footprint: ")
+    add_body(doc, "An intelligent Ingress Gateway buffers incoming client HTTP requests, triggers hardware unpause via the MXC control plane in <300ms, verifies socket readiness, and proxies the payload with zero perceptible cold-start delay (350ms – 650ms nominal, <= 800ms SLA Time to First Byte).", "• Sub-Second Wake-on-Request: ")
     add_body(doc, "Upon session completion or inactivity timeout, the instance delta disk (.avhdx) is discarded, returning the VM back to a pristine, immutable checkpoint baseline (baseline-hot-ready) to prevent state drift and eliminate malware persistence.", "• Sterile Session Isolation: ")
     add_body(doc, "As soon as requirements, concurrency velocity, or schedules signal increased demand, the warm pool manager automatically replenishes and expands the ready-state paused buffer (Kmin -> Kmax) so concurrent requests never experience cold boots or queuing delays.", "• Elastic Ready-State Autoscaling: ")
 
@@ -221,7 +217,6 @@ def generate_master_add():
     add_body(doc, "Formal decision records (ADR-001 through ADR-006) justifying Hyper-V Type-1 virtualization, JIT wake-on-request proxies, separate production images, paused RAM standby states, differencing disk rollback, and dynamic watermark pool autoscaling.", "• Pillar II — Architectural Decision Records (ADR): ")
     add_body(doc, "Component breakdown, JSON proxy route configuration, elastic watermark pool replenishment algorithm, lifecycle state machines, wake-on-request sequence flows, and automated reaping protocols.", "• Pillar III — Functional Design Document (FDD): ")
     add_body(doc, "BDD/Gherkin user stories and testable acceptance criteria across End Users (US-01), SecOps (US-02), DevOps/SRE (US-03), CI/CD Release Engineers (US-04), and Capacity SREs (US-05).", "• Pillar IV — User Stories & Acceptance Criteria: ")
-
 
     add_h1(doc, "3. System Architecture Topology (Mermaid Specification)")
     add_code_block(doc, """flowchart TD
@@ -255,7 +250,7 @@ def generate_master_add():
     BufferQueue -- "Wake Signal if dormant" --> FastMCP --> PoolManager
     PoolManager -- "Resume-VM (<300ms)" --> StandbyVM -.-> ActiveVM
     BufferQueue -- "Forward HTTP" --> Switch --> ActiveVM
-    Reaper -- "Inactivity timeout" --> PoolManager -- "Discard .avhdx & Restore" --> ActiveVM""")
+    Reaper -- "Inactivity timeout" --> PoolManager -- "Discard .avhdx & Restore" --> StandbyVM""")
 
     add_h1(doc, "4. Technical Feasibility & Metric Comparison")
     add_styled_table(
@@ -277,14 +272,18 @@ def generate_master_add():
         "2. Carbon-Aware Workload Scheduling: Dynamically shift suspended VM resume operations and background image baking pipelines to data centers operating at peak renewable energy availability.\n"
         "3. Confidential Computing Partitions: Integrate hardware-enforced memory encryption (AMD SEV-SNP / Intel TDX) at the Hyper-V guest partition level for cryptographic isolation even against host-level inspection."
     )
+
+
+def generate_master_add():
+    doc = init_doc(
+        "Architecture Design Document (ADD)",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes for Enterprise Applications (ADPA / SIDPA)"
+    )
+    build_add_content(doc)
     return doc
 
 
-def generate_bdr():
-    doc = init_doc(
-        "Pillar I: Business Drivers & Requirements (BDR)",
-        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
-    )
+def build_bdr_content(doc):
     add_h1(doc, "1. Executive Context & Operational Trilemma")
     add_body(doc, "Enterprises deploying automated processing services (such as ADPA and SIDPA) face a critical operational trilemma across cost, latency, and security:")
     add_body(doc, "Traditional deployments maintain dedicated, always-on virtual machines to avoid slow startup times. A cluster of 10–20 always-on Windows Server instances consumes significant host CPU ticks, saturates hypervisor RAM, and incurs 24/7 compute and licensing costs even during idle nights and weekends.", "1. High Infrastructure & Idle Power Costs: ")
@@ -293,13 +292,13 @@ def generate_bdr():
 
     add_h1(doc, "2. Core Business Drivers (Strategic Goals)")
     add_h2(doc, "BDR-01: Maximum Resource Density & Cost Reduction (Scale-to-Zero)")
-    add_body(doc, "Minimize hardware footprint and operating costs by ensuring that when zero client requests are pending, virtual machine instances consume 0% CPU and release idle memory pages.", "Goal: ")
-    add_body(doc, "0.0% Host CPU consumption during idle periods; >= 65% compression in active hypervisor memory commitment via Dynamic Memory paging; support for 3x to 5x more concurrent registered services per physical host.", "Target Metrics: ")
+    add_body(doc, "Minimize hardware footprint and operating expenditure by ensuring that when zero client requests are pending, virtual machine instances consume 0% CPU and maintain a compact host memory footprint.", "Goal: ")
+    add_body(doc, "0.0% Host CPU consumption during idle periods; ~1.0–1.2 GB lean static host memory footprint per paused instance achieved via working set pre-trimming prior to snapshot capture (preventing host swap-in disk I/O on resume); support for 3x to 5x more concurrent registered services per physical host.", "Target Metrics: ")
     add_callout(doc, "Predictive Auto-Warming & Same-Page Merging: Introduce machine learning ingress forecasting models that analyze historical tenant traffic patterns to proactively resume anticipated pools 5 seconds before traffic surges occur, paired with hypervisor memory deduplication (Kernel Same-Page Merging) and Carbon-Aware scheduling across green data centers.")
 
     add_h2(doc, "BDR-02: Strict Sub-Second Response SLAs (Instantaneous Readiness)")
     add_body(doc, "Provide instantaneous, consumer-grade responsiveness to end users and API integrations without manual provisioning.", "Goal: ")
-    add_body(doc, "Time to First Byte (TTFB) from a completely dormant/paused state under 800ms (typically 350ms – 550ms); subsequent warm request latency under 15ms.", "Target Metrics: ")
+    add_body(doc, "Time to First Byte (TTFB) from a completely dormant/paused state of 350ms – 650ms (<= 800ms SLA); subsequent warm request latency under 15ms.", "Target Metrics: ")
     add_callout(doc, "Global Edge Socket Holding (Anycast PoPs): Deploy a globally distributed edge proxy mesh that accepts TLS handshakes and holds incoming client sockets at the closest regional Point of Presence (PoP) while concurrently dispatching high-speed gRPC wake signals to the Hyper-V bare-metal pool.")
 
     add_h2(doc, "BDR-03: Zero-Trust Hardware-Grade Isolation")
@@ -317,22 +316,25 @@ def generate_bdr():
         doc,
         ["Requirement ID", "Category", "Requirement Description", "Success Verification"],
         [
-            ["REQ-BDR-01", "Performance", "Ingress gateway must buffer incoming requests and wake dormant VM in <300ms (<= 800ms total TTFB).", "Measured gateway latency logs <= 300ms to VM resume and socket connect."],
+            ["REQ-BDR-01", "Performance", "Ingress gateway must buffer incoming requests and wake dormant VM in <300ms (350ms - 650ms nominal, <= 800ms total TTFB SLA).", "Measured gateway latency logs <= 300ms to VM resume and socket connect."],
             ["REQ-BDR-02", "Lifecycle", "Instances with no traffic for >300s must automatically revert to baseline and suspend.", "Verified automated snapshot rollback and Hyper-V Paused state transition."],
-            ["REQ-BDR-03", "Security", "Guest application must communicate strictly via an isolated virtual network segment.", "Network traffic restricted to Ingress Gateway port forwarding (:8080); no unauthorized egress."],
+            ["REQ-BDR-03", "Security", "Guest application traffic restricted to Ingress Gateway port forwarding (:8080) and strict enterprise datastore egress whitelist (SQL, PostgreSQL, S3 private endpoints); arbitrary public internet egress blocked.", "Network firewall rules strictly enforce isolation; no unauthorized internet egress."],
             ["REQ-BDR-04", "Packaging", "Production image must exclude developer toolchains, debuggers, and source repositories.", "Verified clean golden base image (winserv2025-prod-adpa.vhdx) containing only pre-jitted production binaries and hardened OS."],
             ["REQ-BDR-05", "Elasticity", "As soon as demand indicators surge or a standby instance is leased, the pool must automatically unpause/replenish ready instances up to Kmax.", "Verified standby pool depth auto-replenishment with zero queuing drops under concurrent load."]
         ]
     )
 
+
+def generate_bdr():
+    doc = init_doc(
+        "Pillar I: Business Drivers & Requirements (BDR)",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
+    )
+    build_bdr_content(doc)
     return doc
 
 
-def generate_adr():
-    doc = init_doc(
-        "Pillar II: Architectural Decision Records (ADR)",
-        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
-    )
+def build_adr_content(doc):
     adr_items = [
         (
             "ADR-001: Selection of Type-1 Hyper-V Virtualization over Container Namespaces",
@@ -362,28 +364,27 @@ def generate_adr():
             "ADR-004: Memory-Preserved Standby (Paused Hypervisor RAM State)",
             "Accepted | Date: October 2026 | Deciders: Systems Architecture Team",
             "Cold-booting Windows Server takes 25–45 seconds. Pausing an active VM keeps guest physical memory intact in host RAM, freezing the virtual CPU instruction pointer.",
-            "Implement the warm pool state as Hyper-V Paused Instances. When dormant, VMs remain in Hyper-V Paused state; the host hypervisor stops scheduling vCPU execution ticks (0.0% CPU usage); Dynamic Memory trims and pages unneeded working set memory; resuming via Resume-VM executes in <300ms.",
-            "Positive: Sub-300ms wake times with 0.0% idle CPU overhead.",
+            "Implement the warm pool state as Hyper-V Paused Instances. When dormant, VMs remain in Hyper-V Paused state with instruction pointers frozen (0.0% CPU). Rather than relying on the guest balloon driver to actively reclaim memory while its vCPUs are frozen (which is impossible when paused) or forcing host swap-paging (which violates the <300ms resume SLA due to disk I/O page-ins), guest memory is aggressively trimmed and compacted prior to issuing Suspend-VM during pool replenishment and image baking. This locks each dormant instance into a lean static host RAM allocation (~1.0–1.2 GB). Resuming via Resume-VM executes in <300ms.",
+            "Positive: Guaranteed deterministic sub-300ms wake times with 0.0% idle CPU overhead. Trade-off: Requires sizing host physical RAM to accommodate K_ready warm paused instances without triggering host-level memory overcommit swap.",
             "Two-Tier Hibernation Hierarchy (RAM Pause vs. NVMe Save-VM): Introduce a tiered standby hierarchy where hot-queue instances (N=2) remain in Paused RAM state (<300ms wake), while deep-standby instances (N=10) are placed in Saved NVMe state (0MB host RAM, ~1.5s wake) and promoted into RAM dynamically as active leases increase."
         ),
         (
             "ADR-005: Automated Checkpoint Differencing Disks for Stateless Execution",
             "Accepted | Date: October 2026 | Deciders: Systems Architecture Team",
             "If production services write temporary files, logs, or registry entries during an end-user session, those modifications could accumulate over time, leading to disk bloat, performance degradation, or security cross-contamination.",
-            "Execute all production sessions against a transient differencing disk (.avhdx) anchored to the clean production baseline. Upon session release or inactivity timeout, the differencing disk is discarded and the VM is reverted to the immutable baseline snapshot. Persistent business data is stored exclusively in external enterprise datastores (SQL Server, PostgreSQL, S3/Blob storage), guaranteeing 100% ephemeral compute.",
-            "Positive: Zero post-session state drift and guaranteed eradication of any session residue.",
+            "Execute all production sessions against a transient differencing disk (.avhdx) anchored to the clean production baseline (baseline-hot-ready). All disk writes during the session are captured exclusively in the .avhdx layer and discarded upon session release. Persistent business data is stored exclusively in external enterprise datastores via an Internal Data Plane & Egress Whitelist: public internet egress is strictly blocked (airgap default), while outbound traffic is permitted strictly to internal datastore subnets: TCP 1433 (SQL Server), TCP 5432 (PostgreSQL), and TCP 443 (Private S3/Blob storage endpoints).",
+            "Positive: Zero post-session state drift, guaranteed eradication of session residue, and secure persistence to external datastores without exposing internet access.",
             "WORM Memory-Backed Ephemeral Scratch Disks: Transition high-throughput temporary scratch I/O from file-backed .avhdx delta layers to Write-Once-Read-Many (WORM) host RAM-disks attached via VMBus SCSI, achieving near-zero I/O latency and instantaneous physical memory zeroing upon release."
         ),
         (
             "ADR-006: Dynamic Watermark-Based Standby Pool Autoscaling & Predictive Warm-Up",
             "Accepted | Date: October 2026 | Deciders: Systems Architecture Team",
-            "While maintaining a single dormant instance in Paused RAM achieves sub-300ms wake-up for a single request, a burst of concurrent requests or high-volume batch processing for ADPA/SIDPA could exhaust the standby capacity. If the solitary warm instance is leased, the next simultaneous client request would either wait in a queue or trigger an unbuffered cold provision. Production systems require elastic, proactive ready-state replenishment so multiple warm instances are immediately available whenever demand indicators surge.",
-            "Implement an Adaptive Low/High Watermark Standby Pool Manager with proactive replenishment and predictive event-driven scaling: (1) Immediate Standby Replenishment (Low Watermark Kmin >= 1), promoting the next standby VM upon lease; (2) Surge Velocity & Queue Depth Autoscaling (High Watermark Kmax up to 5-10); (3) Requirement & Schedule-Driven Pre-Warming via API; (4) Dynamic Cooldown & Graceful Reaping past inactivity threshold.",
-            "Positive: Seamless multi-tenant concurrency handling with zero queuing delay during traffic spikes; zero cold-boot delays even under burst conditions; predictable memory overhead bounded by Kmax. Trade-off: Burst expansion momentarily consumes additional host RAM (~1.2GB per additional paused instance), automatically released upon idle cooldown via Dynamic Memory.",
+            "While maintaining a single dormant instance in Paused RAM achieves sub-300ms wake-up for a single request, a burst of concurrent requests or high-volume batch processing for ADPA/SIDPA could exhaust the standby capacity. Production systems require elastic, proactive ready-state replenishment so multiple warm instances are immediately available whenever demand indicators surge.",
+            "Implement an Adaptive Low/High Watermark Standby Pool Manager with tiered lifecycle states: (1) ColdProvisioned (0MB RAM, disk provisioned on NVMe), (2) StandbyPaused (pre-warmed, pre-trimmed, paused in RAM at ~1.0–1.2 GB, <300ms wake), and (3) ActiveRunning. Low Watermark Kmin maintains ready instances; when an instance is leased, an async background worker promotes a ColdProvisioned VM in ~1.5s. High Watermark Kmax dynamically expands the buffer under surge velocity. Sibling VM PRNG entropy is re-seeded from hardware (RDRAND/BCryptGenRandom) on wake, and guest clock sync against host UTC time is asserted on resume before serving requests.",
+            "Positive: Seamless concurrency handling with zero queuing delay; zero cold boots; cryptographic security against PRNG entropy duplication; zero clock-skew authentication errors. Trade-off: Burst expansion momentarily consumes additional host RAM (~1.0–1.2 GB per paused instance), reclaimed back to disk upon idle cooldown.",
             "AI-Driven Predictive Ingress Forecasting: Train an on-host lightweight time-series model (e.g., ARIMA or temporal transformer) analyzing historical request telemetry to automatically pre-warm pools 60 seconds ahead of anticipated demand cycles with zero manual scheduling."
         )
     ]
-
 
     for title, meta, ctx, dec, cons, fut in adr_items:
         add_h1(doc, title)
@@ -392,20 +393,24 @@ def generate_adr():
         add_body(doc, dec, "Decision & Mechanism: ")
         add_body(doc, cons, "Consequences: ")
         add_callout(doc, fut)
+
+
+def generate_adr():
+    doc = init_doc(
+        "Pillar II: Architectural Decision Records (ADR)",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
+    )
+    build_adr_content(doc)
     return doc
 
 
-def generate_fdd():
-    doc = init_doc(
-        "Pillar III: Functional Design Document (FDD)",
-        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
-    )
+def build_fdd_content(doc):
     add_h1(doc, "1. System Architecture & Subsystem Decomposition")
-    add_body(doc, "The MXC Production environment decomposes into three tightly coordinated subsystems: (1) The JIT Ingress Proxy Gateway (Buffer Queue, Wake Signal IPC, Health Poller, Session Tracker), (2) The MXC Hardware Lifecycle Controller (Warm Pool Manager, Inactivity Reaper, Differencing Disk Discard), and (3) The Guest Production Appliance (ADPA/SIDPA Windows Service, Health Probe :8080/health, Isolated Virtual NIC, Memory-Resident Working Set).")
+    add_body(doc, "The MXC Production environment decomposes into three tightly coordinated subsystems: (1) The JIT Ingress Proxy Gateway (Buffer Queue, Wake Signal IPC, In-Flight Request Tracker, Health/Clock Poller), (2) The MXC Hardware Lifecycle Controller (Warm Pool Manager, Inactivity Reaper, Differencing Disk Discard, TransitionLock), and (3) The Guest Production Appliance (ADPA/SIDPA Windows Service, Health Probe :8080/health, Internal Egress Whitelist, Memory-Resident Working Set).")
 
     add_h1(doc, "2. Component Specifications")
     add_h2(doc, "2.1 Component 1: JIT Ingress Proxy Gateway")
-    add_body(doc, "Reverse Proxy Engine (YARP / Envoy / FastMCP Gateway) running as a system service on the Hyper-V host or DMZ node. Responsibilities include terminating client TLS connections (:443), matching incoming paths to production pool targets (/api/v1/adpa/* -> pool:prod-adpa), maintaining a buffered connection queue while dormant, dispatching wake commands to MXC, proxying HTTP payloads, and resetting session inactivity timers on each packet.")
+    add_body(doc, "Reverse Proxy Engine (YARP / Envoy / FastMCP Gateway) running as a system service on the Hyper-V host or DMZ node. Responsibilities include terminating client TLS connections (:443), matching incoming paths to production pool targets (/api/v1/adpa/* -> pool:prod-adpa), maintaining a buffered connection queue while dormant, dispatching wake commands to MXC, proxying HTTP payloads, maintaining an atomic active_open_requests counter, and executing atomic TransitionLock reaping to prevent race conditions.")
     add_code_block(doc, """{
   "route_id": "adpa_production_service",
   "match_path": "/api/v1/adpa/{**catch-all}",
@@ -420,15 +425,16 @@ def generate_fdd():
     add_h2(doc, "2.2 Component 2: MXC Hardware Lifecycle Controller (wxc-exec)")
     add_body(doc, "Native Rust Hyper-V Backend (src/mxc-sdk/src/backends/hyperv/) with cross-process atomic locking (TransitionLock). Maintains pool state in %ProgramData%\\mxc\\hyperv\\pool\\pool_state.json, executes sub-300ms pool-lease operations via Resume-VM, executes pool-release rollbacks (restoring baseline-hot-ready, deleting .avhdx, and invoking Suspend-VM), and exposes FastMCP/REST telemetry.")
     add_code_block(doc, """stateDiagram-v2
-    [*] --> StandbyPaused: Cold Bake & Freeze
+    [*] --> ColdProvisioned: Differencing Disk Attached (0MB Host RAM)
+    ColdProvisioned --> StandbyPaused: Background Pre-Warm & Suspend-VM (~1.5s, 1GB RAM, 0% CPU)
     StandbyPaused --> ActiveRunning: Client Request (pool_lease <300ms)
-    ActiveRunning --> ActiveRunning: Inbound HTTP Traffic
-    ActiveRunning --> ReapingState: Idle Timeout (300s no traffic)
-    ReapingState --> RestoreBaseline: Discard .avhdx Delta
-    RestoreBaseline --> StandbyPaused: Suspend-VM (CPU: 0%)
+    ActiveRunning --> ActiveRunning: Inbound HTTP Traffic (active_open_requests > 0)
+    ActiveRunning --> ReapingState: Idle Timeout (active_open_requests == 0 & t > 300s)
+    ReapingState --> StandbyPaused: Discard .avhdx & Restore Baseline (if pool count <= Kmax)
+    ReapingState --> ColdProvisioned: Reclaim Host RAM / Stop-VM (if surplus beyond Kmin)
     ActiveRunning --> Maintenance: Manual Admin Lock
     Maintenance --> StandbyPaused: Admin Unlock""", "Lifecycle State Machine (Mermaid):")
-    add_body(doc, "Low Watermark Enforcement (Kmin >= 1): The controller maintains ready-state standby instances. When an instance is leased, an async background worker immediately unpauses/promotes the next standby VM. High Watermark Surge Autoscaling (Kmax up to 5-10): Velocity and queue triggers dynamically expand the buffer to absorb burst traffic with zero cold boots.", "• Elastic Standby Replenishment & Autoscaler: ")
+    add_body(doc, "Low Watermark Enforcement (Kmin >= 1): The controller maintains ready-state standby instances. When an instance is leased, an async background worker immediately unpauses/promotes a ColdProvisioned VM in ~1.5s. High Watermark Surge Autoscaling (Kmax up to 5-10): Velocity and queue triggers dynamically expand the buffer to absorb burst traffic with zero cold boots.", "• Elastic Standby Replenishment & Autoscaler: ")
     add_code_block(doc, """{
   "pool_id": "prod-adpa",
   "min_ready_standby": 1,
@@ -443,9 +449,8 @@ def generate_fdd():
 }""", "Pool Configuration Schema (pool_config.json):")
     add_callout(doc, "Adaptive Idle Timeout Analytics: Replace static 300-second timers with adaptive inactivity thresholds driven by workload telemetry—keeping interactive multi-step workflow sessions warm longer while aggressively reclaiming single-shot webhook instances within 30 seconds.")
 
-
     add_h2(doc, "2.3 Component 3: Guest Production Appliance & Image Baking Pipeline (ADPA / SIDPA)")
-    add_body(doc, "Runs on Windows Server 2025 Core or Hardened Desktop Experience (winserv2025-prod-adpa.vhdx). Application runs as a self-hosted Windows Service (Kestrel / FastAPI / Go service) on 0.0.0.0:8080. GET /health returns {\"status\": \"healthy\", \"service\": \"ADPA\", \"uptime_ms\": 1240} in <5ms. Assemblies are pre-compiled (Native AOT / NGen) with working set memory warmed prior to capturing baseline-hot-ready. Windows Firewall blocks all inbound traffic except port 8080 from the internal virtual switch and blocks all outbound internet egress.")
+    add_body(doc, "Runs on Windows Server 2025 Core or Hardened Desktop Experience (winserv2025-prod-adpa.vhdx). Application runs as a self-hosted Windows Service (Kestrel / FastAPI / Go service) on 0.0.0.0:8080. GET /health verifies service health, asserts Hyper-V clock synchronization (abs(GuestTime - HostTime) < 50ms) to prevent TLS/Kerberos clock skew, and re-seeds hardware PRNG entropy (RDRAND/BCryptGenRandom). Outbound traffic is restricted via an Internal Data Plane Whitelist (TCP 1433 for SQL Server, TCP 5432 for PostgreSQL, TCP 443 for S3 Private Endpoints) with arbitrary public internet egress blocked.")
     add_callout(doc, "Zero-Downtime Rolling VHDX Updates: Implement a rolling baseline promotion pipeline that registers newly baked production VHDX images into the standby pool alongside active sessions, seamlessly draining older baseline VMs upon idle timeout without dropping a single in-flight client connection.")
 
     add_h1(doc, "3. Wake-on-Request Sequence & Automated Reaping Protocol")
@@ -456,38 +461,46 @@ def generate_fdd():
     participant MXC as MXC Control Plane (wxc-exec)
     participant HyperV as Hypervisor Core
     participant Guest as ADPA Service (Guest :8080)
+    participant DB as Internal Enterprise Datastore
 
-    Note over HyperV,Guest: State: Paused (0% CPU, Memory Baseline)
+    Note over HyperV,Guest: State: StandbyPaused (0% CPU, Memory Resident)
     Client->>Proxy: POST /api/v1/adpa/process (Payload: 2MB JSON)
     Proxy->>Proxy: Hold request in memory buffer queue
     Proxy->>MXC: IPC: lease_pool_member("prod-adpa")
     MXC->>HyperV: Resume-VM -VMName "mxc-hv-prod-adpa-01"
     HyperV-->>MXC: Resumed (<300ms)
     MXC-->>Proxy: Leased Sandbox ID: "hv:prod-adpa-01", IP: "172.24.100.5"
-    loop Health Probe (Up to 1000ms, typically 50ms)
+    loop Health & Time-Sync Probe (Up to 1000ms, typically 50ms)
         Proxy->>Guest: GET http://172.24.100.5:8080/health
-        Guest-->>Proxy: HTTP 200 {"status": "healthy"}
+        Guest->>Guest: Re-seed PRNG (RDRAND) & Assert Host Clock Sync
+        Guest-->>Proxy: HTTP 200 {"status": "healthy", "clock_synced": true}
     end
-    Proxy->>Guest: Forward buffered POST /api/v1/adpa/process
-    Guest-->>Proxy: HTTP 200 {"result": "success", "txId": "9482"}
+    Proxy->>Guest: Forward buffered POST (Increment active_open_requests)
+    Guest->>DB: TCP 1433/5432/443: Query & Write Results via Egress Whitelist
+    DB-->>Guest: Transaction OK
+    Guest-->>Proxy: HTTP 200 {"result": "success", "txId": "9482"} (Decrement active_open_requests)
     Proxy-->>Client: HTTP 200 {"result": "success", "txId": "9482"}
-    Note over Proxy: Reset idle countdown (300 seconds)""", "Wake-on-Request Execution Sequence:")
+    Note over Proxy: If active_open_requests == 0, reset idle countdown (300 seconds)""", "Wake-on-Request Execution Sequence:")
 
-    add_body(doc, "When elapsed time since the last packet exceeds idle_timeout_seconds (default: 300s), the Ingress Proxy issues pool_release(\"hv:prod-adpa-01\"). MXC disconnects the network adapter, restores the VM to checkpoint baseline-hot-ready, deletes the child .avhdx differencing disk, invokes Suspend-VM, and marks the instance ready in the pool registry.", "Automated Reaping & Baseline Reset Protocol: ")
+    add_body(doc, "When active_open_requests == 0 and elapsed time exceeds idle_timeout_seconds (300s), the Ingress Proxy acquires an atomic TransitionLock marking the VM Reaping in the routing table (eliminating race conditions). It then issues pool_release: MXC disconnects network adapters, restores baseline-hot-ready, discards the child .avhdx disk, invokes Suspend-VM, and updates pool_state.json.", "Automated Reaping & Baseline Reset Protocol: ")
+
+
+def generate_fdd():
+    doc = init_doc(
+        "Pillar III: Functional Design Document (FDD)",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
+    )
+    build_fdd_content(doc)
     return doc
 
 
-def generate_user_stories():
-    doc = init_doc(
-        "Pillar IV: User Stories & Acceptance Criteria",
-        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
-    )
+def build_user_stories_content(doc):
     stories = [
         (
             "User Story US-01: Low-Latency On-Demand Processing (End User)",
             "As an Enterprise Automation Operator or Upstream REST Client, I want to dispatch requests to the ADPA / SIDPA production endpoints at any time of day, so that my data is processed immediately with sub-second response times without encountering gateway 502/504 errors or waiting for a server cold boot.",
             [
-                ("AC-01.1 (Cold Wake TTFB): ", "Given the target Hyper-V VM (hv:prod-adpa-01) is in a dormant (Paused) state, When the client transmits an HTTP POST payload to https://gateway.internal/api/v1/adpa/process, Then the gateway must hold the connection, wake the VM via mxc-pool-lease, and return the initial HTTP response within <= 800ms total wall-clock Time to First Byte (TTFB)."),
+                ("AC-01.1 (Cold Wake TTFB & Platform Overhead): ", "Given the target Hyper-V VM (hv:prod-adpa-01) is in a dormant (Paused) state, When the client transmits an HTTP POST payload to https://gateway.internal/api/v1/adpa/process, Then the gateway must hold the connection, wake the VM via mxc-pool-lease (<= 300ms platform wake overhead), establish the socket connection, and return the initial HTTP response/header flush within <= 800ms total wall-clock Time to First Byte (TTFB), before streaming subsequent business logic payloads."),
                 ("AC-01.2 (Subsequent Warm Traffic): ", "Given the VM is already active (Running), When subsequent HTTP requests arrive within the active session window, Then the gateway must forward requests immediately with a proxy overhead of <= 5ms (<= 15ms - 25ms total response overhead) plus application processing time."),
                 ("AC-01.3 (Zero Connection Drops & Saturation Fallback): ", "Given normal operating conditions, incoming client requests shall experience zero HTTP 502 Bad Gateway or HTTP 504 Gateway Timeout errors due to VM wake-up latency. Given an extreme host saturation event where wake-up exceeds wake_timeout_ms (3000ms), the gateway must gracefully return a structured HTTP 503 Service Unavailable with a Retry-After header rather than dropping the TCP socket.")
             ],
@@ -497,9 +510,10 @@ def generate_user_stories():
             "User Story US-02: Cryptographic State Rollback & Zero Persistence (SecOps)",
             "As a Chief Information Security Officer (CISO) and Compliance Auditor, I want every execution session of SIDPA to run inside a hardware-isolated environment that is mathematically wiped clean upon completion, so that malicious payloads, memory scrapers, or sensitive customer records cannot persist across different user sessions.",
             [
-                ("AC-02.1 (Ephemeral Differencing Disks): ", "Given an active processing session where files, temporary tables, or registry keys were modified in the guest, When the session ends or the 300-second inactivity timer expires, Then the Differencing Delta Disk (.avhdx) must be permanently deleted from host storage, leaving zero residual files or logs."),
+                ("AC-02.1 (Ephemeral Differencing Disks & Active Draining): ", "Given an active processing session where files, temporary tables, or registry keys were modified in the guest, When the session ends or the 300-second inactivity timer expires (with active_open_requests == 0), Then the Differencing Delta Disk (.avhdx) must be permanently deleted from host storage, leaving zero residual files or logs."),
                 ("AC-02.2 (Cryptographic Baseline Verification): ", "Given a completed session rollback, When the VM is reverted to the baseline-hot-ready checkpoint, Then SHA-256 verification of the parent base VHDX (winserv2025-prod-adpa.vhdx) must remain bit-for-bit identical before and after execution."),
-                ("AC-02.3 (Network Airgap Default): ", "Given a production guest instance, When the instance is active or dormant, Then its virtual network adapter must be strictly disconnected from external internet switches (mxc-net-disable) and restricted exclusively to the internal gateway virtual switch (:8080).")
+                ("AC-02.3 (Network Airgap & Datastore Egress Whitelist): ", "Given a production guest instance, When the instance is active or dormant, Then arbitrary public internet egress must be strictly blocked (airgap mode), And outbound traffic is restricted exclusively to internal enterprise datastore endpoints (TCP 1433 for SQL Server, TCP 5432 for PostgreSQL, and TCP 443 for S3/Blob storage private endpoints)."),
+                ("AC-02.4 (PRNG Hardware Entropy & Clock Synchronization): ", "Given a VM restored from baseline-hot-ready memory checkpoint, When the guest service initializes upon wake, Then it must forcibly re-seed its random number generator from CPU hardware (RDRAND / BCryptGenRandom) to guarantee unique cryptographic nonces and UUIDs across sibling cloned VMs, And the guest clock must verify synchronization against host UTC time before returning HTTP 200 on the health probe, preventing clock-skew authentication errors.")
             ],
             "Zero-Fill Scrubbing & Per-Session Key Rotation: Integrate automated zero-fill block scrubbing passes and ephemeral per-session BitLocker/virtual-TPM key rotation so that discarded .avhdx sectors leave zero physical data remanence on host NVMe arrays."
         ),
@@ -508,7 +522,7 @@ def generate_user_stories():
             "As an Infrastructure Platform Engineer, I want dormant production instances to release active CPU and compress RAM usage, so that our on-premise Windows Server / Hyper-V cluster can host 5x to 10x more application workloads than traditional always-on VMs.",
             [
                 ("AC-03.1 (Zero CPU Utilization): ", "Given 10 registered production service VMs in the warm standby pool, When no client requests are active (Paused state), Then total host CPU utilization across all 10 VMs must measure strictly 0.0% on the Hyper-V host performance monitor."),
-                ("AC-03.2 (Dynamic Memory Compression): ", "Given suspended standby instances, When Hyper-V Dynamic Memory is active, Then the host hypervisor must reclaim unallocated guest RAM and compress idle memory commitment down to the configured minimum baseline (>= 65% reduction)."),
+                ("AC-03.2 (Lean Static Host Memory Footprint): ", "Given suspended standby instances in StandbyPaused state, When measured on the host hypervisor, Then each dormant VM's host RAM commitment must not exceed ~1.0–1.2 GB (achieved via working set pre-trimming prior to snapshot capture), eliminating host swap-in disk page latency on resume."),
                 ("AC-03.3 (Sub-300ms Hypervisor Wakeup & Pool Queue): ", "Given a configurable ready queue size (N), When the Ingress Gateway dispatches a wake signal, Then the elapsed time for Hyper-V to complete Resume-VM must be <= 300ms.")
             ],
             "Automated NUMA Node Alignment: Implement host-level Non-Uniform Memory Access (NUMA) node pinning and intelligent memory overcommit policies in wxc-exec, maximizing physical server tenant density by up to 300% without cross-socket memory latency degradation."
@@ -526,15 +540,14 @@ def generate_user_stories():
             "User Story US-05: Elastic Standby Capacity & Concurrency Burst Scaling (DevOps & SRE)",
             "As an SRE and Capacity Planning Engineer, I want the warm pool manager to automatically replenish and expand the ready-state paused instances as soon as demand indicators increase, so that concurrent client requests and unexpected traffic surges always find a pre-warmed instance immediately available with zero queuing delays.",
             [
-                ("AC-05.1 (Instant Buffer Replenishment): ", "Given a configured minimum standby buffer (Kmin = 1), When an incoming request leases the active standby VM (hv:prod-adpa-01), Then the pool manager must immediately dispatch an asynchronous worker to unpause or promote the next standby VM (hv:prod-adpa-02) into StandbyPaused state in the background before the next request arrives."),
+                ("AC-05.1 (Instant Buffer Replenishment): ", "Given a configured minimum standby buffer (Kmin = 1), When an incoming request leases the active standby VM (hv:prod-adpa-01), Then the pool manager must immediately dispatch an asynchronous worker to promote a ColdProvisioned instance into StandbyPaused state in ~1.5s in the background before the next request arrives."),
                 ("AC-05.2 (Velocity-Triggered Dynamic Expansion): ", "Given incoming request velocity exceeds the configured threshold (> 10 req/s) or Ingress Buffer queue depth > 0, When the autoscaling trigger evaluates, Then the pool manager must dynamically scale the ready-state buffer up to Kmax (up to 5 instances in RAM), ensuring concurrent requests are served without cold-boot penalties."),
                 ("AC-05.3 (Schedule & Requirement-Based Pre-Warming): ", "Given scheduled batch processing or calendar events (e.g., 08:00 AM shift start), When an automated or manual pre-warm signal (POST /pool/warm --target prod-adpa --count 4) is received, Then the pool manager must pre-warm the requested ready instances in StandbyPaused state prior to traffic arrival."),
-                ("AC-05.4 (Graceful Scale-Down & Memory Reclamation): ", "Given traffic has normalized and surplus burst instances have remained idle past reaping_cooldown_seconds (180s), When the reaper evaluates the fleet, Then surplus instances beyond Kmin must be systematically restored to baseline, differencing disks discarded, and VMs suspended or deallocated to return host RAM to baseline.")
+                ("AC-05.4 (Graceful Scale-Down & Memory Reclamation): ", "Given traffic has normalized and surplus burst instances have remained idle past reaping_cooldown_seconds (180s), When the reaper evaluates the fleet, Then surplus instances beyond Kmin must be systematically restored to baseline, differencing disks discarded, and VMs suspended or deallocated to ColdProvisioned to return host RAM to baseline.")
             ],
             "Cross-Host Predictive Pool Rebalancing: Coordinate with multi-node hypervisor schedulers to dynamically distribute ready-state buffers across secondary physical Hyper-V nodes when local host memory pressure exceeds 80%."
         )
     ]
-
 
     for title, narrative, ac_list, fut in stories:
         add_h1(doc, title)
@@ -543,6 +556,66 @@ def generate_user_stories():
         for prefix, ac_text in ac_list:
             add_body(doc, ac_text, prefix)
         add_callout(doc, fut)
+
+
+def generate_user_stories():
+    doc = init_doc(
+        "Pillar IV: User Stories & Acceptance Criteria",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)"
+    )
+    build_user_stories_content(doc)
+    return doc
+
+
+def generate_merged_master_document():
+    doc = init_doc(
+        "Enterprise Architecture Specification (Complete Merged Edition)",
+        "Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA) — Master ADD & Pillars I–IV"
+    )
+
+    # Master ADD
+    build_add_content(doc)
+
+    # Pillar I: BDR
+    doc.add_page_break()
+    p = doc.add_paragraph()
+    r = p.add_run("Pillar I: Business Drivers & Requirements (BDR)")
+    r.font.name = "Calibri"
+    r.font.size = Pt(18)
+    r.font.bold = True
+    r.font.color.rgb = RGBColor(31, 78, 121)
+    build_bdr_content(doc)
+
+    # Pillar II: ADR
+    doc.add_page_break()
+    p = doc.add_paragraph()
+    r = p.add_run("Pillar II: Architectural Decision Records (ADR)")
+    r.font.name = "Calibri"
+    r.font.size = Pt(18)
+    r.font.bold = True
+    r.font.color.rgb = RGBColor(31, 78, 121)
+    build_adr_content(doc)
+
+    # Pillar III: FDD
+    doc.add_page_break()
+    p = doc.add_paragraph()
+    r = p.add_run("Pillar III: Functional Design Document (FDD)")
+    r.font.name = "Calibri"
+    r.font.size = Pt(18)
+    r.font.bold = True
+    r.font.color.rgb = RGBColor(31, 78, 121)
+    build_fdd_content(doc)
+
+    # Pillar IV: User Stories
+    doc.add_page_break()
+    p = doc.add_paragraph()
+    r = p.add_run("Pillar IV: User Stories & Acceptance Criteria")
+    r.font.name = "Calibri"
+    r.font.size = Pt(18)
+    r.font.bold = True
+    r.font.color.rgb = RGBColor(31, 78, 121)
+    build_user_stories_content(doc)
+
     return doc
 
 
@@ -552,7 +625,7 @@ def main():
 
     tasks = [
         ("ARCHITECTURE_DESIGN_DOCUMENT-v2.docx", generate_master_add),
-        ("ARCHITECTURE_DESIGN_DOCUMENT_Merged.docx", generate_master_add),
+        ("ARCHITECTURE_DESIGN_DOCUMENT_Merged.docx", generate_merged_master_document),
         ("BDR_Enterprise_Architecture-v2.docx", generate_bdr),
         ("ADR_Enterprise_Architecture-v2.docx", generate_adr),
         ("FDD_Enterprise_Architecture-v2.docx", generate_fdd),
@@ -571,4 +644,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

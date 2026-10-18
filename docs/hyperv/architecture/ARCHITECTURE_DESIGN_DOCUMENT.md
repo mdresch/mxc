@@ -19,8 +19,8 @@
 This Architecture Design Document (ADD) defines the unified enterprise specification for running production-grade services (specifically **ADPA** — Automated Dynamic Process Automation, and **SIDPA** — Secured Intelligent Data Processing Application) inside hardware-isolated **Windows Server 2025 Type-1 Hyper-V micro-instances**. 
 
 Unlike standard developer environments, this architecture implements a **Just-in-Time (JIT) Scale-to-Zero execution model**:
-1. **0% Idle Resource Footprint**: When no client requests are active, production VMs remain suspended in RAM (`Paused`), consuming 0.0% CPU cycles and releasing paged memory via Hyper-V Dynamic Memory.
-2. **Sub-Second Wake-on-Request**: An intelligent Ingress Gateway buffers incoming client HTTP requests, triggers hardware unpause via the MXC control plane in **`<300ms`**, verifies socket readiness (`:8080/health`), and proxies the payload with zero perceptible cold-start delay ($<600\text{ms}$ Time to First Byte).
+1. **0% Idle Resource Footprint**: When no client requests are active, production VMs remain suspended in RAM (`Paused`), consuming 0.0% CPU cycles with a lean, pre-trimmed static working set ($\approx 1.0\text{ – }1.2\text{ GB}$).
+2. **Sub-Second Wake-on-Request**: An intelligent Ingress Gateway buffers incoming client HTTP requests, triggers hardware unpause via the MXC control plane in **`<300ms`**, verifies socket readiness (`:8080/health`), and proxies the payload with zero perceptible cold-start delay ($350\text{ms} - 650\text{ms}$ nominal, $\le 800\text{ms}$ SLA Time to First Byte).
 3. **Sterile Session Isolation**: Upon session completion or inactivity timeout ($300\text{s}$), the instance delta disk (`.avhdx`) is discarded, returning the VM back to a pristine, immutable checkpoint baseline (`baseline-hot-ready`) to prevent state drift and eliminate malware persistence.
 4. **Elastic Ready-State Autoscaling**: As soon as requirements, concurrency velocity, or schedules signal increased demand, the warm pool manager automatically replenishes and expands the ready-state paused buffer ($K_{\text{min}} \rightarrow K_{\text{max}}$) so concurrent requests never experience cold boots or queuing delays.
 
@@ -34,7 +34,6 @@ The complete architecture specification is organized into four formal pillars (a
 * [**Pillar II: Architectural Decision Records (ADR)**](file:///C:/Users/MennoDrescher/source/repos/mxc/docs/hyperv/architecture/ADR.md): Formal decision records (ADR-001 through ADR-006) justifying Type-1 Hyper-V virtualization, JIT connection-buffering proxies, separate hardened production images, memory-preserved standby, automated differencing disk rollbacks, and dynamic watermark pool autoscaling.
 * [**Pillar III: Functional Design Document (FDD)**](file:///C:/Users/MennoDrescher/source/repos/mxc/docs/hyperv/architecture/FDD.md): Component specifications, JSON route definitions, elastic standby watermark replenishment algorithm, lifecycle state machines, wake-on-request sequence flows, and automated reaping protocols.
 * [**Pillar IV: User Stories & Acceptance Criteria**](file:///C:/Users/MennoDrescher/source/repos/mxc/docs/hyperv/architecture/USER_STORIES.md): BDD/Gherkin user stories (US-01 through US-05) across End Users, SecOps/CISO, DevOps/SRE, and Software Release Engineers.
-
 
 ---
 
@@ -86,7 +85,7 @@ flowchart TD
     BufferQueue -- "Forward HTTP" --> Switch
     Switch --> ActiveVM
     Reaper -- "Inactivity timeout" --> PoolManager
-    PoolManager -- "Discard .avhdx & Snapshot Restore" --> ActiveVM
+    PoolManager -- "Discard .avhdx & Snapshot Restore" --> StandbyVM
     StorageSubsystem -. "Parent VHDX" .-> VMPool
 ```
 

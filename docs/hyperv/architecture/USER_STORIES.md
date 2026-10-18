@@ -10,10 +10,10 @@
 > **So that** my data is processed immediately with sub-second response times without encountering gateway 502/504 errors or waiting for a server cold boot.
 
 ### Acceptance Criteria
-* **AC-01.1 (Cold Wake TTFB)**:
+* **AC-01.1 (Cold Wake TTFB & Platform Overhead)**:
   * *Given* the target Hyper-V VM (`hv:prod-adpa-01`) is in a dormant (`Paused`) state,
   * *When* the client transmits an HTTP POST payload to `https://gateway.internal/api/v1/adpa/process`,
-  * *Then* the gateway must hold the connection, wake the VM via `mxc-pool-lease`, and return the initial HTTP response within **$\le 800\text{ms}$** total wall-clock Time to First Byte (TTFB).
+  * *Then* the gateway must hold the connection, wake the VM via `mxc-pool-lease` ($\le 300\text{ms}$ platform wake overhead), establish the socket connection, and return the initial HTTP response/header flush within **$\le 800\text{ms}$** total wall-clock Time to First Byte (TTFB), before streaming subsequent business logic payloads.
 * **AC-01.2 (Subsequent Warm Traffic)**:
   * *Given* the VM is already active (`Running`),
   * *When* subsequent HTTP requests arrive within the active session window,
@@ -37,16 +37,22 @@
 ### Acceptance Criteria
 * **AC-02.1 (Ephemeral Differencing Disks)**:
   * *Given* an active processing session where files, temporary tables, or registry keys were modified in the guest,
-  * *When* the session ends or the 300-second inactivity timer expires,
+  * *When* the session ends or the 300-second inactivity timer expires (with `active_open_requests == 0`),
   * *Then* the Differencing Delta Disk (`.avhdx`) must be permanently deleted from host storage, leaving zero residual files or logs.
 * **AC-02.2 (Cryptographic Baseline Verification)**:
   * *Given* a completed session rollback,
   * *When* the VM is reverted to the `baseline-hot-ready` checkpoint,
   * *Then* SHA-256 verification of the parent base VHDX (`winserv2025-prod-adpa.vhdx`) must remain bit-for-bit identical before and after execution.
-* **AC-02.3 (Network Airgap Default)**:
+* **AC-02.3 (Network Airgap & Datastore Egress Whitelist)**:
   * *Given* a production guest instance,
   * *When* the instance is active or dormant,
-  * *Then* its virtual network adapter must be strictly disconnected from external internet switches (`mxc-net-disable`) and restricted exclusively to the internal gateway virtual switch (`:8080`).
+  * *Then* arbitrary public internet egress must be strictly blocked (airgap mode),
+  * *And* outbound traffic is restricted exclusively to internal enterprise datastore endpoints (TCP `:1433` for SQL Server, TCP `:5432` for PostgreSQL, and TCP `:443` for S3/Blob storage private endpoints).
+* **AC-02.4 (PRNG Hardware Entropy & Clock Synchronization)**:
+  * *Given* a VM restored from `baseline-hot-ready` memory checkpoint,
+  * *When* the guest service initializes upon wake,
+  * *Then* it must forcibly re-seed its random number generator from CPU hardware (`RDRAND` / `BCryptGenRandom`) to guarantee unique cryptographic nonces and UUIDs across sibling cloned VMs,
+  * *And* the guest clock must verify synchronization against host UTC time before returning `HTTP 200` on the health probe, preventing clock-skew authentication errors.
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (US-02): Zero-Fill Scrubbing & Per-Session Key Rotation**  
@@ -65,14 +71,15 @@
   * *Given* 10 registered production service VMs in the warm standby pool,
   * *When* no client requests are active (`Paused` state),
   * *Then* total host CPU utilization across all 10 VMs must measure strictly **0.0%** on the Hyper-V host performance monitor.
-* **AC-03.2 (Dynamic Memory Compression)**:
-  * *Given* suspended standby instances,
-  * *When* Hyper-V Dynamic Memory is active,
-  * *Then* the host hypervisor must reclaim unallocated guest RAM and compress idle memory commitment down to the configured minimum baseline ($\ge 65\%$ reduction).
+* **AC-03.2 (Lean Static Host Memory Footprint)**:
+  * *Given* suspended standby instances in `StandbyPaused` state,
+  * *When* measured on the host hypervisor,
+  * *Then* each dormant VM's host RAM commitment must not exceed $\approx 1.0\text{ – }1.2\text{ GB}$ (achieved via working set pre-trimming prior to snapshot capture), eliminating host swap-in disk page latency on resume.
 * **AC-03.3 (Sub-300ms Hypervisor Wakeup & Pool Queue)**:
   * *Given* a configurable ready queue size ($N$),
   * *When* the Ingress Gateway dispatches a wake signal,
   * *Then* the elapsed time for Hyper-V to complete `Resume-VM` must be $\le 300\text{ms}$.
+
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (US-03): Automated NUMA Node Alignment**  

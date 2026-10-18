@@ -21,10 +21,10 @@ Enterprises deploying automated processing services (such as **ADPA** — Automa
 ## 2. Business Drivers (Strategic Goals)
 
 ### BDR-01: Maximum Resource Density & Cost Reduction (Scale-to-Zero)
-* **Goal**: Minimize hardware footprint and operating expenditure by ensuring that when zero client requests are pending, virtual machine instances consume **0% CPU** and release idle memory pages via Hyper-V Dynamic Memory.
+* **Goal**: Minimize hardware footprint and operating expenditure by ensuring that when zero client requests are pending, virtual machine instances consume **0% CPU** and maintain a compact host memory footprint.
 * **Target Metrics**:
   * **0.0%** Host CPU consumption during idle periods.
-  * $\ge 65\%$ compression in active hypervisor memory commitment via Dynamic Memory paging.
+  * $\approx 1.0\text{ – }1.2\text{ GB}$ lean static host memory footprint per paused instance, achieved via aggressive working set pre-trimming prior to snapshot capture (preventing host swap-in disk I/O on resume).
   * Support for **3× to 5×** (up to **10×** with memory deduplication) more concurrent registered services per physical host compared to always-on VMs.
 
 > [!TIP]
@@ -36,8 +36,9 @@ Enterprises deploying automated processing services (such as **ADPA** — Automa
 ### BDR-02: Strict Sub-Second Response SLAs (Instantaneous Readiness)
 * **Goal**: Provide instantaneous, consumer-grade responsiveness to end users and API integrations without manual provisioning or cold-start penalties.
 * **Target Metrics**:
-  * Time to First Byte (TTFB) from a completely dormant/paused state under **`800ms`** (typically $\approx 350\text{ms} - 550\text{ms}$).
+  * Time to First Byte (TTFB) from a completely dormant/paused state of **$350\text{ms} - 650\text{ms}$** ($\le 800\text{ms}$ SLA).
   * Subsequent warm request latency under **`15ms`**.
+
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (BDR-02): Global Edge Socket Holding (Anycast PoPs)**  
@@ -73,9 +74,10 @@ Enterprises deploying automated processing services (such as **ADPA** — Automa
 
 | Requirement ID | Category | Requirement Description | Success Verification |
 | :--- | :--- | :--- | :--- |
-| **REQ-BDR-01** | **Performance** | Ingress gateway must buffer incoming requests and wake dormant VM in $<300\text{ms}$ ($\le 800\text{ms}$ total TTFB). | Measured gateway latency logs $\le 300\text{ms}$ to VM resume and socket connect. |
+| **REQ-BDR-01** | **Performance** | Ingress gateway must buffer incoming requests and wake dormant VM in $<300\text{ms}$ ($350\text{ms} - 650\text{ms}$ nominal, $\le 800\text{ms}$ total TTFB SLA). | Measured gateway latency logs $\le 300\text{ms}$ to VM resume and socket connect. |
 | **REQ-BDR-02** | **Lifecycle** | Instances with no traffic for $>300\text{s}$ must automatically revert to baseline and suspend. | Verified automated snapshot rollback and Hyper-V `Paused` state transition. |
-| **REQ-BDR-03** | **Security** | Guest application must communicate strictly via an isolated virtual network segment. | Network traffic restricted to Ingress Gateway port forwarding (`:8080`); no unauthorized egress. |
+| **REQ-BDR-03** | **Security** | Guest application traffic restricted to Ingress Gateway port forwarding (`:8080`) and strict enterprise datastore egress whitelist (SQL, PostgreSQL, S3 private endpoints); arbitrary public internet egress blocked. | Network firewall rules strictly enforce isolation; no unauthorized internet egress. |
 | **REQ-BDR-04** | **Packaging** | Production image must exclude developer toolchains, debuggers, and source repositories. | Verified clean golden base image (`winserv2025-prod-adpa.vhdx`) containing only pre-jitted production binaries and hardened OS. |
 | **REQ-BDR-05** | **Elasticity** | As soon as demand indicators surge or a standby instance is leased, the pool must automatically unpause/replenish ready instances up to $K_{\text{max}}$. | Verified standby pool depth auto-replenishment with zero queuing drops under concurrent load. |
+
 
