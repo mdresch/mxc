@@ -32,6 +32,7 @@
   5. Poll guest health endpoint (`:8080/health`), proxy HTTP requests, and stream responses back to the client.
   6. **In-Flight Request Tracking & Draining**: Maintains atomic `active_open_requests` counter. The idle timeout timer decrements strictly when `active_open_requests == 0`. Long-running processing (>300s) is protected from premature reaping.
   7. **Atomic Reaping Lock (Race Prevention)**: When inactivity triggers reaping, the proxy acquires a `TransitionLock` that marks the instance as `Reaping` in the routing table *before* signaling network disconnection, ensuring any simultaneous request arriving at `t = 300.01s` instantly leases the next available `StandbyPaused` instance.
+  8. **Stuck Request Execution Safety Timeout**: To prevent hung downstream operations, client half-closes, or leaked sockets from permanently holding `active_open_requests > 0` and blocking reaping, the gateway enforces a hard execution ceiling (`max_request_execution_timeout_seconds`, default: 900s / 15 min). Exceeded requests are terminated with `HTTP 504 Gateway Timeout`, the in-flight counter decremented, and the VM marked for forced reaping.
 
 * **Proxy Route Configuration Schema**:
   ```json
@@ -42,6 +43,7 @@
     "guest_port": 8080,
     "wake_timeout_ms": 3000,
     "idle_timeout_seconds": 300,
+    "max_request_execution_timeout_seconds": 900,
     "health_check_path": "/health"
   }
   ```
@@ -113,11 +115,15 @@ stateDiagram-v2
     1. Service readiness (`"status": "healthy"`).
     2. Hyper-V Time Synchronization step: asserts `abs(GuestTime - HostVMBusTime) < 50ms` to prevent TLS handshake, JWT, or Kerberos ticket validation errors due to stale snapshot timestamps.
     3. Hardware PRNG Entropy re-seed: calls `BCryptGenRandom` / `RDRAND` upon initial wake to ensure cryptographic nonces/UUIDs never collide across checkpoint-restored sibling VMs.
+    4. Stale Database Connection Pool Purging: triggers connection pool reset mechanisms (e.g., ADO.NET `SqlConnection.ClearAllPools()` or Npgsql reset) to flush and drop any stale TCP sockets held across checkpoint sleep, guaranteeing pristine TCP handshakes with internal datastores without connection resets.
   * **Memory Optimization**: Assemblies pre-compiled (Native AOT or NGen). Working set memory aggressively trimmed before taking the golden baseline checkpoint (`baseline-hot-ready`).
   * **Internal Data Plane & Egress Whitelist**:
     * **Ingress**: Port `8080` strictly restricted to the Ingress Reverse Proxy Gateway on the internal virtual switch.
     * **Public Internet Egress**: Strictly blocked (airgap mode).
-    * **Enterprise Datastore Egress Whitelist**: Stateful outbound rules permit connectivity strictly to internal enterprise private endpoints: TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (Private S3/Blob storage endpoints). All other egress is dropped and alerted.
+    * **Enterprise Datastore & Directory Egress Whitelist**: Stateful outbound rules permit connectivity strictly to internal enterprise private endpoints:
+      * Enterprise Datastores: TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (Private S3/Blob storage endpoints).
+      * Core Directory & Name Resolution: UDP/TCP `:53` (Internal DNS for enterprise FQDN resolution) and UDP/TCP `:88` (Active Directory Domain Controller Kerberos for Windows Integrated Authentication).
+      * All other outbound destinations are dropped and alerted.
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (Component 3): Zero-Downtime Rolling VHDX Updates**  
@@ -144,9 +150,9 @@ sequenceDiagram
     MXC->>HyperV: Resume-VM -VMName "mxc-hv-prod-adpa-01"
     HyperV-->>MXC: Resumed (<300ms)
     MXC-->>Proxy: Leased Sandbox ID: "hv:prod-adpa-01", IP: "172.24.100.5"
-    loop Health & Time-Sync Probe (Up to 1000ms, typically 50ms)
+    loop Health, PRNG & DB Pool Probe (Up to 1000ms, typically 50ms)
         Proxy->>Guest: GET http://172.24.100.5:8080/health
-        Guest->>Guest: Re-seed PRNG (RDRAND) & Assert Host Clock Sync
+        Guest->>Guest: Re-seed PRNG (RDRAND), Clear DB Pools (ClearAllPools), Assert Host Clock Sync
         Guest-->>Proxy: HTTP 200 {"status": "healthy", "clock_synced": true}
     end
     Proxy->>Guest: Forward buffered POST /api/v1/adpa/process (Increment active_open_requests)

@@ -19,10 +19,11 @@
 This Architecture Design Document (ADD) defines the unified enterprise specification for running production-grade services (specifically **ADPA** — Automated Dynamic Process Automation, and **SIDPA** — Secured Intelligent Data Processing Application) inside hardware-isolated **Windows Server 2025 Type-1 Hyper-V micro-instances**. 
 
 Unlike standard developer environments, this architecture implements a **Just-in-Time (JIT) Scale-to-Zero execution model**:
-1. **0% Idle Resource Footprint**: When no client requests are active, production VMs remain suspended in RAM (`Paused`), consuming 0.0% CPU cycles with a lean, pre-trimmed static working set ($\approx 1.0\text{ – }1.2\text{ GB}$).
+1. **0% Idle Resource Footprint**: When no client requests are active, production VMs remain suspended in RAM (`StandbyPaused`), consuming 0.0% CPU cycles with a lean, pre-trimmed static working set ($\approx 1.0\text{ – }1.2\text{ GB}$).
 2. **Sub-Second Wake-on-Request**: An intelligent Ingress Gateway buffers incoming client HTTP requests, triggers hardware unpause via the MXC control plane in **`<300ms`**, verifies socket readiness (`:8080/health`), and proxies the payload with zero perceptible cold-start delay ($350\text{ms} - 650\text{ms}$ nominal, $\le 800\text{ms}$ SLA Time to First Byte).
-3. **Sterile Session Isolation**: Upon session completion or inactivity timeout ($300\text{s}$), the instance delta disk (`.avhdx`) is discarded, returning the VM back to a pristine, immutable checkpoint baseline (`baseline-hot-ready`) to prevent state drift and eliminate malware persistence.
-4. **Elastic Ready-State Autoscaling**: As soon as requirements, concurrency velocity, or schedules signal increased demand, the warm pool manager automatically replenishes and expands the ready-state paused buffer ($K_{\text{min}} \rightarrow K_{\text{max}}$) so concurrent requests never experience cold boots or queuing delays.
+3. **Sterile Session Isolation & Internal Data Plane**: Upon session completion or inactivity timeout ($300\text{s}$), the instance delta disk (`.avhdx`) is discarded, returning the VM back to a pristine, immutable checkpoint baseline (`baseline-hot-ready`) to prevent state drift and eliminate malware persistence. Arbitrary public internet is blocked (airgap mode), while outbound traffic is permitted strictly to internal enterprise datastores (SQL Server, PostgreSQL, S3 private endpoints) and infrastructure services (Internal DNS, Kerberos).
+4. **Cryptographic & Temporal Integrity**: Upon hypervisor unpause, the guest service forcibly re-seeds its PRNG entropy pool via hardware CPU instructions (`RDRAND`/`RDSEED`), purges stale database connection pools (`ClearAllPools()`), and verifies host VMBus clock synchronization before reporting healthy readiness.
+5. **Elastic Ready-State Autoscaling**: As soon as requirements, concurrency velocity, or schedules signal increased demand, the warm pool manager automatically replenishes and expands the ready-state paused buffer ($K_{\text{min}} \rightarrow K_{\text{max}}$) so concurrent requests never experience cold boots or queuing delays.
 
 ---
 
@@ -60,18 +61,25 @@ flowchart TD
 
     subgraph HyperVHost["Hyper-V Server 2025 Host (Machine A)"]
         subgraph NetworkIsolation["Virtual Network Segment"]
-            Switch["Internal vSwitch (Isolated Port Forwarding)"]
+            Switch["Internal vSwitch (Port ACLs)"]
+            EgressFilter["Stateful Egress Filter (Default Deny Internet)"]
         end
 
         subgraph VMPool["Production Instance Fleet"]
-            ActiveVM["Active Leased VM (hv:prod-adpa-01)\nState: Running\nMemory: Active Working Set"]
-            StandbyVM["Standby VM (hv:prod-adpa-02)\nState: Paused\nCPU: 0% | Memory: Paged Baseline"]
+            ActiveVM["Active Leased VM (hv:prod-adpa-01)\nState: ActiveRunning\nMemory: Pre-Trimmed (~1.1 GB Active)"]
+            StandbyVM["Standby VM (hv:prod-adpa-02)\nState: StandbyPaused\nCPU: 0% | Memory: Suspended in RAM"]
         end
 
         subgraph StorageSubsystem["Storage & Image Repository"]
             GoldenProdVHDX[("Production Base VHDX\n(winserv2025-prod-adpa.vhdx)")]
             SnapshotBaseline[("Clean Memory Checkpoint\n(baseline-hot-ready.avhdx)")]
         end
+    end
+
+    subgraph InternalDatastores["Enterprise Data Plane & Infrastructure"]
+        MSSQL[("Enterprise Database\nMSSQL / PostgreSQL\n(:1433 / :5432)")]
+        BlobStore[("Private Blob Storage\n(S3 / Azure Blob :443)")]
+        Directory[("Core Services\nInternal DNS / Kerberos\n(:53 / :88)")]
     end
 
     User --> Proxy
@@ -81,9 +89,13 @@ flowchart TD
     BufferQueue -- "Wake Signal if dormant" --> FastMCP
     FastMCP --> PoolManager
     PoolManager -- "Resume-VM (<300ms)" --> StandbyVM
-    StandbyVM -.-> ActiveVM
+    StandbyVM -. "Promote to Active" .-> ActiveVM
     BufferQueue -- "Forward HTTP" --> Switch
     Switch --> ActiveVM
+    ActiveVM -- "Authorized Egress Only" --> EgressFilter
+    EgressFilter --> MSSQL
+    EgressFilter --> BlobStore
+    EgressFilter --> Directory
     Reaper -- "Inactivity timeout" --> PoolManager
     PoolManager -- "Discard .avhdx & Snapshot Restore" --> StandbyVM
     StorageSubsystem -. "Parent VHDX" .-> VMPool

@@ -123,10 +123,13 @@ Execute all production sessions against a **transient differencing disk (`.avhdx
 * When an instance is leased, Hyper-V operates on an active differencing checkpoint anchored to the clean production baseline (`baseline-hot-ready`).
 * All disk writes during the session are captured exclusively in the `.avhdx` differencing layer.
 * Upon session release or inactivity timeout ($300\text{s}$), the differencing disk is discarded and the VM is reverted to the immutable baseline snapshot before returning to the warm standby pool.
-* **Internal Data Plane & Egress Whitelist**: Persistent business data is stored exclusively in external enterprise datastores (SQL Server, PostgreSQL, S3/Blob storage). To balance zero-trust network isolation with database persistence, the guest firewall implements a strict egress whitelist:
-  * Public Internet Egress: **Strictly Blocked** (Default Deny).
+* **Internal Data Plane & Egress Whitelist**: Persistent business data is stored exclusively in external enterprise datastores (SQL Server, PostgreSQL, S3/Blob storage). To balance zero-trust network isolation with enterprise directory integration and database persistence, the guest firewall implements a strict egress whitelist:
+  * Public Internet Egress: **Strictly Blocked** (Default Deny / Airgap mode).
   * Ingress Traffic: **Port `:8080` only**, restricted to the Ingress Reverse Proxy Gateway on the internal vSwitch.
-  * Egress Traffic: **Restricted to Internal Enterprise Datastore Subnets**: TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (S3 / Blob Storage Private Endpoints). All other outbound destinations are dropped and logged.
+  * Egress Traffic: **Restricted to Internal Enterprise Datastore & Infrastructure Subnets**:
+    * Enterprise Datastores: TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (S3 / Blob Storage Private Endpoints).
+    * Core Directory & Name Resolution: UDP/TCP `:53` (Internal DNS for enterprise FQDN resolution) and UDP/TCP `:88` (Active Directory Domain Controller Kerberos for Windows Integrated Authentication).
+    * All other outbound destinations are dropped and logged.
 
 
 ### Consequences
@@ -158,7 +161,8 @@ Implement an **Adaptive Low/High Watermark Standby Pool Manager** with proactive
 4. **Requirement & Schedule-Driven Pre-Warming**: The pool manager exposes an API (`mxc-pool-warm --target prod-adpa --count 5`) allowing external schedulers, calendar triggers, or upstream batch orchestrators to pre-warm instances minutes before known workload peaks (e.g., market open, shift changes, end-of-day reconciliation).
 5. **PRNG Entropy Re-Seeding on Wake**: Because sibling VMs restored from the same `baseline-hot-ready` checkpoint share identical kernel PRNG states, the guest service forcibly re-seeds its cryptographic random pool from hardware CPU instructions (`RDRAND` / `RDSEED` or `BCryptGenRandom` with `BCRYPT_RNG_USE_ENTROPY_IN_BUFFER`) upon receiving the initial wake signal, preventing duplicate UUIDs or nonce collisions.
 6. **Clock-Skew Synchronization Assertion**: To prevent TLS handshake, JWT validation, or Kerberos ticket failures due to stale snapshot timestamps, the guest health probe verifies that Hyper-V Time Synchronization (`VMICTimeSync`) has stepped the guest clock to host UTC time before reporting `HTTP 200 {"status": "healthy"}`.
-7. **Dynamic Cooldown & Graceful Reaping**: When traffic subsides and instances remain idle past the inactivity threshold ($300\text{s}$) with zero active open requests, surplus instances are systematically rolled back, differencing disks discarded, and VMs suspended or deallocated back to baseline $K_{\text{min}}$.
+7. **Stale Database Connection Pool Purging on Wake**: To prevent TCP connection resets caused by database drivers holding dead TCP sockets across long checkpoint hibernation cycles, the guest service explicitly purges active client connection pools (e.g., `ClearAllPools()` in ADO.NET / Npgsql) during the wake-up `/health` probe prior to accepting new user transactions, or closes open DB handles immediately prior to checkpoint capture.
+8. **Dynamic Cooldown & Graceful Reaping**: When traffic subsides and instances remain idle past the inactivity threshold ($300\text{s}$) with zero active open requests, surplus instances are systematically rolled back, differencing disks discarded, and VMs suspended or deallocated back to baseline $K_{\text{min}}$.
 
 ### Consequences
 * *Positive*: Seamless multi-tenant concurrency handling with zero queuing delay during traffic spikes; zero cold-boot delays; cryptographic security against PRNG entropy duplication; zero clock-skew authentication errors.
