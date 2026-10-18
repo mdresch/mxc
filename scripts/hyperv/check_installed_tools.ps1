@@ -19,8 +19,13 @@ Write-Host "Rustc:     $(rustc --version 2>$null)"
 Write-Host "Cargo:     $(cargo --version 2>$null)"
 Write-Host "Dotnet:    $(dotnet --version 2>$null)"
 Write-Host "TSX:       $(tsx --version 2>$null)"
+Write-Host "TypeScript $(tsc -v 2>$null)"
+Write-Host "ts-node:   $(ts-node -v 2>$null)"
+Write-Host "GitHub CLI $(gh --version 2>$null | Select-Object -First 1)"
 Write-Host "ESLint:    $(eslint -v 2>$null)"
 Write-Host "Prettier:  $(prettier -v 2>$null)"
+Write-Host "Playwright $(if (Test-Path "$HOME\AppData\Local\ms-playwright") { 'Chromium Installed' } else { 'Not installed' })"
+Write-Host "PyPackages $(python -c 'import requests, pydantic, mcp; print(\"requests, pydantic, mcp OK\")' 2>$null)"
 '@
 
 $sb = Get-MxcActiveSandboxId
