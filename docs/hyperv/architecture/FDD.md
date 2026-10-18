@@ -73,6 +73,29 @@ stateDiagram-v2
     Maintenance --> StandbyPaused: Admin Unlock
 ```
 
+* **Elastic Standby Replenishment & Watermark Autoscaler**:
+  * **Low Watermark Enforcement ($K_{\text{min}}$)**: The controller ensures there are always at least $K_{\text{min}}$ (default: 1–2) ready-state VMs in `StandbyPaused` state.
+  * **Atomic Lease & Async Replenishment**: When a request arrives and leases an instance (`StandbyPaused` $\rightarrow$ `ActiveRunning`), the controller immediately triggers an asynchronous background worker to unpause/promote the next standby instance from the baseline VHDX into `StandbyPaused` before subsequent client requests arrive.
+  * **Surge Velocity & Concurrency Autoscaling ($K_{\text{max}}$)**: When request arrival velocity exceeds `surge_velocity_threshold_rps` or Ingress Queue depth $> 0$, the ready pool target dynamically expands up to $K_{\text{max}}$ (default: 5–10 instances).
+  * **Predictive / Schedule-Driven Pre-Warming**: Supports programmatic pre-warming via API (`POST /pool/warm`) or schedule triggers, allowing upstream orchestrators to ramp ready-state instances prior to planned batch runs or shift-start traffic surges.
+  * **Scale-Down Reaping**: Instances idle past `reaping_cooldown_seconds` exceeding $K_{\text{min}}$ are restored to baseline, child `.avhdx` files discarded, and instances deallocated or suspended back to host RAM baseline.
+
+* **Pool Configuration Schema (`pool_config.json`)**:
+  ```json
+  {
+    "pool_id": "prod-adpa",
+    "min_ready_standby": 1,
+    "max_ready_standby": 5,
+    "surge_velocity_threshold_rps": 10,
+    "queue_depth_trigger": 1,
+    "idle_timeout_seconds": 300,
+    "reaping_cooldown_seconds": 180,
+    "pre_warm_schedule": [
+      { "cron": "0 8 * * 1-5", "target_ready": 4, "duration_minutes": 60 }
+    ]
+  }
+  ```
+
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (Component 2): Adaptive Idle Timeout Analytics**  
 > Replace static 300-second timers with adaptive inactivity thresholds driven by workload telemetry—keeping interactive multi-step workflow sessions warm longer while aggressively reclaiming single-shot webhook instances within 30 seconds.

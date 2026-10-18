@@ -99,3 +99,34 @@
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (US-04): Canary Baseline Verification & Auto-Rollback**  
 > Extend the CI/CD baking pipeline to automatically route $5\%$ of live ingress traffic to the newly baked VHDX baseline for a 15-minute canary window, automatically reverting the pool pointer to the previous baseline checkpoint if error rates or latency thresholds deviate.
+
+---
+
+## User Story US-05: Elastic Standby Capacity & Concurrency Burst Scaling (DevOps & SRE)
+
+> **As an** SRE and Capacity Planning Engineer,  
+> **I want** the warm pool manager to automatically replenish and expand the ready-state paused instances as soon as demand indicators increase,  
+> **So that** concurrent client requests and unexpected traffic surges always find a pre-warmed instance immediately available with zero queuing delays.
+
+### Acceptance Criteria
+* **AC-05.1 (Instant Buffer Replenishment)**:
+  * *Given* a configured minimum standby buffer ($K_{\text{min}} = 1$),
+  * *When* an incoming request leases the active standby VM (`hv:prod-adpa-01`),
+  * *Then* the pool manager must immediately dispatch an asynchronous worker to unpause or promote the next standby VM (`hv:prod-adpa-02`) into `StandbyPaused` state in the background before the next request arrives.
+* **AC-05.2 (Velocity-Triggered Dynamic Expansion)**:
+  * *Given* incoming request velocity exceeds the configured threshold ($> 10\text{ req/s}$) or Ingress Buffer queue depth $> 0$,
+  * *When* the autoscaling trigger evaluates,
+  * *Then* the pool manager must dynamically scale the ready-state buffer up to $K_{\text{max}}$ (up to 5 instances in RAM), ensuring concurrent requests are served without cold-boot penalties.
+* **AC-05.3 (Schedule & Requirement-Based Pre-Warming)**:
+  * *Given* scheduled batch processing or calendar events (e.g., 08:00 AM shift start),
+  * *When* an automated or manual pre-warm signal (`POST /pool/warm --target prod-adpa --count 4`) is received,
+  * *Then* the pool manager must pre-warm the requested ready instances in `StandbyPaused` state prior to traffic arrival.
+* **AC-05.4 (Graceful Scale-Down & Memory Reclamation)**:
+  * *Given* traffic has normalized and surplus burst instances have remained idle past `reaping_cooldown_seconds` ($180\text{s}$),
+  * *When* the reaper evaluates the fleet,
+  * *Then* surplus instances beyond $K_{\text{min}}$ must be systematically restored to baseline, differencing disks discarded, and VMs suspended or deallocated to return host RAM to baseline.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (US-05): Cross-Host Predictive Pool Rebalancing**  
+> Coordinate with multi-node hypervisor schedulers to dynamically distribute ready-state buffers across secondary physical Hyper-V nodes when local host memory pressure exceeds 80%.
+

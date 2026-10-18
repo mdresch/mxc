@@ -77,3 +77,5 @@ Enterprises deploying automated processing services (such as **ADPA** — Automa
 | **REQ-BDR-02** | **Lifecycle** | Instances with no traffic for $>300\text{s}$ must automatically revert to baseline and suspend. | Verified automated snapshot rollback and Hyper-V `Paused` state transition. |
 | **REQ-BDR-03** | **Security** | Guest application must communicate strictly via an isolated virtual network segment. | Network traffic restricted to Ingress Gateway port forwarding (`:8080`); no unauthorized egress. |
 | **REQ-BDR-04** | **Packaging** | Production image must exclude developer toolchains, debuggers, and source repositories. | Verified clean golden base image (`winserv2025-prod-adpa.vhdx`) containing only pre-jitted production binaries and hardened OS. |
+| **REQ-BDR-05** | **Elasticity** | As soon as demand indicators surge or a standby instance is leased, the pool must automatically unpause/replenish ready instances up to $K_{\text{max}}$. | Verified standby pool depth auto-replenishment with zero queuing drops under concurrent load. |
+

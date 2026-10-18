@@ -131,3 +131,30 @@ Execute all production sessions against a **transient differencing disk (`.avhdx
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (ADR-005): WORM Memory-Backed Ephemeral Scratch Disks**  
 > Transition high-throughput temporary scratch I/O from file-backed `.avhdx` delta layers to Write-Once-Read-Many (WORM) host RAM-disks attached via VMBus SCSI, achieving near-zero I/O latency and instantaneous physical memory zeroing upon release.
+
+---
+
+## ADR-006: Dynamic Watermark-Based Standby Pool Autoscaling & Predictive Warm-Up
+
+* **Status**: Accepted
+* **Date**: October 2026
+* **Deciders**: Systems Architecture Team
+
+### Context
+While maintaining a single dormant instance in Paused RAM achieves sub-300ms wake-up for a single request, a burst of concurrent requests or high-volume batch processing for ADPA/SIDPA could exhaust the standby capacity. If the solitary warm instance is leased, the next simultaneous client request would either wait in a queue or trigger an unbuffered cold provision. Production systems require elastic, proactive ready-state replenishment so multiple warm instances are immediately available whenever demand indicators surge.
+
+### Decision
+Implement an **Adaptive Low/High Watermark Standby Pool Manager** with proactive replenishment and predictive event-driven scaling:
+1. **Immediate Standby Replenishment (Low Watermark $K_{\text{min}}$)**: The control plane maintains a minimum target of ready-state instances (default $K_{\text{ready}} \ge 1$ or $2$). As soon as an instance is leased (`StandbyPaused` $\rightarrow$ `ActiveRunning`), an asynchronous background worker immediately promotes or warms the next instance from the baseline VHDX into `StandbyPaused` state so the standby buffer is never depleted.
+2. **Surge Velocity & Queue Depth Autoscaling (High Watermark $K_{\text{max}}$)**: If request arrival velocity exceeds threshold (e.g. $> 5\text{ req/s}$) or Ingress Buffer queue depth $> 0$, the ready pool target dynamically expands up to $K_{\text{max}}$ (e.g., 5–10 ready instances).
+3. **Requirement & Schedule-Driven Pre-Warming**: The pool manager exposes an API (`mxc-pool-warm --target prod-adpa --count 5`) allowing external schedulers, calendar triggers, or upstream batch orchestrators to pre-warm instances minutes before known workload peaks (e.g., market open, shift changes, end-of-day reconciliation).
+4. **Dynamic Cooldown & Graceful Reaping**: When traffic subsides and instances remain idle past the inactivity threshold ($300\text{s}$), surplus instances are systematically rolled back, differencing disks discarded, and VMs suspended or reclaimed back to baseline $K_{\text{min}}$, preserving host RAM.
+
+### Consequences
+* *Positive*: Seamless multi-tenant concurrency handling with zero queuing delay during traffic spikes; zero cold-boot delays even under burst conditions; predictable memory overhead bounded by $K_{\text{max}}$.
+* *Trade-off*: Burst expansion momentarily consumes additional host RAM ($\approx 1.2\text{ GB}$ per additional paused instance), which is automatically released upon idle cooldown via Dynamic Memory.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (ADR-006): AI-Driven Predictive Ingress Forecasting**  
+> Train an on-host lightweight time-series model (e.g., ONNX-based ARIMA or temporal transformer) analyzing historical request telemetry to automatically pre-warm pools 60 seconds ahead of anticipated demand cycles with zero manual scheduling.
+
