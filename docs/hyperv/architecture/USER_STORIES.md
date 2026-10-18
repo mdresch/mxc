@@ -1,5 +1,5 @@
 # Pillar IV: User Stories & Acceptance Criteria
-## Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes
+## Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes (ADPA / SIDPA)
 
 ---
 
@@ -7,19 +7,24 @@
 
 > **As an** Enterprise Automation Operator or Upstream REST Client,  
 > **I want** to dispatch requests to the ADPA / SIDPA production endpoints at any time of day,  
-> **So that** my data is processed immediately with sub-second response times without encountering gateway 502/504 errors.
+> **So that** my data is processed immediately with sub-second response times without encountering gateway 502/504 errors or waiting for a server cold boot.
 
 ### Acceptance Criteria
 * **AC-01.1 (Cold Wake TTFB)**:
-  * *Given* the target Hyper-V VM (`hv:prod-adpa-01`) is in dormant (`Paused`) state,
+  * *Given* the target Hyper-V VM (`hv:prod-adpa-01`) is in a dormant (`Paused`) state,
   * *When* the client transmits an HTTP POST payload to `https://gateway.internal/api/v1/adpa/process`,
-  * *Then* the gateway must hold the connection, wake the VM via `mxc-pool-lease`, and return the initial HTTP response within **$\le 800\text{ms}$** total wall-clock time.
+  * *Then* the gateway must hold the connection, wake the VM via `mxc-pool-lease`, and return the initial HTTP response within **$\le 800\text{ms}$** total wall-clock Time to First Byte (TTFB).
 * **AC-01.2 (Subsequent Warm Traffic)**:
-  * *Given* the VM is already active,
-  * *When* subsequent HTTP requests arrive,
-  * *Then* the gateway must forward requests immediately with an overhead of $\le 5\text{ms}$ plus application processing time.
-* **AC-01.3 (Zero Connection Drops)**:
-  * Under no circumstances shall an incoming client request receive an HTTP 502 Bad Gateway or HTTP 504 Gateway Timeout due to VM wake-up latency.
+  * *Given* the VM is already active (`Running`),
+  * *When* subsequent HTTP requests arrive within the active session window,
+  * *Then* the gateway must forward requests immediately with a proxy overhead of **$\le 5\text{ms}$** ($\le 15\text{ms} - 25\text{ms}$ total response overhead) plus application processing time.
+* **AC-01.3 (Zero Connection Drops & Saturation Fallback)**:
+  * *Given* normal operating conditions, incoming client requests shall experience zero HTTP 502 Bad Gateway or HTTP 504 Gateway Timeout errors due to VM wake-up latency.
+  * *Given* an extreme host saturation event where wake-up exceeds `wake_timeout_ms` ($3000\text{ms}$), the gateway must gracefully return a structured HTTP 503 Service Unavailable with a `Retry-After` header rather than dropping the TCP socket.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (US-01): Interactive SSE Wake-Up Telemetry**  
+> Provide an optional client-side loading skeleton or progress stream via Server-Sent Events (SSE) for browser portals so end users receive immediate visual confirmation ("Resuming isolated secure enclave...") within $10\text{ms}$ of connection hold.
 
 ---
 
@@ -33,12 +38,19 @@
 * **AC-02.1 (Ephemeral Differencing Disks)**:
   * *Given* an active processing session where files, temporary tables, or registry keys were modified in the guest,
   * *When* the session ends or the 300-second inactivity timer expires,
-  * *Then* the Differencing Delta Disk (`.avhdx`) must be permanently deleted from host storage.
-* **AC-02.2 (Baseline Verification)**:
-  * The VM must be reverted to the cryptographic hash of the `baseline-hot-ready` checkpoint.
-  * SHA-256 verification of the parent base VHDX (`winserv2025-prod-adpa.vhdx`) must remain identical before and after execution.
+  * *Then* the Differencing Delta Disk (`.avhdx`) must be permanently deleted from host storage, leaving zero residual files or logs.
+* **AC-02.2 (Cryptographic Baseline Verification)**:
+  * *Given* a completed session rollback,
+  * *When* the VM is reverted to the `baseline-hot-ready` checkpoint,
+  * *Then* SHA-256 verification of the parent base VHDX (`winserv2025-prod-adpa.vhdx`) must remain bit-for-bit identical before and after execution.
 * **AC-02.3 (Network Airgap Default)**:
-  * The VM virtual network adapter must be strictly disconnected (`mxc-net-disable`) or restricted exclusively to the internal gateway virtual switch, preventing any unauthorized outbound internet egress.
+  * *Given* a production guest instance,
+  * *When* the instance is active or dormant,
+  * *Then* its virtual network adapter must be strictly disconnected from external internet switches (`mxc-net-disable`) and restricted exclusively to the internal gateway virtual switch (`:8080`).
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (US-02): Zero-Fill Scrubbing & Per-Session Key Rotation**  
+> Integrate automated zero-fill block scrubbing passes and ephemeral per-session BitLocker/virtual-TPM key rotation so that discarded `.avhdx` sectors leave zero physical data remanence on host NVMe arrays.
 
 ---
 
@@ -46,17 +58,25 @@
 
 > **As an** Infrastructure Platform Engineer,  
 > **I want** dormant production instances to release active CPU and compress RAM usage,  
-> **So that** our on-premise Windows Server / Hyper-V cluster can host 5× to 10× more application workloads than traditional always-on VMs.
+> **So that** our on-premise Windows Server / Hyper-V cluster can host $5\times$ to $10\times$ more application workloads than traditional always-on VMs.
 
 ### Acceptance Criteria
 * **AC-03.1 (Zero CPU Utilization)**:
   * *Given* 10 registered production service VMs in the warm standby pool,
-  * *When* no client requests are active,
-  * *Then* total host CPU utilization for all 10 VMs must measure strictly **0.0%**.
+  * *When* no client requests are active (`Paused` state),
+  * *Then* total host CPU utilization across all 10 VMs must measure strictly **0.0%** on the Hyper-V host performance monitor.
 * **AC-03.2 (Dynamic Memory Compression)**:
-  * Hyper-V Dynamic Memory must allow the host hypervisor to compress idle memory allocation down to the configured minimum RAM baseline (e.g., 1024 MB).
-* **AC-03.3 (Sub-300ms Hypervisor Wakeup)**:
-  * The elapsed time between the Ingress Gateway sending the wake signal and Hyper-V completing `Resume-VM` must be $\le 300\text{ms}$.
+  * *Given* suspended standby instances,
+  * *When* Hyper-V Dynamic Memory is active,
+  * *Then* the host hypervisor must reclaim unallocated guest RAM and compress idle memory commitment down to the configured minimum baseline ($\ge 65\%$ reduction).
+* **AC-03.3 (Sub-300ms Hypervisor Wakeup & Pool Queue)**:
+  * *Given* a configurable ready queue size ($N$),
+  * *When* the Ingress Gateway dispatches a wake signal,
+  * *Then* the elapsed time for Hyper-V to complete `Resume-VM` must be $\le 300\text{ms}$.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (US-03): Automated NUMA Node Alignment**  
+> Implement host-level Non-Uniform Memory Access (NUMA) node pinning and intelligent memory overcommit policies in `wxc-exec`, maximizing physical server tenant density by up to $300\%$ without cross-socket memory latency degradation.
 
 ---
 
@@ -64,11 +84,18 @@
 
 > **As a** Software Release Engineer,  
 > **I want** an automated host-driven pipeline to bake production-ready application releases into a clean base VHDX,  
-> **So that** production images are consistent, pre-jitted, and free of development debris.
+> **So that** production images are consistent, pre-jitted, and guaranteed free of development debris.
 
 ### Acceptance Criteria
 * **AC-04.1 (Clean Image Specification)**:
-  * Production base VHDX must contain only the compiled application binary, required Windows runtime dependencies, and hardened security profiles.
-  * Compilers, package managers (Scoop, uv, cargo), and source code repositories must be absent from the image.
+  * *Given* a newly built production base VHDX (`winserv2025-prod-adpa.vhdx`),
+  * *When* inspected by the release audit script,
+  * *Then* it must contain only the compiled application binary, required Windows runtime dependencies, and hardened security profiles—with all compilers, package managers (Scoop, uv, cargo), and source code repositories completely absent.
 * **AC-04.2 (Automated Pre-Warming)**:
-  * The baking script must start the application service, execute a synthetic health-check request, verify database connectivity, and take the baseline checkpoint while the application is hot.
+  * *Given* the automated image baking script,
+  * *When* provisioning completes,
+  * *Then* the script must start the ADPA/SIDPA Windows Service, execute a synthetic health-check request against `localhost:8080/health`, verify database connectivity, and capture the `baseline-hot-ready` checkpoint while the application working set is hot in RAM.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (US-04): Canary Baseline Verification & Auto-Rollback**  
+> Extend the CI/CD baking pipeline to automatically route $5\%$ of live ingress traffic to the newly baked VHDX baseline for a 15-minute canary window, automatically reverting the pool pointer to the previous baseline checkpoint if error rates or latency thresholds deviate.
