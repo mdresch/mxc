@@ -99,10 +99,12 @@ flowchart LR
 * **Objective**: Enforce the mandatory Default Deny Internet + Internal Whitelist security boundary for production workloads.
 * **Key Tasks**:
   1. **Hyper-V Port ACL Automation (`AC-02.3`)**:
-     * Author `scripts/hyperv/configure_port_acls.ps1` utilizing `Add-VMNetworkAdapterAcl`:
-       * **Default Deny Egress**: Blocks all IPv4/IPv6 outbound traffic to public CIDR ranges.
-       * **Enterprise Datastore Whitelist**: Allows outbound TCP `:1433` (SQL Server), TCP `:5432` (PostgreSQL), and TCP `:443` (Private S3/Blob storage endpoints).
-       * **Core Infrastructure Whitelist**: Allows outbound UDP/TCP `:53` (Internal DNS) and UDP/TCP `:88` (Active Directory Kerberos authentication).
+     * Author `scripts/hyperv/configure_port_acls.ps1` utilizing `Add-VMNetworkAdapterExtendedAcl` — **Complete ✅**.
+       * **Default Deny Egress**: Drops all IPv4/IPv6 outbound traffic at the hypervisor virtual switch (Weight 1).
+       * **Default Deny Inbound**: Drops all unsolicited inbound traffic across the virtual switch (Weight 1).
+       * **Enterprise Datastore Whitelist**: Allows outbound TCP `:1433` (SQL Server, Weight 104), TCP `:5432` (PostgreSQL, Weight 105), and TCP `:443` (Private S3/Blob storage, Weight 106).
+       * **Core Infrastructure Whitelist**: Allows outbound UDP/TCP `:53` (Internal DNS, Weight 100/101) and UDP/TCP `:88` (Active Directory Kerberos, Weight 102/103).
+       * **JIT Ingress Whitelist**: Allows stateful inbound TCP `:8080` (Weight 100) for reverse proxy gateway traffic.
   2. **Cryptographic Parent Disk Integrity Assertion (`AC-02.2`)**:
      * Implement SHA-256 baseline verification in `wxc-exec pool-release` to assert that parent VHDX blocks remain bit-for-bit unchanged before and after execution.
 
