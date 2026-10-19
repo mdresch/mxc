@@ -177,7 +177,7 @@ pub fn suspend_vm(vm_name: &str) -> Result<(), PowerShellError> {
 
 pub fn resume_vm(vm_name: &str) -> Result<(), PowerShellError> {
     run_powershell(&format!(
-        "Resume-VM -Name {} | Out-Null",
+        "$vm = Get-VM -Name {}; if ($vm.State -eq 'Paused') {{ Resume-VM -VM $vm | Out-Null }} elseif ($vm.State -ne 'Running') {{ Start-VM -VM $vm | Out-Null }}",
         ps_single_quote(vm_name)
     ))
     .map(|_| ())
