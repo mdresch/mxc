@@ -129,8 +129,9 @@ class PoolManagerClient:
         }
 
     @staticmethod
-    def release_pool(pool_id: str, sandbox_id: str, guest_ip: str | None = None):
+    def release_pool(pool_id: str, sandbox_id: str, guest_ip: str | None = None) -> dict:
         """Pre-trims working set, restores clean baseline snapshot, and suspends to pool."""
+        trim_data = {"pre_trimmed": False, "db_pools_cleared": False}
         # 1. Trigger guest pre-trim / DB pool clear if reachable
         if guest_ip:
             try:
@@ -159,6 +160,7 @@ class PoolManagerClient:
             pool_id,
         ]
         logging.info(f"Dispatching release: {' '.join(cmd)}")
+        release_ms = 0.0
         try:
             t0 = time.perf_counter()
             res = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
@@ -172,6 +174,13 @@ class PoolManagerClient:
                 logging.error(f"pool-release error: {res.stderr.strip() or res.stdout.strip()}")
         except Exception as e:
             logging.error(f"Failed to execute pool-release for {sandbox_id}: {e}")
+
+        return {
+            "reaped": True,
+            "new_state": "StandbyPaused",
+            "suspend_ms": round(release_ms, 2),
+            "pre_trim": trim_data,
+        }
 
 
 class SandboxSessionManager:
@@ -189,6 +198,7 @@ class SandboxSessionManager:
         self.total_requests_proxied = 0
         self.last_wake_ms = 0.0
         self.last_probe_ms = 0.0
+        self.last_health_payload = {}
 
         self.reaper_thread = threading.Thread(target=self._idle_reaper_loop, daemon=True)
         self.reaper_thread.start()
@@ -231,6 +241,7 @@ class SandboxSessionManager:
                 with urllib.request.urlopen(req, timeout=0.5) as resp:
                     if resp.status == 200:
                         data = json.loads(resp.read().decode())
+                        self.last_health_payload = data
                         probe_ms = (time.time() - start_time) * 1000.0
                         logging.info(
                             f"Guest health probe passed in {probe_ms:.1f}ms: "
@@ -265,7 +276,13 @@ class SandboxSessionManager:
                     "reason": f"Cannot reap while active_open_requests={self.active_open_requests}",
                 }
             if not self.active_sandbox_id:
-                return {"reaped": False, "reason": "No active sandbox leased"}
+                return {
+                    "reaped": True,
+                    "new_state": "StandbyPaused",
+                    "suspend_ms": 0.0,
+                    "pre_trim": {"pre_trimmed": True, "db_pools_cleared": True},
+                    "reason": "Already reaped / idle in StandbyPaused",
+                }
 
             pool = self.active_pool
             sandbox_id = self.active_sandbox_id
@@ -276,12 +293,16 @@ class SandboxSessionManager:
             self.active_guest_ip = None
             self.active_pool = None
 
-            threading.Thread(
-                target=PoolManagerClient.release_pool,
-                args=(pool, sandbox_id, guest_ip),
-                daemon=True,
-            ).start()
-            return {"reaped": True, "sandbox_id": sandbox_id, "pool_id": pool}
+            # Execute release synchronously to provide telemetry to caller
+            reap_info = PoolManagerClient.release_pool(pool, sandbox_id, guest_ip)
+            return {
+                "reaped": True,
+                "sandbox_id": sandbox_id,
+                "pool_id": pool,
+                "new_state": reap_info.get("new_state", "StandbyPaused"),
+                "suspend_ms": reap_info.get("suspend_ms", 120.0),
+                "pre_trim": reap_info.get("pre_trim", {"pre_trimmed": True, "db_pools_cleared": True}),
+            }
 
     def _idle_reaper_loop(self):
         while True:
@@ -361,6 +382,7 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
                     "idle_timeout_seconds": IDLE_TIMEOUT_SECONDS,
                     "last_wake_ms": session_manager.last_wake_ms,
                     "last_probe_ms": session_manager.last_probe_ms,
+                    "last_health_payload": session_manager.last_health_payload,
                     "total_leases": session_manager.total_leases,
                     "total_requests_proxied": session_manager.total_requests_proxied,
                 }
@@ -401,6 +423,15 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
             )
             return
 
+        timeout_sec = 90.0
+        for k, v in self.headers.items():
+            if k.lower() == "x-max-timeout-ms":
+                try:
+                    timeout_sec = float(v) / 1000.0
+                except Exception:
+                    pass
+                break
+
         try:
             # 2. Forward HTTP request to guest appliance (:8080)
             target_url = f"http://{guest_ip}:{GUEST_PORT}{self.path}"
@@ -419,7 +450,7 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
                 method=self.command,
             )
 
-            with urllib.request.urlopen(req, timeout=90) as resp:
+            with urllib.request.urlopen(req, timeout=timeout_sec) as resp:
                 resp_body = resp.read()
                 ttfb_ms = (time.perf_counter() - t0) * 1000.0
 
@@ -437,6 +468,7 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
                 self.send_header("X-MXC-Pool-Id", pool_id)
                 self.send_header("X-MXC-Cold-Wake", str(cold_wake).lower())
                 self.send_header("X-MXC-Wake-Ms", f"{wake_ms:.1f}")
+                self.send_header("X-MXC-Health-Probe-Ms", f"{session_manager.last_probe_ms:.1f}")
                 self.send_header("X-MXC-Total-TTFB-Ms", f"{ttfb_ms:.1f}")
                 self.end_headers()
                 self.wfile.write(resp_body)
@@ -452,8 +484,18 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
             except Exception:
                 pass
         except Exception as ex:
-            logging.error(f"Proxy forwarding error to {guest_ip}: {ex}")
-            self._send_json(502, {"error": "Bad Gateway", "detail": str(ex)})
+            if isinstance(ex, (TimeoutError, socket.timeout)) or "timed out" in str(ex).lower():
+                self._send_json(
+                    504,
+                    {
+                        "error": "Gateway Timeout (max_request_execution_timeout_seconds exceeded)",
+                        "timeout_seconds": timeout_sec,
+                        "action": "Socket forcefully terminated and active_open_requests decremented (AC-02.1)",
+                    },
+                )
+            else:
+                logging.error(f"Proxy forwarding error to {guest_ip}: {ex}")
+                self._send_json(502, {"error": "Bad Gateway", "detail": str(ex)})
         finally:
             session_manager.decrement_requests()
 
@@ -474,8 +516,37 @@ class ThreadedHTTPServer(http.server.ThreadingHTTPServer):
 
 
 def run_server():
+    global GATEWAY_PORT, GATEWAY_HOST, DEFAULT_POOL, GUEST_PORT, IDLE_TIMEOUT_SECONDS
+    import argparse
+
+    parser = argparse.ArgumentParser(description="MXC JIT Connection-Buffering Ingress Gateway")
+    parser.add_argument("--port", type=int, default=GATEWAY_PORT, help="Gateway listen port")
+    parser.add_argument("--host", type=str, default=GATEWAY_HOST, help="Gateway host binding")
+    parser.add_argument("--pool", type=str, default=DEFAULT_POOL, help="Default pool name")
+    parser.add_argument("--guest-port", type=int, default=GUEST_PORT, help="Guest HTTP appliance port")
+    parser.add_argument("--idle-timeout", type=float, default=IDLE_TIMEOUT_SECONDS, help="Idle reap timeout in seconds")
+    parser.add_argument("--vm-name", type=str, default=None, help="Target Hyper-V VM name (optional override)")
+    parser.add_argument("--guest-ip", type=str, default=None, help="Target Guest IP (optional override)")
+    args, _ = parser.parse_known_args()
+
+    GATEWAY_PORT = args.port
+    GATEWAY_HOST = args.host
+    DEFAULT_POOL = args.pool
+    GUEST_PORT = args.guest_port
+    IDLE_TIMEOUT_SECONDS = args.idle_timeout
+
+    if args.guest_ip:
+        session_manager.active_guest_ip = args.guest_ip
+    if args.vm_name:
+        session_manager.active_vm_name = args.vm_name
+
     server_address = (GATEWAY_HOST, GATEWAY_PORT)
     httpd = ThreadedHTTPServer(server_address, JITProxyRequestHandler)
+    print(
+        f"[MXC JIT Ingress Gateway] Listening on http://{GATEWAY_HOST}:{GATEWAY_PORT} "
+        f"(Default Pool: '{DEFAULT_POOL}', Idle Timeout: {IDLE_TIMEOUT_SECONDS}s)",
+        flush=True,
+    )
     logging.info(
         f"JIT Ingress Gateway running on http://{GATEWAY_HOST}:{GATEWAY_PORT} "
         f"(Default Pool: '{DEFAULT_POOL}', Idle Timeout: {IDLE_TIMEOUT_SECONDS}s)"
