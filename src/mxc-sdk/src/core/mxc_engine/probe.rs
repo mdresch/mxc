@@ -127,6 +127,7 @@ pub fn available_backends() -> Vec<AvailableBackend> {
                 wslc: wslc_host_available(),
                 isolation_session: isolation_session_host_available(),
                 hyperlight: hyperlight_host_available(),
+                hyperv: hyperv_host_available(),
             },
         )
     }
@@ -252,6 +253,7 @@ struct WindowsHostAvailability {
     wslc: bool,
     isolation_session: bool,
     hyperlight: bool,
+    hyperv: bool,
 }
 
 #[cfg(target_os = "windows")]
@@ -296,6 +298,27 @@ fn hyperlight_host_available() -> bool {
         crate::hyperlight_common::is_kvm_available()
     }
     #[cfg(not(all(feature = "hyperlight", target_arch = "x86_64")))]
+    {
+        false
+    }
+}
+
+#[cfg(target_os = "windows")]
+fn hyperv_host_available() -> bool {
+    #[cfg(feature = "hyperv")]
+    {
+        static AVAILABLE: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+        *AVAILABLE.get_or_init(|| {
+            if !crate::mxc_common::system_dir::system_directory()
+                .join("vmms.exe")
+                .exists()
+            {
+                return false;
+            }
+            crate::hyperv_common::probe::hyperv_available().is_ok()
+        })
+    }
+    #[cfg(not(feature = "hyperv"))]
     {
         false
     }
@@ -359,6 +382,12 @@ fn windows_backends(
         ));
     }
 
+    if hosts.hyperv {
+        backends.push(AvailableBackend::tierless(
+            ContainmentBackend::HyperV.wire_name(),
+        ));
+    }
+
     backends
 }
 
@@ -414,6 +443,7 @@ mod tests {
                 wslc: true,
                 isolation_session: true,
                 hyperlight: true,
+                hyperv: true,
             },
         )
     }
@@ -512,6 +542,13 @@ mod tests {
                     ..Default::default()
                 },
             ),
+            (
+                "hyperv",
+                WindowsHostAvailability {
+                    hyperv: true,
+                    ..Default::default()
+                },
+            ),
         ];
         for (expected, hosts) in cases {
             let reported = windows_backends(
@@ -590,6 +627,10 @@ mod tests {
             (
                 ContainmentBackend::Hyperlight.wire_name(),
                 hyperlight_host_available(),
+            ),
+            (
+                ContainmentBackend::HyperV.wire_name(),
+                hyperv_host_available(),
             ),
         ]);
     }

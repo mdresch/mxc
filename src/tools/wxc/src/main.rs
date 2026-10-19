@@ -208,6 +208,10 @@ struct Cli {
     #[arg(long)]
     probe: bool,
 
+    /// Emit the host capability report and exit, without spawning a sandbox.
+    #[arg(long = "available-backends")]
+    available_backends: bool,
+
     /// Manage telemetry consent without spawning a sandbox.
     #[arg(
         long = "telemetry-consent",
@@ -1310,6 +1314,20 @@ fn main() {
             }
         }
         Err(e) => eprintln!("DACL recovery failed: {e}"),
+    }
+
+    // Detection-only fast path used by SDK `getPlatformSupport()`; runs before
+    // config handling so no JSON file is needed just to ask what the host can
+    // do, and mutates no host state.
+    if cli.available_backends {
+        match mxc_sdk::mxc_engine::to_json_pretty(&mxc_sdk::mxc_engine::available_backends()) {
+            Ok(json) => println!("{json}"),
+            Err(e) => {
+                eprintln!("Error: probe serialization failed: {e}");
+                process::exit(1);
+            }
+        }
+        return;
     }
 
     // --probe is a detection-only fast path used by SDK

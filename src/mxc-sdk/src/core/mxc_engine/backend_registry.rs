@@ -91,10 +91,7 @@ static BACKENDS: [BackendRegistration; 11] = [
     BackendRegistration {
         backend: ContainmentBackend::HyperV,
         experimental: true,
-        probe_coverage: ProbeCoverage::NotDetected(
-            "no Hyper-V presence detector yet (needs Hyper-V role/vmms service check); \
-             follow-up to add a Windows-only detector in probe.rs",
-        ),
+        probe_coverage: ProbeCoverage::Detected(&["windows"]),
     },
 ];
 
