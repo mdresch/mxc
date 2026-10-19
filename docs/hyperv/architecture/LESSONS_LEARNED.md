@@ -149,3 +149,4 @@ Future enhancements for subsequent major versions:
 1. **Host-Wide Non-Volatile Memory (NVDIMM-N)**: Eliminating differencing disk commit latency by mapping checkpoints to persistent memory.
 2. **Confidential Virtual Machines (CVM)**: Hardware-backed AMD SEV-SNP / Intel TDX memory encryption for multi-tenant hypervisor environments.
 3. **Multi-Host Anycast Mesh**: Synchronizing standby pool states across physically distributed edge hypervisors.
+

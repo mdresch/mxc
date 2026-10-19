@@ -704,6 +704,74 @@ def generate_lessons_learned():
     return doc
 
 
+def build_scope_drift_content(doc):
+    add_h1(doc, "1. Executive Summary & Purpose")
+    add_body(
+        doc,
+        "The upstream Microsoft eXecution Container (microsoft/mxc) repository is an open-source, client-side containment SDK designed for executing untrusted model output and developer tools on workstations. Our initiative extended mxc into an enterprise-grade, bare-metal serverless execution engine: the MXC Hyper-V Just-in-Time (JIT) Scale-to-Zero platform. This document formulates the scope drift and establishes the governance model to maintain long-term synchronization."
+    )
+
+    add_h1(doc, "2. Formulation of Scope Drift")
+    add_styled_table(
+        doc,
+        ["Architecture Vector", "Upstream microsoft/mxc Baseline", "Our Enterprise Implementation", "Operational Significance"],
+        [
+            ["Primary Workload", "Interactive, short-lived CLI command execution (stdio-driven)", "Continuous, long-running daemonized services (ADPA/SIDPA) on port 8080", "Shifts runtime from batch job execution to stateful service hosting"],
+            ["Isolation Tier", "Shared-kernel containers (AppContainer, WSLC, Bubblewrap)", "Dedicated hardware Type-1 Hyper-V (vCPUs, SLAT, unshared OS kernel)", "Meets banking/defense compliance prohibiting shared-kernel execution"],
+            ["Lifecycle & State", "Synchronous provision -> execute -> destroy per command", "Standby pools, paused RAM states (baseline-hot-ready), .avhdx rollback", "Achieves <300ms wake-on-request with 0.0% idle compute cost"],
+            ["Network Boundary", "In-process proxy, basic localhost loopback suppression", "Connection-buffering TCP gateway + Ring-0 Virtual Switch Port ACLs", "Airgapped default-deny egress enforced at the hypervisor layer"],
+            ["Scaling Architecture", "Single instance on-demand", "Sliding-window velocity tracking (>=10 req/s) driving burst scaling (K=1 -> K=5)", "Eliminates head-of-line blocking under burst traffic"],
+            ["Tooling & Ops", "Developer CLI tools (wxc, mxc)", "FastMCP server for AI agents; headless CI/CD image baking & audit gate", "Production-ready automation interface for CI/CD and AI agents"]
+        ]
+    )
+
+    add_h1(doc, "3. Four-Layer Upstream Maintenance Strategy")
+    add_h2(doc, "3.1 Layer 1: Core Fork Containment")
+    add_body(doc, "Upstream core files (src/mxc-sdk/src/core/*, Cargo.toml) contain the absolute minimum invasive changes. All Hyper-V lifecycle traits, error types, and dispatch logic are isolated in src/mxc-sdk/src/backends/hyperv/.")
+
+    add_h2(doc, "3.2 Layer 2: Cargo Feature Gating")
+    add_body(doc, "All Windows-specific P/Invoke code, VMBus RPCs, and PowerShell bindings are strictly gated behind the 'hyperv' Cargo feature flag. On Linux/macOS, the module compiles to an inert stub, guaranteeing upstream cross-platform CI pipelines pass without failure.")
+
+    add_h2(doc, "3.3 Layer 3: Physical Directory Isolation")
+    add_body(doc, "All PowerShell automation, FastMCP servers, and gateways live exclusively in scripts/hyperv/ and docs/hyperv/. Because upstream microsoft/mxc has no scripts/hyperv/ directory, git merges in these paths always resolve with zero conflicts.")
+
+    add_h2(doc, "3.4 Layer 4: Upstream Rebase & Synchronization Cadence")
+    add_body(doc, "Maintain a pristine upstream mirror (vendor/mxc-upstream). Rebase bi-weekly or upon upstream minor releases. An automated weekly CI trial merge detects interface drift in mxc_contract or Backend traits before technical debt accumulates.")
+
+    add_h1(doc, "4. Upstream Contribution vs. Proprietary Overlay")
+    add_styled_table(
+        doc,
+        ["Upstream Contribution Candidates (PR to microsoft/mxc)", "Enterprise Proprietary Overlay (Maintained in this Fork)"],
+        [
+            ["StateAwareBackend & StandbyPoolManager trait definitions", "ADPA / SIDPA Production image baking pipelines"],
+            ["Windows Hyper-V Host platform detection probe (probe.rs)", "Ring-0 Hyper-V Virtual Switch Port ACL automation (ADR-005)"],
+            ["Generic Hyper-V process container backend scaffold", "Connection-buffering TCP hold-queue & velocity autoscaler"],
+            ["Basic VM naming and lifecycle error contracts", "FastMCP autonomous AI agent tools & compliance audit gates"]
+        ]
+    )
+
+    add_callout(
+        doc,
+        "Ongoing Maintenance Checklist:\n"
+        "1. Fetch latest upstream tags: git fetch upstream --tags\n"
+        "2. Check diff in core traits: git diff HEAD..upstream/main src/mxc-sdk/src/core/\n"
+        "3. Rebase: git rebase upstream/main\n"
+        "4. Validate cross-compilation: cargo check --target x86_64-unknown-linux-gnu\n"
+        "5. Execute Hyper-V compliance audit gate: powershell scripts/hyperv/audit_production_image.ps1\n"
+        "6. Run JIT wake benchmark: python scripts/hyperv/dev_harness/benchmark_jit_wake.py --dry-run\n"
+        "7. Regenerate documentation suite: python scripts/hyperv/generate_architecture_docx.py"
+    )
+
+
+def generate_scope_drift():
+    doc = init_doc(
+        "Upstream Scope Drift & Maintenance Strategy",
+        "Formulation of Architectural Divergence from microsoft/mxc and Long-Term Synchronization Framework"
+    )
+    build_scope_drift_content(doc)
+    return doc
+
+
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Target Output Directory: {OUTPUT_DIR}")
@@ -716,6 +784,7 @@ def main():
         ("FDD_Enterprise_Architecture-v2.docx", generate_fdd),
         ("UserStories_Enterprise_Architecture-v2.docx", generate_user_stories),
         ("LESSONS_LEARNED_Enterprise_Architecture.docx", generate_lessons_learned),
+        ("SCOPE_DRIFT_Enterprise_Architecture.docx", generate_scope_drift),
     ]
 
     for filename, generator in tasks:
@@ -730,4 +799,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
