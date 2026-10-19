@@ -383,3 +383,4 @@ python scripts\hyperv\dev_harness\benchmark_jit_wake.py
   ```powershell
   Restore-VMSnapshot -VMName "mxc-hv-a7df7452" -Name "pool-clean-baseline" -Confirm:$false
   ```
+

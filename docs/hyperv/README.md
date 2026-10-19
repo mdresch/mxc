@@ -17,6 +17,7 @@ It features a **Just-in-Time (JIT) Scale-to-Zero** execution model: virtual mach
 | [**Architectural Decisions (ADR)**](architecture/ADR.md) | Records of architectural decisions (ADR-001 through ADR-007) | Architecture & Security Teams |
 | [**Functional Design (FDD)**](architecture/FDD.md) | Technical specifications for gateway buffering, pool replenishment, and reaping | Systems Engineers |
 | [**User Stories & Acceptance**](architecture/USER_STORIES.md) | Formal acceptance criteria (`AC-01` through `AC-05`) and testable invariants | QA & Engineering Leads |
+| [**Master Implementation Plan**](architecture/IMPLEMENTATION_PLAN.md) | Multi-phase roadmap, completed vs active milestones, and story traceability | Project Leads & Engineers |
 
 ---
 
@@ -111,3 +112,4 @@ mxc/
     ├── common/                            # Cmdlet wrappers, probe, credentials
     └── lifecycle/                         # Pool manager, control plane, state-aware runner
 ```
+
