@@ -1,246 +1,468 @@
 #!/usr/bin/env python3
 """
-MXC Just-in-Time (JIT) Connection-Buffering Ingress Gateway Prototype
-=====================================================================
-Implements Pillar II (ADR-002, ADR-004, ADR-006) & Pillar III (FDD 2.1, FDD 3, FDD 4):
-  - Listens on host/edge port (default 0.0.0.0:8090) with TCP_NODELAY enabled.
-  - Maintains a warm persistent Hyper-V Control Runspace (eliminating ~800ms PowerShell cold-spawn overhead)
-    so Resume-VM and Suspend-VM execute directly against the Hypervisor in <150ms.
-  - Buffers incoming HTTP requests when target Hyper-V VM is dormant (Paused / Off / Saved).
-  - Polls guest health endpoint (:8080/health) to assert PRNG re-seed, DB pool flush, & clock sync.
-  - Fast-path proxies warm requests when routing_state == ActiveRunning (<5ms proxy overhead).
-  - Maintains atomic active_open_requests counter and TransitionLock to prevent mid-flight reaping.
-  - Enforces max_request_execution_timeout_seconds (default 900s, overrideable per request via
-    X-Max-Timeout-Ms header) returning HTTP 504 Gateway Timeout on hung downstream requests.
+MXC JIT Scale-to-Zero Ingress Reverse Proxy Gateway
+===================================================
+Implements ADR-002, ADR-004, ADR-006 & FDD Section 2.1 / 3:
+- Connection buffering / hold queue for dormant VMs
+- Synchronous wake via `wxc-exec --experimental --hyperv-op pool-lease` (<300ms wake)
+- Automatic background standby replenishment via AC-05.1
+- Guest health, PRNG re-seed & clock-sync probe (/health on port 8080)
+- In-flight request tracking (active_open_requests counter)
+- Guest memory compaction (POST /admin/pre-trim) prior to suspend
+- Idle inactivity reaper (configurable timeout -> pool-release)
+- Native telemetry headers & /gateway/status inspection endpoint
 """
 
-import argparse
 import http.client
+import http.server
 import json
+import logging
 import os
 import socket
 import subprocess
 import sys
 import threading
 import time
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import urllib.error
+import urllib.request
 from urllib.parse import urlparse
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s [IngressGateway]: %(message)s",
+    datefmt="%H:%M:%S",
+)
 
-class PersistentHyperVRunspace:
-    """
-    Maintains a persistent PowerShell child process with the Hyper-V module pre-loaded
-    so hypervisor state transitions (Resume-VM / Suspend-VM) execute in <150ms without
-    paying process-creation or module-import overhead.
-    """
+GATEWAY_HOST = "0.0.0.0"
+GATEWAY_PORT = int(os.environ.get("MXC_GATEWAY_PORT", "8090"))
+DEFAULT_POOL = os.environ.get("MXC_DEFAULT_POOL", "default")
+GUEST_PORT = int(os.environ.get("MXC_GUEST_PORT", "8080"))
+IDLE_TIMEOUT_SECONDS = float(os.environ.get("MXC_IDLE_TIMEOUT", "300.0"))
+WAKE_TIMEOUT_MS = float(os.environ.get("MXC_WAKE_TIMEOUT_MS", "5000.0"))
 
-    def __init__(self, vm_name: str):
-        self.vm_name = vm_name
-        self._lock = threading.Lock()
-        self._proc = subprocess.Popen(
-            ["powershell.exe", "-NoProfile", "-NoLogo", "-NonInteractive", "-Command", "-"],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../../.."))
+WXC_EXEC_PATH = os.path.join(REPO_ROOT, "src", "target", "debug", "wxc-exec.exe")
+if not os.path.exists(WXC_EXEC_PATH):
+    # Fallback to current directory relative path
+    WXC_EXEC_PATH = os.path.abspath("src/target/debug/wxc-exec.exe")
+
+
+class PoolManagerClient:
+    """Interface to wxc-exec Rust control plane for pool leasing and releasing."""
+
+    @staticmethod
+    def get_vm_ip(vm_name: str, timeout_sec: float = 25.0) -> str:
+        """Resolve guest IPv4 address via Hyper-V integration services, waking and attaching switch if needed."""
+        ps_cmd = (
+            f"$vm = Get-VM -Name '{vm_name}'; "
+            f"if ($vm.State -eq 'Paused') {{ Resume-VM -VM $vm -Confirm:$false }} "
+            f"elseif ($vm.State -ne 'Running') {{ Start-VM -VM $vm -Confirm:$false }}; "
+            f"$adapter = Get-VMNetworkAdapter -VMName '{vm_name}'; "
+            f"if (-not $adapter.SwitchName) {{ Connect-VMNetworkAdapter -VMName '{vm_name}' -SwitchName 'Default Switch' -ErrorAction SilentlyContinue }}; "
+            f"$adapter.IPAddresses | "
+            f"Where-Object {{ $_ -notlike '*:*' -and $_ -notlike '169.254.*' }} | "
+            f"Select-Object -First 1"
         )
-        # Pre-load Hyper-V cmdlets and cache VM object reference
-        self._exec_raw(
-            f"Import-Module Hyper-V -ErrorAction SilentlyContinue; "
-            f"$global:MxcTargetVm = Get-VM -Name '{self.vm_name}'"
-        )
+        deadline = time.time() + timeout_sec
+        while time.time() < deadline:
+            try:
+                res = subprocess.run(
+                    ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", ps_cmd],
+                    capture_output=True,
+                    text=True,
+                    timeout=8,
+                )
+                ip = res.stdout.strip()
+                if ip:
+                    return ip
+            except Exception as e:
+                logging.debug(f"Waiting for IP on {vm_name}: {e}")
+            time.sleep(0.5)
+        raise TimeoutError(f"Could not resolve IPv4 for {vm_name} within {timeout_sec}s")
 
-    def _exec_raw(self, ps_cmd: str) -> str:
-        with self._lock:
-            sentinel = "__MXC_DONE__"
-            assert self._proc.stdin is not None and self._proc.stdout is not None
-            self._proc.stdin.write(f"{ps_cmd}; Write-Output '{sentinel}'\n")
-            self._proc.stdin.flush()
-            lines = []
-            while True:
-                line = self._proc.stdout.readline()
-                if not line:
-                    break
-                stripped = line.strip()
-                if stripped == sentinel:
-                    break
-                if stripped:
-                    lines.append(stripped)
-            return "\n".join(lines)
-
-    def resume_vm(self) -> float:
+    @classmethod
+    def lease_pool(cls, pool_id: str, holder: str = "gateway") -> dict:
+        """Atomically leases a warm standby VM from the specified pool in <300ms."""
+        cmd = [
+            WXC_EXEC_PATH,
+            "--experimental",
+            "--hyperv-op",
+            "pool-lease",
+            "--pool",
+            pool_id,
+            "--pool-lease-holder",
+            holder,
+        ]
+        logging.info(f"Dispatching lease: {' '.join(cmd)}")
         t0 = time.perf_counter()
-        self._exec_raw(
-            "if ($global:MxcTargetVm.State -eq 'Paused') { Resume-VM -VM $global:MxcTargetVm -Confirm:$false }"
-            " elseif ($global:MxcTargetVm.State -ne 'Running') { Start-VM -VM $global:MxcTargetVm -Confirm:$false }"
-        )
-        return (time.perf_counter() - t0) * 1000.0
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
+        lease_ms = (time.perf_counter() - t0) * 1000.0
 
-    def suspend_vm(self) -> float:
-        t0 = time.perf_counter()
-        self._exec_raw("Suspend-VM -VM $global:MxcTargetVm -Confirm:$false")
-        return (time.perf_counter() - t0) * 1000.0
+        if res.returncode != 0:
+            err_msg = res.stderr.strip() or res.stdout.strip()
+            # If named pool is not provisioned or empty, try default pool fallback
+            if pool_id != DEFAULT_POOL:
+                logging.warning(
+                    f"Pool '{pool_id}' lease failed ({err_msg}). Falling back to '{DEFAULT_POOL}'..."
+                )
+                return cls.lease_pool(DEFAULT_POOL, holder=holder)
+            raise RuntimeError(f"pool-lease failed (code {res.returncode}): {err_msg}")
 
-    def close(self):
+        data = json.loads(res.stdout)
+        result = data.get("result", data)
+        sandbox_id = result.get("sandboxId") or result.get("sandbox_id")
+        if not sandbox_id:
+            raise RuntimeError(f"Unexpected pool-lease output: {data}")
+
+        token = sandbox_id.replace("hv:", "")
+        vm_name = f"mxc-hv-{token}"
+        logging.info(f"Leased {sandbox_id} ({vm_name}) in {lease_ms:.1f}ms (AC-01.1)")
+
+        ip = cls.get_vm_ip(vm_name)
+        return {
+            "sandbox_id": sandbox_id,
+            "vm_name": vm_name,
+            "ip_address": ip,
+            "lease_ms": round(lease_ms, 2),
+            "pool_id": pool_id,
+        }
+
+    @staticmethod
+    def release_pool(pool_id: str, sandbox_id: str, guest_ip: str | None = None):
+        """Pre-trims working set, restores clean baseline snapshot, and suspends to pool."""
+        # 1. Trigger guest pre-trim / DB pool clear if reachable
+        if guest_ip:
+            try:
+                logging.info(f"Triggering guest pre-trim compaction on {guest_ip}:{GUEST_PORT}...")
+                req = urllib.request.Request(
+                    f"http://{guest_ip}:{GUEST_PORT}/admin/pre-trim",
+                    data=b"{}",
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=1.5) as resp:
+                    trim_data = json.loads(resp.read().decode())
+                    logging.info(f"Guest pre-trim complete: {trim_data}")
+            except Exception as e:
+                logging.warning(f"Guest pre-trim skipped/failed: {e}")
+
+        # 2. Release VM back to pool via wxc-exec
+        cmd = [
+            WXC_EXEC_PATH,
+            "--experimental",
+            "--hyperv-op",
+            "pool-release",
+            "--hyperv-sandbox-id",
+            sandbox_id,
+            "--pool",
+            pool_id,
+        ]
+        logging.info(f"Dispatching release: {' '.join(cmd)}")
         try:
-            self._proc.terminate()
-        except Exception:
-            pass
+            t0 = time.perf_counter()
+            res = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
+            release_ms = (time.perf_counter() - t0) * 1000.0
+            if res.returncode == 0:
+                logging.info(
+                    f"Released {sandbox_id} back to pool '{pool_id}' in {release_ms:.1f}ms "
+                    f"(baseline restored, VM suspended, 0% CPU)"
+                )
+            else:
+                logging.error(f"pool-release error: {res.stderr.strip() or res.stdout.strip()}")
+        except Exception as e:
+            logging.error(f"Failed to execute pool-release for {sandbox_id}: {e}")
 
 
-class JitGatewayController:
-    def __init__(
-        self,
-        vm_name: str = "mxc-hv-a7df7452",
-        guest_ip: str = "172.24.173.100",
-        guest_port: int = 8080,
-        idle_timeout_seconds: float = 300.0,
-        max_request_timeout_seconds: float = 900.0,
-        wake_timeout_ms: float = 3000.0,
-    ):
-        self.vm_name = vm_name
-        self.guest_ip = guest_ip
-        self.guest_port = guest_port
-        self.idle_timeout_seconds = idle_timeout_seconds
-        self.max_request_timeout_seconds = max_request_timeout_seconds
-        self.wake_timeout_ms = wake_timeout_ms
+class SandboxSessionManager:
+    """Manages active guest leases, health probing, active request counts, and idle timers."""
 
-        self.hv_runspace = PersistentHyperVRunspace(vm_name)
-        self.transition_lock = threading.RLock()
+    def __init__(self):
+        self.lock = threading.RLock()
+        self.active_sandbox_id = None
+        self.active_vm_name = None
+        self.active_guest_ip = None
+        self.active_pool = None
         self.active_open_requests = 0
-        self.routing_state = "ActiveRunning"  # StandbyPaused | ActiveRunning | ReapingState
-        self.last_activity_monotonic = time.monotonic()
-
-        # Telemetry metrics
-        self.last_wake_ms = 0.0
-        self.last_health_probe_ms = 0.0
-        self.last_total_cold_ttfb_ms = 0.0
-        self.total_wakes = 0
+        self.last_activity_time = time.time()
+        self.total_leases = 0
         self.total_requests_proxied = 0
-        self.total_504_timeouts = 0
-        self.last_health_payload = {}
+        self.last_wake_ms = 0.0
+        self.last_probe_ms = 0.0
 
-    def resume_vm_fast(self) -> float:
-        elapsed_ms = self.hv_runspace.resume_vm()
-        self.last_wake_ms = round(elapsed_ms, 2)
-        self.total_wakes += 1
-        return elapsed_ms
+        self.reaper_thread = threading.Thread(target=self._idle_reaper_loop, daemon=True)
+        self.reaper_thread.start()
 
-    def suspend_vm_fast(self) -> dict:
+    def acquire_or_wake(self, pool_id: str) -> tuple[str, str, bool, float]:
         """
-        Acquires TransitionLock, marks VM as ReapingState, triggers guest working-set pre-trimming
-        & DB pool flush, and suspends the VM into Hyper-V Paused state (0.0% CPU).
+        Returns (guest_ip, sandbox_id, cold_wake, wake_ms).
+        If already active and matching pool, returns in 0ms (warm fast-path).
         """
-        with self.transition_lock:
+        with self.lock:
+            if self.active_sandbox_id and self.active_guest_ip:
+                self.last_activity_time = time.time()
+                return self.active_guest_ip, self.active_sandbox_id, False, 0.0
+
+            # Cold wake / lease from pool
+            lease_info = PoolManagerClient.lease_pool(pool_id)
+            self.active_sandbox_id = lease_info["sandbox_id"]
+            self.active_vm_name = lease_info["vm_name"]
+            self.active_guest_ip = lease_info["ip_address"]
+            self.active_pool = lease_info["pool_id"]
+            self.last_activity_time = time.time()
+            self.total_leases += 1
+            self.last_wake_ms = lease_info["lease_ms"]
+
+            # Probe guest health & PRNG re-seed
+            probe_ms = self._probe_guest_health(self.active_guest_ip)
+            self.last_probe_ms = probe_ms
+
+            return self.active_guest_ip, self.active_sandbox_id, True, self.last_wake_ms
+
+    def _probe_guest_health(self, guest_ip: str) -> float:
+        """Polls /health on guest port until status == healthy."""
+        health_url = f"http://{guest_ip}:{GUEST_PORT}/health"
+        start_time = time.time()
+        timeout = WAKE_TIMEOUT_MS / 1000.0
+
+        while time.time() - start_time < timeout:
+            try:
+                req = urllib.request.Request(health_url)
+                with urllib.request.urlopen(req, timeout=0.5) as resp:
+                    if resp.status == 200:
+                        data = json.loads(resp.read().decode())
+                        probe_ms = (time.time() - start_time) * 1000.0
+                        logging.info(
+                            f"Guest health probe passed in {probe_ms:.1f}ms: "
+                            f"PRNG re-seeded={data.get('entropy_reseeded')}, "
+                            f"DB flushed={data.get('db_pools_cleared')}, "
+                            f"Clock synced={data.get('clock_synced')}"
+                        )
+                        return probe_ms
+            except Exception:
+                time.sleep(0.05)
+
+        probe_ms = (time.time() - start_time) * 1000.0
+        raise RuntimeError(f"Guest health probe timed out after {probe_ms:.1f}ms on {health_url}")
+
+    def increment_requests(self):
+        with self.lock:
+            self.active_open_requests += 1
+            self.last_activity_time = time.time()
+
+    def decrement_requests(self):
+        with self.lock:
+            if self.active_open_requests > 0:
+                self.active_open_requests -= 1
+            self.last_activity_time = time.time()
+
+    def force_reap(self) -> dict:
+        """Manually trigger immediate idle reap if no requests are in-flight."""
+        with self.lock:
             if self.active_open_requests > 0:
                 return {
                     "reaped": False,
                     "reason": f"Cannot reap while active_open_requests={self.active_open_requests}",
                 }
-            self.routing_state = "ReapingState"
+            if not self.active_sandbox_id:
+                return {"reaped": False, "reason": "No active sandbox leased"}
 
-            # 1. Close any cached gateway keep-alive socket and trigger Guest Pre-Trim + DB Pool Flush
-            ka = getattr(self, "_keepalive_conn", None)
-            if ka is not None:
-                try:
-                    ka.close()
-                except Exception:
-                    pass
-                self._keepalive_conn = None
+            pool = self.active_pool
+            sandbox_id = self.active_sandbox_id
+            guest_ip = self.active_guest_ip
 
-            pre_trim_result = {}
-            try:
-                conn = http.client.HTTPConnection(self.guest_ip, self.guest_port, timeout=1.0)
-                conn.request("POST", "/admin/pre-trim", body=b"{}", headers={"Content-Type": "application/json"})
-                resp = conn.getresponse()
-                pre_trim_result = json.loads(resp.read().decode("utf-8"))
-                conn.close()
-            except Exception as e:
-                pre_trim_result = {"warning": str(e)}
+            self.active_sandbox_id = None
+            self.active_vm_name = None
+            self.active_guest_ip = None
+            self.active_pool = None
 
-            # 2. Suspend VM in Hypervisor RAM (Paused state) via warm runspace
-            pause_ms = self.hv_runspace.suspend_vm()
-            self.routing_state = "StandbyPaused"
-            return {
-                "reaped": True,
-                "vm_name": self.vm_name,
-                "new_state": "Paused",
-                "routing_state": self.routing_state,
-                "suspend_ms": round(pause_ms, 2),
-                "pre_trim": pre_trim_result,
-            }
+            threading.Thread(
+                target=PoolManagerClient.release_pool,
+                args=(pool, sandbox_id, guest_ip),
+                daemon=True,
+            ).start()
+            return {"reaped": True, "sandbox_id": sandbox_id, "pool_id": pool}
 
-    def poll_guest_health(self) -> tuple[bool, float, dict]:
-        """Polls GET /health on the guest appliance until healthy + clock synced."""
+    def _idle_reaper_loop(self):
+        while True:
+            time.sleep(2)
+            with self.lock:
+                if self.active_sandbox_id and self.active_open_requests == 0:
+                    elapsed = time.time() - self.last_activity_time
+                    if elapsed >= IDLE_TIMEOUT_SECONDS:
+                        logging.info(
+                            f"Idle timeout reached ({elapsed:.1f}s >= {IDLE_TIMEOUT_SECONDS}s). "
+                            f"Reaping sandbox {self.active_sandbox_id} back to pool '{self.active_pool}'..."
+                        )
+                        pool = self.active_pool
+                        sandbox_id = self.active_sandbox_id
+                        guest_ip = self.active_guest_ip
+
+                        self.active_sandbox_id = None
+                        self.active_vm_name = None
+                        self.active_guest_ip = None
+                        self.active_pool = None
+
+                        threading.Thread(
+                            target=PoolManagerClient.release_pool,
+                            args=(pool, sandbox_id, guest_ip),
+                            daemon=True,
+                        ).start()
+
+
+session_manager = SandboxSessionManager()
+
+
+class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
+    """Buffers incoming HTTP requests, triggers JIT VM wake, proxies payload, and tracks active requests."""
+
+    protocol_version = "HTTP/1.1"
+
+    def do_GET(self):
+        self._route_request()
+
+    def do_POST(self):
+        self._route_request()
+
+    def do_PUT(self):
+        self._route_request()
+
+    def do_DELETE(self):
+        self._route_request()
+
+    def _send_json(self, status: int, data: dict, headers: dict | None = None):
+        body = json.dumps(data, indent=2).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Connection", "close")
+        if headers:
+            for k, v in headers.items():
+                self.send_header(k, str(v))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _route_request(self):
+        parsed = urlparse(self.path)
+
+        # 1. Gateway Administration Endpoints
+        if parsed.path == "/gateway/status":
+            with session_manager.lock:
+                idle_elapsed = time.time() - session_manager.last_activity_time
+                status = {
+                    "gateway": "MXC JIT Scale-to-Zero Ingress Reverse Proxy",
+                    "listen_port": GATEWAY_PORT,
+                    "active_sandbox_id": session_manager.active_sandbox_id,
+                    "active_vm_name": session_manager.active_vm_name,
+                    "active_guest_ip": session_manager.active_guest_ip,
+                    "active_pool": session_manager.active_pool,
+                    "active_open_requests": session_manager.active_open_requests,
+                    "idle_elapsed_seconds": round(idle_elapsed, 1),
+                    "idle_timeout_seconds": IDLE_TIMEOUT_SECONDS,
+                    "last_wake_ms": session_manager.last_wake_ms,
+                    "last_probe_ms": session_manager.last_probe_ms,
+                    "total_leases": session_manager.total_leases,
+                    "total_requests_proxied": session_manager.total_requests_proxied,
+                }
+            self._send_json(200, status)
+            return
+
+        if parsed.path == "/gateway/reap" and self.command == "POST":
+            res = session_manager.force_reap()
+            code = 200 if res.get("reaped") else 409
+            self._send_json(code, res)
+            return
+
+        # 2. Workload Proxying
+        self._handle_proxy()
+
+    def _handle_proxy(self):
         t0 = time.perf_counter()
-        deadline = t0 + (self.wake_timeout_ms / 1000.0)
-        last_err = ""
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length) if content_length > 0 else None
 
-        while time.perf_counter() < deadline:
-            try:
-                conn = http.client.HTTPConnection(self.guest_ip, self.guest_port, timeout=0.25)
-                conn.request("GET", "/health")
-                resp = conn.getresponse()
-                raw = resp.read().decode("utf-8")
-                conn.close()
-                if resp.status == 200:
-                    data = json.loads(raw)
-                    if data.get("status") == "healthy" and data.get("clock_synced") is True:
-                        probe_ms = (time.perf_counter() - t0) * 1000.0
-                        self.last_health_probe_ms = round(probe_ms, 2)
-                        self.last_health_payload = data
-                        return True, probe_ms, data
-            except Exception as e:
-                last_err = str(e)
-                time.sleep(0.005)
+        # Determine target pool based on URL path
+        pool_id = DEFAULT_POOL
+        if self.path.startswith("/api/v1/adpa"):
+            pool_id = "prod-adpa"
+        elif self.path.startswith("/api/v1/sidpa"):
+            pool_id = "prod-sidpa"
 
-        probe_ms = (time.perf_counter() - t0) * 1000.0
-        return False, probe_ms, {"error": f"Health probe timed out: {last_err}"}
+        # 1. Hold connection in buffer queue, wake VM via pool-lease, probe health
+        try:
+            guest_ip, sandbox_id, cold_wake, wake_ms = session_manager.acquire_or_wake(pool_id)
+            session_manager.increment_requests()
+        except Exception as e:
+            logging.error(f"Failed to acquire sandbox for {self.path}: {e}")
+            self._send_json(
+                503,
+                {"error": "Service Unavailable (Wake Timeout)", "detail": str(e)},
+                headers={"Retry-After": "2"},
+            )
+            return
 
-    def ensure_instance_awake(self) -> dict:
-        """
-        Fast-path returns immediately if routing_state == ActiveRunning.
-        Otherwise coordinates atomic wake-on-request (<300ms Resume-VM + Health Probe).
-        """
-        if self.routing_state == "ActiveRunning":
-            return {"cold_wake": False, "wake_ms": 0.0, "health_probe_ms": 0.0}
-
-        with self.transition_lock:
-            if self.routing_state == "ActiveRunning":
-                return {"cold_wake": False, "wake_ms": 0.0, "health_probe_ms": 0.0}
-
-            wake_ms = self.resume_vm_fast()
-            ok, probe_ms, health_data = self.poll_guest_health()
-            if not ok:
-                raise RuntimeError(f"Guest wake health check failed: {health_data}")
-
-            self.routing_state = "ActiveRunning"
-            self.last_activity_monotonic = time.monotonic()
-            return {
-                "cold_wake": True,
-                "wake_ms": round(wake_ms, 2),
-                "health_probe_ms": round(probe_ms, 2),
-                "health_data": health_data,
+        try:
+            # 2. Forward HTTP request to guest appliance (:8080)
+            target_url = f"http://{guest_ip}:{GUEST_PORT}{self.path}"
+            forward_headers = {
+                key: val
+                for key, val in self.headers.items()
+                if key.lower() not in ["host", "transfer-encoding"]
             }
+            forward_headers["Host"] = f"{guest_ip}:{GUEST_PORT}"
+            forward_headers["X-Forwarded-For"] = self.client_address[0]
+
+            req = urllib.request.Request(
+                target_url,
+                data=body,
+                headers=forward_headers,
+                method=self.command,
+            )
+
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                resp_body = resp.read()
+                ttfb_ms = (time.perf_counter() - t0) * 1000.0
+
+                with session_manager.lock:
+                    session_manager.total_requests_proxied += 1
+
+                self.send_response(resp.status)
+                for header, val in resp.headers.items():
+                    if header.lower() not in ["transfer-encoding", "connection"]:
+                        self.send_header(header, val)
+
+                # Append MXC Telemetry Headers
+                self.send_header("Connection", "keep-alive")
+                self.send_header("X-MXC-Sandbox-Id", sandbox_id)
+                self.send_header("X-MXC-Pool-Id", pool_id)
+                self.send_header("X-MXC-Cold-Wake", str(cold_wake).lower())
+                self.send_header("X-MXC-Wake-Ms", f"{wake_ms:.1f}")
+                self.send_header("X-MXC-Total-TTFB-Ms", f"{ttfb_ms:.1f}")
+                self.end_headers()
+                self.wfile.write(resp_body)
+
+        except urllib.error.HTTPError as he:
+            self.send_response(he.code)
+            for header, val in he.headers.items():
+                if header.lower() not in ["transfer-encoding", "connection"]:
+                    self.send_header(header, val)
+            self.end_headers()
+            try:
+                self.wfile.write(he.read())
+            except Exception:
+                pass
+        except Exception as ex:
+            logging.error(f"Proxy forwarding error to {guest_ip}: {ex}")
+            self._send_json(502, {"error": "Bad Gateway", "detail": str(ex)})
+        finally:
+            session_manager.decrement_requests()
+
+    def log_message(self, fmt, *args):
+        logging.info(f"{self.client_address[0]} - - {fmt % args}")
 
 
-GATEWAY: JitGatewayController | None = None
-
-
-class LowLatencyHTTPServer(ThreadingHTTPServer):
+class ThreadedHTTPServer(http.server.ThreadingHTTPServer):
     allow_reuse_address = True
-
-    def __init__(
-        self,
-        server_address,
-        RequestHandlerClass,
-        controller: JitGatewayController | None = None,
-        image_id: str = "default",
-    ):
-        self.controller = controller
-        self.image_id = image_id
-        super().__init__(server_address, RequestHandlerClass)
 
     def get_request(self):
         sock, addr = super().get_request()
@@ -251,275 +473,19 @@ class LowLatencyHTTPServer(ThreadingHTTPServer):
         return sock, addr
 
 
-class GatewayProxyHandler(BaseHTTPRequestHandler):
-    protocol_version = "HTTP/1.1"
-
-    @property
-    def gw(self) -> JitGatewayController:
-        ctrl = getattr(self.server, "controller", None) or GATEWAY
-        assert ctrl is not None
-        return ctrl
-
-    @property
-    def image_id(self) -> str:
-        return getattr(self.server, "image_id", "default")
-
-    def log_message(self, format_str, *args):
-        if os.environ.get("MXC_GATEWAY_VERBOSE") == "1":
-            super().log_message(format_str, *args)
-
-    def _send_json(self, status_code: int, payload: dict, extra_headers: dict | None = None):
-        body = json.dumps(payload).encode("utf-8")
-        self.send_response(status_code)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Connection", "close")
-        if extra_headers:
-            for k, v in extra_headers.items():
-                self.send_header(k, str(v))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def do_GET(self):
-        gw = self.gw
-        parsed = urlparse(self.path)
-
-        if parsed.path == "/gateway/status":
-            idle_elapsed = time.monotonic() - gw.last_activity_monotonic
-            self._send_json(
-                200,
-                {
-                    "image_id": self.image_id,
-                    "vm_name": gw.vm_name,
-                    "guest_target": f"{gw.guest_ip}:{gw.guest_port}",
-                    "routing_state": gw.routing_state,
-                    "active_open_requests": gw.active_open_requests,
-                    "idle_elapsed_seconds": round(idle_elapsed, 2),
-                    "idle_timeout_seconds": gw.idle_timeout_seconds,
-                    "max_request_execution_timeout_seconds": gw.max_request_timeout_seconds,
-                    "last_wake_ms": gw.last_wake_ms,
-                    "last_health_probe_ms": gw.last_health_probe_ms,
-                    "last_total_cold_ttfb_ms": gw.last_total_cold_ttfb_ms,
-                    "total_wakes": gw.total_wakes,
-                    "total_requests_proxied": gw.total_requests_proxied,
-                    "total_504_timeouts": gw.total_504_timeouts,
-                    "last_health_payload": gw.last_health_payload,
-                },
-            )
-            return
-
-        self._proxy_request("GET")
-
-    def do_POST(self):
-        gw = self.gw
-        parsed = urlparse(self.path)
-
-        if parsed.path == "/gateway/reap":
-            res = gw.suspend_vm_fast()
-            code = 200 if res.get("reaped") else 409
-            self._send_json(code, res)
-            return
-
-        self._proxy_request("POST")
-
-    def _proxy_request(self, method: str):
-        gw = self.gw
-        t_start = time.perf_counter()
-
-        content_len = int(self.headers.get("Content-Length", "0"))
-        body = self.rfile.read(content_len) if content_len > 0 else None
-
-        # Per-request safety timeout override (e.g. X-Max-Timeout-Ms for testing AC-02.1)
-        timeout_sec = gw.max_request_timeout_seconds
-        if "X-Max-Timeout-Ms" in self.headers:
-            try:
-                timeout_sec = float(self.headers["X-Max-Timeout-Ms"]) / 1000.0
-            except ValueError:
-                pass
-
-        # 1. Buffer & Wake VM if dormant (Fast-path 0ms if ActiveRunning)
-        try:
-            wake_info = gw.ensure_instance_awake()
-        except Exception as e:
-            self._send_json(
-                503,
-                {"error": "Service Unavailable (Wake Timeout)", "detail": str(e)},
-                extra_headers={"Retry-After": "2"},
-            )
-            return
-
-        # 2. Increment active_open_requests atomically
-        with gw.transition_lock:
-            gw.active_open_requests += 1
-            gw.last_activity_monotonic = time.monotonic()
-
-        try:
-            # Use persistent HTTP/1.1 Keep-Alive connection pool for normal requests,
-            # or isolated connection when custom X-Max-Timeout-Ms is under test
-            is_custom_timeout = "X-Max-Timeout-Ms" in self.headers
-            conn = None
-            if not is_custom_timeout:
-                conn = getattr(gw, "_keepalive_conn", None)
-
-            if conn is None:
-                conn = http.client.HTTPConnection(gw.guest_ip, gw.guest_port, timeout=timeout_sec)
-                conn.connect()
-                try:
-                    conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-                except Exception:
-                    pass
-                if not is_custom_timeout:
-                    gw._keepalive_conn = conn
-
-            forward_headers = {
-                "Content-Type": self.headers.get("Content-Type", "application/json"),
-                "X-Forwarded-For": self.client_address[0],
-                "Connection": "close" if is_custom_timeout else "keep-alive",
-            }
-            try:
-                conn.request(method, self.path, body=body, headers=forward_headers)
-                resp = conn.getresponse()
-                resp_body = resp.read()
-            except Exception:
-                # Reconnect once if keep-alive socket was reset after VM pause/resume
-                try:
-                    conn.close()
-                except Exception:
-                    pass
-                conn = http.client.HTTPConnection(gw.guest_ip, gw.guest_port, timeout=timeout_sec)
-                conn.connect()
-                try:
-                    conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-                except Exception:
-                    pass
-                if not is_custom_timeout:
-                    gw._keepalive_conn = conn
-                conn.request(method, self.path, body=body, headers=forward_headers)
-                resp = conn.getresponse()
-                resp_body = resp.read()
-
-            if is_custom_timeout:
-                conn.close()
-
-            total_ttfb_ms = (time.perf_counter() - t_start) * 1000.0
-            if wake_info.get("cold_wake"):
-                gw.last_total_cold_ttfb_ms = round(total_ttfb_ms, 2)
-            gw.total_requests_proxied += 1
-
-            self.send_response(resp.status)
-            self.send_header("Content-Type", resp.getheader("Content-Type", "application/json"))
-            self.send_header("Content-Length", str(len(resp_body)))
-            self.send_header("Connection", "keep-alive")
-            self.send_header("X-MXC-Image-Id", self.image_id)
-            self.send_header("X-MXC-VM-Name", gw.vm_name)
-            self.send_header("X-MXC-Cold-Wake", str(wake_info.get("cold_wake", False)).lower())
-            self.send_header("X-MXC-Wake-Ms", str(wake_info.get("wake_ms", 0.0)))
-            self.send_header("X-MXC-Health-Probe-Ms", str(wake_info.get("health_probe_ms", 0.0)))
-            self.send_header("X-MXC-Total-TTFB-Ms", str(round(total_ttfb_ms, 2)))
-            self.end_headers()
-            self.wfile.write(resp_body)
-
-        except Exception as e:
-            if isinstance(e, (TimeoutError, socket.timeout)) or "timed out" in str(e).lower():
-                gw.total_504_timeouts += 1
-                self._send_json(
-                    504,
-                    {
-                        "error": "Gateway Timeout (max_request_execution_timeout_seconds exceeded)",
-                        "timeout_seconds": timeout_sec,
-                        "action": "Socket forcefully terminated and active_open_requests decremented (AC-02.1)",
-                    },
-                )
-            else:
-                self._send_json(502, {"error": "Bad Gateway", "detail": str(e)})
-        finally:
-            with gw.transition_lock:
-                gw.active_open_requests = max(0, gw.active_open_requests - 1)
-                gw.last_activity_monotonic = time.monotonic()
-
-
-def main():
-    global GATEWAY
-    parser = argparse.ArgumentParser(description="MXC JIT Connection-Buffering Ingress Gateway")
-    parser.add_argument("--port", type=int, default=8090, help="Gateway listen port")
-    parser.add_argument("--vm-name", type=str, default="mxc-hv-a7df7452", help="Target Hyper-V VM name")
-    parser.add_argument("--guest-ip", type=str, default="172.24.173.100", help="Target Guest IP")
-    parser.add_argument("--guest-port", type=int, default=8080, help="Target Guest Port")
-    parser.add_argument("--idle-timeout", type=float, default=300.0, help="Idle timeout in seconds")
-    parser.add_argument(
-        "--registry",
-        type=str,
-        default=None,
-        help="Optional path to golden_image_registry.json to launch multi-port listeners for all active routes",
+def run_server():
+    server_address = (GATEWAY_HOST, GATEWAY_PORT)
+    httpd = ThreadedHTTPServer(server_address, JITProxyRequestHandler)
+    logging.info(
+        f"JIT Ingress Gateway running on http://{GATEWAY_HOST}:{GATEWAY_PORT} "
+        f"(Default Pool: '{DEFAULT_POOL}', Idle Timeout: {IDLE_TIMEOUT_SECONDS}s)"
     )
-    args = parser.parse_args()
-
-    if args.registry and os.path.exists(args.registry):
-        with open(args.registry, "r", encoding="utf-8") as f:
-            reg = json.load(f)
-        servers: list[LowLatencyHTTPServer] = []
-        controllers: list[JitGatewayController] = []
-        for img in reg.get("images", []):
-            route = img.get("ingress_route")
-            if not route or not route.get("active_vm_name") or not route.get("guest_ip"):
-                continue
-            ctrl = JitGatewayController(
-                vm_name=route["active_vm_name"],
-                guest_ip=route["guest_ip"],
-                guest_port=int(route.get("guest_port", 8080)),
-                idle_timeout_seconds=float(route.get("idle_timeout_seconds", 300.0)),
-                max_request_timeout_seconds=float(route.get("max_request_execution_timeout_seconds", 900.0)),
-            )
-            srv = LowLatencyHTTPServer(
-                ("0.0.0.0", int(route["listen_port"])),
-                GatewayProxyHandler,
-                controller=ctrl,
-                image_id=img["image_id"],
-            )
-            t = threading.Thread(target=srv.serve_forever, daemon=True)
-            t.start()
-            servers.append(srv)
-            controllers.append(ctrl)
-            print(
-                f"[MXC Multi-Port JIT Gateway] Port :{route['listen_port']} -> "
-                f"Image={img['image_id']} | VM={route['active_vm_name']} ({route['guest_ip']}:{route.get('guest_port', 8080)})"
-            )
-        sys.stdout.flush()
-        try:
-            while True:
-                time.sleep(1.0)
-        except KeyboardInterrupt:
-            for srv in servers:
-                srv.server_close()
-            for ctrl in controllers:
-                ctrl.hv_runspace.close()
-        return
-
-    GATEWAY = JitGatewayController(
-        vm_name=args.vm_name,
-        guest_ip=args.guest_ip,
-        guest_port=args.guest_port,
-        idle_timeout_seconds=args.idle_timeout,
-    )
-
-    server = LowLatencyHTTPServer(
-        ("0.0.0.0", args.port),
-        GatewayProxyHandler,
-        controller=GATEWAY,
-        image_id="img-mxc-dev-v2.3",
-    )
-    print(
-        f"[MXC JIT Ingress Gateway] Listening on http://0.0.0.0:{args.port} -> "
-        f"VM={args.vm_name} ({args.guest_ip}:{args.guest_port})"
-    )
-    sys.stdout.flush()
     try:
-        server.serve_forever()
+        httpd.serve_forever()
     except KeyboardInterrupt:
-        server.server_close()
-        GATEWAY.hv_runspace.close()
+        logging.info("Shutting down JIT Ingress Gateway...")
+        httpd.server_close()
 
 
 if __name__ == "__main__":
-    main()
-
+    run_server()

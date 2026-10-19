@@ -237,12 +237,28 @@ pub fn trigger_background_replenish(pool_id: &str) {
     #[cfg(not(test))]
     {
         if let Ok(exe) = std::env::current_exe() {
-            let _ = std::process::Command::new(exe)
-                .args(&["--experimental", "--hyperv-op", "pool-replenish", "--pool", pool_id])
-                .stdin(std::process::Stdio::null())
-                .stdout(std::process::Stdio::null())
-                .stderr(std::process::Stdio::null())
-                .spawn();
+            #[cfg(windows)]
+            {
+                use std::os::windows::process::CommandExt;
+                const DETACHED_PROCESS: u32 = 0x00000008;
+                const CREATE_NEW_PROCESS_GROUP: u32 = 0x00000200;
+                let _ = std::process::Command::new(exe)
+                    .args(&["--experimental", "--hyperv-op", "pool-replenish", "--pool", pool_id])
+                    .stdin(std::process::Stdio::null())
+                    .stdout(std::process::Stdio::null())
+                    .stderr(std::process::Stdio::null())
+                    .creation_flags(DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
+                    .spawn();
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = std::process::Command::new(exe)
+                    .args(&["--experimental", "--hyperv-op", "pool-replenish", "--pool", pool_id])
+                    .stdin(std::process::Stdio::null())
+                    .stdout(std::process::Stdio::null())
+                    .stderr(std::process::Stdio::null())
+                    .spawn();
+            }
         }
     }
 }
