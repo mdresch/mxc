@@ -52,8 +52,8 @@ const POOL_STATE_FILE_NAME: &str = "pool_state.json";
 const MAX_POOL_ID_LEN: usize = 63;
 
 const DEFAULT_GENERATION: u8 = 2;
-const DEFAULT_MEMORY_STARTUP_BYTES: u64 = 2 * 1024 * 1024 * 1024;
-const DEFAULT_CPU_COUNT: u32 = 2;
+const DEFAULT_MEMORY_STARTUP_BYTES: u64 = 6 * 1024 * 1024 * 1024;
+const DEFAULT_CPU_COUNT: u32 = 6;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
