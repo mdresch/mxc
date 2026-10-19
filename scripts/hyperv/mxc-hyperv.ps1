@@ -381,12 +381,20 @@ function mxc-health {
 
 # --- Warm Standby Pool Operations ---
 
+function Get-MxcPoolArgs {
+    param([string]$Pool)
+    if ($Pool) { return @("--pool", $Pool) }
+    return @()
+}
+
 function mxc-pool-status {
+    param([string]$Pool)
     Ensure-MxcExecBinary
-    $raw = & $Script:ExecExe --experimental --hyperv-op pool-status | ConvertFrom-Json
+    $poolArgs = Get-MxcPoolArgs -Pool $Pool
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-status @poolArgs | ConvertFrom-Json
     if ($raw.result) {
         $res = $raw.result
-        Write-Host "Warm Standby VM Pool (Target: $($res.target_size), Ready: $($res.ready_count), Leased: $($res.leased_count), Total: $($res.total_members))" -ForegroundColor Cyan
+        Write-Host "Warm Standby VM Pool '$($res.pool_id)' (Target: $($res.target_size), Max: $($res.max_ready_standby), Ready: $($res.ready_count), Leased: $($res.leased_count), Total: $($res.total_members))" -ForegroundColor Cyan
         if ($res.members.Count -gt 0) {
             $res.members | Format-Table -Property token, sandbox_id, status, leased_to, vm_name -AutoSize
         } else {
@@ -397,10 +405,28 @@ function mxc-pool-status {
     }
 }
 
-function mxc-pool-lease {
-    param([string]$Holder = "operator")
+function mxc-pool-list {
     Ensure-MxcExecBinary
-    $raw = & $Script:ExecExe --experimental --hyperv-op pool-lease --pool-lease-holder $Holder | ConvertFrom-Json
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-list | ConvertFrom-Json
+    if ($raw.result) {
+        if ($raw.result.pools.Count -eq 0) {
+            Write-Host "No warm standby pools configured." -ForegroundColor DarkGray
+            return
+        }
+        $raw.result.pools | Select-Object pool_id, target_size, max_ready_standby, ready_count, leased_count, total_members | Format-Table -AutoSize
+    } else {
+        Write-Host "Error listing pools: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
+function mxc-pool-lease {
+    param(
+        [string]$Holder = "operator",
+        [string]$Pool
+    )
+    Ensure-MxcExecBinary
+    $poolArgs = Get-MxcPoolArgs -Pool $Pool
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-lease --pool-lease-holder $Holder @poolArgs | ConvertFrom-Json
     if ($raw.result -and $raw.result.sandboxId) {
         $global:MXC_DEFAULT_SANDBOX = $raw.result.sandboxId
         Write-Host "Successfully leased $($raw.result.sandboxId) from standby pool in <300ms!" -ForegroundColor Green
@@ -412,11 +438,16 @@ function mxc-pool-lease {
 }
 
 function mxc-pool-release {
-    param([string]$SandboxId)
+    param(
+        [string]$SandboxId,
+        [string]$Pool
+    )
     Ensure-MxcExecBinary
     $sb = if ($SandboxId) { $SandboxId } else { Get-MxcActiveSandboxId }
+    # Without -Pool, wxc-exec finds the owning pool by scanning every pool.
+    $poolArgs = Get-MxcPoolArgs -Pool $Pool
     Write-Host "Releasing $sb back to standby pool (resetting to clean baseline snapshot)..." -ForegroundColor Cyan
-    $raw = & $Script:ExecExe --experimental --hyperv-op pool-release --hyperv-sandbox-id $sb | ConvertFrom-Json
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-release --hyperv-sandbox-id $sb @poolArgs | ConvertFrom-Json
     if ($raw.result) {
         Write-Host "Successfully returned $sb to standby pool." -ForegroundColor Green
         if ($global:MXC_DEFAULT_SANDBOX -eq $sb) {
@@ -428,13 +459,31 @@ function mxc-pool-release {
 }
 
 function mxc-pool-replenish {
+    param([string]$Pool)
     Ensure-MxcExecBinary
+    $poolArgs = Get-MxcPoolArgs -Pool $Pool
     Write-Host "Replenishing standby pool to configured target size..." -ForegroundColor Cyan
-    $raw = & $Script:ExecExe --experimental --hyperv-op pool-replenish | ConvertFrom-Json
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-replenish @poolArgs | ConvertFrom-Json
     if ($raw.result) {
-        Write-Host "Standby pool replenished. Total members: $($raw.result.total_members)" -ForegroundColor Green
+        Write-Host "Standby pool '$($raw.result.pool_id)' replenished. Ready: $($raw.result.ready_count), total members: $($raw.result.total_members)" -ForegroundColor Green
     } else {
         Write-Host "Failed to replenish pool: $($raw.error.message)" -ForegroundColor Red
+    }
+}
+
+function mxc-pool-warm {
+    param(
+        [Parameter(Mandatory = $true)][int]$Count,
+        [string]$Pool
+    )
+    Ensure-MxcExecBinary
+    $poolArgs = Get-MxcPoolArgs -Pool $Pool
+    Write-Host "Pre-warming pool up to $Count ready standby VM(s) (capped at the pool's max)..." -ForegroundColor Cyan
+    $raw = & $Script:ExecExe --experimental --hyperv-op pool-warm --pool-count $Count @poolArgs | ConvertFrom-Json
+    if ($raw.result) {
+        Write-Host "Pool '$($raw.result.pool_id)' warmed. Ready: $($raw.result.ready_count) (max $($raw.result.max_ready_standby))" -ForegroundColor Green
+    } else {
+        Write-Host "Failed to warm pool: $($raw.error.message)" -ForegroundColor Red
     }
 }
 

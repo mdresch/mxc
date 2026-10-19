@@ -111,9 +111,22 @@ struct Cli {
     #[arg(long = "hyperv-dest-path", requires = "hyperv_op")]
     hyperv_dest_path: Option<String>,
 
-    /// Target size for --hyperv-op pool-config.
+    /// Pool targeted by --hyperv-op pool-* (defaults to `default`).
+    #[arg(long = "pool", requires = "hyperv_op")]
+    pool: Option<String>,
+
+    /// Target size (minimum ready standby VMs) for --hyperv-op pool-config.
     #[arg(long = "pool-target-size", requires = "hyperv_op")]
     pool_target_size: Option<usize>,
+
+    /// Ceiling on ready standby VMs for --hyperv-op pool-config (bounds pool-warm).
+    #[arg(long = "pool-max-size", requires = "hyperv_op")]
+    pool_max_size: Option<usize>,
+
+    /// Number of ready standby VMs to pre-warm for --hyperv-op pool-warm, or an
+    /// override of the target size for --hyperv-op pool-replenish.
+    #[arg(long = "pool-count", requires = "hyperv_op")]
+    pool_count: Option<usize>,
 
     /// Base image path for --hyperv-op pool-config.
     #[arg(long = "pool-base-image", requires = "hyperv_op")]
@@ -304,8 +317,10 @@ enum HypervOp {
     ListCheckpoints,
     CopyFile,
     PoolStatus,
+    PoolList,
     PoolConfig,
     PoolReplenish,
+    PoolWarm,
     PoolLease,
     PoolRelease,
     PoolDrain,
@@ -1099,6 +1114,12 @@ fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
                 MxcError::malformed_request("--hyperv-sandbox-id is required for this --hyperv-op")
             })
         };
+        // The pool targeted by pool-* ops; `default` keeps single-pool callers unchanged.
+        let pool_id = || -> &str {
+            cli.pool
+                .as_deref()
+                .unwrap_or(mxc_sdk::hyperv_lifecycle::pool::DEFAULT_POOL_ID)
+        };
         let checkpoint_name = || -> Result<&str, MxcError> {
             cli.hyperv_checkpoint_name.as_deref().ok_or_else(|| {
                 MxcError::malformed_request(
@@ -1162,32 +1183,56 @@ fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
                     mxc_sdk::hyperv_lifecycle::backend_ops::copy_file_to_guest(id, source, dest)
                         .map(|()| serde_json::json!({}))
                 }
-                HypervOp::PoolStatus => mxc_sdk::hyperv_lifecycle::pool::get_pool_status()
+                HypervOp::PoolStatus => mxc_sdk::hyperv_lifecycle::pool::get_pool_status(pool_id())
                     .map(|report| serde_json::to_value(report).unwrap_or_default()),
+                HypervOp::PoolList => {
+                    let reports = mxc_sdk::hyperv_lifecycle::pool::list_pool_ids()
+                        .iter()
+                        .map(|id| mxc_sdk::hyperv_lifecycle::pool::get_pool_status(id))
+                        .collect::<Result<Vec<_>, _>>();
+                    reports.map(|reports| serde_json::json!({ "pools": reports }))
+                }
                 HypervOp::PoolConfig => {
                     let target_size = cli
                         .pool_target_size
                         .unwrap_or(mxc_sdk::hyperv_lifecycle::pool::DEFAULT_POOL_TARGET_SIZE);
                     let base_image = cli.pool_base_image.as_deref().unwrap_or("");
                     let cred = cli.pool_credential_target.clone();
-                    mxc_sdk::hyperv_lifecycle::pool::configure_pool(target_size, base_image, cred)
+                    mxc_sdk::hyperv_lifecycle::pool::configure_pool(
+                        pool_id(),
+                        target_size,
+                        cli.pool_max_size,
+                        base_image,
+                        cred,
+                    )
+                    .map(|report| serde_json::to_value(report).unwrap_or_default())
+                }
+                HypervOp::PoolReplenish => {
+                    mxc_sdk::hyperv_lifecycle::pool::replenish_pool(pool_id(), cli.pool_count)
                         .map(|report| serde_json::to_value(report).unwrap_or_default())
                 }
-                HypervOp::PoolReplenish => mxc_sdk::hyperv_lifecycle::pool::replenish_pool()
-                    .map(|report| serde_json::to_value(report).unwrap_or_default()),
+                HypervOp::PoolWarm => {
+                    let count = cli.pool_count.ok_or_else(|| {
+                        MxcError::malformed_request(
+                            "--pool-count is required with --hyperv-op pool-warm",
+                        )
+                    })?;
+                    mxc_sdk::hyperv_lifecycle::pool::replenish_pool(pool_id(), Some(count))
+                        .map(|report| serde_json::to_value(report).unwrap_or_default())
+                }
                 HypervOp::PoolLease => {
                     let holder = cli.pool_lease_holder.as_deref();
-                    mxc_sdk::hyperv_lifecycle::pool::lease_from_pool(holder)
+                    mxc_sdk::hyperv_lifecycle::pool::lease_from_pool(pool_id(), holder)
                         .map(|sandbox_id| serde_json::json!({ "sandboxId": sandbox_id }))
                 }
                 HypervOp::PoolRelease => {
                     let id = require_sandbox_id()?;
-                    mxc_sdk::hyperv_lifecycle::pool::release_to_pool(id)
+                    // Without --pool the owning pool is found by scanning every pool.
+                    mxc_sdk::hyperv_lifecycle::pool::release_to_pool(cli.pool.as_deref(), id)
                         .map(|()| serde_json::json!({}))
                 }
-                HypervOp::PoolDrain => {
-                    mxc_sdk::hyperv_lifecycle::pool::drain_pool().map(|()| serde_json::json!({}))
-                }
+                HypervOp::PoolDrain => mxc_sdk::hyperv_lifecycle::pool::drain_pool(pool_id())
+                    .map(|()| serde_json::json!({})),
             }
         })();
         match result {
