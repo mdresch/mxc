@@ -45,7 +45,8 @@ Linux / macOS (`.sh`):
 | `run_windows_sandbox_state_aware_tests.ps1` | Windows Sandbox state-aware lifecycle E2E (single VM held across provision/start/exec*/stop/deprovision) | Windows Sandbox enabled |
 | `run_isolation_session_tests.ps1` | IsolationSession one-shot E2E suite | Interactive local session; OS-side IsolationSession service |
 | `run_isolation_session_state_aware_tests.ps1` | IsolationSession provision/start/exec/stop/deprovision E2E suite | Interactive local session; OS-side IsolationSession service |
-| `run_wslc_all_tests.ps1` | All WSLC one-shot and state-aware E2E tests | WSL2, WSLC SDK, staged daemon, and registry access for the image preflight (`-SkipSetup` skips it and needs an already-warm cache, because the state-aware fixtures deny egress) |
+| `run_wslc_all_tests.ps1` | All WSLC create-and-run and container-lifecycle E2E tests; delegates the lifecycle half to `run_wslc_state_aware_tests.ps1` | WSL2, WSLC SDK, staged daemon, and registry access for the image preflight, which warms both the create-and-run store and daemon store slot 0 (`-SkipSetup` skips it and needs both already warm, because the lifecycle fixtures deny egress) |
+| `run_wslc_state_aware_tests.ps1` | WSLC provision/start/exec/stop/deprovision lifecycle E2E suite, plus warm reuse, exec concurrency and idle teardown | WSL2, WSLC SDK, `wxc-wslc-daemon.exe` staged beside `wxc-exec.exe`, and `alpine:latest` / `python:3.12-alpine` cached in daemon store slot 0 (warm it with `scripts\setup-wslc.ps1 -DaemonSlots 1`) |
 | `run_processcontainer_all_tests.ps1` | Process container (AppContainer / BaseContainer) primitives suite — tier probes, rw/ro/denied matrix, enumeration-only grants, UI mitigations, DACL restore, crash recovery, directional networking. Dispatches to the per-area `run_processcontainer_*_test.ps1` scripts | `wxc-exec.exe`, `wxc-ui-probe.exe`, `plm.exe` and `winhttp-proxy-shim.exe` beside `wxc-exec.exe` |
 | `T3-Workloads.ps1` | Real workloads (pwsh, git, node, python, cmd) on top of the T3 primitives. A missing interpreter is reported as a skip, not a failure | `wxc-exec.exe`; `pwsh` / `git` / `node` / `python` each optional, gating their own cases |
 | `run_telemetry_consent_smoke_test.ps1` | Consent maintenance, presentation, policy, and exit-code smoke tests | Debug `wxc-exec.exe` built with `test-support` |
@@ -62,10 +63,13 @@ tests\scripts\run_processcontainer_network_proxy_test.ps1 -RequireTier base-cont
 
 When the host probe reports `baseContainerSupportsIdentitylessLoopbackProxy`,
 the proxy area requires workload launch and a successful proxied fetch on both
-PSEC 1.0-only hosts and hosts with PSEC 1.1 ingress support.
+PSEC 1.0-only hosts and PSEC 1.1 hosts, including those without ingress support.
 A clean policy rejection is a failure on these hosts.
 Older binaries that omit this probe fact do not enable the capability-specific
 assertions; the existing proxy assertions still apply.
+
+The loopback area checks direct access with both ingress defaults. The proxy
+area checks that other IPv4 and IPv6 loopback endpoints remain blocked.
 
 Shared helpers live in `tests/scripts/lib/WinProcessContainer.Common.ps1`. It
 must be **dot-sourced, not imported as a module** — `Initialize-WpcContext`

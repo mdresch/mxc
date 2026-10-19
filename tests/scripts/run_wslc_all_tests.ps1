@@ -77,7 +77,9 @@ if (-not $WxcExec -or -not (Test-Path $WxcExec)) {
 
 # Preflight: warm the WSLC image cache so per-test timings stay clear of one-off
 # download cost. The runner pulls on a miss by itself, so -SkipSetup is a
-# supported way to exercise that path instead.
+# supported way to exercise that path instead. The lifecycle fixtures provision
+# with the isolated posture, which refuses a registry pull, so the daemon's slot
+# has to be warmed here too or the delegated suite below starts cold.
 if (-not $SkipSetup) {
     $SetupScript = Join-Path $RepoRoot "scripts\setup-wslc.ps1"
     if (Test-Path $SetupScript) {
@@ -92,9 +94,15 @@ if (-not $SkipSetup) {
             "ghcr.io/linuxserver/baseimage-alpine:3.21",
             "quay.io/fedora/fedora-minimal:latest"
         )
-        & $SetupScript -WxcExecPath $WxcExec -Image $images -Force
+        & $SetupScript -WxcExecPath $WxcExec -Image $images -DaemonSlots 1 -Force
         if ($LASTEXITCODE -ne 0) {
-            Write-Host "WARN: setup-wslc.ps1 reported failures; continuing with tests anyway." -ForegroundColor Yellow
+            # The create-and-run half pulls on a miss, but the delegated
+            # lifecycle suite provisions with the isolated posture and cannot,
+            # so a cold slot 0 surfaces much later as unrelated failures.
+            Write-Host "ERROR: setup-wslc.ps1 failed; daemon store slot 0 may be cold." -ForegroundColor Red
+            Write-Host "  The delegated lifecycle suite refuses registry pulls, so it cannot recover." -ForegroundColor Yellow
+            Write-Host "  Resolve the setup failure above, or pass -SkipSetup if both stores are warm." -ForegroundColor Yellow
+            exit 1
         }
         Write-Host ""
     } else {
@@ -239,6 +247,11 @@ $null = $results.Add((Run-WslcTest "wslc_env_vars.json" -OutputContains "MY_VAR=
 $null = $results.Add((Run-WslcTest "wslc_exit_code.json" -ExpectedExit 42 -OutputContains "About to exit with code 42"))
 $null = $results.Add((Run-WslcTest "wslc_stderr.json" -OutputContains "stdout message"))
 $null = $results.Add((Run-WslcTest "wslc_large_output.json"))
+
+# `containerId` is optional, and WSLc refuses the empty session name that an
+# omitted one used to produce (WSLC_E_INVALID_SESSION_NAME, 0x80040608). Every
+# other config here sets the field, so this is the only guard on that path.
+$null = $results.Add((Run-WslcTest "wslc_no_container_id.json" -OutputContains "NO_CONTAINER_ID_OK"))
 
 Write-Host "`n--- Environment Tests ---" -ForegroundColor Cyan
 # PYTHON_VERSION is baked into the image by ENV. Unlike PATH and TERM, no shell
@@ -466,8 +479,9 @@ $null = $results.Add((Run-WslcTest "wslc_destroy_on_exit_false_rejected.json" `
 Write-Host "`n--- State-Aware Lifecycle Tests ---" -ForegroundColor Cyan
 # Delegate the multi-invocation provision/start/exec/stop/deprovision lifecycle
 # to its owning harness (it needs the daemon binary, mints + threads sandbox ids,
-# and drives the idle-teardown watchdog). Images are already pre-pulled above, so
-# skip its redundant preflight. Fold its exit code into the summary.
+# and drives the idle-teardown watchdog). The preflight above warmed the daemon
+# store slot as well, so skip its redundant preflight. Fold its exit code into
+# the summary.
 $saScript = Join-Path $PSScriptRoot "run_wslc_state_aware_tests.ps1"
 $saArgs = @{ WxcExecPath = $WxcExec; SkipSetup = $true }
 if ($Debug) { $saArgs.Debug = $true }

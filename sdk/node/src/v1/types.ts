@@ -681,6 +681,11 @@ export type BackendCapability =
   | 'captureDenials'
   | 'filesystemDeniedPaths'
   | 'filesystemEnumeratePaths'
+  /**
+   * With explicit host-loopback allow, the baseline is policy-permitted stateful outbound
+   * loopback. Native Windows ingress support adds bidirectional access, including
+   * container-hosted loopback servers.
+   */
   | 'ingressHostLoopbackAllow'
   | 'proxyEnforcement'
   | 'identitylessLoopbackProxy'
@@ -756,6 +761,11 @@ export interface ProbeFacts {
   bfsCompiledIn: boolean;
   baseContainerSupportsDenyPaths: boolean;
   baseContainerSupportsEnumeratePaths: boolean;
+  /**
+   * With explicit host-loopback allow, the baseline is policy-permitted stateful outbound
+   * loopback. Native Windows ingress support adds bidirectional access, including
+   * container-hosted loopback servers.
+   */
   baseContainerSupportsIngressHostLoopbackAllow: boolean;
   /** Identity-less proxy support on loopback; requires explicit host-loopback allow. */
   baseContainerSupportsIdentitylessLoopbackProxy: boolean;
@@ -771,7 +781,7 @@ export interface ProbeFacts {
  *
  * Schema `0.9.0-alpha`+ proxy policies run the sandbox in a private network
  * namespace and default-drop everything except the proxy endpoint. That
- * requires host tooling (slirp4netns, util-linux unshare, nsenter, the
+ * requires host tooling (slirp4netns, util-linux unshare, nsenter, iproute2 ip, the
  * iptables family) plus unprivileged user and network namespaces the kernel
  * will actually grant; see `docs/backends/bwrap/bubblewrap-backend.md` for the
  * full list. There is deliberately no fallback to the weaker shared-host-network
