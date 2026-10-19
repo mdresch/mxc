@@ -76,21 +76,18 @@ def run_suite():
             str(HARNESS_DIR / "jit_ingress_gateway.py"),
             "--port",
             str(GATEWAY_PORT),
-            "--vm-name",
-            VM_NAME,
-            "--guest-ip",
-            guest_ip,
-            "--guest-port",
-            "8080",
+            "--pool",
+            "prod-adpa",
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
         bufsize=1,
     )
-    # Wait for PersistentHyperVRunspace to finish pre-loading Hyper-V module
+    # Wait for gateway to print startup banner
     if gw_proc.stdout:
-        gw_proc.stdout.readline()
+        banner = gw_proc.stdout.readline()
+        print(f"[Gateway Start] {banner.strip()}")
 
     results = []
     try:
