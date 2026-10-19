@@ -623,6 +623,70 @@ def pool_warm(count: int, pool: Optional[str] = None) -> str:
 
 
 @mcp.tool()
+def hyperv_pool_list() -> str:
+    """List every configured warm standby pool with its target, max, ready and leased counts."""
+    return pool_list()
+
+
+@mcp.tool()
+def hyperv_pool_warm(count: int, pool: Optional[str] = None) -> str:
+    """Pre-warm a standby pool up to `count` ready VMs ahead of a known workload peak.
+    The count is capped at the pool's configured max_ready_standby.
+
+    Args:
+        count: Number of ready standby VMs to have available (must be >= 0).
+        pool: Pool id (e.g. 'prod-adpa'). Omit for the 'default' pool.
+    """
+    return pool_warm(count, pool)
+
+
+@mcp.tool()
+def hyperv_gateway_status(gateway_url: str = "http://127.0.0.1:8090/gateway/status") -> str:
+    """Query live telemetry from the JIT Scale-to-Zero Ingress Reverse Proxy Gateway.
+    Returns active sandbox, open in-flight request count, request velocity (req/s),
+    burst autoscaling status, idle elapsed time, and last health probe metrics.
+
+    Args:
+        gateway_url: URL to the gateway administration status endpoint.
+    """
+    import urllib.request
+    try:
+        req = urllib.request.Request(gateway_url, headers={"User-Agent": "FastMCP-Agent"})
+        with urllib.request.urlopen(req, timeout=3.0) as resp:
+            data = json.loads(resp.read().decode())
+            return json.dumps(data, indent=2)
+    except Exception as e:
+        return f"[Gateway Status Offline / Unreachable]: {e}"
+
+
+@mcp.tool()
+def hyperv_port_acls(sandbox_id: str = "auto", action: str = "status") -> str:
+    """Inspect, apply, or verify stateful Hyper-V Virtual Switch Port Access Control Lists (AC-02.3).
+
+    Args:
+        sandbox_id: Target sandbox ID (e.g. 'hv:0b1e0d7e') or 'auto' for active session.
+        action: One of 'status' (view current rules), 'verify' (apply standard security rules and verify), or 'remove' (unconstrain).
+    """
+    target_id = _resolve_sandbox_id(sandbox_id)
+    token = target_id.replace("hv:", "")
+    vm_name = f"mxc-hv-{token}"
+    script_path = os.path.join(REPO_ROOT, "scripts", "hyperv", "configure_port_acls.ps1")
+
+    flag = "-Status"
+    if action.lower() in ("verify", "apply"):
+        flag = "-Verify"
+    elif action.lower() == "remove":
+        flag = "-Remove"
+
+    cmd = ["powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script_path, "-VMName", vm_name, flag]
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        return res.stdout if res.returncode == 0 else f"[Error]: {res.stderr.strip() or res.stdout.strip()}"
+    except Exception as e:
+        return f"[Exception running port ACL script]: {e}"
+
+
+@mcp.tool()
 def session_acquire(lease_holder: str = "agent", pool: Optional[str] = None) -> str:
     """Acquire an isolated Hyper-V sandbox session from a warm pool.
     Subsequent commands will automatically run inside this session until session_release() is called.

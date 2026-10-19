@@ -111,14 +111,15 @@ flowchart LR
 ### Milestone 3.3: FastMCP Agent Tool Surface & Velocity Autoscaler (`US-05`)
 * **Objective**: Expose multi-pool lifecycle management to autonomous AI agents and implement burst autoscaling under high request velocity.
 * **Key Tasks**:
-  1. **FastMCP Multi-Pool Tool Integration (`mxc_mcp_server.py`)**:
+  1. **FastMCP Multi-Pool Tool Integration (`mxc_mcp_server.py`)**: — **Complete ✅**
      * Expose native MCP tools for autonomous agents:
        * `hyperv_pool_list()`: Returns all pool states, members, and capacities.
-       * `hyperv_pool_warm(pool_id, count)`: Pre-warms standby instances on demand.
-       * `hyperv_gateway_status()`: Queries live gateway telemetry and open request counts.
-  2. **Velocity-Triggered Dynamic Expansion (`AC-05.2`)**:
-     * Enhance `SandboxSessionManager` in `jit_ingress_gateway.py` to monitor incoming request velocity (req/sec).
-     * When velocity $> 10\text{ req/s}$ or queue depth $> 0$, trigger background expansion from $K_{\text{min}} \rightarrow K_{\text{max}}$ (up to 5 ready standby VMs in RAM).
+       * `hyperv_pool_warm(count, pool_id)`: Pre-warms standby instances on demand.
+       * `hyperv_gateway_status()`: Queries live gateway telemetry, velocity (req/s), and open request counts.
+       * `hyperv_port_acls(sandbox_id, action)`: Inspects, applies, and verifies hardware port ACLs.
+  2. **Velocity-Triggered Dynamic Expansion (`AC-05.2`)**: — **Complete ✅**
+     * Enhanced `SandboxSessionManager` in `jit_ingress_gateway.py` with sliding-window request velocity tracking (`request_timestamps`).
+     * When velocity $\ge 10\text{ req/s}$ or in-flight backlog $> 1$, automatically triggers asynchronous background expansion from $K_{\text{min}} \rightarrow K_{\text{max}}$ (up to 5 ready standby VMs in RAM) with cooldown protection.
 
 ---
 
@@ -152,4 +153,4 @@ flowchart LR
 | **US-03** | High-Density Scale-to-Zero (`AC-03.1` – `AC-03.3`) | **100% Complete ✅** | Phase 1 |
 | **US-04** | Automated Release Image Baking (`AC-04.1`, `AC-04.2`) | **100% Complete ✅** | Milestone 3.1 |
 | **US-05** | Elastic Standby Capacity (`AC-05.1`, `AC-05.3`, `AC-05.4`) | **100% Complete ✅** | Phase 2 |
-| **US-05** | Velocity-Triggered Dynamic Expansion (`AC-05.2`) | **Active 🟡** | Milestone 3.3 |
+| **US-05** | Velocity-Triggered Dynamic Expansion (`AC-05.2`) | **100% Complete ✅** | Milestone 3.3 |

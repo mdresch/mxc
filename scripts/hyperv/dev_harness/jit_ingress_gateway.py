@@ -13,6 +13,7 @@ Implements ADR-002, ADR-004, ADR-006 & FDD Section 2.1 / 3:
 - Native telemetry headers & /gateway/status inspection endpoint
 """
 
+import collections
 import http.client
 import http.server
 import json
@@ -200,6 +201,17 @@ class SandboxSessionManager:
         self.last_probe_ms = 0.0
         self.last_health_payload = {}
 
+        # AC-05.2: Dynamic Velocity-Triggered Autoscaling Attributes
+        self.request_timestamps = collections.deque()
+        self.velocity_window_sec = 5.0
+        self.velocity_threshold_rps = 10.0
+        self.current_velocity_rps = 0.0
+        self.k_min = 1
+        self.k_max = 5
+        self.burst_expansion_active = False
+        self.last_expansion_time = 0.0
+        self.expansion_cooldown_sec = 30.0
+
         self.reaper_thread = threading.Thread(target=self._idle_reaper_loop, daemon=True)
         self.reaper_thread.start()
 
@@ -266,6 +278,59 @@ class SandboxSessionManager:
             if self.active_open_requests > 0:
                 self.active_open_requests -= 1
             self.last_activity_time = time.time()
+
+    def record_request_velocity(self, pool_id: str):
+        """Monitors incoming request velocity (req/s) and triggers AC-05.2 burst expansion."""
+        now = time.time()
+        with self.lock:
+            self.request_timestamps.append(now)
+            cutoff = now - self.velocity_window_sec
+            while self.request_timestamps and self.request_timestamps[0] < cutoff:
+                self.request_timestamps.popleft()
+
+            window_len = max(now - self.request_timestamps[0], 0.1) if len(self.request_timestamps) > 1 else 1.0
+            velocity = len(self.request_timestamps) / min(self.velocity_window_sec, max(window_len, 0.5))
+            self.current_velocity_rps = round(velocity, 2)
+
+            # AC-05.2: If velocity >= 10 req/s or in-flight backlog > 1, expand K_min -> K_max
+            if (self.current_velocity_rps >= self.velocity_threshold_rps or self.active_open_requests > 1) and not self.burst_expansion_active:
+                if (now - self.last_expansion_time) > self.expansion_cooldown_sec:
+                    self._trigger_burst_expansion(pool_id)
+
+    def _trigger_burst_expansion(self, pool_id: str):
+        """Asynchronously triggers pool expansion from K_min to K_max (up to 5 ready VMs in RAM)."""
+        logging.info(
+            f"HIGH REQUEST VELOCITY DETECTED ({self.current_velocity_rps:.1f} req/s >= {self.velocity_threshold_rps} req/s). "
+            f"Triggering AC-05.2 burst autoscaling to K_max={self.k_max} for pool '{pool_id}'..."
+        )
+        self.burst_expansion_active = True
+        self.last_expansion_time = time.time()
+
+        def _expand():
+            try:
+                cmd = [
+                    WXC_EXEC_PATH,
+                    "--experimental",
+                    "--hyperv-op",
+                    "pool-warm",
+                    "--pool",
+                    pool_id,
+                    "--pool-count",
+                    str(self.k_max),
+                ]
+                res = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
+                if res.returncode == 0:
+                    logging.info(f"AC-05.2 burst autoscaling complete: pool '{pool_id}' pre-warmed to K_max={self.k_max}.")
+                else:
+                    logging.warning(f"Burst autoscaling returned {res.returncode}: {res.stderr.strip() or res.stdout.strip()}")
+            except Exception as e:
+                logging.error(f"Error executing burst autoscaling: {e}")
+            finally:
+                time.sleep(15)
+                with self.lock:
+                    self.burst_expansion_active = False
+
+        threading.Thread(target=_expand, daemon=True).start()
 
     def force_reap(self) -> dict:
         """Manually trigger immediate idle reap if no requests are in-flight."""
@@ -380,6 +445,11 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
                     "active_open_requests": session_manager.active_open_requests,
                     "idle_elapsed_seconds": round(idle_elapsed, 1),
                     "idle_timeout_seconds": IDLE_TIMEOUT_SECONDS,
+                    "request_velocity_rps": session_manager.current_velocity_rps,
+                    "velocity_threshold_rps": session_manager.velocity_threshold_rps,
+                    "burst_expansion_active": session_manager.burst_expansion_active,
+                    "k_min": session_manager.k_min,
+                    "k_max": session_manager.k_max,
                     "last_wake_ms": session_manager.last_wake_ms,
                     "last_probe_ms": session_manager.last_probe_ms,
                     "last_health_payload": session_manager.last_health_payload,
@@ -409,6 +479,9 @@ class JITProxyRequestHandler(http.server.BaseHTTPRequestHandler):
             pool_id = "prod-adpa"
         elif self.path.startswith("/api/v1/sidpa"):
             pool_id = "prod-sidpa"
+
+        # Record incoming request velocity and evaluate AC-05.2 burst autoscaling
+        session_manager.record_request_velocity(pool_id)
 
         # 1. Hold connection in buffer queue, wake VM via pool-lease, probe health
         try:
