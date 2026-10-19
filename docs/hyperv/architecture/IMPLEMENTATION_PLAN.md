@@ -87,11 +87,11 @@ flowchart LR
 * **Objective**: Replace the monolithic developer golden image (`winserv2025-mxc-dev.vhdx`, 39 GB) with a lean, hardened production image (`winserv2025-prod-adpa.vhdx`, ~12 GB) separating compiled runtimes from developer toolchains.
 * **Key Tasks**:
   1. **Clean Image Release Audit Script (`AC-04.1`)**:
-     * Author `scripts/hyperv/audit_production_image.ps1`.
-     * Mounts the candidate VHDX and verifies the **absolute absence** of compilers (`rustc`, `cl.exe`, `csc.exe`), package managers (`Scoop`, `uv`, `cargo`), source repos (`.git`, `C:\workspace\mxc-repo`), and build scripts.
+     * Author `scripts/hyperv/audit_production_image.ps1` — **Complete ✅**.
+     * Mounts the candidate VHDX or queries live sandbox via fast-path (`where.exe`, shallow `Test-Path`) and verifies the **absolute absence** of compilers (`rustc`, `cl.exe`, `csc.exe`), package managers (`Scoop`, `uv`, `cargo`), source repos (`.git`, `C:\workspace\mxc-repo`), and build scripts in $<15\text{s}$.
   2. **Automated Headless Image Baking (`AC-04.2`)**:
-     * Author `scripts/hyperv/bake_production_adpa_image.ps1`.
-     * Attaches differencing disk to `winserv2025-golden.vhdx`, installs production ADPA/SIDPA Windows Service, executes warm-up against `:8080/health`, flushes database pools, compacts memory via `EmptyWorkingSet`, and stamps clean checkpoint baseline `baseline-hot-ready`.
+     * Author `scripts/hyperv/bake_production_adpa_image.ps1` — **Complete ✅**.
+     * Attaches differencing disk to `winserv2025-golden.vhdx`, installs production ADPA/SIDPA Windows Service, executes warm-up against `:8080/health`, flushes database pools, compacts memory via `EmptyWorkingSet`, stamps clean checkpoint baseline `baseline-hot-ready`, and automatically runs the AC-04.1 audit gate.
   3. **Supply-Chain Attestation & Signature Verification (`ADR-003 Future Horizon`)**:
      * Integrate vulnerability scanning (`trivy`), Software Bill of Materials (SBOM) generation, and cryptographic VHDX image signing (`cosign`) so the Hyper-V host verifies signatures prior to pool admission.
 
@@ -139,7 +139,7 @@ flowchart LR
 | :--- | :--- | :--- | :--- |
 | **ADR-001** | Type-1 Hypervisor Partition Model | **100% Complete ✅** | Phase 1 |
 | **ADR-002** | JIT Connection-Buffering Ingress Gateway | **100% Complete ✅** | Phase 2 |
-| **ADR-003** | Dedicated Production Base Image Separation | **Active 🟡** | Milestone 3.1 |
+| **ADR-003** | Dedicated Production Base Image Separation | **100% Complete ✅** | Milestone 3.1 |
 | **ADR-004** | Memory-Preserved Standby RAM State | **100% Complete ✅** | Phase 1 |
 | **ADR-005** | Ephemeral Differencing Disks & Egress Filtering | **Active 🟡** | Milestone 3.2 |
 | **ADR-006** | Watermark Standby Pool Autoscaling | **100% Complete ✅** | Phase 2 |
@@ -148,6 +148,6 @@ flowchart LR
 | **US-02** | Cryptographic State Rollback (`AC-02.1`, `AC-02.4`) | **100% Complete ✅** | Phase 2 |
 | **US-02** | Cryptographic Verification & Port ACLs (`AC-02.2`, `AC-02.3`) | **Active 🟡** | Milestone 3.2 |
 | **US-03** | High-Density Scale-to-Zero (`AC-03.1` – `AC-03.3`) | **100% Complete ✅** | Phase 1 |
-| **US-04** | Automated Release Image Baking (`AC-04.1`, `AC-04.2`) | **Active 🟡** | Milestone 3.1 |
+| **US-04** | Automated Release Image Baking (`AC-04.1`, `AC-04.2`) | **100% Complete ✅** | Milestone 3.1 |
 | **US-05** | Elastic Standby Capacity (`AC-05.1`, `AC-05.3`, `AC-05.4`) | **100% Complete ✅** | Phase 2 |
 | **US-05** | Velocity-Triggered Dynamic Expansion (`AC-05.2`) | **Active 🟡** | Milestone 3.3 |
