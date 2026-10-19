@@ -91,6 +91,10 @@ static BACKENDS: [BackendRegistration; 11] = [
     BackendRegistration {
         backend: ContainmentBackend::HyperV,
         experimental: true,
+        probe_coverage: ProbeCoverage::NotDetected(
+            "no Hyper-V presence detector yet (needs Hyper-V role/vmms service check); \
+             follow-up to add a Windows-only detector in probe.rs",
+        ),
     },
 ];
 
@@ -115,6 +119,7 @@ pub(crate) const CANONICAL_BACKEND_NAMES: &[(ContainmentBackend, &str)] = &[
     (ContainmentBackend::IsolationSession, "isolation_session"),
     (ContainmentBackend::Seatbelt, "seatbelt"),
     (ContainmentBackend::Bubblewrap, "bubblewrap"),
+    (ContainmentBackend::HyperV, "hyperv"),
 ];
 
 /// Every canonical backend wire name.
@@ -182,7 +187,7 @@ mod tests {
             .collect();
         assert_eq!(
             experimental,
-            BTreeSet::from(["microvm", "hyperlight", "windows_sandbox"])
+            BTreeSet::from(["microvm", "hyperlight", "windows_sandbox", "hyperv"])
         );
     }
 
