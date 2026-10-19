@@ -47,9 +47,22 @@ def _extract_json_payload(output: str) -> Optional[dict]:
     return None
 
 
-def _lease_from_pool(lease_holder: str = "mcp-agent") -> Tuple[Optional[str], str]:
-    """Attempt to lease a VM from the standby pool in <300ms. Returns (sandbox_id, error_message)."""
-    raw = _run_wxc(["--hyperv-op", "pool-lease", "--pool-lease-holder", lease_holder])
+def _pool_args(pool: Optional[str]) -> List[str]:
+    """CLI args selecting a named pool. Empty when unset so wxc-exec uses its `default` pool.
+
+    The value is passed as a separate argv element (never through a shell) and is
+    validated by wxc-exec, which rejects anything but [a-z0-9_-].
+    """
+    return ["--pool", pool] if pool else []
+
+
+def _lease_from_pool(
+    lease_holder: str = "mcp-agent", pool: Optional[str] = None
+) -> Tuple[Optional[str], str]:
+    """Attempt to lease a VM from a standby pool in <300ms. Returns (sandbox_id, error_message)."""
+    raw = _run_wxc(
+        ["--hyperv-op", "pool-lease", "--pool-lease-holder", lease_holder] + _pool_args(pool)
+    )
     if "[Exit Code: 0]" in raw:
         payload = _extract_json_payload(raw)
         if payload and "result" in payload and "sandboxId" in payload["result"]:
@@ -61,9 +74,14 @@ def _lease_from_pool(lease_holder: str = "mcp-agent") -> Tuple[Optional[str], st
     return None, err
 
 
-def _release_to_pool(sandbox_id: str) -> Tuple[bool, str]:
-    """Release a leased VM back to the standby pool. Returns (success, message)."""
-    raw = _run_wxc(["--hyperv-op", "pool-release", "--hyperv-sandbox-id", sandbox_id])
+def _release_to_pool(sandbox_id: str, pool: Optional[str] = None) -> Tuple[bool, str]:
+    """Release a leased VM back to its standby pool. Returns (success, message).
+
+    With `pool` unset, wxc-exec finds the owning pool by scanning every pool.
+    """
+    raw = _run_wxc(
+        ["--hyperv-op", "pool-release", "--hyperv-sandbox-id", sandbox_id] + _pool_args(pool)
+    )
     return ("[Exit Code: 0]" in raw), raw
 
 
@@ -522,18 +540,32 @@ def apply_guest_changes_to_host(
 
 
 @mcp.tool()
-def pool_status() -> str:
-    """View the live status of the warm standby VM pool (ready, leased, target size, members)."""
-    return _run_wxc(["--hyperv-op", "pool-status"])
+def pool_status(pool: Optional[str] = None) -> str:
+    """View the live status of a warm standby VM pool (ready, leased, target/max size, members).
+
+    Args:
+        pool: Pool id (e.g. 'prod-adpa'). Omit for the 'default' pool.
+    """
+    return _run_wxc(["--hyperv-op", "pool-status"] + _pool_args(pool))
 
 
 @mcp.tool()
-def pool_lease(lease_holder: str = "agent") -> str:
-    """Instantly lease a pre-warmed Hyper-V sandbox VM from the standby pool in <300ms.
+def pool_list() -> str:
+    """List every configured warm standby pool with its target, max, ready and leased counts."""
+    return _run_wxc(["--hyperv-op", "pool-list"])
+
+
+@mcp.tool()
+def pool_lease(lease_holder: str = "agent", pool: Optional[str] = None) -> str:
+    """Instantly lease a pre-warmed Hyper-V sandbox VM from a standby pool in <300ms.
     Sets it as the active session sandbox and returns the leased sandbox ID (e.g. hv:p1a2b3c4).
+
+    Args:
+        lease_holder: Tag recorded against the lease.
+        pool: Pool id (e.g. 'prod-adpa'). Omit for the 'default' pool.
     """
     global _ACTIVE_SESSION_SANDBOX
-    leased_id, err = _lease_from_pool(lease_holder)
+    leased_id, err = _lease_from_pool(lease_holder, pool)
     if leased_id:
         _ACTIVE_SESSION_SANDBOX = leased_id
         return f"Successfully leased sandbox '{leased_id}' in <300ms. Set as active session sandbox."
@@ -541,17 +573,21 @@ def pool_lease(lease_holder: str = "agent") -> str:
 
 
 @mcp.tool()
-def pool_release(sandbox_id: str = "auto") -> str:
-    """Return a leased sandbox VM back to the standby pool.
+def pool_release(sandbox_id: str = "auto", pool: Optional[str] = None) -> str:
+    """Return a leased sandbox VM back to its standby pool.
     Instantly restores it to clean baseline snapshot, suspends it, and marks it Ready.
     If sandbox_id is 'auto', releases the active session sandbox.
+
+    Args:
+        sandbox_id: Sandbox to release, or 'auto' for the active session sandbox.
+        pool: Owning pool id. Omit and the owning pool is found automatically.
     """
     global _ACTIVE_SESSION_SANDBOX
     target_id = _ACTIVE_SESSION_SANDBOX if (sandbox_id == "auto" or not sandbox_id) else sandbox_id
     if not target_id:
         return "No sandbox ID specified and no active session sandbox to release."
 
-    success, raw = _release_to_pool(target_id)
+    success, raw = _release_to_pool(target_id, pool)
     if success and _ACTIVE_SESSION_SANDBOX == target_id:
         _ACTIVE_SESSION_SANDBOX = None
         return f"Successfully returned '{target_id}' to standby pool and cleared active session."
@@ -559,17 +595,39 @@ def pool_release(sandbox_id: str = "auto") -> str:
 
 
 @mcp.tool()
-def pool_replenish() -> str:
-    """Replenish the standby pool by provisioning and warming up VMs up to the configured target size."""
-    return _run_wxc(["--hyperv-op", "pool-replenish"])
+def pool_replenish(pool: Optional[str] = None) -> str:
+    """Replenish a standby pool by provisioning and warming up VMs until it holds its target
+    number of ready standby VMs. Leased VMs do not count towards the target.
+
+    Args:
+        pool: Pool id (e.g. 'prod-adpa'). Omit for the 'default' pool.
+    """
+    return _run_wxc(["--hyperv-op", "pool-replenish"] + _pool_args(pool), timeout=1800)
 
 
 @mcp.tool()
-def session_acquire(lease_holder: str = "agent") -> str:
-    """Acquire an isolated Hyper-V sandbox session from the warm pool.
+def pool_warm(count: int, pool: Optional[str] = None) -> str:
+    """Pre-warm a standby pool up to `count` ready VMs ahead of a known workload peak.
+    The count is capped at the pool's configured max_ready_standby.
+
+    Args:
+        count: Number of ready standby VMs to have available (must be >= 0).
+        pool: Pool id (e.g. 'prod-adpa'). Omit for the 'default' pool.
+    """
+    if count < 0:
+        return "[Error]: count must be >= 0."
+    return _run_wxc(
+        ["--hyperv-op", "pool-warm", "--pool-count", str(count)] + _pool_args(pool),
+        timeout=1800,
+    )
+
+
+@mcp.tool()
+def session_acquire(lease_holder: str = "agent", pool: Optional[str] = None) -> str:
+    """Acquire an isolated Hyper-V sandbox session from a warm pool.
     Subsequent commands will automatically run inside this session until session_release() is called.
     """
-    return pool_lease(lease_holder)
+    return pool_lease(lease_holder, pool)
 
 
 @mcp.tool()
