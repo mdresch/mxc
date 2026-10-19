@@ -192,9 +192,59 @@ fn pool_lock_name(pool_id: &str) -> String {
     format!("pool-{pool_id}")
 }
 
+fn pool_replenish_lock_name(pool_id: &str) -> String {
+    format!("pool-replenish-{pool_id}")
+}
+
 fn acquire_pool_lock(pool_id: &str) -> Result<TransitionLock, MxcError> {
     TransitionLock::acquire(&pool_lock_name(pool_id), POOL_LOCK_TIMEOUT)
         .map_err(|e| MxcError::backend_error(format!("{e}")))
+}
+
+fn try_acquire_replenish_lock(pool_id: &str) -> Result<Option<TransitionLock>, MxcError> {
+    TransitionLock::try_acquire(&pool_replenish_lock_name(pool_id), Duration::ZERO)
+        .map_err(|e| MxcError::backend_error(format!("{e}")))
+}
+
+#[cfg(test)]
+pub mod test_replenish_trigger {
+    use std::collections::HashMap;
+    use std::sync::Mutex;
+
+    static TRIGGERS: Mutex<Option<HashMap<String, usize>>> = Mutex::new(None);
+
+    pub fn record(pool_id: &str) {
+        let mut guard = TRIGGERS.lock().unwrap();
+        let map = guard.get_or_insert_with(HashMap::new);
+        *map.entry(pool_id.to_string()).or_insert(0) += 1;
+    }
+
+    pub fn count_for(pool_id: &str) -> usize {
+        let guard = TRIGGERS.lock().unwrap();
+        guard
+            .as_ref()
+            .and_then(|map| map.get(pool_id).copied())
+            .unwrap_or(0)
+    }
+}
+
+/// Triggers non-blocking background replenishment of the given pool (AC-05.1).
+pub fn trigger_background_replenish(pool_id: &str) {
+    #[cfg(test)]
+    {
+        test_replenish_trigger::record(pool_id);
+    }
+    #[cfg(not(test))]
+    {
+        if let Ok(exe) = std::env::current_exe() {
+            let _ = std::process::Command::new(exe)
+                .args(&["--experimental", "--hyperv-op", "pool-replenish", "--pool", pool_id])
+                .stdin(std::process::Stdio::null())
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null())
+                .spawn();
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -410,26 +460,52 @@ pub fn replenish_pool(
     target_override: Option<usize>,
 ) -> Result<PoolStatusReport, MxcError> {
     validate_pool_id(pool_id)?;
-    let _lock = acquire_pool_lock(pool_id)?;
 
-    let mut state = read_pool_state(pool_id)?.ok_or_else(|| {
-        MxcError::malformed_request(format!(
-            "pool {pool_id:?} has not been configured yet; call configure_pool first with base image path"
-        ))
-    })?;
-
-    if state.config.base_image_path.trim().is_empty() {
-        return Err(MxcError::malformed_request(
-            "pool base_image_path is not set; configure pool before replenishing",
-        ));
-    }
-
-    let goal = match target_override {
-        Some(count) => count.min(state.config.effective_max_ready()),
-        None => state.config.target_size,
+    // Serialize replenishment runs per pool so concurrent leases / replenish
+    // requests don't stampede VM provisioning. If another replenishment is
+    // actively running on this pool, return the current status report immediately.
+    let _replenish_lock = match try_acquire_replenish_lock(pool_id)? {
+        Some(lock) => lock,
+        None => {
+            let state = read_pool_state(pool_id)?.ok_or_else(|| {
+                MxcError::malformed_request(format!("pool {pool_id:?} has not been configured yet"))
+            })?;
+            return Ok(state.into_report());
+        }
     };
 
-    while state.count(PoolMemberStatus::Ready) < goal {
+    loop {
+        let (needed, base_image_path, guest_credential_target) = {
+            let _lock = acquire_pool_lock(pool_id)?;
+            let state = read_pool_state(pool_id)?.ok_or_else(|| {
+                MxcError::malformed_request(format!(
+                    "pool {pool_id:?} has not been configured yet; call configure_pool first with base image path"
+                ))
+            })?;
+
+            if state.config.base_image_path.trim().is_empty() {
+                return Err(MxcError::malformed_request(
+                    "pool base_image_path is not set; configure pool before replenishing",
+                ));
+            }
+
+            let goal = match target_override {
+                Some(count) => count.min(state.config.effective_max_ready()),
+                None => state.config.target_size,
+            };
+
+            let ready_count = state.count(PoolMemberStatus::Ready);
+            (
+                ready_count < goal,
+                state.config.base_image_path.clone(),
+                state.config.guest_credential_target.clone(),
+            )
+        };
+
+        if !needed {
+            break;
+        }
+
         let token = mint_random_token();
         let sandbox_id = format!("hv:{token}");
         let vm_name = hyperv_common::vm_naming::vm_name_for_token(&token);
@@ -437,11 +513,11 @@ pub fn replenish_pool(
         let child_disk = hyperv_common::vm_naming::child_disk_path(
             &control_plane::state_aware_root(),
             &token,
-            &state.config.base_image_path,
+            &base_image_path,
         );
 
         // 1. Provision disk and VM
-        hyperv_common::cmdlets::new_differencing_disk(&state.config.base_image_path, &child_disk)
+        hyperv_common::cmdlets::new_differencing_disk(&base_image_path, &child_disk)
             .map_err(|e| map_powershell_error("pool new differencing disk", e))?;
 
         hyperv_common::cmdlets::new_vm(&vm_name, DEFAULT_GENERATION, DEFAULT_MEMORY_STARTUP_BYTES)
@@ -464,7 +540,7 @@ pub fn replenish_pool(
 
         // 2c. Wait for PowerShell Direct (vmicvmsession / WinRM) to accept connections
         // before capturing `pool-clean-baseline`, preventing mid-boot snapshots.
-        if let Some(target) = state.config.guest_credential_target.as_deref() {
+        if let Some(target) = guest_credential_target.as_deref() {
             if let Ok(cred) = hyperv_common::credential::resolve_guest_credential(target) {
                 let deadline = std::time::Instant::now() + Duration::from_secs(60);
                 while std::time::Instant::now() < deadline {
@@ -489,24 +565,34 @@ pub fn replenish_pool(
         let record = HypervSandboxRecord::new_provisioned(
             sandbox_id.clone(),
             vm_name.clone(),
-            state.config.base_image_path.clone(),
+            base_image_path.clone(),
             child_disk,
-            state.config.guest_credential_target.clone(),
+            guest_credential_target.clone(),
         );
         let _ = control_plane::write_sandbox_record(&token, &record);
 
-        state.members.push(PoolMember {
-            token,
-            sandbox_id,
-            vm_name,
-            status: PoolMemberStatus::Ready,
-            leased_to: None,
-            leased_at_utc: None,
-        });
-
-        write_pool_state(pool_id, &state)?;
+        // Register the new member under pool lock
+        {
+            let _lock = acquire_pool_lock(pool_id)?;
+            let mut state = read_pool_state(pool_id)?.ok_or_else(|| {
+                MxcError::backend_error(format!("pool {pool_id:?} disappeared during replenish"))
+            })?;
+            state.members.push(PoolMember {
+                token,
+                sandbox_id,
+                vm_name,
+                status: PoolMemberStatus::Ready,
+                leased_to: None,
+                leased_at_utc: None,
+            });
+            write_pool_state(pool_id, &state)?;
+        }
     }
 
+    let _lock = acquire_pool_lock(pool_id)?;
+    let state = read_pool_state(pool_id)?.ok_or_else(|| {
+        MxcError::backend_error(format!("pool {pool_id:?} disappeared during replenish"))
+    })?;
     Ok(state.into_report())
 }
 
@@ -562,6 +648,16 @@ pub fn lease_from_pool(pool_id: &str, lease_holder: Option<&str>) -> Result<Stri
     }
 
     write_pool_state(pool_id, &state)?;
+
+    let ready_count = state.count(PoolMemberStatus::Ready);
+    let target_size = state.config.target_size;
+
+    // Drop the pool lock before spawning background replenishment
+    drop(_lock);
+
+    if ready_count < target_size {
+        trigger_background_replenish(pool_id);
+    }
 
     Ok(leased_sandbox_id)
 }
@@ -954,5 +1050,92 @@ mod tests {
         assert!(dir.path().join(POOL_STATE_FILE_NAME).exists());
 
         set_pool_root_for_test(None);
+    }
+
+    #[test]
+    fn lease_triggers_background_replenish_when_below_target() {
+        let dir = tempfile::tempdir().unwrap();
+        set_pool_root_for_test(Some(dir.path().to_path_buf()));
+        let pool = "trig-below";
+
+        let mut st = state_with(pool, vec![member("11111111", PoolMemberStatus::Ready)]);
+        st.config.target_size = 1;
+        write_pool_state(pool, &st).unwrap();
+
+        assert_eq!(test_replenish_trigger::count_for(pool), 0);
+
+        // Leasing the only ready member leaves ready_count = 0 < target_size (1)
+        let leased = lease_from_pool(pool, Some("agent")).unwrap();
+        assert_eq!(leased, "hv:11111111");
+
+        // Background replenishment was triggered per AC-05.1
+        assert_eq!(test_replenish_trigger::count_for(pool), 1);
+
+        set_pool_root_for_test(None);
+    }
+
+    #[test]
+    fn lease_does_not_trigger_replenish_when_buffer_satisfied() {
+        let dir = tempfile::tempdir().unwrap();
+        set_pool_root_for_test(Some(dir.path().to_path_buf()));
+        let pool = "trig-satisfied";
+
+        let mut st = state_with(
+            pool,
+            vec![
+                member("11111111", PoolMemberStatus::Ready),
+                member("22222222", PoolMemberStatus::Ready),
+            ],
+        );
+        st.config.target_size = 1;
+        write_pool_state(pool, &st).unwrap();
+
+        assert_eq!(test_replenish_trigger::count_for(pool), 0);
+
+        // Leasing 1 leaves ready_count = 1 >= target_size (1)
+        let _ = lease_from_pool(pool, Some("agent")).unwrap();
+
+        // Replenish was NOT triggered because ready buffer is still satisfied
+        assert_eq!(test_replenish_trigger::count_for(pool), 0);
+
+        set_pool_root_for_test(None);
+    }
+
+    #[test]
+    fn replenish_lock_deduplicates_concurrent_replenishment() {
+        use std::sync::mpsc;
+
+        let pool_id = format!("dedup-{}", mint_random_token());
+        let (held_tx, held_rx) = mpsc::channel::<()>();
+        let (release_tx, release_rx) = mpsc::channel::<()>();
+
+        let thread_pool = pool_id.clone();
+        let holder = std::thread::spawn(move || {
+            let _lock = TransitionLock::acquire(
+                &pool_replenish_lock_name(&thread_pool),
+                Duration::from_secs(5),
+            )
+            .expect("initial lock acquisition");
+            held_tx.send(()).unwrap();
+            release_rx.recv().ok();
+        });
+        held_rx.recv().unwrap();
+
+        // From another thread, acquiring replenish lock non-blocking fails immediately
+        let second = try_acquire_replenish_lock(&pool_id).unwrap();
+        assert!(
+            second.is_none(),
+            "second acquire must return None while lock is held by another thread"
+        );
+
+        let _ = release_tx.send(());
+        holder.join().unwrap();
+
+        // Once released by holder thread, acquire succeeds
+        let third = try_acquire_replenish_lock(&pool_id).unwrap();
+        assert!(
+            third.is_some(),
+            "subsequent acquire must succeed once previous dropped"
+        );
     }
 }

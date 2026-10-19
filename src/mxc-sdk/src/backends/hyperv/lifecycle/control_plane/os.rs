@@ -154,6 +154,12 @@ impl TransitionLock {
         let handle = named_mutex_acquire(&name, timeout)?;
         Ok(Self { handle })
     }
+
+    pub fn try_acquire(token: &str, timeout: std::time::Duration) -> Result<Option<Self>> {
+        let name = format!("{TRANSITION_MUTEX_PREFIX}{token}");
+        let handle = named_mutex_try_acquire(&name, timeout)?;
+        Ok(handle.map(|h| Self { handle: h }))
+    }
 }
 
 #[cfg(windows)]
@@ -173,6 +179,10 @@ pub struct TransitionLock;
 impl TransitionLock {
     pub fn acquire(_token: &str, _timeout: std::time::Duration) -> Result<Self> {
         Ok(Self)
+    }
+
+    pub fn try_acquire(_token: &str, _timeout: std::time::Duration) -> Result<Option<Self>> {
+        Ok(Some(Self))
     }
 }
 
