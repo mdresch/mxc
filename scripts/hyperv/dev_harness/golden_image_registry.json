@@ -30,6 +30,40 @@
       "notes": "Clean, immutable OS parent image used to stamp new application/workload golden images (ADPA PoC, SIDPA Dev)."
     },
     {
+      "image_id": "img-servercore-webdev-v1",
+      "name": "Windows Server 2025 Core Lean WebDev & PostgreSQL",
+      "role": "webdev-sandbox",
+      "application": "Node.js 24 LTS, TypeScript, Next.js, React, PostgreSQL 18.6",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\winserv2025-servercore-webdev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": 10.85,
+      "max_size_gb": 64,
+      "vhd_type": "Differencing",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "ingress_route": {
+        "listen_port": 8093,
+        "guest_port": 5432,
+        "health_path": null,
+        "idle_timeout_seconds": 300,
+        "active_vm_name": "MXC-Bake-WebDev-Temp"
+      },
+      "installed_stack": [
+        "Windows Server 2025 Core Headless Baseline (No GUI / No Explorer)",
+        "CompactOS Transparent LZX Filesystem Compression (1.7:1 Ratio)",
+        "Node.js LTS v24.22.0 + NPM 11.19.1",
+        "PNPM 12.14.0 + Bun 1.4.3",
+        "TypeScript 7.0.2 (tsc, ts-node, tsx)",
+        "Next.js (create-next-app 16.4.2) & React/Vite (create-vite 9.3.0)",
+        "PostgreSQL 18.6 Database Service (UTF-8 cluster, port 5432, auto-start)",
+        "Git 2.56.0, 7zip, curl, jq, ripgrep, pwsh 7.6.7",
+        "Microsoft Visual C++ 2015-2022 x64 Runtime"
+      ],
+      "notes": "Ultra-lean headless Server Core developer image stamped from winserv2025-golden.vhdx. Explorer bypassed, idle RAM <450MB, frozen in RAM state ready for <300ms JIT wake-up."
+    },
+    {
       "image_id": "img-os-win11-ent",
       "name": "Windows 11 Enterprise Client Golden Baseline (Build 26300.9457)",
       "role": "os-client-baseline",

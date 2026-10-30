@@ -163,3 +163,4 @@ When pulling updates from `microsoft/mxc`:
 - [ ] Run Hyper-V compliance audit gate: `powershell scripts/hyperv/audit_production_image.ps1`
 - [ ] Run JIT wake benchmark: `python scripts/hyperv/dev_harness/benchmark_jit_wake.py --dry-run`
 - [ ] Regenerate docx architecture suite: `python scripts/hyperv/generate_architecture_docx.py`
+

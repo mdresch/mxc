@@ -12,6 +12,7 @@
 | **`img-os-ws2025-base`** | `baked_ready` | `C:\HyperV\BaseImages\winserv2025-golden.vhdx` | `10.88 GB` (`64 GB`) | Clean OS Install | `-` | Parent Base | Minimal Windows Server 2025 baseline used to stamp new workload images |
 | **`img-os-win11-ent`** | `baked_ready` | `C:\HyperV\BaseImages\win11-golden.vhdx` | `14.47 GB` (`64 GB`) | `C:\Users\MennoDrescher\Downloads\Windows11_Client_x64_en-us_26300_9457.iso` (`4.3 GB`) | `-` | Client Base | Windows 11 Enterprise/Client baseline (Build `26300.9457`) |
 | **`img-mxc-dev-v2.3`** | `baked_ready` | `F:\HyperV\BaseImages\winserv2025-mxc-dev.vhdx` | `39.25 GB` (`64 GB`) | `img-os-ws2025-base` | **`:8090` $\rightarrow$ `:8080`** | `mxc-hv-a7df7452` (Active)<br/>`mxc-hv-0b1e0d7e` (Standby) | Full MXC developer & JIT harness image (Rust, MSVC 2022, .NET 8, Python 3.14, Node 25, Git, `hey`, `C:\workspace`, `:8080/health`) |
+| **`img-servercore-webdev-v1`** | `planned_baking` | `C:\HyperV\BaseImages\winserv2025-servercore-webdev.vhdx` | `~6–8 GB` (`64 GB`) | `img-os-ws2025-base` | **`:8093` $\rightarrow$ `:8080`** | `MXC-Bake-WebDev-Temp` | Headless Server Core WebDev & PostgreSQL image (Node LTS, TS, Next.js, React, Postgres 16) |
 | **`img-adpa-poc-v1`** | `poc_planned` | `F:\HyperV\BaseImages\winserv2025-adpa-poc.vhdx` | *Planned* (`64 GB`) | `img-os-ws2025-base` | **`:8091` $\rightarrow$ `:8080`** | `mxc-hv-0b1e0d7e` (PoC Target) | Dedicated **ADPA Proof-of-Concept** image with hardened egress rules & `baseline-hot-ready` snapshot |
 | **`img-sidpa-dev-v1`** | `in_development` | `F:\HyperV\BaseImages\winserv2025-sidpa-dev.vhdx` | *Planned* (`64 GB`) | `img-mxc-dev-v2.3` | **`:8092` $\rightarrow$ `:8080`** | *Pending Provision* | Dedicated **SIDPA Development & Integration** image |
 
@@ -30,10 +31,12 @@ flowchart TD
     MXC_DEV["img-mxc-dev-v2.3<br/>F:\HyperV\BaseImages\winserv2025-mxc-dev.vhdx (39.25 GB)<br/>Ingress Port :8090"]
     ADPA_POC["img-adpa-poc-v1<br/>F:\HyperV\BaseImages\winserv2025-adpa-poc.vhdx<br/>Ingress Port :8091 (PoC)"]
     SIDPA_DEV["img-sidpa-dev-v1<br/>F:\HyperV\BaseImages\winserv2025-sidpa-dev.vhdx<br/>Ingress Port :8092 (Dev)"]
+    WEBDEV["img-servercore-webdev-v1<br/>C:\HyperV\BaseImages\winserv2025-servercore-webdev.vhdx (~6-8 GB)<br/>(Node, TS, Next.js, Postgres)"]
 
     ISO_W11 --> W11
     WS2025 --> MXC_DEV
     WS2025 --> ADPA_POC
+    WS2025 --> WEBDEV
     MXC_DEV --> SIDPA_DEV
 ```
 

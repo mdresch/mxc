@@ -831,12 +831,18 @@ try:
     async def health_check(_request: Request) -> JSONResponse:
         return JSONResponse({"status": "ok", "active_sandbox": _ACTIVE_SESSION_SANDBOX})
 
+    @mcp.custom_route("/openapi.json", methods=["GET"])
+    async def openapi_spec(_request: Request) -> JSONResponse:
+        tools = await mcp.list_tools()
+        return JSONResponse({"status": "ok", "tools": [t.name for t in tools]})
+
     @mcp.custom_route("/call", methods=["POST"])
     async def direct_tool_call(request: Request) -> JSONResponse:
         try:
             body = await request.json()
             tool_name = body.get("name")
             tool_args = body.get("arguments", {})
+            print(f"[*] [MCP /call] {tool_name} with args: {tool_args}")
             res = await mcp.call_tool(tool_name, tool_args)
             content_list = []
             for c in (res.content if hasattr(res, "content") else []):
@@ -844,6 +850,10 @@ try:
                     content_list.append({"type": "text", "text": c.text})
             return JSONResponse({"content": content_list})
         except Exception as e:
+            import traceback
+            tool_name_str = body.get("name", "unknown") if "body" in locals() and isinstance(body, dict) else "unknown"
+            print(f"[!] [MCP /call Error] Tool '{tool_name_str}' failed: {e}")
+            traceback.print_exc()
             return JSONResponse(
                 {"content": [{"type": "text", "text": json.dumps({"error": str(e)})}]},
                 status_code=500,

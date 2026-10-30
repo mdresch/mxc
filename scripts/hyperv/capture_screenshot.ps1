@@ -25,7 +25,10 @@ if ($VmName -like "hv:*") {
     $token = $VmName.Substring(3).Trim()
     $VmName = "mxc-hv-$token"
 } elseif ($VmName -notlike "mxc-hv-*") {
-    $VmName = "mxc-hv-$VmName"
+    $directVm = Get-CimInstance -Namespace 'root\virtualization\v2' -ClassName Msvm_ComputerSystem | Where-Object ElementName -eq $VmName
+    if (-not $directVm) {
+        $VmName = "mxc-hv-$VmName"
+    }
 }
 
 $vm = Get-CimInstance -Namespace 'root\virtualization\v2' -ClassName Msvm_ComputerSystem | Where-Object ElementName -eq $VmName

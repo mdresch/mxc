@@ -291,4 +291,41 @@ The control plane keeps a watermark pool. States run `ColdProvisioned` → `Stan
 > **Future Horizon & Scaling Enhancement (ADR-006): AI-Driven Predictive Ingress Forecasting**  
 > `HYP-mxc-020`. A small on-host time-series model pre-warms a pool about 60 seconds before a predicted demand peak, with no manual schedule. Pre-warm today is an explicit pool command or a surge reaction under `HYP-mxc-014`. No forecast model is running. The hypothesis stays `Formulated`.
 
+---
+
+## ADR-008: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing
+
+* **Status**: Proposed
+* **Date**: October 2026
+* **Deciders**: Systems Architecture Team (pending review)
+
+### Context
+ADR-002's Connection-Buffering Ingress Gateway issues `pool_lease` on **any** inbound HTTPS request matched to a route's path — before any application-layer authentication occurs. The guest VM becomes `ActiveRunning` and begins executing before the gateway knows who, if anyone, is actually requesting access. Routing (FDD §2.1) is pool-scoped by path only (`/api/v1/adpa/*` → `pool:prod-adpa`), never by requester identity — every leased instance comes from the same fungible pool, and a released instance returns to that same shared pool rather than remaining associated with the user who leased it (ADR-005's differencing-disk rollback erases session state specifically to prevent any such binding, by design).
+
+This leaves two real, related gaps wherever the woken environment is meant to be a personalized desktop/application session rather than a stateless API backend: (1) no mechanism ties VM wake specifically to a credential-submission event, as distinct from mere connection arrival; (2) no mechanism lets a specific user's repeated sessions route to a dedicated VM identity, as distinct from the next available instance in a shared pool. Neither gap is covered by US-01 through US-05 (`USER_STORIES.md`) — all five assume path-routed, identity-agnostic leasing.
+
+### Decision
+Add an **Authentication-Gated Leasing** mode to the JIT Ingress Gateway (ADR-002), selectable per route, alongside the existing path-only matching:
+
+1. **Credential-Triggered Wake**: for a route configured `leasing_mode: "auth_gated"`, the gateway holds the inbound connection (identical buffering mechanism to ADR-002) but does **not** issue `pool_lease` on connection arrival. It terminates TLS, proxies the request to the organization's existing IdP (OIDC/SAML; MFA handled entirely by that IdP, never by MXC), and issues `pool_lease` only after a successful authentication assertion. A failed or abandoned login never wakes a VM — a real, measurable resource-efficiency property, not only a security one.
+2. **Identity-to-Pool-Target Resolution**: the authentication assertion's claims (group, role, tenant) resolve, via a configurable claims-to-pool-target mapping, to a target pool or golden-image variant — ADR-003's production-vs-developer image separation generalizes directly to more than two variants, selected by claim rather than hardcoded per route.
+3. **Two leasing strategies, named explicitly, never conflated**:
+   * **Pool-generic leasing** (the ADR-002 default, unchanged): next available instance from the resolved pool; on release, returns to that shared pool per ADR-005. Fits the existing US-01/US-02 stateless-processing scenarios.
+   * **Identity-bound leasing** (new): the control plane persists a durable `(authenticated_identity, pool_target) → VM instance id` mapping. A returning user's later authentication resolves to the *same* instance if it still exists in the pool (paused, not yet reaped past `StandbyPaused`), rather than an arbitrary one. This is the mode that lets per-user settings persist across sessions — pool-generic leasing cannot do this by design, since ADR-005 deliberately erases differencing-disk state on every release.
+4. **Timing budget stays inside the MFA latency users already tolerate**: the credential-gated Resume-VM step (≤300ms, ADR-004) happens *after* the IdP's own authentication round-trip completes, not before or in parallel in a way that adds a second, separately-perceived wait. Total added latency on top of a normal MFA login is the same ≤300ms Resume plus the existing ≈50ms health-probe handshake (ADR-002 §Mechanism step 5) — inside the multi-second budget users already experience for an MFA challenge.
+
+### Rationale
+* **Resource efficiency compounds correctly only if the trigger is real intent, not mere connection arrival.** ADR-002/ADR-004 already guarantee 0.0% idle CPU while paused; gating wake behind a *successful* authentication — rather than any TCP connection — means an anonymous scan, a bot, or an abandoned login page never wakes a VM at all, a strictly stronger property than connection-triggered wake alone provides.
+* **Identity-bound leasing is a genuinely different commitment from ADR-005's stateless rollback, and must be declared, not silently inferred.** A route operator must explicitly opt into `identity_bound` leasing, because it changes a real property ADR-005 otherwise guarantees unconditionally (full rollback to baseline on every release). Making this opt-in per route prevents a route that only needs pool-generic leasing from accidentally inheriting persistent per-user state it never asked for.
+* **MXC does not re-implement authentication or MFA.** Delegating credential validation entirely to the organization's existing IdP keeps this ADR's scope to *when* MXC wakes a VM and *which* VM it wakes, not *how* a user proves who they are — consistent with the existing guest-credential mechanism (`hyperv-state-aware.md`), which is for MXC's own internal automation and is unaffected by this decision.
+
+### Consequences
+* *Positive*: Enables genuine per-user VDI-style desktop/application provisioning on the existing scale-to-zero infrastructure, with no VM running — and no cost incurred — until a real, successfully authenticated user needs one. Added latency is bounded and lands inside the window users already tolerate for MFA, not a new, separately-perceived delay.
+* *Trade-off*: Identity-bound leasing requires a new durable mapping that must itself be reaped/expired on its own policy — an abandoned identity-bound VM cannot be silently returned to the shared pool the way a pool-generic one is, without first deciding how long to hold the binding. This ADR names that need; it does not set the expiry parameters, deferring to a follow-up FDD change.
+* *Trade-off*: A compromised or over-privileged IdP claim could now select a higher-privilege image variant (ADR-003) or rebind to another user's retained instance. The claims-to-pool-target mapping becomes a real, security-relevant configuration surface that did not exist when routing was purely path-based, and warrants the same review rigor as any other access-control configuration.
+
+> [!TIP]
+> **Future Horizon & Scaling Enhancement (ADR-008): Graceful Session Hand-Back for Identity-Bound Desktops**  
+> Extend identity-bound leasing with an explicit "disconnect, don't release" state distinct from both `ActiveRunning` and the existing `ReapingState` (ADR-006), so a user who closes their client without logging out can reconnect to the same paused instance within a configurable grace window before normal idle-timeout rollback applies — the VDI equivalent of session reconnect, layered on the existing Paused-state mechanism (ADR-004) rather than requiring a new suspend primitive.
+
 
