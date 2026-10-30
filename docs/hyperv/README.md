@@ -10,6 +10,7 @@ It features a **Just-in-Time (JIT) Scale-to-Zero** execution model: virtual mach
 
 | Document | Purpose | Target Audience |
 | :--- | :--- | :--- |
+| [**Spark Capture**](../project-docs/Spark-Capture.md) | Stage 1 record of the problem and the trigger, before design choices | Project owner, sponsors |
 | [**User & Operator Guide**](USER_GUIDE.md) | Step-by-step instructions for running pools, configuring the JIT Gateway, and developing inside guest sandboxes | Developers, DevOps & System Operators |
 | [**State-Aware Architecture**](hyperv-state-aware.md) | Deep-dive into the Rust control plane (`HypervRunner`), lifecycle phases, and transition locks | MXC Core Engineers |
 | [**Golden Image Registry**](GOLDEN_IMAGE_REGISTRY.md) | Inventory of base VHDX images, NVMe storage tiers, and snapshot baselines | Infrastructure Engineers |

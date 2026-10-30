@@ -1,0 +1,62 @@
+name: "Company Default Policy"
+description: "Company-level customization of PMBOK compliance standards"
+version: "1.0.0"
+parent_policy: "pmbok_standard"
+scoring_method: "weighted_average"
+confidence_method: "combined"
+iso_standards:
+  - "ISO 21500"
+  - "ISO 9001"  # Add company-specific standards as needed
+extensibility:
+  allow_custom_checks: true
+  allow_custom_criteria: true
+  allow_override_weights: true
+
+# Override criteria from parent policy
+criteria:
+  # You can override weights or add company-specific checks here
+  # Example: adjust weights to emphasize risk management
+  - code: "PROCESS_COMPLETENESS"
+    name: "Process Completeness"
+    description: "Validates that all required PMBOK process elements are present"
+    weight: 0.40  # Can adjust from 0.40 if needed
+    checks:
+      # Add company-specific checks here if allow_custom_checks is true
+      - code: "COMPLIANCE_GATE_APPROVAL"
+        description: "Verify artifact has passed internal compliance gate"
+        type: "semantic"
+        severity: "CRITICAL"
+        parameters:
+          requires_approval: true
+
+  - code: "QUALITY_STANDARDS"
+    name: "Quality Standards"
+    weight: 0.30
+    checks: []  # Inherit from parent, but can add company checks here
+
+  - code: "ALIGNMENT"
+    name: "Alignment & Mapping"
+    weight: 0.30
+    checks: []  # Inherit from parent
+
+# Add company-specific criteria
+  - code: "CORPORATE_GOVERNANCE"
+    name: "Corporate Governance"
+    description: "Track alignment with corporate governance and compliance requirements"
+    weight: 0.00  # Set to zero by default, override to enable
+    knowledge_areas:
+      - "Integration"
+    process_groups:
+      - "Initiating"
+      - "Planning"
+    checks:
+      - code: "COMPANY_STANDARDS_COMPLIANCE"
+        description: "Verify compliance with company standards"
+        type: "semantic"
+        severity: "WARNING"
+        parameters: {}
+      - code: "RISK_REGISTER_UPDATED"
+        description: "Verify company risk register is updated"
+        type: "content"
+        severity: "WARNING"
+        parameters: {}

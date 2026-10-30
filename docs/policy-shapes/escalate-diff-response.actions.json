@@ -1,0 +1,18 @@
+[
+  {
+    "id": "escalate_to_human",
+    "description": "Halts execution, blocks automated merging, and prompts a human maintainer for sign-off",
+    "parameters": {}
+  },
+  {
+    "id": "apply_with_notification",
+    "description": "Automatically applies the change, emits an immutable Episode audit record, and sends a notification",
+    "parameters": {}
+  },
+  {
+    "id": "apply_automatically",
+    "description": "Automatically applies the change and commits directly, with mandatory immutable Episode audit record emission",
+    "parameters": {}
+  }
+]
+

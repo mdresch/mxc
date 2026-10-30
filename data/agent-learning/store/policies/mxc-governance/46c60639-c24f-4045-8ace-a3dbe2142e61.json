@@ -1,0 +1,48 @@
+{
+  "id": "46c60639-c24f-4045-8ace-a3dbe2142e61",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-pmp",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_pmp",
+      "description": "The Project Management Plan soundly integrates the subsidiary management plans (Scope, Risk, Quality, Communications, Resource, etc.), establishes valid baselines, and defines clear governance rules -- approve it to authorize drafting ADRs, BRDs, FDDs, and User Stories",
+      "parameters": {}
+    },
+    {
+      "id": "reject_pmp",
+      "description": "The Project Management Plan has critical gaps, conflicting subsidiary plans, or ungrounded baseline assumptions -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The Project Management Plan requires reconciliation among subsidiary plans, clearer risk/quality thresholds, or unforced schedule/cost deferrals before authorization",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_pmp": 0.0,
+    "reject_pmp": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a drafted Project Management Plan and its integrated subsidiary plans, decide whether to approve it to authorize drafting technical requirements (ADR, BRD, FDD, Stories), reject it, or request revision before deciding",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:35:11.402023+00:00"
+}

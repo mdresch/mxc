@@ -1,0 +1,91 @@
+{
+  "playbook_id": "pb-standard-v7",
+  "name": "Standard AI-Guided Issue Resolution Playbook",
+  "version": "1.0.0",
+  "description": "Canonical V7 governance playbook for disciplined issue resolution with COSO assertions and mandatory RCA.",
+  "workflow_steps": [
+    {
+      "step": 1,
+      "segment": "Issue Identification & Severity Triage",
+      "required_fields": ["issue_id", "source", "severity", "urgency", "affected_process"],
+      "guidance": "Determine if this is a Risk (Possibility) or Issue (Materialized). Use severity triage: L=Optional, M=COSO Required, H=COSO+RCA Required, C=COSO+RCA+Decision Required."
+    },
+    {
+      "step": 2,
+      "segment": "Immediate Containment (Responsive)",
+      "required_fields": ["containment_actions", "containment_date"],
+      "guidance": "Isolate the problem. Stop the spread. Containment is NOT closure."
+    },
+    {
+      "step": 3,
+      "segment": "Originating Risk Maturity",
+      "required_fields": ["matured_from_risk_id"],
+      "guidance": "Establish the bridge between 'what could happen' and 'what is happening'. Trace to MATURED_FROM -> Risk."
+    },
+    {
+      "step": 4,
+      "segment": "COSO Assertion Block (Governance)",
+      "required_fields": ["objective_domain", "coso_component", "coso_principles", "control_assertion"],
+      "guidance": "Mandatory for Medium+. Define the control breakdown using the restricted list of 17 principles.",
+      "taxonomy": {
+        "objective_domain": ["operations", "reporting", "compliance"]
+      }
+    },
+    {
+      "step": 5,
+      "segment": "Root Cause Analysis (Mandatory)",
+      "required_fields": ["problem_statement", "symptoms", "root_cause", "rca_evidence_refs"],
+      "guidance": "Hard Gate. Determine WHY it happened. Distinguish root cause from symptoms. No closure without RCA."
+    },
+    {
+      "step": 6,
+      "segment": "Mitigation Strategy & Resolution Action Plan",
+      "required_fields": ["mitigation_strategy", "resolution_steps", "owner_ids"],
+      "guidance": "Select strategy class: Corrective, Preventive, or Compensating. Assign owners and due dates."
+    },
+    {
+      "step": 7,
+      "segment": "Compliance & Operational Governance Checkpoint",
+      "required_fields": ["regulatory_impact", "ethics_override_required"],
+      "guidance": "Formal review of resolution against ISO/IEC 23894 and NIST AI RMF."
+    },
+    {
+      "step": 8,
+      "segment": "Escalation & SLA Monitoring",
+      "required_fields": ["escalation_trail"],
+      "guidance": "48h without RCA triggers auto-escalation and closure block. LOG ALL EVENTS."
+    },
+    {
+      "step": 9,
+      "segment": "Resolution Recommendation (Synthesis)",
+      "required_fields": ["recommended_path", "rationale"],
+      "guidance": "Prepare the analytical case for the chosen fix."
+    },
+    {
+      "step": 10,
+      "segment": "Formal Adoption (Human-Accountable DECIDED_BY)",
+      "required_fields": ["decider_stakeholder_id", "decision_date"],
+      "guidance": "Mandatory for high/critical. Re-establish human accountability for the control restoration."
+    },
+    {
+      "step": 11,
+      "segment": "De-escalation & Restoration Verification",
+      "required_fields": ["control_restoration_status", "verification_evidence"],
+      "guidance": "No de-escalation without evidence of control restoration. Verify containment and corrective action."
+    },
+    {
+      "step": 12,
+      "segment": "Closure, Lessons Learned & Prevention",
+      "required_fields": ["closure_evidence", "preventive_action_id"],
+      "guidance": "Final closure. Update Risk Register. Prevent recurrence."
+    }
+  ],
+  "governance_rules": [
+    "Rule 1: No Medium+ closure without RCA.",
+    "Rule 2: No Medium+ closure without COSO mapping.",
+    "Rule 3: No high/critical resolution path adoption without DECIDED_BY.",
+    "Rule 4: Containment is not closure.",
+    "Rule 5: 48h open without RCA = Mandatory Escalation + Closure Block.",
+    "Rule 6: No de-escalation without evidence of control restoration."
+  ]
+}

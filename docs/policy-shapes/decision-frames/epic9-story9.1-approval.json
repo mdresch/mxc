@@ -1,0 +1,107 @@
+{
+  "task": "Epic 9 (Intent Refinement and Cognitive Feedback Loop - Stories 9.1, 9.2, 9.3): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "code_shaped_testable",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Acceptance criteria AC0 through AC11 are real, contract-testable assertions with explicit mathematical and structural invariants"
+    },
+    {
+      "id": "traceable_to_fdd_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories trace directly to FDD-009 contracts, BRD-009 business rules, and ADR-009 double-loop cybernetic feedback"
+    },
+    {
+      "id": "scope_correctly_bounded",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Tactical sprint adaptations, autonomous unaligned drift, and bespoke database schemas are correctly excluded"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "code_shaped_testable",
+          "source": "epic_9_stories_ac0_through_ac11_concrete_and_testable",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "epic_9_header_and_body_trace_to_adr_009_brd_009_fdd_009",
+          "support": 0.96,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "scope_correctly_bounded",
+          "source": "epic_9_out_of_scope_boundary_preserves_adr_001_and_adr_002",
+          "support": 0.95,
+          "confidence": 0.90
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "code_shaped_testable",
+          "source": "epic_9_stories_ac0_through_ac11_concrete_and_testable",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "epic_9_header_and_body_trace_to_adr_009_brd_009_fdd_009",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "scope_correctly_bounded",
+          "source": "epic_9_out_of_scope_boundary_preserves_adr_001_and_adr_002",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "code_shaped_testable",
+          "source": "epic_9_stories_ac0_through_ac11_concrete_and_testable",
+          "support": 0.08,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "epic_9_header_and_body_trace_to_adr_009_brd_009_fdd_009",
+          "support": 0.08,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "scope_correctly_bounded",
+          "source": "epic_9_out_of_scope_boundary_preserves_adr_001_and_adr_002",
+          "support": 0.09,
+          "confidence": 0.78
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

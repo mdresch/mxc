@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_charter",
+    "description": "The Project Charter establishes clear strategic purpose, sponsor authority, measurable objectives aligned with benefits, and realistic scope boundaries -- approve it to proceed to project execution and subsidiary planning",
+    "parameters": {}
+  },
+  {
+    "id": "reject_charter",
+    "description": "The Project Charter has fundamental flaws in authority, objectives, or scope alignment that cannot be reconciled -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Project Charter requires clarification of measurable objectives, sponsor boundaries, or premature subsidiary commitments before a final decision can be made",
+    "parameters": {}
+  }
+]

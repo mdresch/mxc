@@ -1,0 +1,66 @@
+{
+  "id": "73e63626-d465-4bca-9fc4-1f2a2dd6eb8f",
+  "agent_id": "agent-learning-governance",
+  "task_id": "classify-hypothesis-status",
+  "version": 0,
+  "actions": [
+    {
+      "id": "advance_to_testing",
+      "description": "The hypothesis has a real, actionable test plan now -- move it from Formulated to Testing",
+      "parameters": {}
+    },
+    {
+      "id": "mark_validated",
+      "description": "Real evidence confirms this hypothesis -- mark it Validated",
+      "parameters": {}
+    },
+    {
+      "id": "mark_invalidated",
+      "description": "Real evidence contradicts this hypothesis -- mark it Invalidated",
+      "parameters": {}
+    },
+    {
+      "id": "mark_inconclusive",
+      "description": "Real evidence exists but does not clearly confirm or contradict the hypothesis -- mark it Inconclusive",
+      "parameters": {}
+    },
+    {
+      "id": "remain_formulated_blocked",
+      "description": "No real test has happened yet, or a named prerequisite blocks testing -- the hypothesis stays Formulated/Blocked",
+      "parameters": {}
+    },
+    {
+      "id": "flag_for_human_review",
+      "description": "Whether this hypothesis's current evidence actually supports any of the above is ambiguous enough that a human should decide directly",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "advance_to_testing": 0.0,
+    "mark_validated": 0.0,
+    "mark_invalidated": 0.0,
+    "mark_inconclusive": 0.0,
+    "remain_formulated_blocked": 0.0,
+    "flag_for_human_review": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a Hypothesis with a real test outcome, decide its status -- literally shared agent_id/task_id across agent-learning and SocialEngage, not re-namespaced per project",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T06:48:17.596865+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "intent_ambiguity": "low",
+  "context_variability": "variable",
+  "outcome_observability": "direct",
+  "decision_impact": "high",
+  "reversibility": "reversible",
+  "requires_human_approval": true,
+  "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+}

@@ -1,0 +1,5 @@
+[
+  {"id": "approve_user_stories", "description": "The user stories are code-shaped with real, testable acceptance criteria, correctly distinguish code-shaped stories from documentation-only items rather than forcing everything into a Story template, and are traceable to their BRD/FDD/ADR -- approve them", "parameters": {}},
+  {"id": "reject_user_stories", "description": "The user stories have a fundamental, unfixed flaw -- e.g. acceptance criteria that cannot actually be contract-tested, or a story forced into a shape the underlying work does not have -- reject them outright", "parameters": {}},
+  {"id": "request_revision_before_decision", "description": "The user stories need a real change before they can be judged -- distinct from a named, deliberately out-of-scope follow-on item already scoped correctly", "parameters": {}}
+]

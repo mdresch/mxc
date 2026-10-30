@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_intent_refinement",
+    "description": "The Intent Refinement proposal synthesizes empirical outcomes and adaptation lessons to update strategic intent, closing the cognitive loop -- approve it to guide future project cycles",
+    "parameters": {}
+  },
+  {
+    "id": "reject_intent_refinement",
+    "description": "The Intent Refinement proposal misattributes empirical findings, attempts ungrounded strategic pivot, or contradicts proven architectural baselines -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Intent Refinement proposal requires deeper empirical justification or clearer traceability to observed outcomes before updating top-of-chain intent",
+    "parameters": {}
+  }
+]

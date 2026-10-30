@@ -1,0 +1,38 @@
+[
+  {
+    "id": "new_superseding_adr",
+    "description": "Alters core architecture, principles, or system topology; mandates drafting a full superseding ADR",
+    "parameters": {}
+  },
+  {
+    "id": "amendment_log_entry",
+    "description": "Updates operational parameters, timeouts, or thresholds while preserving core architectural intent",
+    "parameters": {}
+  },
+  {
+    "id": "correction_note",
+    "description": "Errata, broken citations, typographical errors, or non-semantic formatting fixes",
+    "parameters": {}
+  },
+  {
+    "id": "clarification_section",
+    "description": "Additional explanatory prose or diagrams resolving ambiguity without altering decision boundary",
+    "parameters": {}
+  },
+  {
+    "id": "provenance_note",
+    "description": "Lineage, authorship, or upstream specification references updated",
+    "parameters": {}
+  },
+  {
+    "id": "pending_supersession_note",
+    "description": "Marks active artifact indicating replacement is currently drafted; permanently frozen from autonomy",
+    "parameters": {}
+  },
+  {
+    "id": "supersession_update",
+    "description": "Marks older artifact superseded once replacement is formally accepted; permanently frozen from autonomy",
+    "parameters": {}
+  }
+]
+

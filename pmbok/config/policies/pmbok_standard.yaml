@@ -1,0 +1,125 @@
+name: "PMBOK Standard"
+description: "Standard PMBOK compliance baseline for artifact validation"
+version: "1.0.0"
+scoring_method: "weighted_average"
+confidence_method: "combined"
+iso_standards:
+  - "ISO 21500"
+extensibility:
+  allow_custom_checks: true
+  allow_custom_criteria: true
+  allow_override_weights: true
+
+criteria:
+  # Process Completeness (40% weight)
+  - code: "PROCESS_COMPLETENESS"
+    name: "Process Completeness"
+    description: "Validates that all required PMBOK process elements are present in the artifact"
+    weight: 0.40
+    knowledge_areas:
+      - "Integration"
+      - "Scope"
+      - "Schedule"
+      - "Cost"
+      - "Quality"
+      - "Resource"
+      - "Communications"
+      - "Risk"
+      - "Procurement"
+      - "Stakeholder"
+    process_groups:
+      - "Initiating"
+      - "Planning"
+      - "Executing"
+      - "Monitoring and Controlling"
+      - "Closing"
+    checks:
+      - code: "REQUIRED_INPUTS_PRESENT"
+        description: "Verify all required inputs are present in artifact"
+        type: "schema"
+        severity: "CRITICAL"
+        parameters:
+          required_fields:
+            - "content"
+            - "process_id"
+      - code: "OUTPUTS_DOCUMENTED"
+        description: "Verify process outputs are properly documented"
+        type: "content"
+        severity: "WARNING"
+        parameters: {}
+      - code: "STAKEHOLDER_CONSIDERATIONS"
+        description: "Verify stakeholder considerations are documented"
+        type: "content"
+        severity: "WARNING"
+        parameters: {}
+
+  # Quality Standards (30% weight)
+  - code: "QUALITY_STANDARDS"
+    name: "Quality Standards"
+    description: "Validates clarity, consistency, and completeness of artifact content"
+    weight: 0.30
+    knowledge_areas:
+      - "Quality"
+    process_groups:
+      - "Planning"
+      - "Executing"
+      - "Monitoring and Controlling"
+    checks:
+      - code: "NO_PLACEHOLDER_TEXT"
+        description: "Verify no placeholder text remains in artifact"
+        type: "content"
+        severity: "WARNING"
+        parameters:
+          no_placeholder_text: true
+      - code: "FIELD_MIN_LENGTH"
+        description: "Verify text fields meet minimum length requirements"
+        type: "content"
+        severity: "INFO"
+        parameters:
+          min_field_length: 3
+      - code: "LOGICAL_CONSISTENCY"
+        description: "Verify logical consistency across artifact fields"
+        type: "semantic"
+        severity: "WARNING"
+        parameters: {}
+      - code: "FORMATTING_COMPLIANCE"
+        description: "Verify artifact follows standard formatting guidelines"
+        type: "format"
+        severity: "INFO"
+        parameters: {}
+
+  # Alignment & Mapping (30% weight)
+  - code: "ALIGNMENT"
+    name: "Alignment & Mapping"
+    description: "Validates proper alignment with PMBOK standards, knowledge areas, and process groups"
+    weight: 0.30
+    knowledge_areas:
+      - "Integration"
+    process_groups:
+      - "Initiating"
+      - "Planning"
+      - "Executing"
+      - "Monitoring and Controlling"
+      - "Closing"
+    checks:
+      - code: "VALID_PMBOK_PROCESS"
+        description: "Verify process ID is valid PMBOK process"
+        type: "semantic"
+        severity: "WARNING"
+        parameters:
+          valid_pmbok_process: true
+      - code: "PROCESS_GROUP_ALIGNMENT"
+        description: "Verify artifact aligns with appropriate process group"
+        type: "semantic"
+        severity: "INFO"
+        parameters: {}
+      - code: "KNOWLEDGE_AREA_MAPPING"
+        description: "Verify proper knowledge area mapping"
+        type: "semantic"
+        severity: "INFO"
+        parameters: {}
+      - code: "DEPENDENCY_SATISFACTION"
+        description: "Verify all process dependencies are satisfied"
+        type: "semantic"
+        severity: "WARNING"
+        parameters: {}

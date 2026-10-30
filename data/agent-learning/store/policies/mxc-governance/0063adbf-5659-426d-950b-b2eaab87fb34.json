@@ -1,0 +1,48 @@
+{
+  "id": "0063adbf-5659-426d-950b-b2eaab87fb34",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-adr",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_adr",
+      "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+      "parameters": {}
+    },
+    {
+      "id": "reject_adr",
+      "description": "The ADR has a fundamental, unfixed flaw in its own decision or reasoning -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The ADR's own decision or reasoning needs a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the ADR itself already scoped correctly",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_adr": 0.0,
+    "reject_adr": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a drafted ADR, decide whether to approve it, reject it, or request revision before deciding -- shape independently converged by ADPA and SocialEngage",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T06:48:19.522651+00:00"
+}

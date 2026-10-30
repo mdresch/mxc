@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_business_case",
+    "description": "The Business Case establishes a grounded value premise tied to hypotheses, credible ROI/benefit expectations, realistic risk assessments, and sound business alternatives -- approve it to authorize project chartering",
+    "parameters": {}
+  },
+  {
+    "id": "reject_business_case",
+    "description": "The Business Case fails to justify investment, presents unviable economics or unsubstantiated value premises -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Business Case requires further financial justification, risk quantification, or clearer hypothesis-to-benefit linkage before it can be judged",
+    "parameters": {}
+  }
+]

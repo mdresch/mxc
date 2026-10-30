@@ -1,0 +1,316 @@
+﻿{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-ideation",
+  "policy_id": "dcdf7865-7d06-40cd-b282-18c01c3aaed0",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "reason": "The policy requires human approval; accept or reject the reasoned recommendation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_ideation",
+    "description": "The Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Charter and Business Case",
+    "parameters": {}
+  },
+  "candidate_actions": [
+    {
+      "id": "approve_ideation",
+      "description": "The Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Charter and Business Case",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_ideation",
+        "description": "The Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Charter and Business Case",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "strategic_motivation",
+          "support": 0.9841976792752518,
+          "entropy_bits": 0.11717350174206034,
+          "disagreement_bits": 0.0008826454530804217,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "problem_definition",
+          "support": 0.9780278279542932,
+          "entropy_bits": 0.15237496510537904,
+          "disagreement_bits": 0.0017331658105317893,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "support": 0.9488357938536444,
+          "entropy_bits": 0.2913219869421677,
+          "disagreement_bits": 0.0012394117092527912,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "support": 0.9656494755378553,
+          "entropy_bits": 0.21576085659823796,
+          "disagreement_bits": 0.0006382237424115145,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9691776941552612,
+      "uncertainty": 0.19415782759696126,
+      "robust_utility": 0.9497619113955651,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_ideation",
+        "description": "The Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "strategic_motivation",
+          "support": 0.010752890822356415,
+          "entropy_bits": 0.0857440045345925,
+          "disagreement_bits": 0.001112014082212287,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "problem_definition",
+          "support": 0.00845987220940738,
+          "entropy_bits": 0.07040071876665349,
+          "disagreement_bits": 0.0012854826696456767,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "support": 0.018120039009725114,
+          "entropy_bits": 0.13075084299826378,
+          "disagreement_bits": 0.00023176291908849622,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "support": 0.01007495800258903,
+          "entropy_bits": 0.08128965083774958,
+          "disagreement_bits": 0.0002966777475269522,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.011851940011019486,
+      "uncertainty": 0.09204630428431484,
+      "robust_utility": 0.002647309582588001,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_ideation"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "strategic_motivation",
+          "support": 0.03787727418416547,
+          "entropy_bits": 0.2324734515225174,
+          "disagreement_bits": 0.0006380943633355063,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "problem_definition",
+          "support": 0.05299328219751706,
+          "entropy_bits": 0.2989786357161085,
+          "disagreement_bits": 0.00013767504519091034,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "support": 0.20982139820055817,
+          "entropy_bits": 0.7411412104150308,
+          "disagreement_bits": 0.0030327824507654366,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "support": 0.06514317413014221,
+          "entropy_bits": 0.34753175777474926,
+          "disagreement_bits": 0.0005109988620835004,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.09145878217809573,
+      "uncertainty": 0.4050312638571015,
+      "robust_utility": 0.05095565579238558,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_ideation"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": null,
+  "action_probabilities": {
+    "approve_ideation": 0.3333333333333333,
+    "reject_ideation": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_context": "Given a Spark Capture / Ideation Document, decide whether to approve it to proceed to Charter and Business Case, reject it, or request revision before deciding -- validating Stage 1 Intent",
+  "decision_authority": "full",
+  "selection_mode": "reasoned",
+  "selected_action_feedback": {
+    "attempts": 0,
+    "correctness_evaluated": 0,
+    "correct": 0,
+    "correctness_rate": null,
+    "rewarded_episodes": 0,
+    "mean_reward": null,
+    "recent_outcomes": []
+  },
+  "historical_feedback": {
+    "episodes_reviewed": 0,
+    "actions": {
+      "approve_ideation": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "reject_ideation": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "request_revision_before_decision": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      }
+    }
+  },
+  "autonomy": {
+    "eligible": false,
+    "authorization_basis": "none",
+    "decision_authority": "full",
+    "mode": "supervised",
+    "execute_without_confirmation": false,
+    "request_user_feedback": true,
+    "observable_outcome_satisfies_feedback": false,
+    "feedback_reason": "human_approval_required",
+    "outcome_recording": "user_feedback",
+    "complexity": {
+      "tier": "standard",
+      "score": 4,
+      "intent_score": 1,
+      "decision_score": 3,
+      "action_count": 3,
+      "action_space_points": 1,
+      "profile_source": "configured",
+      "profile": {
+        "intent_ambiguity": "low",
+        "context_variability": "variable",
+        "outcome_observability": "direct",
+        "decision_impact": "high",
+        "reversibility": "reversible",
+        "requires_human_approval": true,
+        "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+      },
+      "risk_floors": []
+    },
+    "learned_policy_assessment": {
+      "eligible": false,
+      "authorization_basis": "none",
+      "user_feedback_status": null,
+      "user_feedback_episode_id": null,
+      "recommended_action_id": "approve_ideation",
+      "scored_outcomes": 0,
+      "correctness_evaluated": 0,
+      "correct_outcomes": 0,
+      "correctness_rate": null,
+      "correctness_lower_bound": 0.0,
+      "mean_reward": null,
+      "action_probability": 0.3333333333333333,
+      "probability_margin": 0.0,
+      "stable_snapshots": 0,
+      "audit_rate": 0.1,
+      "complexity": {
+        "tier": "standard",
+        "score": 4,
+        "intent_score": 1,
+        "decision_score": 3,
+        "action_count": 3,
+        "action_space_points": 1,
+        "profile_source": "configured",
+        "profile": {
+          "intent_ambiguity": "low",
+          "context_variability": "variable",
+          "outcome_observability": "direct",
+          "decision_impact": "high",
+          "reversibility": "reversible",
+          "requires_human_approval": true,
+          "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+        },
+        "risk_floors": []
+      },
+      "criteria": {
+        "minimum_outcomes": {
+          "actual": 0,
+          "required": 20,
+          "met": false
+        },
+        "correctness_lower_bound": {
+          "actual": 0.0,
+          "required": 0.9,
+          "wilson_z": 1.96,
+          "met": false
+        },
+        "positive_mean_reward": {
+          "actual": null,
+          "required_greater_than": 0.0,
+          "met": false
+        },
+        "action_probability": {
+          "actual": 0.3333333333333333,
+          "required": 0.6,
+          "met": false
+        },
+        "probability_margin": {
+          "actual": 0.0,
+          "required": 0.15,
+          "met": false
+        },
+        "stable_snapshots": {
+          "actual": 0,
+          "required": 3,
+          "met": false
+        },
+        "human_approval_not_required": {
+          "actual": true,
+          "required": false,
+          "met": false
+        },
+        "latest_user_feedback_not_rejected": {
+          "actual": null,
+          "required_not": "rejected",
+          "met": true
+        }
+      }
+    }
+  }
+}

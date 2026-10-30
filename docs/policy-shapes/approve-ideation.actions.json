@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_ideation",
+    "description": "The Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Charter and Business Case",
+    "parameters": {}
+  },
+  {
+    "id": "reject_ideation",
+    "description": "The Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+    "parameters": {}
+  }
+]

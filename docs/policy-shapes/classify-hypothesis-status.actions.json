@@ -1,0 +1,8 @@
+[
+  {"id": "advance_to_testing", "description": "The hypothesis has a real, actionable test plan now -- move it from Formulated to Testing", "parameters": {}},
+  {"id": "mark_validated", "description": "Real evidence confirms this hypothesis -- mark it Validated", "parameters": {}},
+  {"id": "mark_invalidated", "description": "Real evidence contradicts this hypothesis -- mark it Invalidated", "parameters": {}},
+  {"id": "mark_inconclusive", "description": "Real evidence exists but does not clearly confirm or contradict the hypothesis -- mark it Inconclusive", "parameters": {}},
+  {"id": "remain_formulated_blocked", "description": "No real test has happened yet, or a named prerequisite blocks testing -- the hypothesis stays Formulated/Blocked", "parameters": {}},
+  {"id": "flag_for_human_review", "description": "Whether this hypothesis's current evidence actually supports any of the above is ambiguous enough that a human should decide directly", "parameters": {}}
+]
