@@ -1,0 +1,17 @@
+---
+description: Rust test, coverage, and regression checks for MXC changes
+globs: "**/*.rs"
+alwaysApply: false
+---
+
+# Rust validation
+
+Run Rust commands from `src/`. Before a Rust change is done, run `scripts/validate-rust.sh` or `scripts/validate-rust.ps1`. That is `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, and `cargo test --workspace`.
+
+`cargo test` is the regression check. A failed assertion exits non-zero. Filter while iterating (`cargo test -p mxc-sdk --lib -- <name>`), then run the workspace suite so a failure outside that filter is caught. The GitHub Actions build jobs run `cargo test --locked` and fail the pull request on a non-zero exit.
+
+A story contract is one `#[test]` per acceptance criterion, in `#[cfg(test)]` next to the code or in `src/mxc-sdk/tests/`. The comment names the story and the ADR. The test fails before the implementation and passes after it.
+
+Line coverage is `cargo llvm-cov --workspace --fail-under-lines 100` (`scripts/validate-rust.sh --coverage`). Use that floor for a new crate or a story module that can meet it. Do not lower the floor to make an existing crate pass. `cargo test` does not measure coverage.
+
+The full rules are in `.github/instructions/rust.instructions.md`.
