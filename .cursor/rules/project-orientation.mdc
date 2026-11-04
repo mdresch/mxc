@@ -1,0 +1,12 @@
+---
+description: Read the project status register for the active phase, stage, and epic
+alwaysApply: true
+---
+
+# Project orientation
+
+The active phase, macro stage, and epic are in `docs/registers/Project-Status-Register.md`. Read §1 before starting work and overwrite that section at every natural pause.
+
+Do not re-audit every story to answer which phase, stage, or epic is active. Per-story steps belong in `Story-Execution-Register.md`. An epic or ADR `lifecycle_stage` frontmatter value is the label from when that document was written, not the project stage.
+
+Out-of-loop code goes in the register's "Open side-thread" cell. Do not invent an epic or story to match it.

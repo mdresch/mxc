@@ -1,5 +1,7 @@
 # ADR and story audit
 
+The running answer to "which phase, stage, and epic is active" is [`docs/registers/Project-Status-Register.md`](../registers/Project-Status-Register.md). This file is the 4 Nov 2026 evidence behind that snapshot. Do not re-audit every story to refresh orientation. Update the register in place, and use `Story-Execution-Register.md` for per-story steps.
+
 Judged against the SIDPA `implement-story` skill, not against the Hyper-V implementation plan's own completion marks.
 
 | Item | Value |

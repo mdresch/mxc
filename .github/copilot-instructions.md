@@ -2,6 +2,10 @@
 
 MXC (Microsoft eXecution Container) is a cross-platform sandboxed code execution system. Prefer precise, scoped changes and preserve existing platform behavior, feature gates, wire compatibility, and failure semantics.
 
+## Where the project is
+
+Read [`docs/registers/Project-Status-Register.md`](../docs/registers/Project-Status-Register.md) for the active phase, macro stage, and epic. Update §1 of that register at every natural pause. Story step detail belongs in `Story-Execution-Register.md`. Do not re-audit every story to answer which phase, stage, or epic is active. Epic `lifecycle_stage` frontmatter is the authoring-time label, not the project stage.
+
 ## Before changing code
 
 - Read the documentation for the affected subsystem. Start with the references below rather than inferring behavior from names.
