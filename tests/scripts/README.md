@@ -140,6 +140,8 @@ cd src
 cargo test --workspace       # Rust unit tests
 ```
 
+`scripts/validate-rust.ps1` (and `scripts/validate-rust.sh`) runs `cargo fmt`, `cargo clippy -D warnings`, and `cargo test --workspace`. Pass `-Coverage` to also run `cargo llvm-cov --fail-under-lines 100`. The Rust rules for story contracts are in [`.github/instructions/rust.instructions.md`](../../.github/instructions/rust.instructions.md).
+
 ### Unix PTY SDK integration tests
 
 The caller-controlled PTY contract is directly runnable on a matching host:

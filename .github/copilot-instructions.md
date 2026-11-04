@@ -56,12 +56,20 @@ build and CI entry points.
 ### Targeted validation
 
 ```text
-# From src/
+# From src/ — required before a Rust change is done.
+# scripts/validate-rust.sh and scripts/validate-rust.ps1 run these three.
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 cargo test -p mxc-sdk --lib
 cargo test -p mxc-sdk --lib -- config_parser
+
+# Line coverage (cargo install cargo-llvm-cov). 100 is the floor for a new
+# crate or a story module that can meet it. cargo test does not measure this.
+cargo llvm-cov --workspace --fail-under-lines 100
+
+# Rerun on save (cargo install cargo-watch)
+cargo watch -c -x "test --workspace"
 
 # From sdk/node/
 npm test
@@ -71,7 +79,7 @@ npm run test:integration
 dotnet test --solution Microsoft.Mxc.Sdk.slnx
 ```
 
-Prefer the smallest test command covering the change. Host-dependent backend suites live under `tests/scripts/`; use the applicable backend guide and `docs/development/build-and-test/ci-validation-infrastructure.md` before running or changing them.
+Rust story contracts are `#[test]` functions under `src/`, one per acceptance criterion, with a comment naming the story and ADR. They are not Node `tests/contracts/*.test.js` files. Prefer the smallest test command while iterating, then run `cargo test --workspace` so a regression outside that filter fails before the change is done. The build jobs already fail the pull request when `cargo test --locked` exits non-zero. Host-dependent backend suites live under `tests/scripts/`; use the applicable backend guide and `docs/development/build-and-test/ci-validation-infrastructure.md` before running or changing them. The full Rust rules are in [`.github/instructions/rust.instructions.md`](./instructions/rust.instructions.md).
 
 ## Schema and policy rules
 

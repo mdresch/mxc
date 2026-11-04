@@ -17,7 +17,7 @@ From the skill's own "Definition of done" and the mandatory loop (steps 0–9). 
 2. Step 0: a fresh worktree on `feat/story-<X.Y>` from the confirmed base branch. An existing story branch is resumed with `heal-contract-failure`, not re-implemented.
 3. Step 1: story Status is Ready (never Blocked); ADR, BRD, and FDD are read; named data paths are tracked in git.
 4. Step 2: intent, file scope, contract paraphrase, and explicit out-of-scope are stated.
-5. Step 3: one contract test per acceptance criterion, header comment naming the story and ADR, observed failing (RED) before implementation. Rust (`cargo test`) and C# are unevidenced in the methodology; the first MXC story must confirm the runner, fixture path, and worktree provisioning, then correct this project's copy of the skill. The template CLI looks for `tests/contracts/*.test.js` and `node --test`. That path is a template default, not this repo's convention.
+5. Step 3: one contract test per acceptance criterion, header comment naming the story and ADR, observed failing (RED) before implementation. For Rust in this repo the runner is confirmed: `cargo test` from `src/`, tests in `#[cfg(test)]` beside the code or under `src/mxc-sdk/tests/`. The commands, the `cargo llvm-cov --fail-under-lines 100` floor for a new crate or a story module that can meet it, and `scripts/validate-rust.sh` / `scripts/validate-rust.ps1` are recorded in [`.github/instructions/rust.instructions.md`](../../.github/instructions/rust.instructions.md). The template CLI looks for `tests/contracts/*.test.js` and `node --test`. That path is for Node story contracts, not for these Rust stories. Node SDK work still uses `npm test`. .NET still uses `dotnet test`.
 6. Step 4: a component `SKILL.md` naming governing ADRs, contract files, and constraints.
 7. Step 5: minimal implementation that turns the contract green.
 8. Step 6: that contract, then the whole accumulated contract suite in every language the project uses.
@@ -67,7 +67,7 @@ BDR/FDD requirements in the numbered packs all have a story. REQ-BDR-01 maps to 
 
 Suggested order follows the ADR dependency notes. Each row is still "not started" under the skill. "Code already present" means a later `implement-story` run must re-walk that code with `heal-contract-failure` if a `feat/story-*` branch is cut on top of it: show the new contract RED before trusting the existing code.
 
-Install the skill into this repo's `.claude/skills/` and instantiate `Project-Status-Register.md` before story 1.1, as the skill requires. Confirm the base branch first: story worktrees belong on `feat/hyperv-v2-rebased`, because `main` has none of this backend. Confirm contract location on story 1.1 (`cargo test` in the Hyper-V crate, plus any PowerShell/Python contract the AC actually needs). The template's `tests/contracts/*.test.js` runner is unevidenced for this repo.
+Install the skill into this repo's `.claude/skills/` and instantiate `Project-Status-Register.md` before story 1.1, as the skill requires. Story worktrees belong on `feat/hyperv-v2-rebased`, because `main` has none of this backend. Rust contracts use `cargo test` as recorded in `.github/instructions/rust.instructions.md`. Run `scripts/validate-rust.sh` or `scripts/validate-rust.ps1` before the story pull request. A PowerShell or Python check is added only when the acceptance criterion cannot be asserted from Rust.
 
 | Order | Story | Depends on | Why this position |
 |---|---|---|---|
