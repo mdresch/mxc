@@ -295,9 +295,11 @@ The control plane keeps a watermark pool. States run `ColdProvisioned` → `Stan
 
 ## ADR-008: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing
 
-* **Status**: Proposed
+* **Status**: Accepted
 * **Date**: October 2026
-* **Deciders**: Systems Architecture Team (pending review)
+* **Deciders**: Systems Architecture Team
+* **Topic pillar**: `TP-02` Ingress
+* **Also**: `TP-05` when a route selects identity-bound leasing. Path-only leasing, `HYP-mxc-008`, and `BEN-06` stay with `ADR-002`. No spark row, hypothesis id, or benefit id states this decision.
 
 ### Context
 ADR-002's Connection-Buffering Ingress Gateway issues `pool_lease` on **any** inbound HTTPS request matched to a route's path — before any application-layer authentication occurs. The guest VM becomes `ActiveRunning` and begins executing before the gateway knows who, if anyone, is actually requesting access. Routing (FDD §2.1) is pool-scoped by path only (`/api/v1/adpa/*` → `pool:prod-adpa`), never by requester identity — every leased instance comes from the same fungible pool, and a released instance returns to that same shared pool rather than remaining associated with the user who leased it (ADR-005's differencing-disk rollback erases session state specifically to prevent any such binding, by design).
@@ -319,10 +321,27 @@ Add an **Authentication-Gated Leasing** mode to the JIT Ingress Gateway (ADR-002
 * **Identity-bound leasing is a genuinely different commitment from ADR-005's stateless rollback, and must be declared, not silently inferred.** A route operator must explicitly opt into `identity_bound` leasing, because it changes a real property ADR-005 otherwise guarantees unconditionally (full rollback to baseline on every release). Making this opt-in per route prevents a route that only needs pool-generic leasing from accidentally inheriting persistent per-user state it never asked for.
 * **MXC does not re-implement authentication or MFA.** Delegating credential validation entirely to the organization's existing IdP keeps this ADR's scope to *when* MXC wakes a VM and *which* VM it wakes, not *how* a user proves who they are — consistent with the existing guest-credential mechanism (`hyperv-state-aware.md`), which is for MXC's own internal automation and is unaffected by this decision.
 
+### Alternatives Considered
+
+| Alternative | Reason for rejection |
+|---|---|
+| Keep path-only wake, then authenticate inside the already-running guest | Rejected for routes that need a person rather than a path. The guest would be `ActiveRunning` before the gateway knows who asked. This remains the `ADR-002` default for stateless API routes. |
+| Identity-bind every release | Rejected. It would silently remove `ADR-005`'s unconditional rollback. Binding is opt-in. |
+| MXC implements OIDC, SAML, or MFA | Rejected. The organization's identity provider already does that. |
+
 ### Consequences
 * *Positive*: Enables genuine per-user VDI-style desktop/application provisioning on the existing scale-to-zero infrastructure, with no VM running — and no cost incurred — until a real, successfully authenticated user needs one. Added latency is bounded and lands inside the window users already tolerate for MFA, not a new, separately-perceived delay.
 * *Trade-off*: Identity-bound leasing requires a new durable mapping that must itself be reaped/expired on its own policy — an abandoned identity-bound VM cannot be silently returned to the shared pool the way a pool-generic one is, without first deciding how long to hold the binding. This ADR names that need; it does not set the expiry parameters, deferring to a follow-up FDD change.
 * *Trade-off*: A compromised or over-privileged IdP claim could now select a higher-privilege image variant (ADR-003) or rebind to another user's retained instance. The claims-to-pool-target mapping becomes a real, security-relevant configuration surface that did not exist when routing was purely path-based, and warrants the same review rigor as any other access-control configuration.
+
+### Project details carried in
+
+| Source | Item | Detail | Pillar | Also |
+|---|---|---|---|---|
+| Architecture suite | ADR-002 boundary | Path-only `pool_lease` stays the default. | TP-02 | — |
+| Hypothesis | HYP-mxc-008 | Guest sign-in after wake. Not this decision. | TP-02 | ADR-002 |
+| Benefit | BEN-06 | Sign-in does not wait on boot. Not this decision. | TP-02 | ADR-002 |
+| — | No register row | No spark row, hypothesis id, or benefit id states credential-triggered wake or identity-bound leasing. | TP-02 | TP-05 |
 
 > [!TIP]
 > **Future Horizon & Scaling Enhancement (ADR-008): Graceful Session Hand-Back for Identity-Bound Desktops**  
