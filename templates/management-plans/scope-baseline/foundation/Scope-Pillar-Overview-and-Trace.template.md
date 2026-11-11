@@ -6,7 +6,7 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-0P
+substage: 7.A-0P
 depends_on: []
 ---
 

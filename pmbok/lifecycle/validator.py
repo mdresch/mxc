@@ -138,14 +138,19 @@ def validate_project(root: str | Path) -> Report:
         if not (by[6].canonical + by[6].legacy):
             violations.append("I2: Stage 9/10 artifacts exist but no Stage 6 requirements exist")
 
-    # I4: loop closure
-    for p in by[18].canonical + by[18].legacy:
-        text = ""
+    # I4: a Stage 16 governance change or Stage 17 adaptation record must close the loop.
+    loop_files = [
+        p
+        for num, prefixes in ((16, ("GC-",)), (17, ("ADAPT-",)))
+        for p in (by[num].canonical + by[num].legacy)
+        if p.name.startswith(prefixes)
+    ]
+    for p in loop_files:
         try:
             text = p.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
-            pass
-        if p.name.startswith(("GC-", "ADAPT-")) and not re.search(r"refinesIntent|amendsADR", text):
+            text = ""
+        if not re.search(r"refinesIntent|amendsADR", text):
             violations.append(f"I4: {p.name} closes no loop (needs refinesIntent and/or amendsADR)")
 
     folder_gaps = [f for f in FOLDERS.values() if not (life / f).is_dir()]

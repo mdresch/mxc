@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-1
+substage: 7.D-1
 pmbok_process: Plan Financial Management
 depends_on:
-  - 6.D-0P
+  - 7.D-0P
 ---
 
 # Cost Categories and Estimating Basis — {{PROJECT_NAME}}

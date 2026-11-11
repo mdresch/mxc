@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-1
+substage: 7.A-1
 pmbok_process: Define Scope
 depends_on:
-  - 6.A-0P
+  - 7.A-0P
 ---
 
 # Project Scope Statement — {{PROJECT_NAME}}

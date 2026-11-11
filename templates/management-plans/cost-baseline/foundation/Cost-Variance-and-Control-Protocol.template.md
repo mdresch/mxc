@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-4
+substage: 7.D-4
 pmbok_process: Monitor and Control Finances
 depends_on:
-  - 6.D-3
+  - 7.D-3
 ---
 
 # Cost Variance and Control Protocol — {{PROJECT_NAME}}

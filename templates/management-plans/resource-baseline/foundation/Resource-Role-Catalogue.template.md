@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.C-1
+substage: 7.C-1
 pmbok_process: Plan Resource Management
 depends_on:
-  - 6.C-0P
+  - 7.C-0P
 ---
 
 # Resource Role Catalogue — {{PROJECT_NAME}}

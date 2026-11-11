@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.B-1
+substage: 7.B-1
 pmbok_process: Plan Schedule Management
 depends_on:
-  - 6.B-0P
+  - 7.B-0P
 ---
 
 # Schedule Basis of Estimates — {{PROJECT_NAME}}

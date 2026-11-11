@@ -6,11 +6,11 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.C-4
+substage: 7.C-4
 pmbok_process: Lead the Team
 depends_on:
-  - 6.C-1
-  - 6.C-3
+  - 7.C-1
+  - 7.C-3
 ---
 
 # Resource Team Operating Charter — {{PROJECT_NAME}}

@@ -6,14 +6,14 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.B-5
+substage: 7.B-5
 depends_on:
-  - 6.B-1
-  - 6.B-2
-  - 6.B-2A
-  - 6.B-2B
-  - 6.B-3
-  - 6.B-4
+  - 7.B-1
+  - 7.B-2
+  - 7.B-2A
+  - 7.B-2B
+  - 7.B-3
+  - 7.B-4
 ---
 
 # Schedule Domain Checklist — {{PROJECT_NAME}}

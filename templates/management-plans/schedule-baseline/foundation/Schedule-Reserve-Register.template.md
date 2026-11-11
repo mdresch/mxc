@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.B-3
+substage: 7.B-3
 depends_on:
-  - 6.B-1
-  - 6.B-4
+  - 7.B-1
+  - 7.B-4
 ---
 
 # Schedule Reserve Register — {{PROJECT_NAME}}

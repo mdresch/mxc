@@ -6,11 +6,11 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.C-5
+substage: 7.C-5
 pmbok_process: Monitor and Control Resourcing
 depends_on:
-  - 6.C-2
-  - 6.C-4
+  - 7.C-2
+  - 7.C-4
 ---
 
 # Resource Utilization and Control Protocol — {{PROJECT_NAME}}

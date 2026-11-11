@@ -6,12 +6,12 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-2
+substage: 7.D-2
 pmbok_process: Estimate Costs
 depends_on:
-  - 6.D-1
-  - 6.B-7
-  - 6.C-7
+  - 7.D-1
+  - 7.B-7
+  - 7.C-7
 ---
 
 # Cost Estimates by Category — {{PROJECT_NAME}}

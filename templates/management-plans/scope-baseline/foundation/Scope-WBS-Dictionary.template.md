@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-2
+substage: 7.A-2
 pmbok_process: Develop Scope Structure
 depends_on:
-  - 6.A-1
+  - 7.A-1
 ---
 
 # Scope WBS and Dictionary — {{PROJECT_NAME}}

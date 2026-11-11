@@ -6,12 +6,12 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-5
+substage: 7.D-5
 depends_on:
-  - 6.D-1
-  - 6.D-2
-  - 6.D-3
-  - 6.D-4
+  - 7.D-1
+  - 7.D-2
+  - 7.D-3
+  - 7.D-4
 ---
 
 # Cost / Finance Domain Checklist — {{PROJECT_NAME}}

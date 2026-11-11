@@ -6,13 +6,13 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-5
+substage: 7.A-5
 pmbok_process: Scope Performance Domain check results
 depends_on:
-  - 6.A-1
-  - 6.A-2
-  - 6.A-3
-  - 6.A-4
+  - 7.A-1
+  - 7.A-2
+  - 7.A-3
+  - 7.A-4
 ---
 
 # Scope Domain Checklist — {{PROJECT_NAME}}

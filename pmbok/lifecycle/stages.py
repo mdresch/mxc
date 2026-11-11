@@ -140,8 +140,8 @@ INVARIANTS: dict[str, str] = {
     "I2": "Stage 6 requirements exist, and the Stage 7 PMP is at PMP-BL-v1.1.0 or later, "
           "before Stage 9/10 canonical execution evidence.",
     "I3": "Every stage policy has a governing policy shape in docs/policy-shapes.",
-    "I4": "Stage 18 closes the loop: a governance change refines intent (Stage 1) "
-          "and/or amends an ADR.",
+    "I4": "A Stage 16 GC-* record or a Stage 17 ADAPT-* record closes the loop: "
+          "it refines intent (Stage 1) and/or amends an ADR.",
 }
 
 

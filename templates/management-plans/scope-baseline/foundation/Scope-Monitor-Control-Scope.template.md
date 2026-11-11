@@ -6,11 +6,11 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-3
+substage: 7.A-3
 pmbok_process: Monitor and Control Scope
 depends_on:
-  - 6.A-1
-  - 6.A-2
+  - 7.A-1
+  - 7.A-2
 ---
 
 # Monitor and Control Scope — {{PROJECT_NAME}}

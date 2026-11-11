@@ -6,13 +6,13 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.C-6
+substage: 7.C-6
 depends_on:
-  - 6.C-1
-  - 6.C-2
-  - 6.C-3
-  - 6.C-4
-  - 6.C-5
+  - 7.C-1
+  - 7.C-2
+  - 7.C-3
+  - 7.C-4
+  - 7.C-5
 ---
 
 # Resource Domain Checklist — {{PROJECT_NAME}}

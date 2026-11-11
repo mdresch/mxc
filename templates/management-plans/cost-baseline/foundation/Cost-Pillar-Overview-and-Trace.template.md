@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-0P
+substage: 7.D-0P
 depends_on:
-  - 6.A-7
-  - 6.B-7
+  - 7.A-7
+  - 7.B-7
 ---
 
 # Cost Pillar Overview and Trace — {{PROJECT_NAME}}

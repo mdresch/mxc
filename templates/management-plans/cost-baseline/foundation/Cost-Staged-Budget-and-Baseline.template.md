@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.D-3
+substage: 7.D-3
 pmbok_process: Develop Budget
 depends_on:
-  - 6.D-2
+  - 7.D-2
 ---
 
 # Staged Budget and Cost Baseline — {{PROJECT_NAME}}

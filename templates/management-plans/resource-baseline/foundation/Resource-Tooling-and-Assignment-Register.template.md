@@ -6,10 +6,10 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.C-3
+substage: 7.C-3
 pmbok_process: Acquire Resources
 depends_on:
-  - 6.C-2
+  - 7.C-2
 ---
 
 # Resource Tooling and Assignment Register — {{PROJECT_NAME}}

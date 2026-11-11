@@ -6,11 +6,11 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.A-4
+substage: 7.A-4
 pmbok_process: Validate Scope
 depends_on:
-  - 6.A-1
-  - 6.A-2
+  - 7.A-1
+  - 7.A-2
 ---
 
 # Validate Scope — {{PROJECT_NAME}}

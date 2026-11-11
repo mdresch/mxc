@@ -6,12 +6,12 @@ route: foundation_artifact
 governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
-substage: 6.B-2B
+substage: 7.B-2B
 pmbok_process: Develop Schedule — develop schedule model
 depends_on:
-  - 6.B-2
-  - 6.B-2A
-  - 6.B-4
+  - 7.B-2
+  - 7.B-2A
+  - 7.B-4
 ---
 
 # Schedule Model / Gantt — {{PROJECT_NAME}}
