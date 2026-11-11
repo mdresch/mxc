@@ -1,0 +1,32 @@
+{
+  "name": "mxc",
+  "version": "1.2.0",
+  "description": "MXC \u2014 Hyper-V sandbox + SIDPA governance (synced from sidpa-template)",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/run-contracts.mjs",
+    "story:done": "node scripts/complete-story.mjs",
+    "story:verify": "node scripts/complete-story.mjs --dry-run",
+    "story:claim": "node scripts/provision-story-worktree.mjs",
+    "pr-gate": "python scripts/pr_gate.py",
+    "lifecycle": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
+    "lifecycle:repo": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
+    "lifecycle:vault": "node scripts/brain/run-lifecycle-pipeline.mjs",
+    "brain:heal": "node scripts/brain/heal-brain.mjs",
+    "brain:diagnose": "node scripts/brain/diagnose-broken-links.mjs",
+    "brain:compile": "node scripts/brain/compile-ontology-graph.mjs",
+    "brain:analyze": "node scripts/brain/analyze-graph.mjs",
+    "brain:validate": "node scripts/brain/synthesis-validator.mjs",
+    "brain:drift": "node scripts/brain/brain-drift-detection.mjs",
+    "brain:canvas": "node scripts/brain/build-18-stage-canvas.mjs",
+    "brain:ground": "node scripts/brain/ground-adrs-to-concepts.mjs",
+    "brain:query": "node scripts/brain/query-knowledge-graph.mjs",
+    "brain:research": "node scripts/brain/research-engine.mjs",
+    "brain:enrich:queue": "node scripts/brain/discover-enrichment-gaps.mjs",
+    "brain:enrich:topic": "node scripts/brain/enrich-brain-topics.mjs",
+    "brain:enrich:list": "node scripts/brain/list-enrichment-topics.mjs",
+    "brain:enrich:audit": "node scripts/brain/quarantine-pseudo-concepts.mjs",
+    "brain:enrich:quarantine": "node scripts/brain/quarantine-pseudo-concepts.mjs --execute",
+    "brain:enrich:promote": "node scripts/brain/promote-concept-authority.mjs"
+  }
+}

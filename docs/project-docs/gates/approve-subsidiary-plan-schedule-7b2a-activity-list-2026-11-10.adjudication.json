@@ -1,0 +1,143 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-subsidiary-plan",
+  "policy_id": "1c0b25f8-af6e-4573-a101-9f5568f28792",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "The user accepted the proposed option to resolve the tie.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_plan",
+    "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+    "parameters": {}
+  },
+  "proposed_action": null,
+  "candidate_actions": [
+    {
+      "id": "approve_plan",
+      "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_plan",
+        "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.9861566830180115,
+          "entropy_bits": 0.10531067117192935,
+          "disagreement_bits": 0.000982757291021985,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.9861566830180115,
+          "entropy_bits": 0.10531067117192935,
+          "disagreement_bits": 0.000982757291021985,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.9861566830180115,
+          "entropy_bits": 0.10531067117192935,
+          "disagreement_bits": 0.000982757291021985,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9861566830180116,
+      "uncertainty": 0.10531067117192934,
+      "robust_utility": 0.9756256159008186,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_plan",
+        "description": "The subsidiary management plan has critical deficiencies, ungrounded assumptions, or irreconcilable contradictions with upstream plans -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.013843316981988495,
+          "entropy_bits": 0.10531067117192941,
+          "disagreement_bits": 0.0009827572910217075,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.013843316981988495,
+          "entropy_bits": 0.10531067117192941,
+          "disagreement_bits": 0.0009827572910217075,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.013843316981988495,
+          "entropy_bits": 0.10531067117192941,
+          "disagreement_bits": 0.0009827572910217075,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.013843316981988494,
+      "uncertainty": 0.10531067117192942,
+      "robust_utility": 0.003312249864795551,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_plan"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The subsidiary management plan requires minor clarifications, boundary sharpening, or terminology reconciliation with upstream plans before authorization",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.037503525819321856,
+      "uncertainty": 0.2307264627086992,
+      "robust_utility": 0.014430879548451934,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_plan"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": "user_acceptance",
+  "action_probabilities": {
+    "approve_plan": 0.3333333333333333,
+    "reject_plan": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_authority": "full"
+}

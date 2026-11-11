@@ -1,0 +1,163 @@
+{
+  "task": "Scope subsidiary plan (7a3-monitor-control): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "sound_baseline_definitions",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "WBS, boundaries, and controls are defined without inventing commitments"
+    },
+    {
+      "id": "technical_integrity",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Traceability to approved ADR/BRD/FDD/epic chain is explicit and honest about gaps"
+    },
+    {
+      "id": "consistent_with_upstream",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "No irreconcilable conflict with accepted architecture and approved requirements"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_plan",
+      "evidence": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.89,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.89,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.89,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_plan",
+      "evidence": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.12,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.15,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.12,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.15,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/foundation/Scope-Monitor-Control-Scope.md",
+          "support": 0.12,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "source": "docs/project-docs/management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md",
+          "support": 0.15,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

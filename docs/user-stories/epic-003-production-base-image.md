@@ -30,6 +30,7 @@ outputs:
 
 ## Story 3.1 — Clean production VHDX
 
+**WBS ID:** `1.3.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Software Release Engineer, **I want** audit a baked production VHDX, **so that** production carries no developer debris.
 
@@ -38,6 +39,7 @@ outputs:
 
 ## Story 3.2 — Warm baseline checkpoint
 
+**WBS ID:** `1.3.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Software Release Engineer, **I want** bake and checkpoint the production image, **so that** first wake avoids JIT compile stall.
 

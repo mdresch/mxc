@@ -29,6 +29,7 @@ outputs:
 
 ## Story 1.1 — Generation 2 isolation boundary
 
+**WBS ID:** `1.1.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Platform Engineer, **I want** provision ADPA and SIDPA on Generation 2 Hyper-V guests, **so that** confidential workloads never share the host kernel.
 
@@ -38,6 +39,7 @@ outputs:
 
 ## Story 1.2 — Windows subsystems on the guest
 
+**WBS ID:** `1.1.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Software Release Engineer, **I want** run WMI, COM+, a Windows service, and Group Policy inside the guest, **so that** legacy Windows automation required by ADPA/SIDPA remains in scope.
 

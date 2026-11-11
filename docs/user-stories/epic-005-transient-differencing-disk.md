@@ -30,6 +30,7 @@ outputs:
 
 ## Story 5.1 — Ephemeral session disk
 
+**WBS ID:** `1.5.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** CISO, **I want** run a session that writes disk state, **so that** no residue remains after release.
 
@@ -39,6 +40,7 @@ outputs:
 
 ## Story 5.2 — Egress whitelist
 
+**WBS ID:** `1.5.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** CISO, **I want** control guest outbound traffic, **so that** only approved internal endpoints are reachable.
 
@@ -48,6 +50,7 @@ outputs:
 
 ## Story 5.3 — Discard and reproduce
 
+**WBS ID:** `1.5.3`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** SecOps Engineer, **I want** end a session by two discard paths, **so that** the next session does not inherit the previous disk.
 

@@ -30,6 +30,7 @@ outputs:
 
 ## Story 2.1 — Cold wake TTFB
 
+**WBS ID:** `1.2.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Enterprise Automation Operator, **I want** POST to ADPA/SIDPA while the guest is Paused, **so that** I receive the first byte without a cold boot.
 
@@ -39,6 +40,7 @@ outputs:
 
 ## Story 2.2 — No wake-caused 502/504
 
+**WBS ID:** `1.2.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Enterprise Automation Operator, **I want** send HTTPS during wake, **so that** I do not see gateway 502 or 504 caused by wake latency.
 
@@ -48,6 +50,7 @@ outputs:
 
 ## Story 2.3 — Dual routing rules
 
+**WBS ID:** `1.2.3`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** DevOps Engineer, **I want** route by path and by catalogued listen port, **so that** the request reaches the owning image.
 

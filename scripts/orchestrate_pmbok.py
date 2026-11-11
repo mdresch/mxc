@@ -50,6 +50,14 @@ PLAN_MAPPING = {
     "13.2": {"name": "Stakeholder-Engagement-Plan", "title": "Stakeholder Engagement Plan", "flag": "Stakeholder Engagement Plan"},
 }
 
+def get_governance_agent_id() -> str:
+    active_dir = repo_root / "data" / "agent-learning" / "store" / "active-policies"
+    if active_dir.exists():
+        for d in active_dir.iterdir():
+            if d.is_dir() and d.name != "agent-learning-governance":
+                return d.name
+    return "template-governance"
+
 def extract_project_identity(charter_path: Path) -> dict[str, str]:
     """Extract project title and objectives from Project Charter."""
     if not charter_path.exists():
@@ -59,7 +67,7 @@ def extract_project_identity(charter_path: Path) -> dict[str, str]:
         }
     text = charter_path.read_text(encoding="utf-8")
     title_match = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
-    title = title_match.group(1).replace("Project Charter", "").strip(" :-") if title_match else "SIDPA Project"
+    title = title_match.group(1).replace("Project Charter", "").strip(" :-—\u2014\u2013") if title_match else "SIDPA Project"
     if not title:
         title = "SIDPA Project"
     return {
@@ -82,7 +90,7 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         'pmbok_process_group: "Planning"',
         'pmbok_process: "4.2 Develop Project Management Plan"',
         f'pmp_baseline: "{baseline_id}"',
-        'lifecycle_stage: "Stage 6 (Project)"',
+        'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"',
         'governance_policy: "approve-pmp"',
         "inputs:",
         '  - "Project-Charter.md"',
@@ -95,7 +103,7 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         f"# Project Management Plan (PMP) — {clean_title}",
         "",
         "> **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  ",
-        "> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  ",
+        "> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  ",
         f"> **Baseline Identifier:** `{baseline_id}`  ",
         "> **Inputs:** Project-Charter.md, Subsidiary Management Plans  ",
         "> **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  ",
@@ -215,12 +223,52 @@ async def run_orchestration(args):
             if artifacts:
                 art = artifacts[0]
                 doc_path = plans_dir / f"{meta['name']}.md"
+                
+                # Check if existing doc has a Foundation Baseline Roll-up section to preserve
+                existing_rollup = None
+                if doc_path.exists():
+                    existing_text = doc_path.read_text(encoding="utf-8")
+                    if "Foundation Baseline Roll-up" in existing_text:
+                        match = re.search(r"(## 3\.\s+.*Foundation Baseline Roll-up.*?)(?=\n## 4\.|\Z)", existing_text, re.DOTALL)
+                        if match:
+                            existing_rollup = match.group(1).strip()
+                
+                pack_keys = {"5.1": "scope", "6.1": "schedule", "7.1": "cost", "9.1": "resource"}
+                if existing_rollup:
+                    rollup_section = f"\n\n{existing_rollup}\n\n## 4. Review & Governance Invariant\nThis subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-subsidiary-plan`."
+                elif pid in pack_keys:
+                    pname = pack_keys[pid]
+                    pcap = pname.capitalize()
+                    rollup_section = f"""
+
+## 3. {pcap} Foundation Baseline Roll-up
+
+**Status:** Pending. Creating this plan does not approve the {pcap} foundation pack or baseline.
+
+**Source pack:** [{pcap} Foundation Pack Manifest]({pname}-baseline/{pcap}-Foundation-Pack-Manifest.md).
+
+| Roll-up item | Record |
+|---|---|
+| Approved baseline boundaries and inputs | Pending; summarize approved inputs |
+| Foundation manifest and artifact hashes | Pending; verify registry after artifact approval |
+| Baseline identifier | Pending; record only after pack and plan gates pass |
+| Subsidiary plan approval | Pending; record configured human approval reference |
+| PMP integration | Pending until this plan is approved |
+
+## 4. Review & Governance Invariant
+This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-subsidiary-plan`."""
+                else:
+                    rollup_section = """
+
+## 3. Review & Governance Invariant
+This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-subsidiary-plan`."""
+
                 md_content = f"""---
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "{pid} {meta['title']}"
-lifecycle_stage: "Stage 6 (Project)"
-governance_policy: "approve-pmp"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
+governance_policy: "approve-subsidiary-plan"
 inputs:
   - "Project-Charter.md"
 process: "Plan and formalize {meta['title']}"
@@ -231,7 +279,7 @@ outputs:
 # {meta['title']} — {project_context['title']}
 
 > **PMBOK 8 Process:** `{pid} {meta['title']}` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-subsidiary-plan` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Source:** [Project-Charter.md](../Project-Charter.md)
 
 ## 1. Purpose & Scope
@@ -240,10 +288,7 @@ This plan establishes the guidelines and processes for managing {meta['title'].l
 ## 2. Process Specifications
 ```json
 {json.dumps(art.content, indent=2)}
-```
-
-## 3. Review & Governance Invariant
-This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-pmp`.
+```{rollup_section}
 """
                 doc_path.write_text(md_content, encoding="utf-8")
                 generated_summaries[pid] = f"Formulated {meta['title']} addressing {', '.join(project_context['objectives'])}."
@@ -261,7 +306,7 @@ This subsidiary plan integrates directly into [Project-Management-Plan.md](../Pr
     # Decision Validation Gate Notice
     print("\n-------------------------------------------------------")
     print("  Decision Gate Verification:")
-    print("  Run 'agent-learn task-policy-decide --agent-id template-governance --task-id approve-pmp'")
+    print(f"  Run 'agent-learn task-policy-decide --agent-id {get_governance_agent_id()} --task-id approve-pmp'")
     print("  to formally validate the synthesized PMP.")
     print("-------------------------------------------------------\n")
 
@@ -379,7 +424,7 @@ Submit this ideation document to `template-governance` / `approve-ideation` befo
 
     print("\n-------------------------------------------------------")
     print("  Phase Next Seeding Complete.")
-    print("  Run 'agent-learn task-policy-decide --agent-id template-governance --task-id approve-ideation'")
+    print(f"  Run 'agent-learn task-policy-decide --agent-id {get_governance_agent_id()} --task-id approve-ideation'")
     print("  to evaluate and authorize the new development cycle.")
     print("-------------------------------------------------------\n")
 

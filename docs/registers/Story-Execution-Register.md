@@ -1,4 +1,4 @@
-# Story Execution Register — <project>
+# Story Execution Register — mxc
 
 | Field | Value |
 |---|---|
