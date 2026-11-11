@@ -1,0 +1,316 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-pmp",
+  "policy_id": "46c60639-c24f-4045-8ace-a3dbe2142e61",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "reason": "The policy requires human approval; accept or reject the reasoned recommendation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_pmp",
+    "description": "The Project Management Plan soundly integrates the subsidiary management plans (Scope, Risk, Quality, Communications, Resource, etc.), establishes valid baselines, and defines clear governance rules -- approve it to authorize drafting ADRs, BRDs, FDDs, and User Stories",
+    "parameters": {}
+  },
+  "candidate_actions": [
+    {
+      "id": "approve_pmp",
+      "description": "The Project Management Plan soundly integrates the subsidiary management plans (Scope, Risk, Quality, Communications, Resource, etc.), establishes valid baselines, and defines clear governance rules -- approve it to authorize drafting ADRs, BRDs, FDDs, and User Stories",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_pmp",
+        "description": "The Project Management Plan soundly integrates the subsidiary management plans (Scope, Risk, Quality, Communications, Resource, etc.), establishes valid baselines, and defines clear governance rules -- approve it to authorize drafting ADRs, BRDs, FDDs, and User Stories",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "support": 0.9892471091776436,
+          "entropy_bits": 0.08574400453459254,
+          "disagreement_bits": 0.0011120140822127311,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "support": 0.9788354529944161,
+          "entropy_bits": 0.14793014662204518,
+          "disagreement_bits": 0.0008028738460507667,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "support": 0.9536259430770169,
+          "entropy_bits": 0.2707898066645701,
+          "disagreement_bits": 0.0005661659850898504,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "support": 0.9406600785136776,
+          "entropy_bits": 0.32481906227152346,
+          "disagreement_bits": 0.0005115027249262827,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9655921459406885,
+      "uncertainty": 0.2073207550231828,
+      "robust_utility": 0.9448600704383703,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_pmp",
+        "description": "The Project Management Plan has critical gaps, conflicting subsidiary plans, or ungrounded baseline assumptions -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "support": 0.01324287566975327,
+          "entropy_bits": 0.10159589409172931,
+          "disagreement_bits": 0.003961910806722979,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "support": 0.024823607064383715,
+          "entropy_bits": 0.16772770097219414,
+          "disagreement_bits": 0.0029633852818661266,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "support": 0.05207877081343209,
+          "entropy_bits": 0.295162644687185,
+          "disagreement_bits": 0.0021521786259571796,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "support": 0.06589945826162491,
+          "entropy_bits": 0.3504314520848173,
+          "disagreement_bits": 0.0019586146747010424,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.0390111779522985,
+      "uncertainty": 0.22872942295898144,
+      "robust_utility": 0.01613823565640035,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_pmp"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Project Management Plan requires reconciliation among subsidiary plans, clearer risk/quality thresholds, or unforced schedule/cost deferrals before authorization",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "support": 0.03507749904249268,
+          "entropy_bits": 0.21924843918736098,
+          "disagreement_bits": 0.0006384224545004091,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "support": 0.03507749904249268,
+          "entropy_bits": 0.21924843918736098,
+          "disagreement_bits": 0.0006384224545004091,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "support": 0.03507749904249268,
+          "entropy_bits": 0.21924843918736098,
+          "disagreement_bits": 0.0006384224545004091,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "support": 0.03507749904249268,
+          "entropy_bits": 0.21924843918736098,
+          "disagreement_bits": 0.0006384224545004091,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.03507749904249268,
+      "uncertainty": 0.21924843918736098,
+      "robust_utility": 0.01315265512375658,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_pmp"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": null,
+  "action_probabilities": {
+    "approve_pmp": 0.3333333333333333,
+    "reject_pmp": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_context": "Given a drafted Project Management Plan and its integrated subsidiary plans, decide whether to approve it to authorize drafting technical requirements (ADR, BRD, FDD, Stories), reject it, or request revision before deciding",
+  "decision_authority": "full",
+  "selection_mode": "reasoned",
+  "selected_action_feedback": {
+    "attempts": 0,
+    "correctness_evaluated": 0,
+    "correct": 0,
+    "correctness_rate": null,
+    "rewarded_episodes": 0,
+    "mean_reward": null,
+    "recent_outcomes": []
+  },
+  "historical_feedback": {
+    "episodes_reviewed": 0,
+    "actions": {
+      "approve_pmp": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "reject_pmp": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "request_revision_before_decision": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      }
+    }
+  },
+  "autonomy": {
+    "eligible": false,
+    "authorization_basis": "none",
+    "decision_authority": "full",
+    "mode": "supervised",
+    "execute_without_confirmation": false,
+    "request_user_feedback": true,
+    "observable_outcome_satisfies_feedback": false,
+    "feedback_reason": "human_approval_required",
+    "outcome_recording": "user_feedback",
+    "complexity": {
+      "tier": "standard",
+      "score": 4,
+      "intent_score": 1,
+      "decision_score": 3,
+      "action_count": 3,
+      "action_space_points": 1,
+      "profile_source": "configured",
+      "profile": {
+        "intent_ambiguity": "low",
+        "context_variability": "variable",
+        "outcome_observability": "direct",
+        "decision_impact": "high",
+        "reversibility": "reversible",
+        "requires_human_approval": true,
+        "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+      },
+      "risk_floors": []
+    },
+    "learned_policy_assessment": {
+      "eligible": false,
+      "authorization_basis": "none",
+      "user_feedback_status": null,
+      "user_feedback_episode_id": null,
+      "recommended_action_id": "approve_pmp",
+      "scored_outcomes": 0,
+      "correctness_evaluated": 0,
+      "correct_outcomes": 0,
+      "correctness_rate": null,
+      "correctness_lower_bound": 0.0,
+      "mean_reward": null,
+      "action_probability": 0.3333333333333333,
+      "probability_margin": 0.0,
+      "stable_snapshots": 0,
+      "audit_rate": 0.1,
+      "complexity": {
+        "tier": "standard",
+        "score": 4,
+        "intent_score": 1,
+        "decision_score": 3,
+        "action_count": 3,
+        "action_space_points": 1,
+        "profile_source": "configured",
+        "profile": {
+          "intent_ambiguity": "low",
+          "context_variability": "variable",
+          "outcome_observability": "direct",
+          "decision_impact": "high",
+          "reversibility": "reversible",
+          "requires_human_approval": true,
+          "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+        },
+        "risk_floors": []
+      },
+      "criteria": {
+        "minimum_outcomes": {
+          "actual": 0,
+          "required": 20,
+          "met": false
+        },
+        "correctness_lower_bound": {
+          "actual": 0.0,
+          "required": 0.9,
+          "wilson_z": 1.96,
+          "met": false
+        },
+        "positive_mean_reward": {
+          "actual": null,
+          "required_greater_than": 0.0,
+          "met": false
+        },
+        "action_probability": {
+          "actual": 0.3333333333333333,
+          "required": 0.6,
+          "met": false
+        },
+        "probability_margin": {
+          "actual": 0.0,
+          "required": 0.15,
+          "met": false
+        },
+        "stable_snapshots": {
+          "actual": 0,
+          "required": 3,
+          "met": false
+        },
+        "human_approval_not_required": {
+          "actual": true,
+          "required": false,
+          "met": false
+        },
+        "latest_user_feedback_not_rejected": {
+          "actual": null,
+          "required_not": "rejected",
+          "met": true
+        }
+      }
+    }
+  }
+}

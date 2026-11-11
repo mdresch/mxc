@@ -30,6 +30,7 @@ outputs:
 
 ## Story 4.1 — Zero idle CPU
 
+**WBS ID:** `1.4.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Infrastructure Platform Engineer, **I want** keep dormant VMs Paused, **so that** idle guests consume no processor.
 
@@ -38,6 +39,7 @@ outputs:
 
 ## Story 4.2 — Trimmed paused footprint
 
+**WBS ID:** `1.4.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Infrastructure Platform Engineer, **I want** trim before suspend, **so that** paused guests hold a lean RAM allocation.
 
@@ -46,6 +48,7 @@ outputs:
 
 ## Story 4.3 — Sub-300 ms resume
 
+**WBS ID:** `1.4.3`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** Infrastructure Platform Engineer, **I want** resume a Paused guest, **so that** wake stays inside the platform ceiling.
 

@@ -1,0 +1,295 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-subsidiary-plan",
+  "policy_id": "1c0b25f8-af6e-4573-a101-9f5568f28792",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "reason": "The policy requires human approval; accept or reject the reasoned recommendation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_plan",
+    "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+    "parameters": {}
+  },
+  "candidate_actions": [
+    {
+      "id": "approve_plan",
+      "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_plan",
+        "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9826877746921353,
+      "uncertainty": 0.1260710736947101,
+      "robust_utility": 0.9700806673226643,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_plan",
+        "description": "The subsidiary management plan has critical deficiencies, ungrounded assumptions, or irreconcilable contradictions with upstream plans -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.017312225307864484,
+      "uncertainty": 0.12607107369470952,
+      "robust_utility": 0.004705117938393531,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_plan"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The subsidiary management plan requires minor clarifications, boundary sharpening, or terminology reconciliation with upstream plans before authorization",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "sound_baseline_definitions",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "technical_integrity",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consistent_with_upstream",
+          "support": 0.037503525819321856,
+          "entropy_bits": 0.23072646270869918,
+          "disagreement_bits": 0.0013926926320335653,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.037503525819321856,
+      "uncertainty": 0.2307264627086992,
+      "robust_utility": 0.014430879548451934,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_plan"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": null,
+  "action_probabilities": {
+    "approve_plan": 0.3333333333333333,
+    "reject_plan": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_context": "Given a drafted standalone subsidiary management plan, decide whether to approve it, reject it, or request revision before deciding. Each decision is scoped to one plan_id.",
+  "decision_authority": "full",
+  "selection_mode": "reasoned",
+  "selected_action_feedback": {
+    "attempts": 0,
+    "correctness_evaluated": 0,
+    "correct": 0,
+    "correctness_rate": null,
+    "rewarded_episodes": 0,
+    "mean_reward": null,
+    "recent_outcomes": []
+  },
+  "historical_feedback": {
+    "episodes_reviewed": 0,
+    "actions": {
+      "approve_plan": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "reject_plan": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "request_revision_before_decision": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      }
+    }
+  },
+  "autonomy": {
+    "eligible": false,
+    "authorization_basis": "none",
+    "decision_authority": "full",
+    "mode": "supervised",
+    "execute_without_confirmation": false,
+    "request_user_feedback": true,
+    "observable_outcome_satisfies_feedback": false,
+    "feedback_reason": "human_approval_required",
+    "outcome_recording": "user_feedback",
+    "complexity": {
+      "tier": "standard",
+      "score": 4,
+      "intent_score": 1,
+      "decision_score": 3,
+      "action_count": 3,
+      "action_space_points": 1,
+      "profile_source": "configured",
+      "profile": {
+        "intent_ambiguity": "low",
+        "context_variability": "variable",
+        "outcome_observability": "direct",
+        "decision_impact": "high",
+        "reversibility": "reversible",
+        "requires_human_approval": true,
+        "rationale": "Every standalone subsidiary plan requires explicit human adjudication; the model may recommend but must not authorize baseline formalization autonomously."
+      },
+      "risk_floors": []
+    },
+    "learned_policy_assessment": {
+      "eligible": false,
+      "authorization_basis": "none",
+      "user_feedback_status": null,
+      "user_feedback_episode_id": null,
+      "recommended_action_id": "approve_plan",
+      "scored_outcomes": 0,
+      "correctness_evaluated": 0,
+      "correct_outcomes": 0,
+      "correctness_rate": null,
+      "correctness_lower_bound": 0.0,
+      "mean_reward": null,
+      "action_probability": 0.3333333333333333,
+      "probability_margin": 0.0,
+      "stable_snapshots": 0,
+      "audit_rate": 0.1,
+      "complexity": {
+        "tier": "standard",
+        "score": 4,
+        "intent_score": 1,
+        "decision_score": 3,
+        "action_count": 3,
+        "action_space_points": 1,
+        "profile_source": "configured",
+        "profile": {
+          "intent_ambiguity": "low",
+          "context_variability": "variable",
+          "outcome_observability": "direct",
+          "decision_impact": "high",
+          "reversibility": "reversible",
+          "requires_human_approval": true,
+          "rationale": "Every standalone subsidiary plan requires explicit human adjudication; the model may recommend but must not authorize baseline formalization autonomously."
+        },
+        "risk_floors": []
+      },
+      "criteria": {
+        "minimum_outcomes": {
+          "actual": 0,
+          "required": 20,
+          "met": false
+        },
+        "correctness_lower_bound": {
+          "actual": 0.0,
+          "required": 0.9,
+          "wilson_z": 1.96,
+          "met": false
+        },
+        "positive_mean_reward": {
+          "actual": null,
+          "required_greater_than": 0.0,
+          "met": false
+        },
+        "action_probability": {
+          "actual": 0.3333333333333333,
+          "required": 0.6,
+          "met": false
+        },
+        "probability_margin": {
+          "actual": 0.0,
+          "required": 0.15,
+          "met": false
+        },
+        "stable_snapshots": {
+          "actual": 0,
+          "required": 3,
+          "met": false
+        },
+        "human_approval_not_required": {
+          "actual": true,
+          "required": false,
+          "met": false
+        },
+        "latest_user_feedback_not_rejected": {
+          "actual": null,
+          "required_not": "rejected",
+          "met": true
+        }
+      }
+    }
+  }
+}

@@ -30,6 +30,7 @@ outputs:
 
 ## Story 6.1 — Buffer replenishment
 
+**WBS ID:** `1.6.1`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** SRE, **I want** lease the last ready guest, **so that** the next caller finds a Paused standby without blocking the in-flight request.
 
@@ -38,6 +39,7 @@ outputs:
 
 ## Story 6.2 — Surge expansion
 
+**WBS ID:** `1.6.2`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** SRE, **I want** handle request bursts, **so that** concurrent callers avoid cold boot.
 
@@ -46,6 +48,7 @@ outputs:
 
 ## Story 6.3 — Wake hygiene
 
+**WBS ID:** `1.6.3`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** SRE, **I want** wake a guest from checkpoint, **so that** cryptography, time, and DB pools are safe before traffic.
 
@@ -54,6 +57,7 @@ outputs:
 
 ## Story 6.4 — Scale down
 
+**WBS ID:** `1.6.4`  
 **Status:** Ready for review — not yet run through `implement-story`  
 **As a** SRE, **I want** cool surplus guests, **so that** host RAM returns toward baseline.
 

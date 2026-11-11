@@ -126,6 +126,7 @@ STAGES: tuple[Stage, ...] = (
 # Policies that the stage registry requires. Stages 18 additionally uses
 # approve-intent-refinement; stage 3 uses classify-hypothesis-status for HYP-*.
 EXTRA_POLICIES: tuple[str, ...] = (
+    "approve-subsidiary-plan",
     "approve-intent-refinement",
     "classify-hypothesis-status",
     "approve-adaptation-plan",
