@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "7.1 Cost Management Plan"
-lifecycle_stage: "Stage 6 (Project)"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "Project-Charter.md"
@@ -13,8 +13,10 @@ outputs:
 
 # Cost Management Plan — SIDPA Project
 
+**Status:** Scaffold copied for a project named SIDPA. `approve-subsidiary-plan` has not been run. This is not an MXC baseline.
+
 > **PMBOK 8 Process:** `7.1 Cost Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Source:** [Project-Charter.md](../Project-Charter.md)
 
 ## 1. Purpose & Scope

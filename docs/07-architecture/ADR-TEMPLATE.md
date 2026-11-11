@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning"
 pmp_baseline: "PMP-BL-v<X.Y.Z>"
-lifecycle_stage: "Stage 7 (Requirement: Architecture)"
+lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 inputs:
   - "Ideation-Document.md (Hypotheses)"
@@ -17,7 +17,7 @@ outputs:
 # ADR <NNN>: <Title>
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Systems Architecture Planning` (Planning)  
-> **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 7 (Requirement: Architecture)`  
+> **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 6 (Requirement: Architecture)`  
 > **Inputs:** Ideation-Document.md (Hypotheses), Project-Management-Plan.md, BRD-*.md  
 > **Process:** Formulate architectural decisions, evaluate trade-off alternatives, specify consequences  
 > **Outputs:** ADR-*.md

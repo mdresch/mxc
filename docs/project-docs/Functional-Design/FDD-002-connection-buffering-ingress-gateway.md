@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Solution)"
+lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
   - "docs/07-architecture/ADR-002-connection-buffering-ingress-gateway.md"
@@ -16,7 +16,7 @@ outputs:
 # FDD-002: Connection-buffering ingress gateway
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design` (Planning)  
-> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 7 (Requirement: Solution)`  
+> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Inputs:** [ADR-002](../../07-architecture/ADR-002-connection-buffering-ingress-gateway.md), [BRD-002](../Business-Requirements/BRD-002-connection-buffering-ingress-gateway.md)  
 > **Process:** Specify technical interfaces, data schemas, algorithmic logic, and invariant contracts  
 > **Outputs:** FDD-002-connection-buffering-ingress-gateway.md

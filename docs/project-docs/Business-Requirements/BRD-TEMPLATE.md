@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
 pmp_baseline: "PMP-BL-v<X.Y.Z>"
-lifecycle_stage: "Stage 7 (Requirement: Business)"
+lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
   - "Project-Charter.md"
@@ -16,7 +16,7 @@ outputs:
 # BRD-<NNN>: <Title>
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope` (Planning)  
-> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 7 (Requirement: Business)`  
+> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
 > **Inputs:** Project-Charter.md, Project-Management-Plan.md (Scope Management Plan)  
 > **Process:** Define functional and non-functional business requirements and stakeholder rules  
 > **Outputs:** BRD-*.md

@@ -96,6 +96,121 @@ def _baseline(pmp: Path) -> tuple[int, int, int] | None:
     return tuple(int(x) for x in m.groups()) if m else None  # type: ignore[return-value]
 
 
+_EMPTY_LINK = {"", "tbd", "pending", "n/a", "none", "null", "~", "[]", "{}", '""', "''"}
+
+
+def _read_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return ""
+
+
+def _frontmatter_block(text: str) -> str:
+    match = re.match(r"^---\r?\n(.*?)\r?\n---", text, re.DOTALL)
+    return match.group(1) if match else ""
+
+
+def _front_value(text: str, key: str) -> str:
+    """Return a frontmatter scalar, or a comma-joined list when the scalar is empty."""
+    lines = _frontmatter_block(text).splitlines()
+    for index, line in enumerate(lines):
+        match = re.match(rf"^\s*{re.escape(key)}:\s*(.*)$", line)
+        if not match:
+            continue
+        raw = re.sub(r"\s+#.*$", "", match.group(1).strip()).strip().strip("'\"")
+        if raw:
+            return raw
+        items: list[str] = []
+        for nxt in lines[index + 1 :]:
+            item = re.match(r"^\s+-\s+(.+)$", nxt)
+            if not item:
+                break
+            items.append(re.sub(r"\s+#.*$", "", item.group(1).strip()).strip().strip("'\""))
+        return ", ".join(items)
+    return ""
+
+
+def _concrete(value: str) -> bool:
+    if value.lower() in _EMPTY_LINK:
+        return False
+    return not any(token in value for token in ("<", ">", "X.Y.Z"))
+
+
+def _proposal_in_force(text: str) -> bool:
+    status = _front_value(text, "status") or _front_value(text, "approval_status")
+    if status.lower() == "approved":
+        return True
+    return _concrete(_front_value(text, "refinement_id"))
+
+
+def _project_claims_spark(spark_id: str, stage1_files: list[Path]) -> bool:
+    """True when a Stage 1 artifact is this spark, not the template's example id."""
+    if len(spark_id) < 3:
+        return False
+    pattern = re.compile(rf"(?<!\w){re.escape(spark_id)}(?!\w)")
+    for path in stage1_files:
+        if spark_id in {path.name, path.stem}:
+            return True
+        if pattern.search(_read_text(path)):
+            return True
+    return False
+
+
+def _closes_loop(text: str, stage1_files: list[Path]) -> bool:
+    """A proposal closes the loop the way the Stage 18 template records it.
+
+    Section 6 names the Phase N+1 catalyst. ``refinesIntent`` and ``amendsADR``
+    remain accepted explicit links. ``lineage.root_spark`` counts only when a
+    Stage 1 artifact uses that id. The template example ``SPARK-v1.0.0`` does not.
+    """
+    if _concrete(_front_value(text, "refinesIntent")) or _concrete(_front_value(text, "amendsADR")):
+        return True
+    root = _front_value(text, "root_spark")
+    if _concrete(root) and _project_claims_spark(root, stage1_files):
+        return True
+    catalyst = re.search(r"Primary Catalyst for Phase N\+1:\**\s*(.+)", text)
+    if catalyst and _concrete(catalyst.group(1).strip().strip("*")):
+        return True
+    return False
+
+
+def _i4_violations(stage_files: dict[int, list[Path]], stage1_files: list[Path] | None = None) -> list[str]:
+    """Loop closure is Stage 18. Design-time changes and adaptations must not refine intent."""
+    stage1_files = stage1_files or []
+    violations: list[str] = []
+    for path in stage_files.get(16, []):
+        if not path.name.startswith("GC-"):
+            continue
+        text = _read_text(path)
+        basis = _front_value(text, "evidence_basis").replace("-", "_")
+        if "design_time" in basis and _concrete(_front_value(text, "refinesIntent")):
+            violations.append(
+                f"I4: {path.name} is a design-time governance change and must not refine intent"
+            )
+    for path in stage_files.get(17, []):
+        if path.name != "Adaptation-Plan.md" and not path.name.startswith("ADAPT-"):
+            continue
+        if _concrete(_front_value(_read_text(path), "refinesIntent")):
+            violations.append(
+                f"I4: {path.name} refines intent; Stage 17 adaptation must not redefine intent"
+            )
+    for path in stage_files.get(18, []):
+        if not path.name.startswith("Intent-Refinement"):
+            continue
+        text = _read_text(path)
+        if not _proposal_in_force(text):
+            continue
+        if _closes_loop(text, stage1_files):
+            continue
+        violations.append(
+            f"I4: {path.name} closes no loop "
+            "(needs a Phase N+1 spark catalyst, refinesIntent, amendsADR, or a lineage.root_spark "
+            "that a Stage 1 artifact uses; the template example SPARK-v1.0.0 does not count)"
+        )
+    return violations
+
+
 def validate_project(root: str | Path) -> Report:
     root = Path(root).resolve()
     life = root / LIFECYCLE_ROOT
@@ -112,43 +227,44 @@ def validate_project(root: str | Path) -> Report:
     by = {r.stage.number: r for r in results}
     violations: list[str] = []
 
-    # I1: business documents before charter
-    charter = (by[4].canonical + by[4].legacy)
-    charter = [p for p in charter if p.name.startswith("Project-Charter")]
-    if charter:
-        biz = by[3].canonical + by[3].legacy
+    # I1: benefit documents before an approved charter (chain §2 stages 4 then 2)
+    charter = [p for p in (by[2].canonical + by[2].legacy) if p.name.startswith("Project-Charter")]
+    if charter and parse_frontmatter(charter[0]).get("status", "").lower() == "approved":
+        biz = by[4].canonical + by[4].legacy
         kinds = {k: [p for p in biz if p.name.startswith(k)]
                  for k in ("Business-Case", "Benefits-Statement", "Stakeholder-Register")}
         for k, files in kinds.items():
             if not files:
-                violations.append(f"I1: Project Charter exists but {k} is missing")
-            elif parse_frontmatter(charter[0]).get("status", "").lower() == "approved" and \
-                    not any(parse_frontmatter(f).get("status", "").lower() == "approved" for f in files):
+                violations.append(f"I1: Project Charter is Approved but {k} is missing")
+            elif not any(parse_frontmatter(f).get("status", "").lower() == "approved" for f in files):
                 violations.append(f"I1: Project Charter is Approved but {k} is not Approved")
 
-    # I2: progressive PMP elaboration before execution/contract evidence
-    exec_evidence = by[11].canonical + by[12].canonical
+    # I2: canonical execution evidence requires an elaborated Stage 7 PMP and Stage 6 stories
+    exec_evidence = by[9].canonical + by[10].canonical
     if exec_evidence:
-        pmps = [p for p in (by[10].canonical + by[10].legacy) if p.name == "Project-Management-Plan.md"]
+        pmps = [p for p in (by[7].canonical + by[7].legacy) if p.name == "Project-Management-Plan.md"]
         bl = _baseline(pmps[0]) if pmps else None
         if bl is None:
-            violations.append("I2: Stage 11/12 artifacts exist but no baselined Project-Management-Plan.md")
-        elif bl[1] < 1 and bl[0] < 2:
+            violations.append("I2: Stage 9/10 artifacts exist but no baselined Project-Management-Plan.md")
+        elif bl < (1, 1, 0):
             violations.append(
-                f"I2: Stage 11/12 artifacts exist but PMP baseline is PMP-BL-v{bl[0]}.{bl[1]}.{bl[2]} "
-                "(needs elaboration to >= v1.1.0 after User Stories)")
-        if bl is not None and not (by[9].canonical + by[9].legacy):
-            violations.append("I2: PMP elaborated but no Stage 9 User Stories/Epics exist")
+                f"I2: Stage 9/10 artifacts exist but PMP baseline is PMP-BL-v{bl[0]}.{bl[1]}.{bl[2]} "
+                "(needs elaboration to >= v1.1.0)")
+        if not (by[6].canonical + by[6].legacy):
+            violations.append("I2: Stage 9/10 artifacts exist but no Stage 6 requirements exist")
 
-    # I4: loop closure
-    for p in by[18].canonical + by[18].legacy:
-        text = ""
-        try:
-            text = p.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
-            pass
-        if p.name.startswith(("GC-", "ADAPT-")) and not re.search(r"refinesIntent|amendsADR", text):
-            violations.append(f"I4: {p.name} closes no loop (needs refinesIntent and/or amendsADR)")
+    # I4: Stage 18 closes the loop. Design-time Stage 16 records and Stage 17
+    # adaptations must not refine intent.
+    violations.extend(
+        _i4_violations(
+            {
+                16: by[16].canonical + by[16].legacy,
+                17: by[17].canonical + by[17].legacy,
+                18: by[18].canonical + by[18].legacy,
+            },
+            by[1].canonical + by[1].legacy,
+        )
+    )
 
     folder_gaps = [f for f in FOLDERS.values() if not (life / f).is_dir()]
     missing_policies = [p for p in required_policies()
