@@ -115,7 +115,7 @@ def _front_value(text: str, key: str) -> str:
     """Return a frontmatter scalar, or a comma-joined list when the scalar is empty."""
     lines = _frontmatter_block(text).splitlines()
     for index, line in enumerate(lines):
-        match = re.match(rf"^{re.escape(key)}:\s*(.*)$", line)
+        match = re.match(rf"^\s*{re.escape(key)}:\s*(.*)$", line)
         if not match:
             continue
         raw = re.sub(r"\s+#.*$", "", match.group(1).strip()).strip().strip("'\"")
@@ -144,6 +144,22 @@ def _proposal_in_force(text: str) -> bool:
     return _concrete(_front_value(text, "refinement_id"))
 
 
+def _closes_loop(text: str) -> bool:
+    """A proposal closes the loop the way the Stage 18 template records it.
+
+    ``lineage.root_spark`` names the Stage 1 spark. Section 6 names the Phase N+1
+    catalyst. ``refinesIntent`` and ``amendsADR`` remain accepted explicit links.
+    """
+    if _concrete(_front_value(text, "refinesIntent")) or _concrete(_front_value(text, "amendsADR")):
+        return True
+    if _concrete(_front_value(text, "root_spark")):
+        return True
+    catalyst = re.search(r"Primary Catalyst for Phase N\+1:\**\s*(.+)", text)
+    if catalyst and _concrete(catalyst.group(1).strip().strip("*")):
+        return True
+    return False
+
+
 def _i4_violations(stage_files: dict[int, list[Path]]) -> list[str]:
     """Loop closure is Stage 18. Design-time changes and adaptations must not refine intent."""
     violations: list[str] = []
@@ -169,9 +185,12 @@ def _i4_violations(stage_files: dict[int, list[Path]]) -> list[str]:
         text = _read_text(path)
         if not _proposal_in_force(text):
             continue
-        if _concrete(_front_value(text, "refinesIntent")) or _concrete(_front_value(text, "amendsADR")):
+        if _closes_loop(text):
             continue
-        violations.append(f"I4: {path.name} closes no loop (needs refinesIntent and/or amendsADR)")
+        violations.append(
+            f"I4: {path.name} closes no loop "
+            "(needs lineage.root_spark, a Phase N+1 spark catalyst, refinesIntent, or amendsADR)"
+        )
     return violations
 
 

@@ -141,8 +141,9 @@ INVARIANTS: dict[str, str] = {
           "before Stage 9/10 canonical execution evidence.",
     "I3": "Every stage policy has a governing policy shape in docs/policy-shapes.",
     "I4": "An approved or concretely identified Stage 18 Intent-Refinement-Proposal closes "
-          "the loop by recording refinesIntent (Stage 1) and/or amendsADR. A Stage 16 "
-          "design-time GC-* record and a Stage 17 adaptation record do not refine intent.",
+          "the loop through lineage.root_spark, a Phase N+1 spark catalyst, or "
+          "refinesIntent/amendsADR. A Stage 16 design-time GC-* record and a Stage 17 "
+          "adaptation record do not refine intent.",
 }
 
 
