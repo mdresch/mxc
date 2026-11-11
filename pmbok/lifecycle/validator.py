@@ -131,7 +131,7 @@ def validate_project(root: str | Path) -> Report:
         bl = _baseline(pmps[0]) if pmps else None
         if bl is None:
             violations.append("I2: Stage 9/10 artifacts exist but no baselined Project-Management-Plan.md")
-        elif bl[1] < 1 and bl[0] < 2:
+        elif bl < (1, 1, 0):
             violations.append(
                 f"I2: Stage 9/10 artifacts exist but PMP baseline is PMP-BL-v{bl[0]}.{bl[1]}.{bl[2]} "
                 "(needs elaboration to >= v1.1.0)")
