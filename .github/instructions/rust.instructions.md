@@ -96,11 +96,43 @@ Eagerly implement common traits where appropriate:
 - Functions should validate their arguments
 - All public types must implement `Debug`
 
-## Testing and Documentation
+## Testing and validation
 
-- Write comprehensive unit tests using `#[cfg(test)]` modules and `#[test]` annotations.
-- Use test modules alongside the code they test (`mod tests { ... }`).
-- Write integration tests in `tests/` directory with descriptive filenames.
+Rust changes use Cargo, from `src/` (or `--manifest-path src/Cargo.toml`). This is the project's Jest / pytest equivalent. `cargo test` exits non-zero on the first failed assertion. The GitHub Actions build jobs run `cargo test --locked` and fail the check on that exit, which is the regression notification for a pull request.
+
+Run this before finishing any Rust change. `scripts/validate-rust.sh` and `scripts/validate-rust.ps1` run the same three steps.
+
+```text
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
+```
+
+While iterating, filter to the test you are writing (`cargo test -p mxc-sdk --lib -- <name>`). The workspace run is still required before the change is done, so a failure outside that filter is caught.
+
+- Put unit tests in a `#[cfg(test)] mod tests` next to the code they exercise.
+- Put integration tests in the crate's `tests/` directory. For `mxc-sdk` that is `src/mxc-sdk/tests/`.
+- A story contract is one `#[test]` per acceptance criterion. The test comment names the story and the ADR (`// Story 1.1 — … (ADR-001)`). The test must fail before the implementation change and pass after it.
+- Do not use `tests/contracts/*.test.js` or `npm run story:done` for Rust story contracts. Those belong to the SIDPA template's Node runner. Node SDK changes still use `npm test` from `sdk/node/`. .NET SDK changes still use `dotnet test`.
+- `#[ignore]` tests do not run under `cargo test --workspace`. Pass `-- --include-ignored` when the change touches an ignored test and the host can run it.
+- Doc tests: `cargo test -p mxc-sdk --doc`.
+
+Line coverage is `cargo-llvm-cov`, not `cargo test`. Install once with `cargo install cargo-llvm-cov`. Then:
+
+```text
+cargo llvm-cov --workspace --fail-under-lines 100
+```
+
+`--fail-under-lines 100` is the coverage floor, the same role as a Jest `coverageThreshold` of 100 or pytest-cov `--cov-fail-under=100`. Use it for a new crate or a story module that can honestly meet that floor. Do not lower the floor to make an existing crate pass. The repository build does not currently fail CI on a workspace-wide line percentage, because host-only and `#[ignore]` tests cannot run on every runner. The required CI signal remains `cargo test`.
+
+Local rerun on save, after `cargo install cargo-watch`:
+
+```text
+cargo watch -c -x "test --workspace"
+```
+
+## Documentation
+
 - Write clear and concise comments for each function, struct, enum, and complex logic.
 - Ensure functions have descriptive names and include comprehensive documentation.
 - Document all public APIs with rustdoc (`///` comments) following the [API Guidelines](https://rust-lang.github.io/api-guidelines/).
@@ -125,7 +157,7 @@ Before publishing or reviewing Rust code, ensure:
 - [ ] **Traits**: Implements `Debug`, `Clone`, `PartialEq` where appropriate
 - [ ] **Error Handling**: Uses `Result<T, E>` and provides meaningful error types
 - [ ] **Documentation**: All public items have rustdoc comments with examples
-- [ ] **Testing**: Comprehensive test coverage including edge cases
+- [ ] **Testing**: `cargo test --workspace` passes. New behavior has a `#[test]`. A story has one test per acceptance criterion, seen failing before the implementation. `cargo llvm-cov --fail-under-lines 100` is run when the change is a new crate or a module that can meet that floor.
 
 ### Safety and Quality
 - [ ] **Safety**: No unnecessary `unsafe` code, proper error handling

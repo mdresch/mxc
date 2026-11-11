@@ -254,10 +254,18 @@ The Rust style guidelines used in this repo are documented in [`.github/instruct
 Testing is a key component in the development workflow. We expect contributors to add or update tests alongside their changes.
 
 ```bash
-# Rust unit tests (from src/)
+# Rust (from src/). scripts/validate-rust.sh and scripts/validate-rust.ps1
+# run fmt, clippy, and the workspace tests.
 cargo test --workspace
 cargo test -p mxc-sdk --lib                         # Consolidated library unit tests
 cargo test -p mxc-sdk --lib -- config_parser        # Filter by test name
+
+# Line coverage. Install once: cargo install cargo-llvm-cov
+# Use the 100 floor for a new crate or a story module that can meet it.
+cargo llvm-cov --workspace --fail-under-lines 100
+
+# Rerun tests on save. Install once: cargo install cargo-watch
+cargo watch -c -x "test --workspace"
 
 # SDK unit and integration tests (from sdk/node/)
 npm test
@@ -267,6 +275,8 @@ npm run test:integration
 cargo test -p mxc-sdk --test 'wxc_e2e_tests_*'              # Invokes MXC binaries directly
 cargo test -p mxc-sdk --test 'wxc_e2e_tests_*' -- --ignored # Include stress tests
 ```
+
+A Rust story contract is a `#[test]` next to the code, one test per acceptance criterion, with a comment that names the story and the ADR. Run the filtered test until it passes, then `cargo test --workspace` so a regression outside that test fails before the pull request. Node and .NET story contracts stay on `npm test` and `dotnet test`.
 
 PowerShell and shell helper scripts that drive the executor end-to-end live under `tests/scripts/` and require a local build. See the [README](./README.md) and the [SDK README](./sdk/node/README.md) for more.
 
