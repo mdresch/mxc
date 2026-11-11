@@ -144,15 +144,30 @@ def _proposal_in_force(text: str) -> bool:
     return _concrete(_front_value(text, "refinement_id"))
 
 
-def _closes_loop(text: str) -> bool:
+def _project_claims_spark(spark_id: str, stage1_files: list[Path]) -> bool:
+    """True when a Stage 1 artifact is this spark, not the template's example id."""
+    if len(spark_id) < 3:
+        return False
+    pattern = re.compile(rf"(?<!\w){re.escape(spark_id)}(?!\w)")
+    for path in stage1_files:
+        if spark_id in {path.name, path.stem}:
+            return True
+        if pattern.search(_read_text(path)):
+            return True
+    return False
+
+
+def _closes_loop(text: str, stage1_files: list[Path]) -> bool:
     """A proposal closes the loop the way the Stage 18 template records it.
 
-    ``lineage.root_spark`` names the Stage 1 spark. Section 6 names the Phase N+1
-    catalyst. ``refinesIntent`` and ``amendsADR`` remain accepted explicit links.
+    Section 6 names the Phase N+1 catalyst. ``refinesIntent`` and ``amendsADR``
+    remain accepted explicit links. ``lineage.root_spark`` counts only when a
+    Stage 1 artifact uses that id. The template example ``SPARK-v1.0.0`` does not.
     """
     if _concrete(_front_value(text, "refinesIntent")) or _concrete(_front_value(text, "amendsADR")):
         return True
-    if _concrete(_front_value(text, "root_spark")):
+    root = _front_value(text, "root_spark")
+    if _concrete(root) and _project_claims_spark(root, stage1_files):
         return True
     catalyst = re.search(r"Primary Catalyst for Phase N\+1:\**\s*(.+)", text)
     if catalyst and _concrete(catalyst.group(1).strip().strip("*")):
@@ -160,8 +175,9 @@ def _closes_loop(text: str) -> bool:
     return False
 
 
-def _i4_violations(stage_files: dict[int, list[Path]]) -> list[str]:
+def _i4_violations(stage_files: dict[int, list[Path]], stage1_files: list[Path] | None = None) -> list[str]:
     """Loop closure is Stage 18. Design-time changes and adaptations must not refine intent."""
+    stage1_files = stage1_files or []
     violations: list[str] = []
     for path in stage_files.get(16, []):
         if not path.name.startswith("GC-"):
@@ -185,11 +201,12 @@ def _i4_violations(stage_files: dict[int, list[Path]]) -> list[str]:
         text = _read_text(path)
         if not _proposal_in_force(text):
             continue
-        if _closes_loop(text):
+        if _closes_loop(text, stage1_files):
             continue
         violations.append(
             f"I4: {path.name} closes no loop "
-            "(needs lineage.root_spark, a Phase N+1 spark catalyst, refinesIntent, or amendsADR)"
+            "(needs a Phase N+1 spark catalyst, refinesIntent, amendsADR, or a lineage.root_spark "
+            "that a Stage 1 artifact uses; the template example SPARK-v1.0.0 does not count)"
         )
     return violations
 
@@ -244,7 +261,8 @@ def validate_project(root: str | Path) -> Report:
                 16: by[16].canonical + by[16].legacy,
                 17: by[17].canonical + by[17].legacy,
                 18: by[18].canonical + by[18].legacy,
-            }
+            },
+            by[1].canonical + by[1].legacy,
         )
     )
 
