@@ -8,10 +8,16 @@ import subprocess
 import sys
 from pathlib import Path
 
+LIB_DIR = Path(__file__).resolve().parent / "lib"
+if str(LIB_DIR) not in sys.path:
+    sys.path.insert(0, str(LIB_DIR))
+
+from gate_common import resolve_agent_learn_cli
+
 REPO = Path(__file__).resolve().parents[1]
 GATES = REPO / "docs" / "project-docs" / "gates"
 MP = REPO / "docs" / "project-docs" / "management-plans"
-CLI = REPO / ".venv" / "Scripts" / "agent-learn.exe"
+CLI = resolve_agent_learn_cli(REPO)
 DATE = "2026-11-10"
 TASK_ID = "approve-subsidiary-plan"
 POLICY_ID = "1c0b25f8-af6e-4573-a101-9f5568f28792"

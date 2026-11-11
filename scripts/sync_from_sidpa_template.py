@@ -78,9 +78,21 @@ def main() -> int:
         "init_management_plan_foundations.py",
         "orchestrate_pmbok.py",
         "execute_approve_gate.example.py",
+        "pr_gate.py",
         "complete-story.mjs",
         "run-contracts.mjs",
     ]
+    lib_py = [
+        "decision.py",
+        "critique_evidence.py",
+        "gate_common.py",
+    ]
+    lib_dst = REPO / "scripts" / "lib"
+    for name in lib_py:
+        src = TEMPLATE_ROOT / "scripts" / "lib" / name
+        if src.is_file():
+            copy_file(src, lib_dst / name)
+            report.append(f"scripts/lib/{name}")
     for name in script_names:
         src = TEMPLATE_ROOT / "scripts" / name
         if src.is_file():

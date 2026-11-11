@@ -25,9 +25,9 @@ Cumulative **CAT-LAB likely** through each milestone gate ([Schedule-Gantt-Phase
 | Gate 0 | Planning packs approved | €0 execution | — | Stage 8 notice |
 | MS-01 | 1.1.2 | €4,620 | + pro-rata OV | Story 1.1.2 AC |
 | MS-02 | 1.3.2 | €11,220 | ~€12,400 | Image baseline |
-| MS-03 | 1.4.3 | €22,460 | ~€24,700 | Pause proven |
-| MS-04 | 1.2.3 | €32,360 | ~€35,400 | Ingress live |
-| MS-05 | 1.5.3 | €42,710 | ~€46,600 | Sterile path |
+| MS-03 | 1.4.3 | €20,460 | ~€22,500 | Pause proven |
+| MS-04 | 1.2.3 | €30,360 | ~€33,300 | Ingress live |
+| MS-05 | 1.5.3 | €40,710 | ~€44,400 | Sterile path |
 | MS-06 | 1.6.4 | **€50,610** | **~€54,700** | Pool ops |
 | MS-07 | 1.0 acceptance | €50,610 | **€58,710** incl. **CAT-LAB-OV** | Phase-1 baseline |
 

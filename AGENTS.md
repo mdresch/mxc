@@ -2,7 +2,7 @@
 
 - Take lifecycle document templates from the sibling `sidpa-template` repo (`D:\Source\repos\sidpa-template`), instantiate them in this repo (including the Spark Capture form), and keep MXC aligned with the latest sidpa-template governance policies and templates.
 - Save architecture decision records to the designated folder `01 Architecture Decisions (ADR)` at `C:\Users\menno\Documents\Second Brain\wiki\Projects\MXC\01 Architecture Decisions (ADR)`.
-- For GitHub pull requests, prefer on-demand PR Approval Agent runs via the project `approve-pr` skill over the always-on GitHub PR Reviewer when token use matters; invoke explicitly (for example `approve PR #N`).
+- For GitHub pull requests, prefer on-demand PR Approval Agent runs via the project `approve-pr` skill over the always-on GitHub PR Reviewer when token use matters; invoke explicitly (for example `approve PR #N`). Run the SIDPA Bayesian gatekeeper first with `pr-gate` / `python scripts/pr_gate.py <N>` when checking merge readiness.
 - In schedule and cost baselines, express planned work as human developer or engineering effort in days; do not pre-estimate agentic effort actuals—leave those for execution-time tracking.
 - When a task needs multiple specialists, record a lead plus specialists reporting to that lead.
 - Do not invent payroll hourly rates; use market-conform placeholders only when actual payroll rates are unavailable.

@@ -8,13 +8,19 @@ import subprocess
 import sys
 from pathlib import Path
 
+LIB_DIR = Path(__file__).resolve().parent / "lib"
+if str(LIB_DIR) not in sys.path:
+    sys.path.insert(0, str(LIB_DIR))
+
+from gate_common import frontmatter_has, resolve_agent_learn_cli
+
 REPO = Path(__file__).resolve().parents[1]
 GATES = REPO / "docs" / "project-docs" / "gates"
 MP = REPO / "docs" / "project-docs" / "management-plans"
 PMP = REPO / "docs" / "project-docs" / "Project-Management-Plan.md"
 REG = REPO / "docs" / "registers" / "Project-Status-Register.md"
 PACKAGE = MP / "PMP-Approval-Package-Manifest.md"
-CLI = REPO / ".venv" / "Scripts" / "agent-learn.exe"
+CLI = resolve_agent_learn_cli(REPO)
 DATE = "2026-11-10"
 TASK_ID = "approve-pmp"
 POLICY_ID = "46c60639-c24f-4045-8ace-a3dbe2142e61"
@@ -82,18 +88,15 @@ def main() -> int:
         print(json.dumps({"error": "adjudication did not select approve_pmp", "data": data}, indent=2), file=sys.stderr)
         return 1
 
-    pmp_hash = sha256_file(PMP)
-
     # --- PMP frontmatter ---
     pt = PMP.read_text(encoding="utf-8")
-    if "pmp_approved:" not in pt.split("---", 2)[0]:
+    if not frontmatter_has(pt, "pmp_approved"):
         pt = pt.replace(
             'governance_policy: "approve-pmp"',
             f'governance_policy: "approve-pmp"\n'
             f'pmp_status: approved\n'
             f'pmp_approved: "{DATE}"\n'
-            f'pmp_approval_gate: "gates/{STEM}.adjudication.json"\n'
-            f'pmp_sha256_at_approval: "{pmp_hash}"',
+            f'pmp_approval_gate: "gates/{STEM}.adjudication.json"',
             1,
         )
     if LOCK_OLD.search(pt):
@@ -120,10 +123,30 @@ def main() -> int:
         f"## 5. Governance Authorization\n\n**Status:** **Approved ({DATE})** — integrated PMP **`{BASELINE}`** locked under `approve-pmp` "
         f"(policy `{POLICY_ID}`, human acceptance). "
         f"Gate: [gates/{STEM}.adjudication.json](gates/{STEM}.adjudication.json). "
-        f"PMP SHA-256 at approval: `{pmp_hash}`.\n\n"
+        "PMP SHA-256 at approval: `__PMP_SHA256__`.\n\n"
         "This integrated PMP was formally evaluated and approved via `approve-pmp`",
     )
     PMP.write_text(pt, encoding="utf-8")
+    pmp_hash = sha256_file(PMP)
+    pt = PMP.read_text(encoding="utf-8")
+    if not frontmatter_has(pt, "pmp_sha256_at_approval"):
+        pt = pt.replace(
+            f'pmp_approval_gate: "gates/{STEM}.adjudication.json"',
+            f'pmp_approval_gate: "gates/{STEM}.adjudication.json"\n'
+            f'pmp_sha256_at_approval: "{pmp_hash}"',
+            1,
+        )
+    else:
+        pt = re.sub(
+            r'^pmp_sha256_at_approval:\s*".*"$',
+            f'pmp_sha256_at_approval: "{pmp_hash}"',
+            pt,
+            count=1,
+            flags=re.M,
+        )
+    pt = pt.replace("__PMP_SHA256__", pmp_hash)
+    PMP.write_text(pt, encoding="utf-8")
+    pmp_hash = sha256_file(PMP)
 
     for name in OPERATIONAL_PLANS:
         path = MP / name

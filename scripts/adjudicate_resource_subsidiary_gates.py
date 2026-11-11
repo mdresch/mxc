@@ -8,12 +8,18 @@ import subprocess
 import sys
 from pathlib import Path
 
+LIB_DIR = Path(__file__).resolve().parent / "lib"
+if str(LIB_DIR) not in sys.path:
+    sys.path.insert(0, str(LIB_DIR))
+
+from gate_common import frontmatter_has, resolve_agent_learn_cli
+
 REPO = Path(__file__).resolve().parents[1]
 GATES = REPO / "docs" / "project-docs" / "gates"
 MP = REPO / "docs" / "project-docs" / "management-plans"
 PMP = REPO / "docs" / "project-docs" / "Project-Management-Plan.md"
 REG = REPO / "docs" / "registers" / "Project-Status-Register.md"
-CLI = REPO / ".venv" / "Scripts" / "agent-learn.exe"
+CLI = resolve_agent_learn_cli(REPO)
 DATE = "2026-11-10"
 TASK_ID = "approve-subsidiary-plan"
 POLICY_ID = "1c0b25f8-af6e-4573-a101-9f5568f28792"
@@ -125,11 +131,11 @@ def main() -> int:
         mtext = mtext.replace("pack_status: pending", "pack_status: approved", 1)
     elif "pack_status: draft_complete" in mtext:
         mtext = mtext.replace("pack_status: draft_complete", "pack_status: approved", 1)
-    if "approval_status:" not in mtext.split("---", 2)[0]:
+    if not frontmatter_has(mtext, "approval_status"):
         mtext = mtext.replace("pack_status: approved", "pack_status: approved\napproval_status: approved", 1)
     else:
         mtext = re.sub(r"^approval_status: pending\s*$", "approval_status: approved", mtext, count=1, flags=re.M)
-    if "rollup_completed:" not in mtext.split("---", 2)[0]:
+    if not frontmatter_has(mtext, "rollup_completed"):
         mtext = mtext.replace(
             "owner_role: Project Manager",
             f'owner_role: Project Manager\nrollup_completed: "{DATE}"',

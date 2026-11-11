@@ -60,11 +60,11 @@ depends_on:
 
 | Reserve ID | WD range | h (mid) | Planning rate | Cost envelope (EUR) | Trigger |
 |---|---|---|---|---|---|
-| SCH-RSV-001 | 5–10 | 45 | 110 | €4,950 – €6,600 | Pause metrics |
-| SCH-RSV-002 | 5–15 | 60 | 100 | €5,000 – €9,000 | VHDX catalog |
-| SCH-RSV-003 | 3–7 | 30 | 110 | €1,980 – €4,620 | Dual routing |
-| SCH-RSV-004 | 2–5 | 21 | 95 | €1,330 – €2,850 | Audit latency |
-| SCH-RSV-MGT | **~8** (10% CP) | 48 | 110 | **~€5,280** | PM change |
+| SCH-RSV-001 | 5–10 | 30–60 | 110 | €3,300 – €6,600 | Pause metrics |
+| SCH-RSV-002 | 5–15 | 30–90 | 100 | €3,000 – €9,000 | VHDX catalog |
+| SCH-RSV-003 | 3–7 | 18–42 | 110 | €1,980 – €4,620 | Dual routing |
+| SCH-RSV-004 | 2–5 | 12–30 | 95 | €1,140 – €2,850 | Audit latency |
+| SCH-RSV-MGT | **~4–8** (10% CP) | 24–48 | 110 | **~€2,640 – €5,280** | PM change |
 | **Contingency envelope** | | | | **~€18k – €28k** | Not auto-spent |
 
 ## CAT-INFRA / CAT-TOOL / CAT-AGT (Phase 1)

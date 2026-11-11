@@ -32,7 +32,7 @@
         },
         {
           "criterion_id": "sound_baseline_definitions",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.9199999999999999,
           "confidence": 0.86
         },
@@ -44,7 +44,7 @@
         },
         {
           "criterion_id": "technical_integrity",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.9199999999999999,
           "confidence": 0.86
         },
@@ -56,7 +56,7 @@
         },
         {
           "criterion_id": "consistent_with_upstream",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.9199999999999999,
           "confidence": 0.86
         }
@@ -76,7 +76,7 @@
         },
         {
           "criterion_id": "sound_baseline_definitions",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.08000000000000006,
           "confidence": 0.86
         },
@@ -88,7 +88,7 @@
         },
         {
           "criterion_id": "technical_integrity",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.08000000000000006,
           "confidence": 0.86
         },
@@ -100,7 +100,7 @@
         },
         {
           "criterion_id": "consistent_with_upstream",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.08000000000000006,
           "confidence": 0.86
         }
@@ -120,7 +120,7 @@
         },
         {
           "criterion_id": "sound_baseline_definitions",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.15,
           "confidence": 0.86
         },
@@ -132,7 +132,7 @@
         },
         {
           "criterion_id": "technical_integrity",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.15,
           "confidence": 0.86
         },
@@ -144,7 +144,7 @@
         },
         {
           "criterion_id": "consistent_with_upstream",
-          "source": "docs/project-docs/Scope-Management-Plan.md",
+          "source": "docs/project-docs/management-plans/Scope-Management-Plan.md",
           "support": 0.15,
           "confidence": 0.86
         }

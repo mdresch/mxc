@@ -37,7 +37,7 @@ depends_on:
 | 1.6.2 | Surge expansion | — | 2 / 4 / 5 | Medium | Story 6.2 | 1.6.1 |
 | 1.6.3 | Wake hygiene | — | 2 / 3 / 5 | Medium | Story 6.3 | 1.6.2 |
 | 1.6.4 | Scale down | — | 2 / 4 / 5 | Medium | Story 6.4 | 1.6.3 |
-| **1.0** | **Product roll-up** | — | **~62 / ~78 / ~102** | Low–Med | Sum likely on CP | Chain 1.1.1→1.6.4 |
+| **1.0** | **Product roll-up** | — | **~44 / ~77 / ~105** | Low–Med | Sum low/likely/high on CP (17 WPs) | Chain 1.1.1→1.6.4 |
 
 ## Roll-up method
 
