@@ -1,10 +1,18 @@
 # SIDPA alignment check
 
-Checked 4 Nov 2026, 10:41 Europe/Amsterdam, against `mdresch/sidpa-template` @ `5fb4f20` (4 Nov 2026, 09:14 Europe/Amsterdam) and the MXC tree `feat/hyperv-v2-rebased` @ `06a630d4`, plus unmerged `cursor/approve-adr-008-73a6`.
+Checked 4 Nov 2026, 10:41 Europe/Amsterdam, against `mdresch/sidpa-template` @ `5fb4f20`, then continued on 11 Nov 2026 against `0e88dd0` (11 Nov 2026, 01:59 Europe/Amsterdam).
 
-MXC is on an earlier copy of the scaffold. It is not aligned to that template commit. `main` (`3d0d9dd0`) does not contain the chain at all.
+## Numbering brought forward on 11 Nov 2026
 
-Stage numbers below are the template's `docs/chain-coverage.md` at `5fb4f20`. MXC's own `docs/chain-coverage.md` still uses an older map: PMP as stage 6, requirements as stage 7, readiness as stage 8. `pmbok/lifecycle/stages.py` on the Hyper-V branch is a third map (ADR 5, BRD 6, FDD 7, TDS 8, stories 9, PMP 10) and is not in the template commit. The policy table in MXC's chain file still names `template-governance`. The live store is `mxc-governance`.
+`cursor/sidpa-stage-alignment-73a6` copies `docs/chain-coverage.md` and `docs/sequence-and-lessons.md` from `0e88dd0`. Requirement frontmatter is `Stage 6`. The PMP and the nine subsidiary plans are `Stage 7`. The Stage 8 notice, pillars exercise, foundation packs, and `approve-subsidiary-plan` are present as templates. `pmbok.lifecycle.validate_project` reports invariants PASS. Stages with non-template evidence: 9 of 18. Stages 5, 8, 9, 10, and 12–16 have none.
+
+That branch does not approve the Charter, the benefits statement, the PMP, or Stage 8. `main` still has no chain.
+
+## Gap list from 4 Nov 2026
+
+The table below is the content gap. Stage numbers are the template matrix, which `0e88dd0` kept. The 4 Nov tree was `feat/hyperv-v2-rebased` @ `06a630d4` plus unmerged `cursor/approve-adr-008-73a6`.
+
+The paragraph that used to describe MXC's older stage map is historical. `cursor/sidpa-stage-alignment-73a6` replaces that map. Rows below that say "no pillars file" or "no foundation packs" describe `06a630d4`. The 11 Nov branch adds those files as templates and still does not approve them.
 
 | Template stage | What the template requires | What MXC has |
 |---|---|---|

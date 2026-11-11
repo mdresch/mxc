@@ -7,7 +7,7 @@ governance_policy: "none (orientation snapshot, not a governed approval artifact
 artifact_id: "project-status-register"
 version: "1.0 (live — overwritten in place, not re-versioned, every time orientation changes)"
 owner: "Menno Drescher"
-last_updated: "2026-11-04"
+last_updated: "2026-11-11"
 ---
 
 # Project Status Register — MXC Hyper-V JIT (ADPA / SIDPA)
@@ -46,21 +46,21 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Initial phase. One open phase under `PMP-BL-v1.0.0`. The delivery slices in `docs/hyperv/architecture/IMPLEMENTATION_PLAN.md` (Phase 1–4) are inside this phase. They are not separate SIDPA phases and have no Stage 17 or Stage 18 close. |
+| **Current Phase** | Initial phase. One open phase. The delivery slices in `docs/hyperv/architecture/IMPLEMENTATION_PLAN.md` (Phase 1–4) are inside this phase. They are not separate SIDPA phases and have no Stage 17 or Stage 18 close. |
 | **Current PMP Baseline** | `PMP-BL-v1.0.0`, printed on the PMP and on ADR/BRD/FDD/epic 001–006. No `approve-pmp` gate file is in `docs/project-docs/gates/`. |
-| **Session close-off checkpoint** | Initial phase. Requirement packs 001–006 are approved. Readiness gate not entered. No story in flight. This numbering is MXC's older `docs/chain-coverage.md` (requirements = 7, readiness = 8). Current `sidpa-template` @ `5fb4f20` calls that requirement band Stage 6 and the PMP Stage 7. Alignment evidence: `docs/status/sidpa-alignment.md` (4 Nov 2026, 10:41 Europe/Amsterdam). Story evidence remains `docs/status/adr-story-audit.md`. |
-| **Current macro Stage** (MXC's older chain on `feat/hyperv-v2-rebased`, not the 4 Nov 2026 template) | **Requirement band for Epics 001–006.** Those epics have accepted ADRs and approved BRDs, FDDs, and story packs (gate files dated 30 Oct 2026). `validate-intent-foundation` is not recorded on any story. `implement-story` has no row in the Story Execution Register. The current template's chain (`5fb4f20`) places this band at Stage 6, the PMP at Stage 7, and readiness at Stage 8. MXC has not reached the template's Stage 7: `approve-pmp` has no gate file. |
+| **Session close-off checkpoint** | Initial phase. Stage 6 packs 001–006 are approved. Stage 7 PMP is a scaffold and `approve-pmp` has no gate. Stage 8 has not been issued. No story in flight. Chain source: `sidpa-template` @ `0e88dd0` (11 Nov 2026, 01:59 Europe/Amsterdam), applied on `cursor/sidpa-stage-alignment-73a6`. Evidence: `docs/status/sidpa-alignment.md`. |
+| **Current macro Stage** (`docs/chain-coverage.md` §2) | **Stage 6 (Requirement) for Epics 001–006.** Accepted ADRs and approved BRDs, FDDs, and story packs (30 Oct 2026). **Stage 7 (PMP) is not approved.** **Stage 8 (`validate-intent-foundation`) has no notice.** **Stage 9 (`implement-story`) has no Story Execution Register row.** |
 | **Last Epic/unit of work fully completed** | None. No epic has a Step 9 breakout. `Lessons-Learned-Register.md` and `Continuous-Improvement-Register.md` are not instantiated. |
-| **Next Epic/unit of work to implement** | **Epic 001 — Type-1 Hyper-V Generation 2.** Story packs are approved. Stage 8 is still open: run `validate-intent-foundation` and write the sign-off on the story status line before `implement-story`. First story after that gate is **1.1 Generation 2 isolation boundary**, then 1.2. Rust contracts use `cargo test` as recorded in `.github/instructions/rust.instructions.md`. Story worktrees branch from `feat/hyperv-v2-rebased`, not `main`. |
+| **Next Epic/unit of work to implement** | **Epic 001 — Type-1 Hyper-V Generation 2**, after Stage 7 `approve-pmp` and the Stage 8 notice. First story after that gate is **1.1 Generation 2 isolation boundary**, then 1.2. Rust contracts use `cargo test`. Story worktrees branch from `feat/hyperv-v2-rebased`, not `main`. |
 | **Last commit on the base branch** | Story base `feat/hyperv-v2-rebased` @ `06a630d4` (30 Oct 2026, 15:44 Europe/Amsterdam), `feat(hyperv): Server Core WebDev golden image, ADR-008, and harness tooling`. Repository default `main` @ `3d0d9dd0` (15 Oct 2026, 16:17 Europe/Amsterdam) has no Hyper-V ADR chain. |
 | **Open side-thread outside the formal loop** | Hyper-V control plane, warm pool, JIT ingress harness, image bake/audit scripts, and the implementation plan's "complete" marks were built on `feat/hyperv-v2-rebased` with no `implement-story` row. Leave them in this cell. Do not invent epic or story paperwork to match that code. A later story run re-walks the code with `heal-contract-failure` and shows the new contract failing before trusting it. ADR-008 (authentication-gated leasing) was accepted under `approve-adr` on 4 Nov 2026, Europe/Amsterdam (gate `approve-adr-008-2026-11-04` on `cursor/approve-adr-008-73a6`, off `feat/hyperv-v2-rebased`). It still has no BRD, FDD, or epic, and no spark, hypothesis, or benefit id. ADR-007 stays inside accepted ADR-006 as story 6.3. |
-| **Stage-label overload caveat (if this project's docs exhibit it)** | Confirmed. ADR frontmatter says `Stage 7 (Requirement: Architecture)`, BRD says `Stage 7 (Requirement: Business)`, FDD says `Stage 7 (Requirement: Solution)`, and each epic says `Stage 7 (Requirement: Story)`. The PMP frontmatter says `Stage 6 (Project)`. Those labels follow MXC's older chain file. `pmbok/lifecycle/stages.py` numbers the same documents differently again. Use the macro Stage cell above, and `docs/status/sidpa-alignment.md` when comparing with `sidpa-template`. |
+| **Stage-label overload caveat (if this project's docs exhibit it)** | On `cursor/sidpa-stage-alignment-73a6`, requirement frontmatter says Stage 6 and the PMP says Stage 7, matching `chain-coverage.md` §2. Older commits still say Stage 7 for requirements and Stage 6 for the PMP. Use the macro Stage cell above. |
 
 ## 2. Phase Status
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| Initial | `PMP-BL-v1.0.0` | Open. Stage 7 packs 001–006 approved on 30 Oct 2026. Stage 8 not entered. Stage 6 `approve-pmp` and Stage 2 `approve-charter` have no gate file under `docs/project-docs/gates/`. | Not closed. No approved Stage 17 Adaptation Plan and no approved Stage 18 Intent Refinement. |
+| Initial | `PMP-BL-v1.0.0` | Open. Stage 6 packs 001–006 approved on 30 Oct 2026. Stage 7 `approve-pmp` and Stage 2 `approve-charter` have no gate file. Stage 8 not issued. | Not closed. No approved Stage 17 Adaptation Plan and no approved Stage 18 Intent Refinement. |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
