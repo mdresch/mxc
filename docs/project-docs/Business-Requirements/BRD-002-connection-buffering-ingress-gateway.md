@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Business)"
+lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
   - "docs/07-architecture/ADR-002-*.md"
@@ -16,7 +16,7 @@ outputs:
 # BRD-002: Connection-buffering ingress gateway
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope` (Planning)  
-> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 7 (Requirement: Business)`  
+> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
 > **Inputs:** [ADR-002](../../07-architecture/ADR-002-connection-buffering-ingress-gateway.md), suite [BDR.md](../../hyperv/architecture/BDR.md) (BDR-02)  
 > **Process:** Define functional and non-functional business requirements and stakeholder rules  
 > **Outputs:** BRD-002-connection-buffering-ingress-gateway.md

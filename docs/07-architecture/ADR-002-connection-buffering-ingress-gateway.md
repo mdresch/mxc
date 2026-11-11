@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Architecture)"
+lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-02"
 inputs:
@@ -20,7 +20,7 @@ outputs:
 # ADR 002: Connection-buffering ingress gateway
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Systems Architecture Planning` (Planning)  
-> **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 7 (Requirement: Architecture)`  
+> **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 6 (Requirement: Architecture)`  
 > **Topic pillar:** `TP-02` Ingress. The 300 ms unpause stays with `TP-04`. Kerberos stays with `TP-05`. The clock step stays with `TP-06`.  
 > **Inputs:** [Spark-Capture.md](../project-docs/Spark-Capture.md), [Ideation-Document.md](../project-docs/Ideation-Document.md), [Business-Case.md](../project-docs/Business-Case.md), [Benefits-Statement.md](../project-docs/Benefits-Statement.md)  
 > **Process:** Formulate architectural decisions, evaluate trade-off alternatives, specify consequences  

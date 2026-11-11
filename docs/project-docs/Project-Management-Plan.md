@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "4.2 Develop Project Management Plan"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 6 (Project)"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "Project-Charter.md"
@@ -15,8 +15,10 @@ outputs:
 
 # Project Management Plan (PMP) — SIDPA Project
 
+**Status:** Scaffold. `approve-pmp` has not been run. Packs 001–006 cite `PMP-BL-v1.0.0`, and that citation is not a locked Stage 7 baseline.
+
 > **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Baseline Identifier:** `PMP-BL-v1.0.0`  
 > **Inputs:** Project-Charter.md, Subsidiary Management Plans  
 > **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  
@@ -71,4 +73,4 @@ outputs:
 When an **Adaptation Plan** (Stage 17) is approved, this PMP and its subsidiary plans are updated with tailored operational changes evaluated through the Governance Change Impact Matrix, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle. Prior baselines are archived to `management-plans/history/{baseline_id}/`.
 
 ## 4. Governance Authorization
-This integrated PMP must be formally evaluated and approved via `approve-pmp` (`FULL` Bayesian authority, `requires_human_approval: true`) before technical specifications (ADR, BRD, FDD, Stories) are finalized. All downstream technical requirements must record `pmp_baseline: 'PMP-BL-v1.0.0'` (Invariant 6). Prior baselines remain recoverable from history archives (Invariant 7).
+Stage 6 requirement packs 001–006 are already approved. This PMP is the Stage 7 document and is not approved. `approve-pmp` (`FULL` authority, `requires_human_approval: true`) has not been run. Invariant 1 in `docs/chain-coverage.md` puts those requirements before this baseline, which is the order already used. The nine subsidiary plans are still scaffolds titled "SIDPA Project". `approve-subsidiary-plan` has not been run. This file does not authorize Stage 8 or Stage 9.

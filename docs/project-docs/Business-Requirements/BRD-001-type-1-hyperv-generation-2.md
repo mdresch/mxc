@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Business)"
+lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
   - "docs/07-architecture/ADR-001-*.md"
@@ -16,7 +16,7 @@ outputs:
 # BRD-001: Type-1 Hyper-V Generation 2 instead of a container namespace
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope` (Planning)  
-> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 7 (Requirement: Business)`  
+> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
 > **Inputs:** [ADR-001](../../07-architecture/ADR-001-type-1-hyperv-generation-2.md), suite [BDR.md](../../hyperv/architecture/BDR.md) (BDR-03)  
 > **Process:** Define functional and non-functional business requirements and stakeholder rules  
 > **Outputs:** BRD-001-type-1-hyperv-generation-2.md

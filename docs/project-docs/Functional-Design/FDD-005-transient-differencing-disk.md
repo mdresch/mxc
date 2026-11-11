@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Solution)"
+lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
   - "docs/07-architecture/ADR-005-transient-differencing-disk.md"
@@ -16,7 +16,7 @@ outputs:
 # FDD-005: Transient differencing disk and egress whitelist
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design` (Planning)  
-> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 7 (Requirement: Solution)`  
+> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Inputs:** [ADR-005](../../07-architecture/ADR-005-transient-differencing-disk.md), [BRD-005](../Business-Requirements/BRD-005-transient-differencing-disk.md)  
 > **Process:** Specify technical interfaces, data schemas, algorithmic logic, and invariant contracts  
 > **Outputs:** FDD-005-transient-differencing-disk.md

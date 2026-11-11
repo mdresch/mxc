@@ -112,33 +112,31 @@ def validate_project(root: str | Path) -> Report:
     by = {r.stage.number: r for r in results}
     violations: list[str] = []
 
-    # I1: business documents before charter
-    charter = (by[4].canonical + by[4].legacy)
-    charter = [p for p in charter if p.name.startswith("Project-Charter")]
-    if charter:
-        biz = by[3].canonical + by[3].legacy
+    # I1: benefit documents before an approved charter (chain §2 stages 4 then 2)
+    charter = [p for p in (by[2].canonical + by[2].legacy) if p.name.startswith("Project-Charter")]
+    if charter and parse_frontmatter(charter[0]).get("status", "").lower() == "approved":
+        biz = by[4].canonical + by[4].legacy
         kinds = {k: [p for p in biz if p.name.startswith(k)]
                  for k in ("Business-Case", "Benefits-Statement", "Stakeholder-Register")}
         for k, files in kinds.items():
             if not files:
-                violations.append(f"I1: Project Charter exists but {k} is missing")
-            elif parse_frontmatter(charter[0]).get("status", "").lower() == "approved" and \
-                    not any(parse_frontmatter(f).get("status", "").lower() == "approved" for f in files):
+                violations.append(f"I1: Project Charter is Approved but {k} is missing")
+            elif not any(parse_frontmatter(f).get("status", "").lower() == "approved" for f in files):
                 violations.append(f"I1: Project Charter is Approved but {k} is not Approved")
 
-    # I2: progressive PMP elaboration before execution/contract evidence
-    exec_evidence = by[11].canonical + by[12].canonical
+    # I2: canonical execution evidence requires an elaborated Stage 7 PMP and Stage 6 stories
+    exec_evidence = by[9].canonical + by[10].canonical
     if exec_evidence:
-        pmps = [p for p in (by[10].canonical + by[10].legacy) if p.name == "Project-Management-Plan.md"]
+        pmps = [p for p in (by[7].canonical + by[7].legacy) if p.name == "Project-Management-Plan.md"]
         bl = _baseline(pmps[0]) if pmps else None
         if bl is None:
-            violations.append("I2: Stage 11/12 artifacts exist but no baselined Project-Management-Plan.md")
+            violations.append("I2: Stage 9/10 artifacts exist but no baselined Project-Management-Plan.md")
         elif bl[1] < 1 and bl[0] < 2:
             violations.append(
-                f"I2: Stage 11/12 artifacts exist but PMP baseline is PMP-BL-v{bl[0]}.{bl[1]}.{bl[2]} "
-                "(needs elaboration to >= v1.1.0 after User Stories)")
-        if bl is not None and not (by[9].canonical + by[9].legacy):
-            violations.append("I2: PMP elaborated but no Stage 9 User Stories/Epics exist")
+                f"I2: Stage 9/10 artifacts exist but PMP baseline is PMP-BL-v{bl[0]}.{bl[1]}.{bl[2]} "
+                "(needs elaboration to >= v1.1.0)")
+        if not (by[6].canonical + by[6].legacy):
+            violations.append("I2: Stage 9/10 artifacts exist but no Stage 6 requirements exist")
 
     # I4: loop closure
     for p in by[18].canonical + by[18].legacy:

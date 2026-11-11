@@ -1,17 +1,13 @@
-"""Unified 18-stage lifecycle registry (single source of truth).
+"""Unified 18-stage lifecycle registry.
 
-Mirrors the Second Brain "Software Engineering Lifecycle Pipeline" and the
-SIDPA closed-loop lifecycle. Everything that needs to know "what are the
-stages, which folder, which artifact, which policy" reads it from here.
+Numbers match ``docs/chain-coverage.md`` §2 in sidpa-template ``0e88dd0``
+(11 Nov 2026). ``validator.py`` enforces:
 
-Ordering rules encoded elsewhere (see validator.py):
-  * Stage 3 (Business Case, Benefits Statement, Stakeholder Register)
-    precedes Stage 4 (Project Charter).
-  * The PMP is progressively elaborated: a draft baseline exists after the
-    Charter, and is re-elaborated and locked at Stage 10 (after User Stories)
-    before Stage 11 (agent execution) and Stage 12 (contract tests).
-  * Stage 18 closes the loop back to Stage 1 (refinesIntent) and Stage 5
-    (amendsADR).
+  * Stage 4 benefit documents before an approved Stage 2 Charter.
+  * Stage 6 requirements before a Stage 7 PMP baseline.
+  * Stage 7 PMP elaborated to ``PMP-BL-v1.1.0`` or later before Stage 9/10
+    canonical execution evidence.
+  * Stage 18 loop closure back to Stage 1 (refinesIntent) and/or an ADR.
 """
 
 from __future__ import annotations
@@ -60,86 +56,92 @@ class Stage:
 
 
 STAGES: tuple[Stage, ...] = (
-    Stage(1, "Strategic Intent, Spark & Ideation", 1, ("00",),
-          ("Spark-Capture*.md", "Ideation-Document*.md", "INTENT-*.md"),
+    Stage(1, "Intent: Spark & Ideation", 1, ("00",),
+          ("Spark-Capture*.md", "Ideation-Document*.md"),
           "approve-ideation", "Initiating: Strategic Need Identification",
           ("docs/project-docs",)),
-    Stage(2, "Feature Research & Cybernetic Information Flow Loop", 1, ("06",),
-          ("Concept-*.md", "Cybernetic-Flow-Loop-*.md"),
-          "score-concept-authority", "Initiating: Domain Grounding & Gap Discovery"),
-    Stage(3, "Business Case, Benefits Statement & Stakeholder Register", 1, ("05",),
+    Stage(2, "Objective: Project Charter", 1, ("05",),
+          ("Project-Charter*.md",),
+          "approve-charter", "Initiating: 4.1 Develop Project Charter",
+          ("docs/project-docs",)),
+    Stage(3, "Hypothesis", 1, ("00",),
+          ("HYP-*.md", "Ideation-Document*.md"),
+          "classify-hypothesis-status", "Initiating: Design Assumption Formulation",
+          ("docs/project-docs",)),
+    Stage(4, "Benefit: Business Case & Benefits Statement", 1, ("05",),
           ("Business-Case*.md", "Benefits-Statement*.md", "Stakeholder-Register*.md"),
           "approve-business-case", "Initiating: Business Case & Benefits Planning",
           ("docs/project-docs",)),
-    Stage(4, "Project Charter & Architectural Hypothesis", 1, ("05",),
-          ("Project-Charter*.md", "HYP-*.md"),
-          "approve-charter", "Initiating: 4.1 Develop Project Charter",
-          ("docs/project-docs",)),
-    Stage(5, "Architecture Decision Record (ADR)", 1, ("01",),
-          ("ADR-*.md",), "approve-adr", "Planning: Architecture Governance",
+    Stage(5, "Pillars & Architecture", 1, ("01",),
+          ("PILLARS-EXERCISE.md", "PILLARS*.md"),
+          "approve-adr", "Planning: Architectural Strategy Formulation",
           ("docs/07-architecture",)),
-    Stage(6, "Business Requirements (BRD)", 2, ("02",),
-          ("BRD-*.md",), "approve-brd", "Planning: 5.2 Collect Requirements",
-          ("docs/project-docs/Business-Requirements",)),
-    Stage(7, "Functional Design Document (FDD)", 2, ("03",),
-          ("FDD-*.md",), "approve-fdd", "Planning: 5.3 Define Scope",
-          ("docs/project-docs/Functional-Design",)),
-    Stage(8, "Technical Design Spec (TDS)", 2, ("03.5",),
-          ("TDS-*.md",), "approve-tds", "Planning: Component Architecture & DDL"),
-    Stage(9, "User Stories & Delivery Slices", 2, ("04",),
-          ("EPIC-*.md", "epic-*.md", "Story-*.md", "story-*.md"),
-          "approve-user-stories", "Planning: 5.4 Create WBS & Backlog",
-          ("docs/user-stories",)),
-    Stage(10, "Management Plans & PMP Update (Progressive Elaboration)", 2, ("05",),
+    Stage(6, "Requirement: ADR, BRD, FDD, User Stories", 2, ("01", "02", "03", "04"),
+          ("ADR-*.md", "BRD-*.md", "FDD-*.md", "epic-*.md", "EPIC-*.md"),
+          "approve-adr", "Planning: 5.2 Collect Requirements & 5.3 Define Scope",
+          ("docs/07-architecture", "docs/project-docs/Business-Requirements",
+           "docs/project-docs/Functional-Design", "docs/user-stories")),
+    Stage(7, "Project: PMP & Subsidiary Plans", 2, ("05",),
           ("Project-Management-Plan*.md", "*-Management-Plan*.md", "*-Engagement-Plan*.md"),
           "approve-pmp", "Planning: 4.2 Develop Project Management Plan",
-          ("docs/project-docs/management-plans", "docs/project-docs")),
-    Stage(11, "Agent Skills & Execution Plan", 2, ("04.5", "07.5"),
-          ("Plan-*.md", "SKILL.md", "Skill-*.md"),
-          "validate-intent-foundation", "Executing: 4.3 Direct & Manage Work",
-          (".claude/skills",)),
-    Stage(12, "Executable Contract Tests & Gates", 3, ("07",),
-          ("*.contract.test.*", "test_*.py", "ContractTest-*.md", "Audit-Register*.md"),
-          "approve-audit-record", "Monitoring & Controlling: 8.3 Control Quality",
-          ("tests", "docs/registers")),
-    Stage(13, "Telemetry Observation (OBS)", 3, ("08",),
-          ("OBS-*.md",), "ingest-telemetry-signal",
-          "Monitoring & Controlling: 4.5 Monitor & Control"),
-    Stage(14, "Empirical Outcome & Affect Measurement", 3, ("08",),
-          ("OUTCOME-*.md", "AFFECT-*.md"), "evaluate-outcome-delta",
-          "Monitoring & Controlling: 5.5 Validate Scope"),
-    Stage(15, "Diagnostic Finding & Insight", 3, ("06",),
-          ("INSIGHT-*.md",), "resolve-kb-conflict",
-          "Monitoring & Controlling: 4.4 Manage Knowledge"),
-    Stage(16, "Crystallized Lesson Learned", 4, ("06",),
-          ("LL-*.md",), "codify-lesson-learned",
-          "Monitoring & Controlling: 4.4 Lessons Learned"),
-    Stage(17, "AI Reasoning & Recommendation Trace", 4, ("09",),
-          ("AIR-*.md", "AIREC-*.md"), "evaluate-ai-recommendation",
-          "Monitoring & Controlling: AI Governance"),
-    Stage(18, "Governance Change, Adaptation & Intent Refinement", 4, ("05",),
-          ("GC-*.md", "ADAPT-*.md", "Adaptation-Plan*.md", "Intent-Refinement-Proposal*.md"),
-          "classify-diff-type", "Closing: 4.6 Integrated Change & Tailoring",
+          ("docs/project-docs", "docs/project-docs/management-plans")),
+    Stage(8, "Implementation Readiness", 2, ("04.5",),
+          ("Stage-8-Implementation-Authorization-Notice.md",),
+          "validate-intent-foundation", "Planning to Executing: Implementation Authorization",
+          ("docs/project-docs/Status-Reports",)),
+    Stage(9, "Deliverable", 2, ("04.5",),
+          ("Plan-*.md",),
+          "implement-story", "Executing: 4.3 Direct & Manage Project Work"),
+    Stage(10, "Verification Evidence", 3, ("07",),
+          ("*.contract.test.*", "ContractTest-*.md"),
+          "contract-test-suite", "Monitoring & Controlling: 8.3 Control Quality"),
+    Stage(11, "Audit Record", 3, ("07",),
+          ("Audit-Register.md", "Audit-Finding.md"),
+          "approve-audit-record", "Monitoring & Controlling: 8.2 Manage Quality Audits",
+          ("docs/registers",)),
+    Stage(12, "Actual Outcome", 3, ("08",),
+          ("OUTCOME-*.md", "AFFECT-*.md"),
+          "empirical-observation", "Monitoring & Controlling: 5.5 Validate Scope"),
+    Stage(13, "Observation", 3, ("08",),
+          ("OBS-*.md",),
+          "ingest-telemetry-signal", "Monitoring & Controlling: 4.5 Monitor & Control"),
+    Stage(14, "Insight", 3, ("06",),
+          ("INSIGHT-*.md",),
+          "resolve-kb-conflict", "Monitoring & Controlling: 4.4 Manage Project Knowledge"),
+    Stage(15, "Lesson Learned", 4, ("06",),
+          ("LL-*.md", "Lesson-*.md"),
+          "resolve-kb-conflict", "Monitoring & Controlling: 4.4 Lessons Learned"),
+    Stage(16, "Governance Change", 4, ("09",),
+          ("GC-*.md",),
+          "classify-diff-type", "Monitoring & Controlling: 4.6 Integrated Change Control",
+          ("docs/project-docs",)),
+    Stage(17, "Adaptation Plan", 4, ("05",),
+          ("Adaptation-Plan.md", "ADAPT-*.md"),
+          "approve-adaptation-plan", "Closing: Tailoring",
+          ("docs/project-docs",)),
+    Stage(18, "Intent Refinement", 4, ("05",),
+          ("Intent-Refinement-Proposal.md",),
+          "approve-intent-refinement", "Closing: 4.7 Close Project or Phase",
           ("docs/project-docs",)),
 )
 
-# Policies that the stage registry requires. Stages 18 additionally uses
-# approve-intent-refinement; stage 3 uses classify-hypothesis-status for HYP-*.
+# Sibling policies for a stage whose registry slot holds only one policy id.
 EXTRA_POLICIES: tuple[str, ...] = (
-    "approve-intent-refinement",
-    "classify-hypothesis-status",
-    "approve-adaptation-plan",
+    "approve-brd",
+    "approve-fdd",
+    "approve-user-stories",
+    "approve-subsidiary-plan",
     "escalate-diff-response",
 )
 
 # Ordering invariants (documented here, enforced in validator.py).
 INVARIANTS: dict[str, str] = {
-    "I1": "Stage 3 business documents are approved before the Stage 4 Project Charter.",
-    "I2": "PMP is progressively elaborated and locked (PMP-BL-vX.Y.Z, Y>=1) at Stage 10 "
-          "before Stage 11 execution plans or Stage 12 contract tests exist.",
-    "I3": "Every stage artifact must have a governing policy shape in docs/policy-shapes.",
-    "I4": "Stage 18 closes the loop: a governance change/adaptation must refine intent "
-          "(Stage 1) and/or amend an ADR (Stage 5).",
+    "I1": "Stage 4 business documents are approved before an approved Stage 2 Project Charter.",
+    "I2": "Stage 6 requirements exist, and the Stage 7 PMP is at PMP-BL-v1.1.0 or later, "
+          "before Stage 9/10 canonical execution evidence.",
+    "I3": "Every stage policy has a governing policy shape in docs/policy-shapes.",
+    "I4": "Stage 18 closes the loop: a governance change refines intent (Stage 1) "
+          "and/or amends an ADR.",
 }
 
 

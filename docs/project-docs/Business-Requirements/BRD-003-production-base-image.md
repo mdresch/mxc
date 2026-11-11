@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Business)"
+lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
   - "docs/07-architecture/ADR-003-*.md"
@@ -16,7 +16,7 @@ outputs:
 # BRD-003: Production base image separate from the developer image
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope` (Planning)  
-> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 7 (Requirement: Business)`  
+> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
 > **Inputs:** [ADR-003](../../07-architecture/ADR-003-production-base-image.md), suite [BDR.md](../../hyperv/architecture/BDR.md) (BDR-04 (packaging))  
 > **Process:** Define functional and non-functional business requirements and stakeholder rules  
 > **Outputs:** BRD-003-production-base-image.md

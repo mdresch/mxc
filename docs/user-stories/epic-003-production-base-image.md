@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 7 (Requirement: Story)"
+lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
   - "docs/project-docs/Functional-Design/FDD-003-production-base-image.md"
@@ -17,7 +17,7 @@ outputs:
 # Epic 003: Production base image separate from the developer image
 
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration` (Planning)  
-> **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 7 (Requirement: Story)`  
+> **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Inputs:** [FDD-003](../project-docs/Functional-Design/FDD-003-production-base-image.md), [BRD-003](../project-docs/Business-Requirements/BRD-003-production-base-image.md), [ADR-003](../07-architecture/ADR-003-production-base-image.md)  
 > **Process:** Decompose solution requirements into testable user stories with explicit acceptance criteria  
 > **Outputs:** epic-003-production-base-image.md
