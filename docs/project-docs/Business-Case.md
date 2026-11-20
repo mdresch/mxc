@@ -10,6 +10,7 @@ inputs:
 process: "Evaluate economic viability, ROI expectations, investment limits, and business alternatives"
 outputs:
   - "Business-Case.md (Input to Benefits Statement & Project Charter)"
+status: "Approved"
 ---
 
 # Business Case — Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes

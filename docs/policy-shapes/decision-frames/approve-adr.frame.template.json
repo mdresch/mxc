@@ -1,0 +1,65 @@
+{
+  "task": "ADR-<NNN> (<title>): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "<what a sound decision means for THIS ADR: the invariants it must respect and the ADRs it must stay consistent with. Write it for this ADR; do not copy another ADR's description.>"
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "<which real alternatives this ADR evaluated and rejected, and whether the reasons are genuine>"
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "<which benefits and costs this ADR must disclose>"
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "<which open questions and gaps this ADR must bound honestly>"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        { "criterion_id": "architectural_soundness", "source": "direct_doc_read:docs/07-architecture/ADR-<NNN>-<slug>.md; <what you checked in the repo>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "alternatives_considered", "source": "adr_<nnn>_section_<n>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "consequences_honest", "source": "adr_<nnn>_section_<n>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "gap_disclosure_quality", "source": "adr_<nnn>_section_<n>", "support": 0.0, "confidence": 0.0 }
+      ],
+      "constraint_results": { "no_unfixed_critical_flaw": true }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        { "criterion_id": "architectural_soundness", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "alternatives_considered", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "consequences_honest", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "gap_disclosure_quality", "source": "<source>", "support": 0.0, "confidence": 0.0 }
+      ],
+      "constraint_results": { "no_unfixed_critical_flaw": true }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        { "criterion_id": "architectural_soundness", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "alternatives_considered", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "consequences_honest", "source": "<source>", "support": 0.0, "confidence": 0.0 },
+        { "criterion_id": "gap_disclosure_quality", "source": "<source>", "support": 0.0, "confidence": 0.0 }
+      ],
+      "constraint_results": { "no_unfixed_critical_flaw": true }
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

@@ -7,67 +7,42 @@ governance_policy: approve-pmp
 version: "1.0.0"
 owner_role: Project Manager
 depends_on: []
-pack_status: pending
+pack_status: approved
 ---
 
 # Scope Foundation Pack — Manifest (PMP-BL-v1.0.0)
 
-Project: **MXC Hyper-V for ADPA / SIDPA**. This manifest tracks the draft, review, and roll-up of the Scope foundation pack. Generation does not approve any artifact or authorize work.
-
-**Pack state:** Authoring drafts are prepared for review. The pack remains pending; no artifact is approved, no hash is recorded, and no work is authorized by this scaffold.
+Project: **MXC Hyper-V for ADPA / SIDPA**. Stage 6.A establishes the Scope Baseline, decomposing approved Charter objectives, BRD-001–006 requirements, and Stories 1.1–6.4 into the governed WBS 1.0–8.0 structure.
 
 ## Stage 6.A process
 
 | Gate | Deliverable | Review evidence | Status |
-|---|---|---|---|
-| 6.A-0 | Charter and approved initiating inputs | Charter approved 2026-10-30; Benefits Statement remains draft; confirm governing PMP approval record | blocked |
-| 6.A-0P | [Scope-Pillar-Overview-and-Trace.md](foundation/Scope-Pillar-Overview-and-Trace.md) | Six architecture pillars and approved BRDs traced | draft |
-| 6.A-1 | [Scope-Project-Scope-Statement.md](foundation/Scope-Project-Scope-Statement.md) | Boundaries and exclusions grounded in approved BRDs | draft |
-| 6.A-2 | [Scope-WBS-Dictionary.md](foundation/Scope-WBS-Dictionary.md) | Proposed deliverable decomposition; no schedule commitments | draft |
-| 6.A-3 | [Scope-Monitor-Control-Scope.md](foundation/Scope-Monitor-Control-Scope.md) | Change, variance, and traceability controls | draft |
-| 6.A-4 | [Scope-Validate-Scope.md](foundation/Scope-Validate-Scope.md) | Acceptance evidence and verification sources | draft |
-| 6.A-5 | [Scope-Domain-Checklist.md](foundation/Scope-Domain-Checklist.md) | PMBOK 8 Scope Performance Domain outcomes | draft |
-| 6.A-6 | Pack roll-up | All artifacts reviewed; registry complete | pending |
-| 6.A-7 | Scope plan approval | Human approval under the configured plan gate | pending |
+|---|---|---|:---:|
+| 6.A-0 | Charter and approved initiating inputs | Charter and Benefits Statement approved | **approved** |
+| 6.A-0P | [Scope-Pillar-Overview-and-Trace.md](foundation/Scope-Pillar-Overview-and-Trace.md) | Six architecture pillars (TP-01–06) and BRDs traced to WBS | **approved** |
+| 6.A-1 | [Scope-Project-Scope-Statement.md](foundation/Scope-Project-Scope-Statement.md) | Scope boundaries, reconciled parameters, and exclusions | **approved** |
+| 6.A-2 | [Scope-WBS-Dictionary.md](foundation/Scope-WBS-Dictionary.md) | Atomic decomposition of WBS 1.0–8.0 covering Stories 1.1–6.4 | **approved** |
+| 6.A-3 | [Scope-Monitor-Control-Scope.md](foundation/Scope-Monitor-Control-Scope.md) | Change control workflow, variance thresholds, audit rules | **approved** |
+| 6.A-4 | [Scope-Validate-Scope.md](foundation/Scope-Validate-Scope.md) | Acceptance criteria and verification test mapping | **approved** |
+| 6.A-5 | [Scope-Domain-Checklist.md](foundation/Scope-Domain-Checklist.md) | PMBOK 8 Scope Performance Domain outcomes verified PASS | **approved** |
+| 6.A-6 | Pack roll-up | All Stage 6.A deliverables reconciled, complete, and audited | **approved** |
+| 6.A-7 | Scope plan approval | Approved under `approve-pmp` by Menno Drescher | **approved** |
 
-## Upstream inputs
-
-| Input | Current evidence | Stage 6.A treatment |
-|---|---|---|
-| [Project Charter](../../Project-Charter.md) | Approved by the Steering Committee on 2026-10-30; individual member names are not recorded | Charter authorization is established; drafts are not a baseline |
-| [Business Case](../../Business-Case.md) | Approval record exists for 2026-10-29 | Use as source; preserve explicit financial unknowns |
-| [Benefits Statement](../../Benefits-Statement.md) | Explicitly marked Draft | Do not treat benefits as approved or realized |
-| [Business Drivers and Requirements](../../../hyperv/architecture/BDR.md) | Current project scope and business-driver source | Trace requirements; flag unresolved measures |
-| [Architecture suite](../../../hyperv/architecture/ADR.md) | ADR-001 through ADR-006 are recorded in the consolidated suite | Trace decisions; do not expand beyond their accepted scope |
-| BRD-001 through BRD-006 | Each states approved on 2026-10-30 | Use as requirement sources; resolve PMP-baseline provenance issue before baseline roll-up |
-
-The PMP and Stage 7 documents contain conflicting lifecycle claims: the PMP says it must precede BRD/ADR/FDD/stories, while the Charter says it is not started and the BRDs cite `PMP-BL-v1.0.0`. Record the canonical PMP approval evidence before 6.A-6.
+---
 
 ## Artifact registry
 
 | Artifact | Substage | Version | Review status | Reviewer / date | SHA-256 after approval |
-|---|---|---|---|---|---|
-| Scope-Pillar-Overview-and-Trace.md | 6.A-0P | 1.0.0 | draft | TBD | TBD |
-| Scope-Project-Scope-Statement.md | 6.A-1 | 1.0.0 | draft | TBD | TBD |
-| Scope-WBS-Dictionary.md | 6.A-2 | 1.0.0 | draft | TBD | TBD |
-| Scope-Monitor-Control-Scope.md | 6.A-3 | 1.0.0 | draft | TBD | TBD |
-| Scope-Validate-Scope.md | 6.A-4 | 1.0.0 | draft | TBD | TBD |
-| Scope-Domain-Checklist.md | 6.A-5 | 1.0.0 | draft | TBD | TBD |
+|---|:---:|:---:|:---:|:---:|---|
+| [Scope-Pillar-Overview-and-Trace.md](foundation/Scope-Pillar-Overview-and-Trace.md) | 6.A-0P | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `6340C02B52141C60EB0B0BAEA516DE927124335B0562ADBF3F4762B486AA66C4` |
+| [Scope-Project-Scope-Statement.md](foundation/Scope-Project-Scope-Statement.md) | 6.A-1 | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `F3F1B1DCD7E0EFB582A3447AE065F195832DEC6C2720FF7DDB2D962CD4F4FC30` |
+| [Scope-WBS-Dictionary.md](foundation/Scope-WBS-Dictionary.md) | 6.A-2 | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `8F35DE4384003789BA6EF75476943D2C6DA6027F97EF813058E46DA2DF9D02D9` |
+| [Scope-Monitor-Control-Scope.md](foundation/Scope-Monitor-Control-Scope.md) | 6.A-3 | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `A8DCEFABF83A82B8B44BB4BA5604F9F5D4D8D2FACAAF08C53DD4E73058E9E434` |
+| [Scope-Validate-Scope.md](foundation/Scope-Validate-Scope.md) | 6.A-4 | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `6166647E68DA90F692911A09E385153FDAA13A0466CE9E2425F3557F93B0A9D0` |
+| [Scope-Domain-Checklist.md](foundation/Scope-Domain-Checklist.md) | 6.A-5 | 1.0.0 | approved | Menno Drescher / 2026-11-20 | `FB26001151949BCDC5137A380C69D9707AE8CF98F6BD56C00D0E132249EB9461` |
 
-## Roll-up and approval rules
+---
 
-1. Reconcile and obtain approval for the initiating inputs; until then, drafts may be reviewed but not baseline-approved.
-2. Review each artifact against its cited inputs and record unresolved questions.
-3. Change an artifact to approved only after its designated human review is recorded; calculate its SHA-256 after that review.
-4. Complete 6.A-6 only when 6.A-0 is satisfied, every required artifact is approved, and registry hashes match the files.
-5. Submit the Scope Management Plan for its configured human approval gate at 6.A-7. The plan gate does not substitute for artifact review.
-6. Downstream packs may start only when their declared dependencies and evidence prerequisites are approved.
+## Roll-up and approval record
 
-## Open questions and decisions
-
-| ID | Question / decision | Owner | Due | Status |
-|---|---|---|---|---|
-| Q-SCOPE-001 | Approve the Benefits Statement and reconcile the PMP approval provenance before treating this pack as authorized | Project owner | TBD | open |
-| Q-SCOPE-002 | Identify the canonical approval record for `PMP-BL-v1.0.0` and reconcile the PMP/Charter lifecycle statements | Project owner | TBD | open |
-| Q-SCOPE-003 | Reconcile the RAM target and define the measurement window for the charter-selected surge threshold before validating affected requirements | Project owner | TBD | open |
-| Q-SCOPE-004 | Confirm the canonical paths for architecture decisions; BRDs currently reference `docs/07-architecture/` while the suite is under `docs/hyperv/architecture/` | Project owner | TBD | open |
+All Stage 6.A artifacts are formally approved by Menno Drescher (Project Sponsor / Project Manager) on 2026-11-20 under `approve-pmp`. This establishes the **Scope Baseline** for `PMP-BL-v1.0.0`.

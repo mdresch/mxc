@@ -25,7 +25,7 @@ status: "Approved"
 - **Project description:** Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes
 - **Prepared from:** [Spark Capture](Spark-Capture.md), [Ideation Document](Ideation-Document.md), [Business Case](Business-Case.md), and [Benefits Statement](Benefits-Statement.md)
 - **Business Case status:** Approved on 2026-10-29 for the operational case. It does not establish a budget or currency ROI.
-- **Benefits Statement status:** Draft.
+- **Benefits Statement status:** Approved on 2026-10-30.
 
 ## Executive summary
 

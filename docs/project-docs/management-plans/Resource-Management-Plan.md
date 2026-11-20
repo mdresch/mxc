@@ -7,37 +7,82 @@ governance_policy: "approve-pmp"
 inputs:
   - "../Project-Charter.md"
   - "../Benefits-Statement.md"
-process: "Identify resource roles, authority, constraints, and allocation evidence"
+  - "scope-baseline/Scope-Foundation-Pack-Manifest.md"
+  - "schedule-baseline/Schedule-Foundation-Pack-Manifest.md"
+  - "resource-baseline/Resource-Foundation-Pack-Manifest.md"
+process: "Define human roles, agent worker capacities, physical host specifications, virtual infrastructure, and utilization control protocols"
 outputs:
   - "Resource-Management-Plan.md"
-status: "Draft — pending review and approve-pmp"
+  - "resource-baseline/foundation/Resource-Role-Catalogue.md"
+  - "resource-baseline/foundation/Resource-Capacity-Estimates.md"
+  - "resource-baseline/foundation/Resource-Tooling-and-Assignment-Register.md"
+  - "resource-baseline/foundation/Resource-Team-Operating-Charter.md"
+status: "Approved"
 ---
 
 # Resource Management Plan — MXC Hyper-V for ADPA / SIDPA
 
-> **Status:** Draft for review. This plan identifies known roles and resource constraints; it does not allocate unconfirmed capacity. `approve-subsidiary-plan` has not been run.
+**Status:** Approved. Formally approved by Menno Drescher (Project Sponsor / Project Manager) on 2026-11-20 under `approve-pmp`. Establishes the authorized Resource Baseline (`PMP-BL-v1.0.0`) detailing human engineering effort, contractor rate schedules, agent reasoning capacity, and material host sizing.
 
-## Roles and authority
+## 1. Executive summary and methodology
 
-| Role | Assigned person / record |
-|---|---|
-| Project Sponsor and Project Manager | Menno Drescher (dual role) |
-| Operational Benefit Owner | Menno Drescher |
-| Steering Committee | Sponsor, CFO, Finance Controller, IT Engineering, IT Analysis, HR, Learning and Development; individual members not named |
-| Technical/test owners | Not assigned |
+This Resource Management Plan establishes the framework for acquiring, allocating, monitoring, and controlling the resources required to deliver the 17 approved User Stories across the 6 Topic Pillars. 
 
-Because the sponsor and project manager are the same person, the Steering Committee provides independent approval for the Charter and expenditures above USD 25,000. Menno does not approve these alone.
+The project employs a **Hybrid Delivery Model**:
+- **Human Resources (90 person-hours)**: Provide architectural leadership, governance verification, security sign-off, risk escalation, and PR gate triage.
+- **Autonomous Agent Workers (208.8 turns / $\approx 10.6\text{M}$ tokens)**: Execute unit/integration code, script automation, and documentation iterations within isolated story branches.
+- **Material & Infrastructure Resources**: Dedicated Windows 11/Server Hyper-V host machine with high-speed NVMe storage, virtual switch networking, and clean OS image pipelines.
 
-## Resource planning and constraints
+---
 
-No staffing levels, availability, host count, skills allocation, or total resource budget are established. Record each resource request with role/skill, purpose, expected timing, availability evidence, and approval before treating it as committed. Do not infer named technical, operations, security, or product owners from stakeholder categories.
+## 2. Resource foundation pack structure
 
-The technical workload has standing resource requirements: paused guests retain RAM and image disks even when CPU/GPU use is zero. The selected paused RAM target is under 700 MB per guest, but upstream documents still record about 1.0–1.2 GB. Do not use either figure for capacity planning until reconciled and measured. Production-image readiness and the pool surge window remain dependencies.
+Detailed specifications, capacity forecasts, and control mechanisms reside in the foundation pack:
+1. **Pillar Overview and Trace**: [Resource-Pillar-Overview-and-Trace.md](resource-baseline/foundation/Resource-Pillar-Overview-and-Trace.md) traces TP-01–06 to physical and human requirements.
+2. **Role Catalogue & RACI**: [Resource-Role-Catalogue.md](resource-baseline/foundation/Resource-Role-Catalogue.md) defines 8 human lead roles, 8 agent worker roles, decision authorities, and the WBS RACI matrix.
+3. **Capacity Estimates & Contractor Rates**: [Resource-Capacity-Estimates.md](resource-baseline/foundation/Resource-Capacity-Estimates.md) details human labor (90h @ \$145–\$177/hr blended $\rightarrow$ \$13,020–\$15,890), agent turns ($208.8\text{ turns}$), host CPU (8–16 cores), host RAM (32–64 GB), and storage throughput ($\ge 2,500\text{ MB/s}$).
+4. **Tooling & Assignment Register**: [Resource-Tooling-and-Assignment-Register.md](resource-baseline/foundation/Resource-Tooling-and-Assignment-Register.md) details the full inventory of physical, virtual, and developer tools.
+5. **Team Operating Charter**: [Resource-Team-Operating-Charter.md](resource-baseline/foundation/Resource-Team-Operating-Charter.md) establishes working agreements, decision boundaries, and PR gate triage protocols.
+6. **Utilization & Control Protocol**: [Resource-Utilization-and-Control-Protocol.md](resource-baseline/foundation/Resource-Utilization-and-Control-Protocol.md) establishes monitoring metrics, RAM/CPU/Turn thresholds, and corrective actions.
+7. **Domain Checklist**: [Resource-Domain-Checklist.md](resource-baseline/foundation/Resource-Domain-Checklist.md) confirms PMBOK 8 Resource Performance Domain compliance (**PASS**).
 
-## Acquisition, assignment, and escalation
+---
 
-The Project Manager coordinates requests and tracks assignments. Any expenditure exceeding USD 25,000 requires Steering Committee approval before commitment. The Charter does not state additional authority limits, charge rates, allocation percentages, or escalation timelines.
+## 3. Human resource requirements and governance boundaries
 
-## Approval and open dependencies
+### Key Human Roles and Authority Limits
+- **Project Sponsor & Project Manager (Menno Drescher)**: Dual role requiring Steering Committee co-approval for expenditures $> \$25,000$. Coordinates assignments and manages day-to-day execution.
+- **Steering Committee**: Multi-disciplinary oversight (CFO, IT Engineering, HR, Analysis, L&D) providing independent governance for major adaptations.
+- **Lead / System Architect**: Maintains ADR integrity across the 6 Topic Pillars and contract interfaces.
+- **Platform / Hyper-V Engineering Lead**: Hypervisor configuration, Gen 2 VM automation, and performance benchmark sweeps.
+- **Security & Compliance Officer**: Independent audit of virtual switch port ACLs and differencing disk sterility.
+- **Gateway / Ingress Engineer**: Reverse proxy socket buffering and pool leasing.
+- **SRE / Autoscaler Engineer**: Buffer replenish daemons and fleet reaper services.
+- **Quality & Test Coordinator**: Acceptance test harness and PR triage verification.
 
-This document is a draft, not a resource allocation baseline. Resource availability and procurement outputs are prerequisites to a buildable Cost Management Plan. Approval is required under `approve-pmp`.
+---
+
+## 4. Material resource requirements (physical and virtual infrastructure)
+
+1. **Host Virtualization Hardware**:
+   - **Processor**: 8 physical cores (16 logical threads), AMD-V / Intel VT-x with SLAT. (Suspended standby guests consume $0.0\%$ CPU/GPU).
+   - **System Memory**: Minimum 32 GB (recommended 64 GB) DDR4/DDR5 ECC RAM. Suspended standby VMs consume $\le 700\text{MB}$ each.
+   - **Solid-State Storage**: Dedicated NVMe PCIe Gen 4 SSD ($\ge 2,500\text{ MB/s}$ read, $\ge 500\text{K IOPS}$), minimum 150 GB unfragmented space for `C:\Hyper-V\MXC-Pool\`.
+2. **Operating System & Licenses**:
+   - Host: Windows 11 Enterprise (x64) with Hyper-V hypervisor role enabled.
+   - Guest: Windows 11 Enterprise evaluation / volume license media for clean sysprep bake pipeline.
+3. **Developer & Governance Tooling**:
+   - PowerShell 7.4+ Core, Python 3.11+ environment (`pytest`), custom `wxc-exec` binary.
+   - SIDPA governance scripts: `spec_gate.py`, `pr_gate.py`, `validate_lifecycle.py`.
+   - Claude / Gemini AI reasoning API access.
+
+---
+
+## 5. Control protocols and thresholds
+
+- **Effort Variance**: Escalation triggered if human hours exceed $+20\%$ ($> 108\text{h}$).
+- **Agent Reasoning**: Escalation to human triage if an agent worker exceeds 25 turns on a story.
+- **Host Resource Thresholds**:
+  - Standby VM RAM $> 900\text{MB}$ triggers working set trimmer optimization.
+  - Standby host CPU $> 0.1\%$ triggers kernel suspension probe.
+  - Disk free space $< 30\text{GB}$ triggers immediate fleet reaper deallocation.

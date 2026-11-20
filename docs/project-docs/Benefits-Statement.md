@@ -10,6 +10,7 @@ inputs:
 process: "Quantify measurable target benefits, metric thresholds, and realization sequence"
 outputs:
   - "Benefits-Statement.md (Mandatory input to Project Charter)"
+status: "Approved"
 ---
 
 # Benefits Statement — Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes
@@ -25,7 +26,7 @@ outputs:
 **Project Name:** MXC Hyper-V for ADPA / SIDPA  
 **Project Description:** Just-in-Time (JIT) Scale-to-Zero Production Hyper-V Sandboxes  
 **Accountable benefit owner:** Menno Drescher for the operational checks below. No finance owner is named, because no money benefit is claimed.  
-**Status:** Draft. This statement is a charter input. The charter is not started.
+**Status:** **Approved (2026-10-30)** — `approve-business-case` accepted `approve_business_case` on 2026-10-30 (policy `91a33a4f-7d22-43e1-85ff-51026f350df0`, human acceptance). Gate record: [approve-benefits-statement-2026-10-30.adjudication.json](gates/approve-benefits-statement-2026-10-30.adjudication.json).
 
 `HYP-mxc-015` through `HYP-mxc-020` are research hypotheses. They do not appear in the register.
 

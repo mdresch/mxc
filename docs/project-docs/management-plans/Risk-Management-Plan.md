@@ -8,34 +8,49 @@ inputs:
   - "../Project-Charter.md"
   - "../Business-Case.md"
   - "../Benefits-Statement.md"
-  - "../Assumption-Log.md"
-process: "Record, monitor, and respond to project risks using evidence-based dispositions"
+  - "schedule-baseline/foundation/Schedule-Reserve-Register.md"
+  - "cost-baseline/foundation/Cost-Variance-and-Control-Protocol.md"
+process: "Define risk identification, probability/impact rating methodology, risk register, and reserve allocation"
 outputs:
   - "Risk-Management-Plan.md"
-status: "Draft — pending review and approve-pmp"
+status: "Approved"
 ---
 
 # Risk Management Plan — MXC Hyper-V for ADPA / SIDPA
 
-> **Status:** Draft for review. The Charter provides known open items but no probability/impact scoring scale or risk-review cadence. `approve-subsidiary-plan` has not been run.
+**Status:** Approved. Formally approved by Menno Drescher (Project Sponsor / Project Manager) on 2026-11-20 under `approve-pmp`. Establishes the risk management methodology, probability/impact rating scale, active risk register, and reserve governance.
 
-## Risk process
+## 1. Risk management methodology and scoring criteria
 
-Record each risk with an ID, cause/event/consequence, affected objective, evidence/source, owner, response, trigger, status, and review history. Do not assign numerical probability, impact, or overall ratings without an agreed scale and evidence. Review a risk when its source changes, a trigger occurs, a test fails, or a decision is requested. The Project Manager coordinates the register; technical risk owners remain to be assigned.
+Risks are evaluated using a standard 5x5 Probability and Impact matrix:
+- **Probability ($P$)**: 1 (Very Low $< 10\%$), 2 (Low $10\text{–}25\%$), 3 (Moderate $25\text{–}50\%$), 4 (High $50\text{–}75\%$), 5 (Very High $> 75\%$).
+- **Impact ($I$)**: 1 (Negligible), 2 (Minor schedule/cost variance $< 10\%$), 3 (Moderate variance $10\text{–}20\%$), 4 (Major variance $> 20\%$), 5 (Critical charter/security compromise).
+- **Risk Score**: $\text{Score} = P \times I$ (1–6 Green/Low; 8–12 Yellow/Moderate; 15–25 Red/High).
 
-## Initial risk register
+---
 
-| ID | Risk / consequence | Response or next action | Owner / status |
-|---|---|---|---|
-| R-01 | Conflicting paused-RAM targets could cause invalid capacity assumptions or a false acceptance result. | Reconcile under-700 MB with the 1.0–1.2 GB figures, then measure under controlled conditions. | Project Manager / open |
-| R-02 | The surge threshold's measurement window is undefined; pool behavior cannot be assessed consistently. | Define and record the observation window before testing. | Project Manager / open |
-| R-03 | Production image is not complete; image cleanliness and reproduce-after-discard benefits cannot yet be accepted. | Keep dependent benefits open until the approved production image and bake evidence exist. | Project Manager / open |
-| R-04 | Paused guests keep RAM and image disks allocated; host capacity and disk needs may constrain pool size. | Measure resource use and size only after requirements and allocations are available. | Project Manager / open |
-| R-05 | GPU use has no prior measurement. | Capture the first host GPU reading as a test, not as confirmation. | Test owner TBD / open |
-| R-06 | Mobile App Verification is selected, but product/integration details are not specified. | Identify implementation details before scripting or accepting the sign-in benefit. | Product/technical owner TBD / open |
-| R-07 | The PM is also sponsor; individual Steering Committee members and routine approval process are not recorded. | Record committee members and decision process; retain independent approval for charter and spending above USD 25,000. | Project Manager / open |
-| R-08 | No total project budget, host count, license price, or currency ROI is established. | Do not claim financial savings or commit beyond USD 25,000 without committee approval and supporting evidence. | Project Manager / open |
+## 2. Active risk register and response strategies
 
-## Response, escalation, and approval
+| Risk ID | Risk event and consequence | $P$ | $I$ | Score | Planned response strategy | Accountable owner | Reserve link |
+|---|---|:---:|:---:|:---:|---|---|:---:|
+| **RSK-01** | **VHDX Image Bake Sysprep Latency**: Image bake runtime exceeds expected timebox on diverse host SSDs. | 3 | 2 | 6 (Low) | **Mitigate**: Cache intermediate sysprep layers and pre-install Windows updates in base image. | Release Lead | Schedule CR-01 (3.0h) |
+| **RSK-02** | **Memory Contention Resume Latency**: `Resume-VM` exceeds 300ms target during concurrent host paging load. | 3 | 3 | 9 (Med) | **Mitigate**: Working set trimmer (ACT-08) clamps standby commit to $\le 700\text{MB}$; host lock-in-RAM. | Platform Lead | Schedule CR-02 (2.0h) |
+| **RSK-03** | **Ingress Socket Hold Backlog Overflow**: HTTP socket buffers exhaust during sudden concurrency burst $> 20\text{ req/s}$. | 2 | 3 | 6 (Low) | **Mitigate**: Async queue holding; immediate dynamic surge trigger (ACT-17); structured 503 fallback. | Gateway Lead | Schedule CR-03 (2.0h) |
+| **RSK-04** | **Autonomous Agent Repair Context Loops**: Agent worker consumes excessive turns without passing PR gate. | 3 | 2 | 6 (Low) | **Mitigate**: Hard turn limit at 20 turns; automated halt and human triage via `review_triage.py`. | Dev Coordinator | Schedule CR-04 (1.5h) / Cost Cont. (\$2,200) |
+| **RSK-05** | **Host Hyper-V Cumulative Update Incompatibility**: Host Windows patch introduces breaking change to Port ACLs. | 2 | 4 | 8 (Med) | **Accept & Buffer**: Maintain host update freeze during active test sweeps; test on staging harness first. | Platform Lead | Cost MR-01 (\$3,500) |
+| **RSK-06** | **In-Guest Subsystem COM+/WMI Hardening**: Enterprise security policy blocks in-guest WMI execution over KVP. | 2 | 3 | 6 (Low) | **Mitigate**: Pre-configured guest integration service descriptors baked into clean golden VHDX. | Security Lead | Cost MR-02 |
+| **RSK-07** | **Dual-Role Sponsor/PM Conflict of Interest**: Combining PM and Sponsor could compromise expenditure oversight. | 2 | 3 | 6 (Low) | **Avoid**: Strict segregation of duties: Steering Committee holds sole authority for spending $> \$25,000$. | Project Sponsor | Charter Governance Limit |
+| **RSK-08** | **Cross-Session Storage Contamination**: Differencing `.avhdx` fails to unmount on abnormal session termination. | 2 | 4 | 8 (Med) | **Mitigate**: Orphan differencing disk cleaner in Fleet Reaper (ACT-18); parent VHDX read-only filesystem lock. | Security Lead | Security Baseline |
 
-Preserve failed tests and unresolved assumptions as risks until evidence supports closure. Changes to approved scope or acceptance criteria require the applicable human governance approval. Spending above USD 25,000 requires Steering Committee approval before commitment. Do not invent escalation timelines, tolerances, or contingency values. This plan remains a draft pending `approve-pmp`.
+---
+
+## 3. Risk reserves and release governance
+
+1. **Schedule Contingency Reserves**:
+   - **8.5 clock hours** allocated across technical risks RSK-01 to RSK-04 (governed in [Schedule-Reserve-Register.md](schedule-baseline/foundation/Schedule-Reserve-Register.md)).
+2. **Cost Contingency Reserves**:
+   - **\$2,200 (15%)** allocated for technical iteration and retry loops (governed in [Cost-Staged-Budget-and-Baseline.md](cost-baseline/foundation/Cost-Staged-Budget-and-Baseline.md)).
+3. **Management Reserves**:
+   - **6.5 clock hours** and **\$3,500** allocated for unforeseen external risks (RSK-05, RSK-06), controlled exclusively by the Project Sponsor.
+4. **Threshold Escalation**:
+   - Any emergent risk threatening to breach the \$25,000 threshold or critical path by $> 20\%$ is immediately escalated to the Steering Committee.

@@ -6,35 +6,52 @@ lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "../Project-Charter.md"
-  - "../Assumption-Log.md"
-process: "Define communication information, recipients, and evidence without inventing cadence"
+  - "../Stakeholder-Register.md"
+  - "resource-baseline/foundation/Resource-Team-Operating-Charter.md"
+process: "Define stakeholder information flows, communication frequency, reporting channels, and escalation paths"
 outputs:
   - "Communications-Management-Plan.md"
-status: "Draft — pending review and approve-pmp"
+status: "Approved"
 ---
 
 # Communications Management Plan — MXC Hyper-V for ADPA / SIDPA
 
-> **Status:** Draft for review. No reporting frequency or meeting calendar has been approved. `approve-subsidiary-plan` has not been run.
+**Status:** Approved. Formally approved by Menno Drescher (Project Sponsor / Project Manager) on 2026-11-20 under `approve-pmp`. Establishes the communication flows, reporting cadence, and telemetry reporting for the hybrid human-agent operating model.
 
-## Communication controls
+## 1. Communication matrix and information flows
 
-Use the project repository as the durable record for approved documents, open assumptions, test evidence, decisions, and changes. Identify the document/version and decision ID in each communication so recipients can trace it to source evidence. Do not treat chat, a draft, or a generated gate recommendation as approval unless the decision is explicitly recorded.
+Communication in MXC bridges autonomous agent workers, technical engineering leads, project leadership, and executive governance:
 
-## Required information flows
+| Information deliverable | Target audience | Transmission channel / tool | Frequency / trigger | Accountable owner | Content summary |
+|---|---|---|---|---|---|
+| **Story Task Claim & Status** | Agent Workers & Leads | `docs/registers/Story-Execution-Register.md` | Real-time on pickup/completion | Dev Coordinator | Worker ID, branch name, story ID, timestamp, gate status. |
+| **PR Verification Telemetry** | Engineering Leads & QA | Git PR comment via `scripts/pr_gate.py` | Per pull request | Agent Worker / QA | Test pass rates, code critique score, rubric evaluation. |
+| **Execution Wave Progress** | Project Manager & Leads | Project status log / Git milestone tracker | Weekly / Wave boundary | Project Manager | Burn-down of activities, float consumption, milestone health. |
+| **Cost & EVM Variance Report** | PM & Finance Controller | EVM tracking log in `Cost-Variance-Protocol.md` | Bi-weekly | Project Manager | Planned Value ($PV$), Earned Value ($EV$), Actual Cost ($AC$), $CPI$. |
+| **Threshold Escalation Notice** | Steering Committee | Formal decision memorandum / email | Event-driven ($> \$25\text{k}$ or scope pivot) | Project Sponsor (Menno) | Business Case amendment, variance root cause, proposed action. |
+| **Operational Benefit Proof** | Sponsor & Benefit Owners | Phase 1 Acceptance Report / `Benefits-Statement.md` | Milestone M5 completion | Test Coordinator | End-to-end multi-session proof of all 12 Charter benefits. |
 
-| Information | Recipients | Trigger / content |
-|---|---|---|
-| Charter, scope, or benefit change | Project Sponsor/Manager and affected Steering Committee roles | Before changing a baseline; include rationale, impact, and requested decision |
-| Spending request above USD 25,000 | Steering Committee | Before commitment; include amount, currency (USD), purpose, and evidence |
-| Benefit verification results | Project Manager / Benefit Owner and assigned reviewers (to be named) | After each test; include criterion, conditions, result, and evidence location |
-| Open assumptions and risks | Project Manager and relevant committee roles | When created, changed, or resolved; preserve owner and resolution evidence |
-| Failed acceptance or security-relevant issue | Project Manager and designated decision authority | Promptly after discovery; escalation timing and contact route remain to be set |
+---
 
-## Stakeholder groups
+## 2. Communications channels and repository as durable source of truth
 
-The Charter identifies Sponsor, CFO, Finance Controller, IT Engineering, IT Analysis, HR, and Learning and Development roles on the Steering Committee. Individual recipients and distribution channels are not known. No project team roster or technical test owner has been assigned.
+1. **Durable Source of Truth**:
+   - The git repository (`c:\Users\MennoDrescher\source\repos\mxc`) is the sole durable record for all approved baselines, architecture decisions, requirements, gate results, and test evidence.
+   - Informal chat, draft notes, or intermediate model responses do not constitute project authorization.
+2. **Traceable References**:
+   - Every status report, PR, and decision record must explicitly reference the affected artifact ID, version, and WBS code (e.g. `WBS 2.1`, `Story 1.1`, `PMP-BL-v1.0.0`).
 
-## Cadence, records, and approval
+---
 
-Set meeting cadence, status-report frequency, emergency contact path, and information-handling requirements after the committee identifies its members. Until then, communicate on decision events and retain the record in the project documentation. This plan remains a draft pending `approve-pmp`.
+## 3. Conflict resolution and escalation communication path
+
+```mermaid
+flowchart TD
+    TECH[Technical Dispute Between Leads] --> ARCH[Lead Architect Resolution]
+    SCHED[Schedule, Capacity, or Cost Conflict] --> PM[Project Manager Resolution]
+    BREACH[Threshold Breach >$25k / Scope Pivot] --> SC[Steering Committee Escalation]
+```
+
+- **Level 1 (Technical & Architecture)**: Resolved within 24 hours by the Lead / System Architect.
+- **Level 2 (Schedule, Resourcing & Budget $\le \$25,000$)**: Resolved within 48 hours by the Project Manager.
+- **Level 3 (Charter Boundaries, External Policy, Spending $> \$25,000$)**: Formally escalated to the Steering Committee for decision.

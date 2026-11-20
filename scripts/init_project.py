@@ -1,107 +1,158 @@
-"""
+﻿"""
 Initialize a new project from sidpa-template.
 
 Usage:
     python scripts/init_project.py --name my-project
+    python scripts/init_project.py --name my-project --stage plans
 
 Actions performed:
-1. Renames data/agent-learning/store/active-policies/template-governance/ -> <name>-governance/
-2. Renames data/agent-learning/store/policies/template-governance/ -> <name>-governance/
-3. Updates agent_id: "template-governance" to "<name>-governance" in all policy JSONs.
-4. Leaves agent-learning-governance unchanged (shared global namespace).
-5. Copies *.template.md files to active *.md documents if they do not already exist.
+1. Renames data/agent-learning/store/{active-policies,policies}/template-governance/
+   to <name>-governance/ and updates agent_id in the policy JSON files.
+2. Leaves agent-learning-governance unchanged (shared global namespace).
+3. Copies the *.template.md files for the chosen stage to their working .md names,
+   never overwriting an existing file, and fills <project name> and the start date.
+
+Stages (documents are copied when their stage is reached, not all at once):
+    start    Spark, Ideation, Business Case, Benefits Statement, Charter, and the registers
+    plans    the nine subsidiary plan skeletons and the Project Management Plan
+    closing  the Adaptation Plan and the Intent Refinement Proposal
+    all      everything
 """
 
 from __future__ import annotations
 
 import argparse
-import json
-import os
+import datetime
 import re
 import shutil
-import sys
 from pathlib import Path
 
 repo_root = Path(__file__).resolve().parent.parent
 
-def init_project(project_name: str, create_docs: bool = True):
-    # Sanitize project name
-    clean_name = re.sub(r"[^a-zA-Z0-9_\-]", "-", project_name).lower().strip("-")
+STAGES = {
+    "start": [
+        "docs/project-docs/Spark-Capture.template.md",
+        "docs/project-docs/Ideation-Document.template.md",
+        "docs/project-docs/Business-Case.template.md",
+        "docs/project-docs/Benefits-Statement.template.md",
+        "docs/project-docs/Project-Charter.template.md",
+        "docs/registers/Cycle-Register.template.md",
+        "docs/registers/Lessons-Learned-Register.template.md",
+        "docs/registers/Implementation-Log.template.md",
+        "docs/registers/Story-Execution-Register.template.md",
+        "docs/registers/Audit-Register.template.md",
+        "docs/registers/Methodology-Best-Practice-Ledger.template.md",
+    ],
+    "plans": [
+        "docs/project-docs/management-plans/*.template.md",
+        "docs/project-docs/Project-Management-Plan.template.md",
+    ],
+    "closing": [
+        "docs/project-docs/Adaptation-Plan.template.md",
+        "docs/project-docs/Intent-Refinement-Proposal.template.md",
+    ],
+}
+STAGES["all"] = STAGES["start"] + STAGES["plans"] + STAGES["closing"]
+
+NEXT_STEPS = {
+    "start": [
+        "Write the Spark, then the Ideation Document, then the Business Case and Benefits Statement, then the Charter.",
+        "Run the matching approve-* gate for each (see docs/policy-shapes/decision-frames/README.md).",
+        "CYC-001 is open in docs/registers/Cycle-Register.md. Add the upstream pins as those documents are approved.",
+        "After the Charter is approved, run: python scripts/init_project.py --name <name> --stage plans",
+    ],
+    "plans": [
+        "Draft the plans in dependency order (Scope first). See .claude/skills/pmbok-planning/SKILL.md.",
+        "Approve each full_plan, then synthesize and approve the Project Management Plan.",
+    ],
+    "closing": ["Use these when a governance change reaches Stage 17 or the phase reaches Stage 18."],
+    "all": ["Every skeleton is in place. Work through the stages in order."],
+}
+
+
+def clean_project_name(project_name: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9_\-]", "-", project_name).lower().strip("-")
+
+
+def rename_governance(clean_name: str) -> int:
+    """Rename the template governance agent and rewrite agent_id. Returns files updated."""
     new_agent_id = f"{clean_name}-governance"
     old_agent_id = "template-governance"
-
-    print(f"\n=======================================================")
-    print(f"  SIDPA Project Initializer")
-    print(f"  Project Name: {clean_name}")
-    print(f"  New Governance Agent ID: {new_agent_id}")
-    print(f"=======================================================\n")
-
     store_dir = repo_root / "data" / "agent-learning" / "store"
-    active_dir = store_dir / "active-policies"
-    policies_dir = store_dir / "policies"
+    updated = 0
+    for kind in ("active-policies", "policies"):
+        old_dir = store_dir / kind / old_agent_id
+        new_dir = store_dir / kind / new_agent_id
+        if old_dir.exists():
+            if new_dir.exists():
+                shutil.rmtree(new_dir)
+            old_dir.rename(new_dir)
+            print(f"  [OK] Renamed {new_dir.relative_to(repo_root)}")
+        if new_dir.exists():
+            for json_file in new_dir.glob("*.json"):
+                try:
+                    content = json_file.read_text(encoding="utf-8")
+                    if old_agent_id in content:
+                        json_file.write_text(
+                            content.replace(f'"{old_agent_id}"', f'"{new_agent_id}"'),
+                            encoding="utf-8",
+                        )
+                        updated += 1
+                except (OSError, PermissionError) as err:
+                    print(f"  [WARN] Failed to update {json_file.relative_to(repo_root)}: {err}")
+    return updated
 
-    # 1. Update and rename active-policies
-    old_active = active_dir / old_agent_id
-    new_active = active_dir / new_agent_id
-    if old_active.exists():
-        if new_active.exists():
-            shutil.rmtree(new_active)
-        old_active.rename(new_active)
-        print(f"  [OK] Renamed active policies directory: {new_active.relative_to(repo_root)}")
 
-    # 2. Update and rename policies
-    old_policies = policies_dir / old_agent_id
-    new_policies = policies_dir / new_agent_id
-    if old_policies.exists():
-        if new_policies.exists():
-            shutil.rmtree(new_policies)
-        old_policies.rename(new_policies)
-        print(f"  [OK] Renamed policy definitions directory: {new_policies.relative_to(repo_root)}")
+def copy_stage_documents(stage: str, project_title: str, clean_name: str, today: str) -> int:
+    """Copy the stage's templates to their working names without overwriting anything."""
+    created = 0
+    for pattern in STAGES[stage]:
+        for template_file in sorted(repo_root.glob(pattern)):
+            dest = template_file.with_name(template_file.name.replace(".template.md", ".md"))
+            if dest.exists():
+                print(f"  [SKIP] Already exists: {dest.relative_to(repo_root)}")
+                continue
+            text = template_file.read_text(encoding="utf-8")
+            text = (
+                text.replace("<project name>", project_title)
+                .replace("HYP-<project>-", f"HYP-{clean_name}-")
+                .replace("<project>", project_title)
+                .replace("<date the project starts>", today)
+                .replace("<date this project starts using it>", today)
+            )
+            dest.write_text(text, encoding="utf-8")
+            created += 1
+            print(f"  [OK] Created {dest.relative_to(repo_root)}")
+    return created
 
-    # 3. Update agent_id in all JSON policy files inside new_policies and new_active
-    updated_files = 0
-    for target_dir in [new_active, new_policies]:
-        if not target_dir.exists():
-            continue
-        for json_file in target_dir.glob("*.json"):
-            try:
-                content = json_file.read_text(encoding="utf-8")
-                if old_agent_id in content:
-                    updated = content.replace(f'"{old_agent_id}"', f'"{new_agent_id}"')
-                    json_file.write_text(updated, encoding="utf-8")
-                    updated_files += 1
-            except Exception as e:
-                print(f"  [WARN] Failed updating {json_file.name}: {e}")
 
-    print(f"  [OK] Updated agent_id in {updated_files} policy file(s).")
+def init_project(project_name: str, stage: str = "start", create_docs: bool = True) -> None:
+    clean_name = clean_project_name(project_name)
+    if not clean_name:
+        raise SystemExit("Project name is empty after sanitizing; use letters, digits, '-' or '_'.")
+    print(f"\nSIDPA Project Initializer\n  Project: {clean_name}\n  Governance agent: {clean_name}-governance\n  Stage: {stage}\n")
 
-    # 4. Copy template documents to active .md documents if requested
+    updated = rename_governance(clean_name)
+    print(f"  [OK] Updated agent_id in {updated} policy file(s).")
+
     if create_docs:
-        docs_created = 0
-        for template_file in repo_root.glob("docs/**/*.template.md"):
-            # Target path replaces .template.md with .md
-            dest_name = template_file.name.replace(".template.md", ".md")
-            dest_file = template_file.parent / dest_name
-            if not dest_file.exists():
-                shutil.copy2(template_file, dest_file)
-                docs_created += 1
-                print(f"  [OK] Created document: {dest_file.relative_to(repo_root)}")
-            else:
-                print(f"  [SKIP] Document already exists: {dest_file.relative_to(repo_root)}")
+        created = copy_stage_documents(stage, project_name.strip(), clean_name, datetime.date.today().isoformat())
+        print(f"  [OK] Created {created} document(s) for stage '{stage}'.")
 
-        print(f"  [OK] Generated {docs_created} initial project document(s) from templates.")
+    print("\nNext steps:")
+    for step in NEXT_STEPS[stage]:
+        print(f"  - {step}")
+    print(f"\nUse agent-id '{clean_name}-governance' for governance decisions.\n")
 
-    print(f"\nProject initialization complete! You can now start with Step 2 (Spark & Ideation).")
-    print(f"To run governance decisions, use agent-id: '{new_agent_id}'\n")
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Initialize a new project from sidpa-template")
-    parser.add_argument("--name", required=True, help="New project name (e.g. 'my-awesome-app')")
-    parser.add_argument("--skip-docs", action="store_true", help="Skip copying .template.md files to active .md files")
+    parser.add_argument("--name", required=True, help="Project name (for example 'my-awesome-app')")
+    parser.add_argument("--stage", choices=sorted(STAGES), default="start", help="Which documents to create")
+    parser.add_argument("--skip-docs", action="store_true", help="Rename the governance agent only")
     args = parser.parse_args()
+    init_project(args.name, stage=args.stage, create_docs=not args.skip_docs)
 
-    init_project(args.name, create_docs=not args.skip_docs)
 
 if __name__ == "__main__":
     main()
-
