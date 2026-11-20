@@ -2,75 +2,65 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "4.2 Develop Project Management Plan"
-pmp_baseline: "PMP-BL-v1.0.0"
+pmp_baseline: "PMP-BL-v1.0.0 (provenance unverified; not approved)"
 lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "Project-Charter.md"
-  - "docs/project-docs/management-plans/*.md"
-process: "Integrate subsidiary management plans, establish baselines, define governance gates"
+  - "management-plans/*.md"
+process: "Integrate approved subsidiary management plans and establish authorized project baselines"
 outputs:
   - "Project-Management-Plan.md"
+status: "Draft — not ready for approval"
 ---
 
-# Project Management Plan (PMP) — SIDPA Project
+# Project Management Plan — MXC Hyper-V for ADPA / SIDPA
 
-**Status:** Scaffold. `approve-pmp` has not been run. Packs 001–006 cite `PMP-BL-v1.0.0`, and that citation is not a locked Stage 7 baseline.
+> **Status:** Draft only. The Charter is approved; this PMP and its subsidiary plans are not. No PMP baseline or execution baselines are approved by this document.
+> **Baseline label in downstream documents:** `PMP-BL-v1.0.0` is referenced by existing artifacts, but this repository currently has no canonical `approve-pmp` approval record establishing it as an approved baseline.
 
-> **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
-> **Baseline Identifier:** `PMP-BL-v1.0.0`  
-> **Inputs:** Project-Charter.md, Subsidiary Management Plans  
-> **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  
-> **Outputs:** Project-Management-Plan.md
+## 1. Authorization and planning status
 
-## 1. Executive Summary & Baselines
-- **Project Title:** SIDPA Project
-- **Baseline ID:** `PMP-BL-v1.0.0`
-- **Scope Baseline:** Approved scope boundary traced to Project Charter objectives.
-- **Schedule Baseline / Progressive Elaboration:** Milestones established; duration detailed progressively from empirical evidence.
-- **Cost Baseline / Progressive Elaboration:** Investment limits from Business Case; detailed cost tracked as resources are committed.
+The [Project Charter](Project-Charter.md) was approved by the Steering Committee on 2026-10-30. It authorizes project planning within its stated scope and USD 25,000 Project Manager spending authority. It does not approve this PMP or any subsidiary plan.
 
-## 2. Integrated Subsidiary Management Plans
+The subsidiary plans below are drafts for review. Seven can be prepared from the available charter inputs; the Schedule Management Plan and Cost Management Plan are explicitly not yet buildable under the Charter's evidence requirements.
 
-### 2.5.1 Scope Management Plan
-**Document Link:** [management-plans/Scope-Management-Plan.md](management-plans/Scope-Management-Plan.md)
-- **Summary:** Formulated Scope Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+| Subsidiary plan | Current status |
+|---|---|
+| Scope Management Plan | Draft; Scope Foundation Pack pending review and initiating-input reconciliation |
+| Quality Management Plan | Draft; requirements and test-owner assignments remain incomplete |
+| Resource Management Plan | Draft; no capacity or resource allocation is approved |
+| Communications Management Plan | Draft; committee membership and cadence remain open |
+| Risk Management Plan | Draft; no probability/impact scale or cadence is approved |
+| Procurement Management Plan | Draft; no procurement need or commitment is identified |
+| Stakeholder Engagement Plan | Draft; individual committee membership is not recorded |
+| Schedule Management Plan | Not yet buildable; actual duration data and approved scope/WBS are prerequisites |
+| Cost Management Plan | Not yet buildable; Resource Allocation and Procurement outputs are prerequisites |
 
-### 2.6.1 Schedule Management Plan
-**Document Link:** [management-plans/Schedule-Management-Plan.md](management-plans/Schedule-Management-Plan.md)
-- **Summary:** Formulated Schedule Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+## 2. Baselines
 
-### 2.7.1 Cost Management Plan
-**Document Link:** [management-plans/Cost-Management-Plan.md](management-plans/Cost-Management-Plan.md)
-- **Summary:** Formulated Cost Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+- **Scope baseline:** Not approved. The Scope Foundation Pack and its artifacts remain drafts/pending.
+- **Schedule baseline:** Not established. No dates or duration estimates are authorized.
+- **Cost baseline:** Not established. The USD 25,000 amount is an approval threshold, not a total budget.
+- **Benefits baseline:** Operational targets are recorded in the Benefits Statement, which remains draft. The paused-RAM target conflicts with upstream documents and the surge measurement window remains open.
 
-### 2.8.1 Quality Management Plan
-**Document Link:** [management-plans/Quality-Management-Plan.md](management-plans/Quality-Management-Plan.md)
-- **Summary:** Formulated Quality Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+## 3. Governance and decisions
 
-### 2.9.1 Resource Management Plan
-**Document Link:** [management-plans/Resource-Management-Plan.md](management-plans/Resource-Management-Plan.md)
-- **Summary:** Formulated Resource Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+Use the applicable human governance gate for each baseline. Approval of the Charter is not approval of this PMP. The Steering Committee provides independent approval for this PMP and commitments above USD 25,000; individual member names and the standing approval process remain to be recorded.
 
-### 2.10.1 Communications Management Plan
-**Document Link:** [management-plans/Communications-Management-Plan.md](management-plans/Communications-Management-Plan.md)
-- **Summary:** Formulated Communications Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+Preserve decision evidence and identify the artifact revision reviewed. Downstream references to `PMP-BL-v1.0.0` must not be interpreted as approval: resolve their provenance before roll-up or approval.
 
-### 2.11.1 Risk Management Plan
-**Document Link:** [management-plans/Risk-Management-Plan.md](management-plans/Risk-Management-Plan.md)
-- **Summary:** Formulated Risk Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+## 4. Dependencies and open planning inputs
 
-### 2.12.1 Procurement Management Plan
-**Document Link:** [management-plans/Procurement-Management-Plan.md](management-plans/Procurement-Management-Plan.md)
-- **Summary:** Formulated Procurement Management Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+1. Approve the Benefits Statement or otherwise record its authorized disposition.
+2. Resolve and record the RAM target and surge measurement window before baselining affected measures.
+3. Complete and review the Scope Foundation Pack; preserve its pending state until all prerequisites are met.
+4. Record resource allocations and any procurement outputs before preparing cost planning.
+5. Gather actual duration evidence after completed work before preparing schedule planning.
+6. Name Steering Committee members and confirm the committee approval process.
 
-### 2.13.2 Stakeholder Engagement Plan
-**Document Link:** [management-plans/Stakeholder-Engagement-Plan.md](management-plans/Stakeholder-Engagement-Plan.md)
-- **Summary:** Formulated Stakeholder Engagement Plan addressing Formalize PMBOK 8 planning baselines, Generate verified subsidiary management plans, Integrate into Project Management Plan (PMP)....
+Track open items in the [Assumption Log](Assumption-Log.md). No subsidiary plan or baseline is approved merely because a file exists or is linked here.
 
-## 3. Feedback Loop from Adaptation
-When an **Adaptation Plan** (Stage 17) is approved, this PMP and its subsidiary plans are updated with tailored operational changes evaluated through the Governance Change Impact Matrix, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle. Prior baselines are archived to `management-plans/history/{baseline_id}/`.
+## 5. Governance and approval
 
-## 4. Governance Authorization
-Stage 6 requirement packs 001–006 are already approved. This PMP is the Stage 7 document and is not approved. `approve-pmp` (`FULL` authority, `requires_human_approval: true`) has not been run. Invariant 1 in `docs/chain-coverage.md` puts those requirements before this baseline, which is the order already used. The nine subsidiary plans are still scaffolds titled "SIDPA Project". `approve-subsidiary-plan` has not been run. This file does not authorize Stage 8 or Stage 9.
+This PMP is the Stage 7 document and requires independent Steering Committee review and approval under `approve-pmp` (`FULL` authority, `requires_human_approval: true`) before it becomes the integrated Project Management Plan or establishes baselines. Stage 6 requirement packs 001–006 are already approved. The subsidiary plans are drafts for review pending `approve-subsidiary-plan` and `approve-pmp`. This file does not authorize Stage 8 or Stage 9.
