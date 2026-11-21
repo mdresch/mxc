@@ -20,7 +20,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 2.3 | Complete (`feat/story-2.3`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-002 / WBS 3.3) | Complete (`test_story_2_3_dual_routing_rules.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`ingress_gateway.py`) | Complete (3 contracts + 65 suite pass) | Complete (`12659be9`) | Merged (`a96850b8`) |
 | Story 3.1 | Complete (`feat/story-3.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-003 / WBS 4.1) | Complete (`test_story_3_1_production_image_audit.py`) | Complete (`production-image/SKILL.md`) | Complete (`production_image.py`) | Complete (23 contracts + 88 suite pass) | Complete (`836aadcc`) | Merged (`68fdf047`) |
 | Story 3.2 | Complete (`feat/story-3.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-003 / WBS 4.2) | Complete (`test_story_3_2_warm_baseline_checkpoint.py`) | Complete (`production-image/SKILL.md`) | Complete (`production_image.py`) | Complete (5 contracts + 93 suite pass) | Complete (`af0b7bc3`) | Merged (`18892234`) |
-| Story 4.1 | Complete (`feat/story-4.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-004 / WBS 5.1) | Complete (`test_story_4_1_zero_idle_cpu.py`) | Complete (`paused-ram-standby/SKILL.md`) | Complete (`paused_ram.py`) | Complete (5 contracts + 98 suite pass) | Pending commit | Pending merge |
+| Story 4.1 | Complete (`feat/story-4.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-004 / WBS 5.1) | Complete (`test_story_4_1_zero_idle_cpu.py`) | Complete (`paused-ram-standby/SKILL.md`) | Complete (`paused_ram.py`) | Complete (5 contracts + 98 suite pass) | Complete (`55bafe4f`) | Merging |
 
 ## When a story's steps don't match this template's own assumed shape
 

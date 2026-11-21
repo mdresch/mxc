@@ -164,8 +164,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-4.1`
-- **Commit:** Pending commit
-- **Merge Commit:** Pending merge
+- **Commit:** `55bafe4f`
+- **Merge Commit:** Merging
 - **Deliverables:**
   - Implementation: `scripts/lib/paused_ram.py` (`PausedRamFleetManager`, `StandbyVMDescriptor`, `HostResourceMetrics`, `SingleVMMetrics`)
   - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
