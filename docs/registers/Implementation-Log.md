@@ -203,3 +203,24 @@ Copy this block per story.
   - Telemetry output explicitly records the configured target band (1024.0 MB to 1228.8 MB) alongside resident RAM per `AC-03.2` and `BEN-10`.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 4.3 — Sub-300 ms resume]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-4.3`
+- **Commit:** `fb072ee5`
+- **Merge Commit:** Merging
+- **Deliverables:**
+  - Implementation: `scripts/lib/paused_ram.py` (`ResumeResult`, `resume_vm`)
+  - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
+  - Contract: `tests/contracts/test_story_4_3_sub_300ms_resume.py`
+  - Spec Gate: `scripts/spec_gate.py 4.3` (Passed, margin +0.2153, episode `spec-4_3-0df89f98`)
+- **Validation results:**
+  - Observed RED first: `test_story_4_3_sub_300ms_resume.py` written and verified against contract invariants.
+  - Story contract: `tests/contracts/test_story_4_3_sub_300ms_resume.py` 4 passed.
+  - Full suite: `pytest tests` 106 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Resuming from `Paused` state leverages host RAM resident pages without disk page-in delays; resuming from `Saved` or `Stopped` state incurs disk page-in penalty and fails the sub-300ms ceiling (ADR-004 §5).
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

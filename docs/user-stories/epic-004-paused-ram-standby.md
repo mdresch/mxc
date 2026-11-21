@@ -46,7 +46,7 @@ outputs:
 
 ## Story 4.3 — Sub-300 ms resume
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`tests/contracts/test_story_4_3_sub_300ms_resume.py` passing)  
 **As a** Infrastructure Platform Engineer, **I want** resume a Paused guest, **so that** wake stays inside the platform ceiling.
 
 **Acceptance Criteria:**
