@@ -159,3 +159,25 @@ Copy this block per story.
   - Any remaining unclosed database connection handles abort checkpoint capture citing `BRU-003-03` to prevent cross-checkpoint handle corruption.
 - **Open for a human:** None.
 - **Breakout recap:** Complete. Epic 003 fully verified and closed out. Transitioned to Epic 004 in `Project-Status-Register.md`.
+
+## [Story 4.1 — Zero idle CPU]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-4.1`
+- **Commit:** `55bafe4f`
+- **Merge Commit:** Merging
+- **Deliverables:**
+  - Implementation: `scripts/lib/paused_ram.py` (`PausedRamFleetManager`, `StandbyVMDescriptor`, `HostResourceMetrics`, `SingleVMMetrics`)
+  - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
+  - Contract: `tests/contracts/test_story_4_1_zero_idle_cpu.py`
+  - Spec Gate: `scripts/spec_gate.py 4.1` (Passed, margin +0.2129, episode `spec-4_1-31b8c8a2`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'scripts.lib.paused_ram'`).
+  - Story contract: `tests/contracts/test_story_4_1_zero_idle_cpu.py` 5 passed.
+  - Full suite: `pytest tests` 98 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Standby fleet guests must be strictly in `Paused` state; any `Running` guest spends ~1.2% idle processor time and fails the zero idle CPU invariant citing `BRU-004-01`.
+  - Absent GPU partition is accounted as 0.0% with an audit record citing partition absence per `BRU-004-02`.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
