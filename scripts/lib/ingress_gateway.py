@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import json
 import time
-from typing import Optional
+from typing import Optional, Sequence
 
 
 class VMTargetState(str, Enum):
@@ -217,3 +217,17 @@ class IngressGateway:
             routed_image_name=image_name,
             routing_rule_fired=rule_fired,
         )
+
+
+def batch_resolve_routes(
+    gateway: IngressGateway,
+    requests: Sequence[IngressRequest],
+) -> list[tuple[str, str, RoutingRuleType]]:
+    """Batch resolve routes for a sequence of incoming ingress requests.
+
+    Handles empty collection base case (Interpretation I1) returning empty list without error.
+    """
+    if not requests:
+        return []
+    return [gateway.resolve_route(req) for req in requests]
+

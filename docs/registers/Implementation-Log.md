@@ -94,3 +94,24 @@ Copy this block per story.
   - None (zero findings flagged by `scripts/spec_gate.py 2.2`).
 - **Open for a human:** None.
 - **Breakout recap:** pending, last story of the epic (Story 2.3 remaining).
+
+## Story 2.3 — Dual routing rules
+- **Commit:** `12659be9`
+- **Date:** 2026-11-21
+- **Branch:** `feat/story-2.3`
+- **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
+- **Files Modified/Created:**
+  - `scripts/lib/ingress_gateway.py` (Dual routing engine for path prefix and catalogued listen ports)
+  - `tests/contracts/test_story_2_3_dual_routing_rules.py` (Contract tests for AC-1, AC-2, and Interpretation I1)
+  - `.claude/skills/ingress-gateway/SKILL.md` (Updated component skill definition)
+- **Validation:**
+  - AC-1: Path routing `/api/v1/adpa` verified to lease `prod-adpa` and record path routing rule (`HYP-mxc-004`).
+  - AC-2: Port routing `:8091` verified to accept and route to catalogued ADPA PoC image and record port routing rule (`BEN-04`).
+  - I1: Empty collection base case returns empty list without error.
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'batch_resolve_routes'`) prior to implementation.
+  - Story contract: `tests/contracts/test_story_2_3_dual_routing_rules.py` 3 passed.
+  - Full suite: `pytest tests` 65 passed.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - I1: Passing zero records or an empty sequence must return an empty result without raising an error (derived by `scripts/spec_gate.py 2.3`).
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
