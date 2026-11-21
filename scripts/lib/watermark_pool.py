@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import threading
 import time
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 
 class PoolInstanceState(str, Enum):
@@ -436,3 +436,18 @@ def batch_wake_hygiene(
     for vm_name in vm_names:
         results[vm_name] = pool.perform_wake_hygiene(vm_name, clock_drift_ms=clock_drift_ms)
     return results
+
+
+def audit_cooldown_reaping(
+    pool: WatermarkPoolManager,
+    idle_duration_seconds: float,
+) -> dict[str, Any]:
+    """Execute surplus cooldown reaping and record structured benchmark telemetry (BEN-09, AC-05.4)."""
+    res = pool.reap_idle_surplus(idle_duration_seconds=idle_duration_seconds)
+    return {
+        "configured_figure": pool.config.configured_cooldown_figure,
+        "cooldown_seconds": pool.config.cooldown_seconds,
+        "k_min": pool.config.min_ready_standby,
+        "reaped_count": res.instances_reaped,
+        "remaining_count": res.remaining_ready,
+    }
