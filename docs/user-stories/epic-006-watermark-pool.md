@@ -34,7 +34,8 @@ outputs:
 **As a** SRE, **I want** lease the last ready guest, **so that** the next caller finds a Paused standby without blocking the in-flight request.
 
 **Acceptance Criteria:**
-- Given K_min met, when a guest is leased, then another reaches `StandbyPaused` in about 1.5 s in background (`AC-05.1`).
+- **AC1:** Given K_min met, when a guest is leased, then another reaches `StandbyPaused` in about 1.5 s in background (`AC-05.1`).
+- **AC2:** Given pool with zero available guests, when lease requested, then handle gracefully without crash (e.g. wait or provision on-demand).
 
 ## Story 6.2 — Surge expansion
 
@@ -42,7 +43,8 @@ outputs:
 **As a** SRE, **I want** handle request bursts, **so that** concurrent callers avoid cold boot.
 
 **Acceptance Criteria:**
-- Given configured surge threshold (record 5 rps or 10 rps/5 s), when tripped or queue depth > 0, then ready count expands up to K_max (`AC-05.2`, `BEN-09`).
+- **AC1:** Given configured surge threshold (record 5 rps or 10 rps/5 s), when tripped or queue depth > 0, then ready count expands up to K_max (`AC-05.2`, `BEN-09`).
+- **AC2:** Given ready count at K_max, when additional surge occurs, then pool does not exceed K_max ceiling.
 
 ## Story 6.3 — Wake hygiene
 
@@ -50,7 +52,8 @@ outputs:
 **As a** SRE, **I want** wake a guest from checkpoint, **so that** cryptography, time, and DB pools are safe before traffic.
 
 **Acceptance Criteria:**
-- Given restore from `baseline-hot-ready`, when `/health` first succeeds, then entropy reseeded, clock synced, and DB pools cleared (`AC-02.4`).
+- **AC1:** Given restore from `baseline-hot-ready`, when `/health` first succeeds, then entropy reseeded, clock synced, and DB pools cleared (`AC-02.4`).
+- **AC2:** Given wake failure during hygiene sequence, then instance is quarantined/reaped and not routed traffic.
 
 ## Story 6.4 — Scale down
 
@@ -58,7 +61,8 @@ outputs:
 **As a** SRE, **I want** cool surplus guests, **so that** host RAM returns toward baseline.
 
 **Acceptance Criteria:**
-- Given traffic normalized, when idle exceeds configured cooldown (record 180 s or 300 s), then surplus above K_min is reaped (`AC-05.4`).
+- **AC1:** Given traffic normalized, when idle exceeds configured cooldown (record 180 s or 300 s), then surplus above K_min is reaped (`AC-05.4`).
+- **AC2:** Given pool count at or below K_min, when cooldown fires, then no instances below K_min are reaped.
 
 ## Before running `implement-story`
 
