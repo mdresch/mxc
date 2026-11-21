@@ -51,6 +51,7 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 | ID | Originating Epic | Idea Title | Category | Description & Technical Value | Target Benefit / Outcome | Disposition & Status |
 |---|---|---|---|---|---|---|
 | `IMP-MXC-001` | Epic 01 | Automated Subsystem Differential Telemetry Matrix | Architecture / Verification | Generalize the differential subsystem probe from Story 1.2 into an automated telemetry probe executed during JIT guest provisioning to stream structured WMI, COM+, Services, and GPO health directly to the pool controller. | Instantaneous detection of guest image degradation or missing Windows subsystem prerequisites prior to session dispatch (`BEN-05`). | ⚪ `In-Flight Candidate` |
+| `IMP-MXC-002` | Epic 02 | Early TLS ClientHello Interception for Predictive Hyper-V Resume | Performance / Architecture | Trigger hypervisor `Resume-VM` upon TCP connection establishment and receipt of TLS SNI hostname during the TLS handshake, overlapping the ~220ms hypervisor wake latency with TLS negotiation. | Reduces observed cold wake TTFB from ~350ms down to near-warm latency (~120ms total TTFB), accelerating sub-800ms margins (`BEN-02`). | ⚪ `In-Flight Candidate` |
 
 ---
 
@@ -60,6 +61,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 - **Cadence Date:** 2026-11-21
 - **Defensive Review (`LL-###`):** `LL-001` (zero-padded epic file matching in `spec_gate.py`), `LL-002` (local store dir process environment isolation for pytest).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-001` (Automated Subsystem Differential Telemetry Matrix).
+
+### Epic 02: Connection-buffering ingress gateway
+- **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-003` (Ingress gateway buffer holding and timeout decoupling).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-002` (Early TLS ClientHello Interception for Predictive Hyper-V Resume).
 
 ---
 

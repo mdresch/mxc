@@ -17,6 +17,7 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 |---|---|---|---|---|
 | `LL-001` | Zero-Padded Epic File Matching & AC Parsing Fallback | Epic 01 / Story 1.1 | Tier 2 (`scripts/spec_gate.py`) | 2026-11-21 |
 | `LL-002` | Local Store Dir Environment Isolation for Pytest Session | Epic 01 / Story 1.1 | Tier 2 (`tests/conftest.py`) | 2026-11-21 |
+| `LL-003` | Ingress Gateway Buffer Holding and Timeout Decoupling | Epic 02 / Story 2.2 | Tier 2 (`ingress-gateway/SKILL.md`) | 2026-11-21 |
 
 ## Entries
 
@@ -37,3 +38,12 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 - **The Trap / Problem:** When `$env:AGENT_LEARNING_LOCAL_STORE_DIR` was set at the user OS level to an external inaccessible path, `conftest.py` failed during session setup with `WinError 5 Access is denied`, halting all pytest tests.
 - **The Root Cause:** `conftest.py` captures `os.environ.get("AGENT_LEARNING_LOCAL_STORE_DIR")` at initial import before fixtures run.
 - **Actionable Invariant / Rule:** Set `$env:AGENT_LEARNING_LOCAL_STORE_DIR = "data/agent-learning/store"` at process scope before invoking python/pytest runners.
+
+### LL-003 — Ingress Gateway Buffer Holding and Timeout Decoupling
+- **Epic / Story:** Epic 002 / Story 2.2 (commit `e9e6e1c1`)
+- **Scope:** JIT scale-to-zero reverse proxy gateway (`scripts/lib/ingress_gateway.py`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `.claude/skills/ingress-gateway/SKILL.md`
+- **The Trap / Problem:** Direct reverse proxying to a dormant or paused guest socket drops incoming HTTP connections and emits HTTP 502/504 errors, causing webhooks and external callers to abort.
+- **The Root Cause:** Off-the-shelf reverse proxies assume downstream socket availability and fail closed on connection reset before hypervisor unpause completes.
+- **Actionable Invariant / Rule:** Buffer the incoming socket, asynchronously dispatch `pool-lease` / `resume`, probe guest health on port 8080, and if `wake_timeout_ms` expires, return HTTP 503 with a structured `Retry-After: 2` header, never exposing 502 or 504 to the caller.

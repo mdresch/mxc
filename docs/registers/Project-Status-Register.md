@@ -43,11 +43,11 @@ caused this, both worth guarding against here:
 |---|---|
 | **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) |
 | **Current PMP Baseline** | `PMP-BL-v1.0.0` |
-| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 001 Stories 1.1 & 1.2 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
+| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 002 Stories 2.1..2.3 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
 | **Current macro Stage** | Stage 10 (Execution & Verification) |
-| **Last Epic/unit of work fully completed** | Epic 001: Type-1 Hyper-V Generation 2 instead of a container namespace (`LL-001`, `LL-002`, `IMP-MXC-001`) |
-| **Next Epic/unit of work to implement** | Epic 002: Connection-buffering ingress gateway (Story 2.1 — Cold wake TTFB & connection hold) |
-| **Last commit on the base branch** | `a3600bd7` (docs(US-01.2): update story execution register merge status) |
+| **Last Epic/unit of work fully completed** | Epic 002: Connection-buffering ingress gateway (`LL-003`, `IMP-MXC-002`) |
+| **Next Epic/unit of work to implement** | Epic 003: Production base image and warm checkpoint (Story 3.1 — Clean production VHDX image bake) |
+| **Last commit on the base branch** | `ece4a280` (docs(US-02.3): update story execution register merge status) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -55,14 +55,14 @@ caused this, both worth guarding against here:
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| Phase 1 | `PMP-BL-v1.0.0` | Active (Epic 001 complete, Epic 002 in flight) | — |
+| Phase 1 | `PMP-BL-v1.0.0` | Active (Epic 001 & Epic 002 complete, Epic 003 in flight) | — |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
 | Epic | Title | Phase | Status | Stories Executed |
 |---|---|---|---|---|
 | Epic 001 | Type-1 Hyper-V Generation 2 instead of a container namespace | Phase 1 | Complete | Story 1.1, Story 1.2 (2/2) |
-| Epic 002 | Connection-buffering ingress gateway | Phase 1 | Ready | Story 2.1, Story 2.2, Story 2.3 (0/3) |
+| Epic 002 | Connection-buffering ingress gateway | Phase 1 | Complete | Story 2.1, Story 2.2, Story 2.3 (3/3) |
 | Epic 003 | Production base image and warm checkpoint | Phase 1 | Ready | Story 3.1, Story 3.2 (0/2) |
 | Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Ready | Story 4.1, Story 4.2, Story 4.3 (0/3) |
 | Epic 005 | Transient differencing disk and session sterility | Phase 1 | Ready | Story 5.1, Story 5.2, Story 5.3 (0/3) |
