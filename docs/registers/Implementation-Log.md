@@ -136,7 +136,7 @@ Copy this block per story.
   - Production pool parent registration rejection must explicitly cite `BRU-003-01` when attempting to register `winserv2025-mxc-dev.vhdx` or any non-prod image.
   - Image compliance audit must verify required runtime baselines (`vmbus.sys`, `vmictimeprovider.dll`, `bcrypt.dll`) and fail if missing per FDD-003.
 - **Open for a human:** None.
-- **Breakout recap:** Pending Step 9 epic closeout.
+- **Breakout recap:** Complete. Logged `LL-004` (pre-checkpoint connection pool sterilization & JIT warm-up decoupling) and `IMP-MXC-003` (automated image signature and SBOM attestation gate).
 
 ## [Story 3.2 — Warm baseline checkpoint]
 
@@ -158,4 +158,4 @@ Copy this block per story.
   - Checkpoint name must strictly be `baseline-hot-ready` (ADR-003 §4.4); arbitrary names are rejected.
   - Any remaining unclosed database connection handles abort checkpoint capture citing `BRU-003-03` to prevent cross-checkpoint handle corruption.
 - **Open for a human:** None.
-- **Breakout recap:** Pending Step 9 epic closeout.
+- **Breakout recap:** Complete. Epic 003 fully verified and closed out. Transitioned to Epic 004 in `Project-Status-Register.md`.

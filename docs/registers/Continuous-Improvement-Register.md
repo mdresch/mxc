@@ -52,6 +52,7 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 |---|---|---|---|---|---|---|
 | `IMP-MXC-001` | Epic 01 | Automated Subsystem Differential Telemetry Matrix | Architecture / Verification | Generalize the differential subsystem probe from Story 1.2 into an automated telemetry probe executed during JIT guest provisioning to stream structured WMI, COM+, Services, and GPO health directly to the pool controller. | Instantaneous detection of guest image degradation or missing Windows subsystem prerequisites prior to session dispatch (`BEN-05`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-002` | Epic 02 | Early TLS ClientHello Interception for Predictive Hyper-V Resume | Performance / Architecture | Trigger hypervisor `Resume-VM` upon TCP connection establishment and receipt of TLS SNI hostname during the TLS handshake, overlapping the ~220ms hypervisor wake latency with TLS negotiation. | Reduces observed cold wake TTFB from ~350ms down to near-warm latency (~120ms total TTFB), accelerating sub-800ms margins (`BEN-02`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-003` | Epic 03 | Automated Image Cryptographic Signature & SBOM Attestation Gate | Security / Supply Chain | Implement a cryptographic signing and in-toto / cosign attestation check into `PoolRegistrationGuard` for production images, pairing the existing offline VHDX compliance audit with signed SBOM validation (`HYP-mxc-017` horizon). | Guarantees verifiable provenance, zero tampering, and complete supply-chain attestation before allowing any VHDX parent into the standby pool (`BEN-08`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 
 ---
 
@@ -66,6 +67,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 - **Cadence Date:** 2026-11-21
 - **Defensive Review (`LL-###`):** `LL-003` (Ingress gateway buffer holding and timeout decoupling).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-002` (Early TLS ClientHello Interception for Predictive Hyper-V Resume).
+
+### Epic 03: Production base image separate from the developer image
+- **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-004` (Pre-checkpoint connection pool sterilization & JIT warm-up decoupling).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-003` (Automated Image Cryptographic Signature & SBOM Attestation Gate).
 
 ---
 

@@ -25,7 +25,7 @@ outputs:
 **Source ADR:** [ADR-003](../07-architecture/ADR-003-production-base-image.md) — Accepted.  
 **Source BRD/FDD:** [BRD-003](../project-docs/Business-Requirements/BRD-003-production-base-image.md) — Approved (2026-10-30) / [FDD-003](../project-docs/Functional-Design/FDD-003-production-base-image.md) — Approved (2026-10-30).
 **Governing Baseline:** `PMP-BL-v1.0.0`  
-**Status:** **Approved (2026-10-30)** — `approve-user-stories` accepted `approve_user_stories` on 2026-10-30 (policy `f864addc-593f-46b1-93e0-0720f6d18a6b`, human acceptance). Gate record: [approve-user-stories-003-2026-10-30.adjudication.json](../project-docs/gates/approve-user-stories-003-2026-10-30.adjudication.json).
+**Status:** **Completed & Validated (2026-11-21)** — Stories 3.1 & 3.2 implemented and contract-verified (`tests/contracts/test_story_3_1_production_image_audit.py` and `tests/contracts/test_story_3_2_warm_baseline_checkpoint.py`).  
 **Suite anchor:** [US-04](../hyperv/architecture/USER_STORIES.md) in the monolith user-story document.
 
 ## Story 3.1 — Clean production VHDX
