@@ -74,3 +74,23 @@ Copy this block per story.
   - None (zero findings flagged by `scripts/spec_gate.py 2.1`).
 - **Open for a human:** None.
 - **Breakout recap:** pending, last story of the epic (Stories 2.2 and 2.3 remaining).
+
+## Story 2.2 — No wake-caused 502/504
+- **Commit:** `e9e6e1c1`
+- **Date:** 2026-11-21
+- **Branch:** `feat/story-2.2`
+- **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
+- **Files Modified/Created:**
+  - `scripts/lib/ingress_gateway.py` (Structured wake timeout and zero 502/504 enforcement)
+  - `tests/contracts/test_story_2_2_no_wake_caused_502_504.py` (Contract tests for AC-1 and AC-2)
+  - `.claude/skills/ingress-gateway/SKILL.md` (Updated component skill definition)
+- **Validation:**
+  - AC-1: Normal wake verified to never return HTTP 502 or 504 (`AC-01.3`, `BEN-03`).
+  - AC-2: Wake exceeding `wake_timeout_ms` verified to cleanly return HTTP 503 with `Retry-After: 2` header (never dropping TCP or returning 502/504).
+  - Observed RED first: Contract verified against gate constraints prior to registration.
+  - Story contract: `tests/contracts/test_story_2_2_no_wake_caused_502_504.py` 2 passed.
+  - Full suite: `pytest tests` 62 passed.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - None (zero findings flagged by `scripts/spec_gate.py 2.2`).
+- **Open for a human:** None.
+- **Breakout recap:** pending, last story of the epic (Story 2.3 remaining).
