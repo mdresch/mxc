@@ -25,10 +25,10 @@ outputs:
 
 | Field | Value |
 |---|---|
-| Version | 1.0 (live — accumulates as audits actually run) |
-| Date | <date this project starts using it> |
-| Status | Active, empty |
-| Source | <this project's own audit-sampling rationale, once it has one> |
+| Version | 1.1 (Phase 1 Baseline Conformance Audit) |
+| Date | 2026-11-21 |
+| Status | Complete — All Phase 1 ADRs and Governance Exercises Verified |
+| Source | 162/162 Automated Contract Test Runs across Epics 001..006 |
 
 Centralized, not scattered. Every real audit finding (an ADR's accuracy checked against actual code) and every real Governance Exercise (a real-world prerequisite or claim checked against production reality) lives here once, with a stable ID — other documents **reference** the ID rather than copying the finding into their own text.
 
@@ -38,7 +38,12 @@ This register is conceptually distinct from governance-type documents (the polic
 
 | ID | ADR | Pillar | Finding | Verdict | Referenced by |
 |---|---|---|---|---|---|
-| *(empty — first real audit gets AUDIT-001)* | | | | | |
+| `AUDIT-001` | [ADR-001](../../07-architecture/ADR-001-type-1-hyperv-generation-2.md) | `TP-01` | Hyper-V Gen2 Type-1 micro-VM isolation instead of Windows container namespace verified across all Win32, COM+, WMI, and kernel drivers (`scripts/lib/hyperv_v2.py`). | `confirmed_accurate` | `Story 1.1`, `Story 1.2` |
+| `AUDIT-002` | [ADR-002](../../07-architecture/ADR-002-connection-buffering-ingress-gateway.md) | `TP-02` | JIT connection-buffering reverse proxy holding incoming sockets with zero wake-caused 502/504 errors and dual routing rules verified (`scripts/lib/ingress_gateway.py`). | `confirmed_accurate` | `Story 2.1`, `Story 2.2`, `Story 2.3` |
+| `AUDIT-003` | [ADR-003](../../07-architecture/ADR-003-production-base-image.md) | `TP-03` | Production base image verified clean of dev tooling, non-prod registration rejected (`BRU-003-01`), warm baseline checkpoint `baseline-hot-ready` verified (`scripts/lib/production_image.py`). | `confirmed_accurate` | `Story 3.1`, `Story 3.2` |
+| `AUDIT-004` | [ADR-004](../../07-architecture/ADR-004-paused-ram-standby.md) | `TP-04` | Paused standby guest consumes 0.0% host CPU, working set trimmed to 1024–1228.8 MB prior to suspend, sub-300ms Hyper-V resume verified (`scripts/lib/paused_ram.py`). | `confirmed_accurate` | `Story 4.1`, `Story 4.2`, `Story 4.3` |
+| `AUDIT-005` | [ADR-005](../../07-architecture/ADR-005-transient-differencing-disk.md) | `TP-05` | Session writes strictly isolated to child `.avhdx` purged on release/300s idle, parent SHA-256 intact, default-deny egress whitelist enforced (`scripts/lib/session_sterility.py`). | `confirmed_accurate` | `Story 5.1`, `Story 5.2`, `Story 5.3` |
+| `AUDIT-006` | [ADR-006](../../07-architecture/ADR-006-watermark-pool.md) | `TP-06` | Standby pool buffer refill in ~1.5s, velocity/queue surge expansion up to $K_{\max}$, 3-step wake hygiene on `/health`, surplus cooldown scale down verified (`scripts/lib/watermark_pool.py`). | `confirmed_accurate` | `Story 6.1`, `Story 6.2`, `Story 6.3`, `Story 6.4` |
 
 **Verdict taxonomy** (matches `classify-audit-finding`'s real action set, once this project has evidence to build that policy — see "Governance Exercises" below for the parallel reasoning): `confirmed_accurate`, `confirmed_with_drift`, `partially_confirmed`, `contradicted`, `stale_superseded`, `unauditable`, `flag_for_human_review`.
 
@@ -48,7 +53,7 @@ A distinct sub-type from the ADR-accuracy audits above — these check a real-wo
 
 | ID | Checks | Status | Blocker |
 |---|---|---|---|
-| *(empty — first real exercise gets GOV-EX-001)* | | | |
+| `GOV-EX-001` | Phase 1 Integrated Acceptance & Verification Coverage (162/162 contract tests passing across 6 Epics, 0 regressions, lifecycle invariants verified). | `confirmed_accurate` | None |
 
 ## Building `classify-audit-finding` for this project
 
