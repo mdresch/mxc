@@ -274,8 +274,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-5.3`
-- **Commit:** `9a970a3b`
-- **Merge Commit:** `pending`
+- **Commit:** `572b2c97`
+- **Merge Commit:** `f3ceda56`
 - **Deliverables:**
   - Implementation: `scripts/lib/session_sterility.py` (`UnapprovedParentImageError`, `APPROVED_PRODUCTION_PARENT`, `execute_discard_path`, `record_session_file`)
   - Component Skill: `.claude/skills/session-sterility/SKILL.md`
