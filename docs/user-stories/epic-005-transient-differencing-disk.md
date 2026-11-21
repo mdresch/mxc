@@ -39,7 +39,7 @@ outputs:
 
 ## Story 5.2 — Egress whitelist
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-5.2`) — Contract: `tests/contracts/test_story_5_2_egress_whitelist.py` (23 passed)  
 **As a** CISO, **I want** control guest outbound traffic, **so that** only approved internal endpoints are reachable.
 
 **Acceptance Criteria:**

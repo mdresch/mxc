@@ -247,3 +247,26 @@ Copy this block per story.
   - Hung requests reaching 900 s ceiling trigger HTTP 504 and instance reaping per `BRU-005-04`.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 5.2 — Egress whitelist]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-5.2`
+- **Commit:** `180dc16b`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/session_sterility.py` (`is_approved_internal_endpoint`, `generate_hyperv_port_acls`, `evaluate_outbound_traffic`, `evaluate_inbound_traffic`)
+  - Component Skill: `.claude/skills/session-sterility/SKILL.md`
+  - Contract: `tests/contracts/test_story_5_2_egress_whitelist.py`
+  - Spec Gate: `scripts/spec_gate.py 5.2` (Passed, margin +0.2153, episode `spec-5_2-c62d6652`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'generate_hyperv_port_acls'`).
+  - Story contract: `tests/contracts/test_story_5_2_egress_whitelist.py` 23 passed.
+  - Full suite: `pytest tests` 134 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Egress filtering evaluates destination addressing in addition to port numbers: public IPs (e.g. `8.8.8.8`, `93.184.216.34`) and public internet domains are dropped even on standard ports (`:53`, `:443`); only approved internal RFC1918 subnets and approved internal hostnames are permitted per `AC-02.3`.
+  - Inbound filtering drops all unsolicited ports, permitting only TCP `:8080` from the reverse proxy.
+  - Hyper-V vSwitch port ACL generation emits discrete inbound and outbound `Add-VMNetworkAdapterAcl` commands with default deny.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

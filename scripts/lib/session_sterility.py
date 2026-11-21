@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 import hashlib
+import ipaddress
 import time
 from typing import Dict, List, Optional, Set
 
@@ -78,7 +79,7 @@ class HungRequestError(Exception):
 WHITELISTED_EGRESS_PORTS: dict[int, str] = {
     53: "DNS (Domain Name Resolution)",
     88: "Kerberos (Enterprise Authentication)",
-    443: "Private Blob / S3 Storage (Approved internal endpoints)",
+    443: "Private Blob Storage / S3 (Approved internal endpoints)",
     1433: "SQL Server (Enterprise Relational Datastore)",
     5432: "PostgreSQL (Enterprise Relational Datastore)",
 }
@@ -107,6 +108,55 @@ class DiscardResult:
     is_residue_eliminated: bool
     next_parent_image: str
     guest_persisted: bool
+
+
+def is_approved_internal_endpoint(destination: str) -> bool:
+    """Evaluate whether a destination address or hostname is an approved internal target."""
+    dest = destination.strip().lower()
+    if dest in ("public_internet", "external_untrusted"):
+        return False
+
+    # Check if IP address
+    try:
+        ip = ipaddress.ip_address(dest)
+        # RFC1918 private addresses or loopback
+        return ip.is_private or ip.is_loopback
+    except ValueError:
+        pass
+
+    # Domain name inspection
+    approved_suffixes = (
+        ".internal",
+        ".corp",
+        ".local",
+        ".privatelink.blob.core.windows.net",
+        ".privatelink.core.windows.net",
+    )
+    if any(dest.endswith(suffix) for suffix in approved_suffixes):
+        return True
+
+    return False
+
+
+def generate_hyperv_port_acls(vm_name: str) -> List[str]:
+    """Generate Hyper-V PowerShell Add-VMNetworkAdapterAcl commands for hardware enforcement."""
+    commands = [
+        f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Deny -Direction Inbound",
+        f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Deny -Direction Outbound",
+        f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Inbound -LocalPort 8080 -Protocol TCP",
+    ]
+    # Whitelisted egress rules
+    for port, desc in WHITELISTED_EGRESS_PORTS.items():
+        if port == 53:
+            commands.append(f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Outbound -RemotePort 53 -Protocol UDP")
+            commands.append(f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Outbound -RemotePort 53 -Protocol TCP")
+        elif port == 88:
+            commands.append(f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Outbound -RemotePort 88 -Protocol TCP")
+            commands.append(f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Outbound -RemotePort 88 -Protocol UDP")
+        else:
+            commands.append(f"Add-VMNetworkAdapterAcl -VMName '{vm_name}' -Action Allow -Direction Outbound -RemotePort {port} -Protocol TCP")
+
+    return commands
 
 
 class SessionDiskManager:
@@ -254,7 +304,7 @@ class SessionDiskManager:
         if port in WHITELISTED_EGRESS_PORTS:
             desc = WHITELISTED_EGRESS_PORTS[port]
             # Verify approved destination (not arbitrary public internet)
-            if destination.lower() in ("public_internet", "external_untrusted", "8.8.8.8", "1.1.1.1"):
+            if not is_approved_internal_endpoint(destination):
                 return NetworkCheckResult(
                     is_allowed=False,
                     destination=destination,
