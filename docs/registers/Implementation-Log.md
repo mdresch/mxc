@@ -314,3 +314,26 @@ Copy this block per story.
   - Zero ready instances condition handles gracefully: provisions on-demand if permitted or raises `PoolExhaustedError`.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 6.2 — Surge expansion]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-6.2`
+- **Commit:** `76401d81`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/watermark_pool.py` (`SurgeExpansionResult`, `evaluate_surge`, `pre_warm_pool`)
+  - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
+  - Contract: `tests/contracts/test_story_6_2_surge_expansion.py`
+  - Spec Gate: `scripts/spec_gate.py 6.2` (Passed, margin +0.2153, episode `spec-6_2-9aa2aceb`)
+- **Validation results:**
+  - Observed RED first: 1 assertion error (`AttributeError: 'WatermarkPoolManager' object has no attribute 'pre_warm_pool'`).
+  - Story contract: `tests/contracts/test_story_6_2_surge_expansion.py` 6 passed.
+  - Full suite: `pytest tests` 150 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Surge triggers on either request velocity ($\ge$ configured threshold: 10 rps or 5 rps) OR queue depth $> 0$ (`AC-05.2`).
+  - Strict ceiling: Ready standby pool strictly clamps at $K_{\max}$ (default 5); subsequent surges do not allocate excess instances.
+  - Explicit pre-warming via `pre_warm_pool` (supporting `mxc-pool-warm` / `POST /pool/warm`) directly raises ready count up to $K_{\max}$ (`AC-05.3`).
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

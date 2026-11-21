@@ -295,6 +295,33 @@ class WatermarkPoolManager:
                 max_kmax=self.config.max_ready_standby,
             )
 
+    def pre_warm_pool(self, target_count: int) -> int:
+        """Pre-warm ready standby pool up to target_count (clamped at K_max) (AC-05.3)."""
+        with self._lock:
+            clamped_target = min(target_count, self.config.max_ready_standby)
+            ready_guests = [g for g in self._guests.values() if g.state == PoolInstanceState.STANDBY_PAUSED]
+            deficit = clamped_target - len(ready_guests)
+
+            for _ in range(max(0, deficit)):
+                cold = [g for g in self._guests.values() if g.state == PoolInstanceState.COLD_PROVISIONED]
+                if cold:
+                    target = cold[0]
+                else:
+                    vm_name = f"mxc-pool-vm-{self._seq:02d}"
+                    self._seq += 1
+                    target = PoolGuestRecord(
+                        vm_name=vm_name,
+                        state=PoolInstanceState.COLD_PROVISIONED,
+                        host_ram_mb=0.0,
+                    )
+                    self._guests[vm_name] = target
+
+                target.state = PoolInstanceState.STANDBY_PAUSED
+                target.host_ram_mb = 1126.4
+                target.last_active_timestamp = time.time()
+
+            return len([g for g in self._guests.values() if g.state == PoolInstanceState.STANDBY_PAUSED])
+
     # -------------------------------------------------------------------------
     # Story 6.3: Wake hygiene sequence on /health (AC-02.4, BRU-006-03)
     # -------------------------------------------------------------------------
