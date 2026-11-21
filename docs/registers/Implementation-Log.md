@@ -11,21 +11,26 @@ Append-only. One entry per completed story, written after the implementation com
 
 <!--
 Copy this block per story.
-
-## Story <N.M> — <title>
-- **Commit:** `<hash of the implementation commit>`
-- **Date:** <date>
-- **Branch:** `feat/story-<N.M>`
-- **Source ADR / BRD / FDD:** ADR-<NNN>, BRD-<NNN>, FDD-<NNN>
-- **Files Modified/Created:**
-  - `<path>` (<what changed>)
-- **Validation:**
-  - AC_0 ... AC_n: <how each criterion is met>
-  - Observed RED first: <how many contract tests failed before implementation>
-  - Story contract: <file> <n> passed
-  - Full suite: <command, passed/skipped counts>. Name every path excluded and why; never call a partial run the entire suite.
-- **Interpretations not stated verbatim in the acceptance criteria:**
-  - I1: <reading chosen, and where it is recorded>
-- **Open for a human:** <approvals or decisions still needed>
-- **Breakout recap:** <LL-### entries, a no-new-lessons sign-off, or "pending, last story of the epic">
 -->
+
+## Story 1.1 — Generation 2 isolation boundary
+- **Commit:** `9e454974`
+- **Date:** 2026-11-21
+- **Branch:** `feat/story-1.1`
+- **Source ADR / BRD / FDD:** ADR-001, BRD-001, FDD-001
+- **Files Modified/Created:**
+  - `scripts/lib/hyperv_isolation.py` (Generation 2 isolation boundary and container rejection logic)
+  - `tests/contracts/test_story_1_1_gen2_isolation.py` (Contract tests for AC-1, AC-2, and Interpretation I1)
+  - `.claude/skills/hyperv-isolation/SKILL.md` (Component skill definition)
+  - `scripts/spec_gate.py` (Zero-padded glob matching and AC fallback extraction)
+- **Validation:**
+  - AC-1: Generation 2 partition isolation verified: member generation 2 and distinct guest kernel validated; Generation 1 and shared-kernel VM rejected.
+  - AC-2: Shared-kernel container proposal for confidential records rejected with explicit reference to `BRU-001-02` and `ADR-001`.
+  - I1: Empty collection base case returns empty list without error.
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'hyperv_isolation'`) prior to implementation.
+  - Story contract: `tests/contracts/test_story_1_1_gen2_isolation.py` 3 passed.
+  - Full suite: `pytest tests` 56 passed.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - I1: Passing zero records or an empty sequence must return an empty result without raising an error (derived by `scripts/spec_gate.py 1.1`).
+- **Open for a human:** None.
+- **Breakout recap:** pending, last story of the epic (Story 1.2 remaining).

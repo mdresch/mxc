@@ -142,7 +142,13 @@ def find_epic_file(epic_num: int, repo_root: Path = ROOT) -> Path:
     ]
     for c_dir in candidates:
         if c_dir.is_dir():
-            matches = list(c_dir.glob(f"epic-{epic_num}-*.md")) or list(c_dir.glob(f"epic-{epic_num}.md"))
+            matches = (
+                list(c_dir.glob(f"epic-{epic_num}-*.md"))
+                or list(c_dir.glob(f"epic-{epic_num:03d}-*.md"))
+                or list(c_dir.glob(f"epic-{epic_num:02d}-*.md"))
+                or list(c_dir.glob(f"epic-{epic_num}.md"))
+                or list(c_dir.glob(f"epic-{epic_num:03d}.md"))
+            )
             if matches:
                 return matches[0]
 
@@ -191,6 +197,14 @@ def parse_story_spec(epic_num: int, story_id: str, repo_root: Path = ROOT) -> St
     for idx, (ac_tag, ac_name, prose) in enumerate(ac_matches):
         label = f"{ac_tag} ({ac_name})" if ac_name else ac_tag
         criteria.append(AcceptanceCriterionSpec(index=idx, label=label, prose=prose.strip()))
+
+    if not criteria:
+        # Fallback: look for bullet items under Acceptance Criteria section
+        ac_sec = re.search(r"(?i)\*\*Acceptance Criteria:\*\*\s*\n((?:[ \t]*[-*]\s+.+\n?)+)", section_text)
+        if ac_sec:
+            raw_bullets = re.findall(r"(?m)^\s*[-*]\s+(.+?)$", ac_sec.group(1))
+            for idx, prose in enumerate(raw_bullets):
+                criteria.append(AcceptanceCriterionSpec(index=idx, label=f"AC{idx+1}", prose=prose.strip()))
 
     return StorySpec(
         epic_num=epic_num,
