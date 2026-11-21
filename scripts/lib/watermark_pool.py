@@ -398,3 +398,41 @@ class WatermarkPoolManager:
                 cooldown_seconds=self.config.cooldown_seconds,
                 target_kmin=self.config.min_ready_standby,
             )
+
+
+def verify_health_endpoint(
+    pool: WatermarkPoolManager,
+    vm_name: str,
+    clock_drift_ms: float = 12.0,
+) -> tuple[int, dict]:
+    """Execute /health probe verifying 3-step wake hygiene (AC-02.4)."""
+    try:
+        res = pool.perform_wake_hygiene(vm_name, clock_drift_ms=clock_drift_ms)
+        return 200, {
+            "status": "UP",
+            "vm_name": vm_name,
+            "entropy": "RESEEDED",
+            "clock_synced": True,
+            "clock_drift_ms": res.clock_drift_ms,
+            "db_pools": "CLEARED",
+        }
+    except WakeHygieneError as exc:
+        return 503, {
+            "status": "DOWN",
+            "vm_name": vm_name,
+            "error": str(exc),
+        }
+
+
+def batch_wake_hygiene(
+    pool: WatermarkPoolManager,
+    vm_names: list[str],
+    clock_drift_ms: float = 12.0,
+) -> dict[str, WakeHygieneResult]:
+    """Batch execute wake hygiene across multiple instances (I1: handles empty collection gracefully)."""
+    if not vm_names:
+        return {}
+    results = {}
+    for vm_name in vm_names:
+        results[vm_name] = pool.perform_wake_hygiene(vm_name, clock_drift_ms=clock_drift_ms)
+    return results

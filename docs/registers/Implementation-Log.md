@@ -337,3 +337,26 @@ Copy this block per story.
   - Explicit pre-warming via `pre_warm_pool` (supporting `mxc-pool-warm` / `POST /pool/warm`) directly raises ready count up to $K_{\max}$ (`AC-05.3`).
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 6.3 — Wake hygiene]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-6.3`
+- **Commit:** `fc49e9b0`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/watermark_pool.py` (`WakeHygieneError`, `WakeHygieneResult`, `perform_wake_hygiene`, `verify_health_endpoint`, `batch_wake_hygiene`)
+  - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
+  - Contract: `tests/contracts/test_story_6_3_wake_hygiene.py`
+  - Spec Gate: `scripts/spec_gate.py 6.3` (Passed, margin +0.2061, episode `spec-6_3-dc0b83e5`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'verify_health_endpoint'`).
+  - Story contract: `tests/contracts/test_story_6_3_wake_hygiene.py` 7 passed.
+  - Full suite: `pytest tests` 157 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Prior to receiving tenant traffic, the first `/health` probe enforces three discrete hygiene verification checks: (1) PRNG hardware reseed (`BCryptGenRandom`/TPM), (2) guest clock synchronization within 50 ms host UTC, and (3) complete purge of stale database client connection pools (`AC-02.4`).
+  - Any hygiene failure immediately quarantines the instance, prevents routing, and returns HTTP 503 (`WakeHygieneError`).
+  - [I1] Empty Collection Base Case: Passing an empty list to `batch_wake_hygiene` returns an empty dict without raising an exception.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
