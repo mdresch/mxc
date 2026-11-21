@@ -294,27 +294,112 @@ def build_document() -> docx.Document:
         "spawn pre-trimmed directly from baseline-hot-ready (IMP-MXC-005, LL-005)."
     )
 
-    # 6. Sizing & Benchmark Scorecard
-    add_h1(doc, "6. Comparative Architecture Sizing & Benchmark Matrix")
-    matrix_headers = ["Metric / Dimension", "Standard VM", "MXC Phase 1 (In-Tree)", "MXC Phase Next Target", "Strategic Benefit / Impact"]
+    # 6. Copilot Strategic Peer Review Synthesis
+    add_h1(doc, "6. Strategic Architectural Refinements: Peer Review Synthesis")
+    add_body(
+        doc,
+        "A technical architecture review conducted by Copilot affirmed that the next generation of the MXC platform should move beyond "
+        "incremental guest trimming toward macroscopic refinements that maximize tenant density, predictability, attestation, and wake orchestration. "
+        "Eight strategic priorities were identified for incorporation into Phase Next:"
+    )
+
+    add_body(
+        doc,
+        "Establish an intelligent 3-tier standby pool: Hot (Running, ~5ms resume, high-priority tenants), Warm (Paused in RAM, ~215ms resume, standard workloads), "
+        "and Cold (Saved on NVMe, 2–5s resume, rare/batch workloads). Allocating 5–10% Hot, 25% Warm, and 65% Cold dynamically optimizes host economics, "
+        "effectively doubling practical tenant density on large physical hosts (HYP-mxc-018 horizon).",
+        "1. Multi-Tier Standby Pools (IMP-MXC-007): "
+    )
+
+    add_body(
+        doc,
+        "Evolve early TLS interception into temporal, calendar, and historical activity forecasting. By tracking shift start times, tenant usage history, "
+        "and recurring workload schedules (e.g. daily 08:55 login peaks, monthly payroll runs), instances can be unpaused seconds prior to arrival, "
+        "driving perceived cold-wake latency to 0 ms.",
+        "2. Activity-Based Predictive Wake (IMP-MXC-008): "
+    )
+
+    add_body(
+        doc,
+        "Across 80+ running micro-instances, massive memory regions are identical (ntoskrnl.exe, CLR JIT caches, .NET runtime, user32.dll). "
+        "Leveraging host-level Hyper-V Memory Combining / Page Sharing enables identical pages to be shared across guest partitions. "
+        "This compresses a 640 MB logical allocation down to an estimated 300–450 MB effective physical host RAM—potentially surpassing the gains "
+        "of internal guest trimming alone.",
+        "3. Host Memory Deduplication & Page Sharing (IMP-MXC-009): "
+    )
+
+    add_body(
+        doc,
+        "Expand image signing into an unbroken cryptographic chain of custody: Source Git Commit -> Build Pipeline -> SPDX/CycloneDX SBOM Generation -> "
+        "Image Hash -> Cosign/Sigstore Attestation -> Golden Snapshot -> Pre-Dispatch Verification Gate in PoolRegistrationGuard. "
+        "Guarantees SLSA Level 3 supply chain compliance and tamper-proof production deployment (HYP-mxc-017 horizon).",
+        "4. End-to-End Cryptographic Provenance (IMP-MXC-010): "
+    )
+
+    add_body(
+        doc,
+        "For high-density AMD EPYC and Intel Xeon Scalable hosts hosting 80+ guests, enforce NUMA-node affinity for VM memory allocations and "
+        "wake dispatching. Prevents cross-socket memory bus saturation during simultaneous multi-tenant resume bursts.",
+        "5. NUMA-Aware Placement & Affinity: "
+    )
+
+    add_body(
+        doc,
+        "Branch the single golden baseline into specialized immutable workload profiles: Gold-v1 -> .NET Core Profile, Rust Profile, Python/AI Profile. "
+        "Delivers pre-warmed runtime affinity while retaining strict immutable checkpoint guarantees.",
+        "6. Snapshot Version Graphs & Workload Profiles: "
+    )
+
+    add_body(
+        doc,
+        "Enhance the ingress reverse proxy with request classification, tenant fairness, and priority queuing. Premium tenants trigger immediate unpause, "
+        "standard tenants enter buffered hold, and batch jobs trigger queued bulk unpauses, mirroring modern enterprise cloud edge routers.",
+        "7. Connection Buffer Intelligence & Tenant QoS: "
+    )
+
+    add_body(
+        doc,
+        "Deploy a closed-loop economics controller that continuously evaluates cost-per-session, cost-per-wake, memory efficiency, and host saturation "
+        "to autonomously decide tier depth, consolidation, and migration. Transforms MXC from an isolated VM engine into an autonomous execution fabric.",
+        "8. Autonomous Fleet Economics Engine (IMP-MXC-011): "
+    )
+
+    # 7. Sizing & Benchmark Scorecard
+    add_h1(doc, "7. Comparative Architecture Sizing & Benchmark Matrix")
+    matrix_headers = ["Metric / Dimension", "Standard VM", "Phase 1 Baseline", "Phase Next Target", "Strategic Multiplier"]
     matrix_rows = [
-        ["Cold Boot / Wake Latency", "14–45 seconds", "< 800 ms TTFB (~350ms)", "~120 ms TTFB (Near-Warm)", "Overlaps TLS SNI with wake (IMP-MXC-002)"],
-        ["Hypervisor Resume", "N/A (Cold Boot)", "~215 ms (<= 300ms SLA)", "~215 ms (<= 300ms SLA)", "Pages stay resident in host RAM (AC-03.3)"],
-        ["Idle Compute (CPU/GPU)", "2–5% idle polling", "Strictly 0.0% / 0.0%", "Strictly 0.0% / 0.0%", "Zero wasted host cycles in Paused state (AC-03.1)"],
-        ["Standby Memory / Guest", "2.5–4.0 GB", "1.0–1.2 GB (BEN-10)", "~512–640 MB (IMP-MXC-006)", "~80% density boost (~80 VMs on 64GB host)"],
-        ["Image Supply Hygiene", "Carries dev toolchain", "Strict Audit (AC-04.1)", "Signed SBOM Attestation", "Verifiable provenance via cosign (IMP-MXC-003)"],
+        ["Cold Boot / Wake Latency", "14–45 seconds", "< 800 ms TTFB (~350ms)", "0 ms Perceived (Predictive)", "Activity Forecasting (IMP-MXC-008)"],
+        ["Hypervisor Resume", "N/A (Cold Boot)", "~215 ms (<= 300ms SLA)", "~215 ms (<= 300ms SLA)", "Resident RAM unpause (AC-03.3)"],
+        ["Idle Compute (CPU/GPU)", "2–5% idle polling", "Strictly 0.0% / 0.0%", "Strictly 0.0% / 0.0%", "Zero wasted processor cycles (AC-03.1)"],
+        ["Logical Standby RAM", "2.5–4.0 GB", "1.0–1.2 GB (BEN-10)", "~512–640 MB (IMP-MXC-006)", "Prompt-only stripping (~80% density)"],
+        ["Effective Host RAM / Guest", "2.5–4.0 GB", "1.0–1.2 GB", "300–450 MB (IMP-MXC-009)", "Hyper-V Memory Deduplication (2x-3x density)"],
+        ["Standby Pool Architecture", "Single Static Tier", "Single Paused Tier", "Hot / Warm / Cold Tiers", "Multi-tier economics (IMP-MXC-007)"],
+        ["Image Supply Hygiene", "Carries dev toolchain", "Strict Audit (AC-04.1)", "SLSA Level 3 Attestation", "Unbroken Cosign/Sigstore chain (IMP-MXC-010)"],
         ["Session Release Teardown", "N/A (Manual wipe)", "~120 ms (with trim)", "~20–30 ms (bypass trim)", "Fast disposable VM teardown (IMP-MXC-005)"],
     ]
     add_styled_table(doc, matrix_headers, matrix_rows)
 
-    # 7. Roadmap & Catalysts
-    add_h1(doc, "7. Implementation Roadmap & SPARK-vNext Catalysts")
+    # 8. Top 5 SPARK-vNext Catalysts
+    add_h1(doc, "8. Top 5 SPARK-vNext Catalysts & Implementation Roadmap")
     add_body(
         doc,
-        "All four continuous improvement proposals have been formally recorded in the Continuous Improvement Register "
-        "(IMP-MXC-001 through IMP-MXC-006) and assigned disposition 'Rolled into Phase Next Intent Refinement'. "
-        "At the conclusion of Phase 1, Stage 18 (Intent Refinement) will harvest these items to establish the baseline work "
-        "breakdown structure and operational catalyst for SPARK-vNext."
+        "To maximize architectural leverage and enterprise business value in the next phase, the technical review recommends "
+        "prioritizing five core initiatives for the SPARK-vNext work breakdown structure:"
+    )
+    catalysts_headers = ["Priority", "Initiative Title", "Strategic Value & Objective", "Target Outcome"]
+    catalysts_rows = [
+        ["1", "Predictive Wake Engine (IMP-MXC-008)", "Activity & schedule forecasting pre-warming instances moments before peak", "0 ms perceived wake latency"],
+        ["2", "Memory Deduplication & Page Sharing (IMP-MXC-009)", "Host-level page sharing across 80+ identical Windows Server guests", "300–450 MB effective host RAM per guest"],
+        ["3", "Signed Provenance Pipeline (IMP-MXC-010)", "Cryptographic Git-to-snapshot SBOM attestation and runtime verification gate", "SLSA Level 3 supply chain certification"],
+        ["4", "Multi-Tier Standby Pool Architecture (IMP-MXC-007)", "Hot (5ms), Warm (200ms), and Cold (NVMe 2-5s) execution tiers", "Doubles practical tenant capacity per host"],
+        ["5", "Autonomous Fleet Economics Scheduler (IMP-MXC-011)", "Dynamic feedback loop optimizing cost-per-session, wake, and host saturation", "Self-optimizing serverless execution fabric"],
+    ]
+    add_styled_table(doc, catalysts_headers, catalysts_rows)
+
+    add_body(
+        doc,
+        "All initiatives are registered in Continuous-Improvement-Register.md and will be formally harvested during Stage 18 "
+        "to seed the Intent Refinement Proposal and catalyst baseline for SPARK-vNext."
     )
 
     return doc
