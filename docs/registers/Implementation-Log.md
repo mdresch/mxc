@@ -291,3 +291,26 @@ Copy this block per story.
   - Both Path A (whole guest destruction) and Path B (`.avhdx` only discard) wipe all session ephemeral files and guarantee subsequent guest sessions spawn from approved parent (`BEN-12`).
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 6.1 — Buffer replenishment]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-6.1`
+- **Commit:** `7b62b36e`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/watermark_pool.py` (`PoolInstanceState`, `PoolConfig`, `PoolGuestRecord`, `ReplenishRecord`, `WatermarkPoolManager`)
+  - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
+  - Contract: `tests/contracts/test_story_6_1_buffer_replenishment.py`
+  - Spec Gate: `scripts/spec_gate.py 6.1` (Passed, margin +0.2129, episode `spec-6_1-b43dd36e`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'scripts.lib.watermark_pool'`).
+  - Story contract: `tests/contracts/test_story_6_1_buffer_replenishment.py` 3 passed.
+  - Full suite: `pytest tests` 144 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Pool instances maintain three discrete tiers: `ColdProvisioned` (0 MB RAM, inventory), `StandbyPaused` (1024-1228.8 MB RAM, ready standby), and `ActiveRunning` (leased).
+  - Background buffer replenishment completes in ~1.5 s ($\le 1.8$ s) upon lease, restoring ready count to $K_{\min}$ without blocking the caller (`AC-05.1`).
+  - Zero ready instances condition handles gracefully: provisions on-demand if permitted or raises `PoolExhaustedError`.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

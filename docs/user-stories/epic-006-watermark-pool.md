@@ -30,7 +30,7 @@ outputs:
 
 ## Story 6.1 — Buffer replenishment
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-6.1`) — Contract: `tests/contracts/test_story_6_1_buffer_replenishment.py` (3 passed)  
 **As a** SRE, **I want** lease the last ready guest, **so that** the next caller finds a Paused standby without blocking the in-flight request.
 
 **Acceptance Criteria:**
