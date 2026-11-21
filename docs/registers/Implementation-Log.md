@@ -296,8 +296,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-6.1`
-- **Commit:** `7b62b36e`
-- **Merge Commit:** `pending`
+- **Commit:** `0dfde56c`
+- **Merge Commit:** `ff8e1b50`
 - **Deliverables:**
   - Implementation: `scripts/lib/watermark_pool.py` (`PoolInstanceState`, `PoolConfig`, `PoolGuestRecord`, `ReplenishRecord`, `WatermarkPoolManager`)
   - Component Skill: `.claude/skills/watermark-pool/SKILL.md`

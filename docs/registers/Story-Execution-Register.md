@@ -26,7 +26,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 5.1 | Complete (`feat/story-5.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-005 / WBS 6.1) | Complete (`test_story_5_1_ephemeral_session_disk.py`) | Complete (`session-sterility/SKILL.md`) | Complete (`session_sterility.py`) | Complete (5 contracts + 111 suite pass) | Complete (`94ac04d0`) | Merged (`e78991cd`) |
 | Story 5.2 | Complete (`feat/story-5.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-005 / WBS 6.2) | Complete (`test_story_5_2_egress_whitelist.py`) | Complete (`session-sterility/SKILL.md`) | Complete (`session_sterility.py`) | Complete (23 contracts + 134 suite pass) | Complete (`9c05c98e`) | Merged (`24c0322c`) |
 | Story 5.3 | Complete (`feat/story-5.3`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-005 / WBS 6.3) | Complete (`test_story_5_3_discard_and_reproduce.py`) | Complete (`session-sterility/SKILL.md`) | Complete (`session_sterility.py`) | Complete (7 contracts + 141 suite pass) | Complete (`572b2c97`) | Merged (`f3ceda56`) |
-| Story 6.1 | Complete (`feat/story-6.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.1) | Complete (`test_story_6_1_buffer_replenishment.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (3 contracts + 144 suite pass) | Complete (`7b62b36e`) | Merged (pending merge) |
+| Story 6.1 | Complete (`feat/story-6.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.1) | Complete (`test_story_6_1_buffer_replenishment.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (3 contracts + 144 suite pass) | Complete (`0dfde56c`) | Merged (`ff8e1b50`) |
 
 ## When a story's steps don't match this template's own assumed shape
 
