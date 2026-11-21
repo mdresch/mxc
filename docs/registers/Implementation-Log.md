@@ -365,8 +365,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-6.4`
-- **Commit:** `d6ca765e`
-- **Merge Commit:** `pending`
+- **Commit:** `61c79d45`
+- **Merge Commit:** `e6cec8fd`
 - **Deliverables:**
   - Implementation: `scripts/lib/watermark_pool.py` (`ScaleDownResult`, `reap_idle_surplus`, `audit_cooldown_reaping`)
   - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
