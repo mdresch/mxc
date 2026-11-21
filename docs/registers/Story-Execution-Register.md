@@ -16,7 +16,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 1.1 | Complete (`feat/story-1.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-001 / WBS 2.1) | Complete (`test_story_1_1_gen2_isolation.py`) | Complete (`hyperv-isolation/SKILL.md`) | Complete (`hyperv_isolation.py`) | Complete (3 contracts + 56 suite pass) | Complete (`9e454974`) | Merged (`e64bb1b0`) |
 | Story 1.2 | Complete (`feat/story-1.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-001 / WBS 2.2) | Complete (`test_story_1_2_windows_subsystems.py`) | Complete (`hyperv-isolation/SKILL.md`) | Complete (`hyperv_subsystems.py`) | Complete (2 contracts + 58 suite pass) | Complete (`17c924e2`) | Merged (`a994569e`) |
 | Story 2.1 | Complete (`feat/story-2.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-002 / WBS 3.1) | Complete (`test_story_2_1_cold_wake_ttfb.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`ingress_gateway.py`) | Complete (2 contracts + 60 suite pass) | Complete (`4d1fd8ca`) | Merged (`dc7ab685`) |
-| Story 2.2 | Complete (`feat/story-2.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-002 / WBS 3.2) | Complete (`test_story_2_2_no_wake_caused_502_504.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`ingress_gateway.py`) | Complete (2 contracts + 62 suite pass) | Complete (`e9e6e1c1`) | Ready for merge |
+| Story 2.2 | Complete (`feat/story-2.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-002 / WBS 3.2) | Complete (`test_story_2_2_no_wake_caused_502_504.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`ingress_gateway.py`) | Complete (2 contracts + 62 suite pass) | Complete (`e9e6e1c1`) | Merged (`f3ea4b37`) |
 
 ## When a story's steps don't match this template's own assumed shape
 
