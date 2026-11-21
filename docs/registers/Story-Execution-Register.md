@@ -14,7 +14,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story | Step 0 Worktree | Step 1 Spec pyramid read | Step 2 Intent stated | Step 3 Contract (RED) | Step 4 SKILL.md | Step 5 Implement (GREEN) | Step 6 Validate | Step 7 Log | Step 8 Merge |
 |---|---|---|---|---|---|---|---|---|---|
 | Story 1.1 | Complete (`feat/story-1.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-001 / WBS 2.1) | Complete (`test_story_1_1_gen2_isolation.py`) | Complete (`hyperv-isolation/SKILL.md`) | Complete (`hyperv_isolation.py`) | Complete (3 contracts + 56 suite pass) | Complete (`9e454974`) | Merged (`e64bb1b0`) |
-| Story 1.2 | Complete (`feat/story-1.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-001 / WBS 2.2) | Complete (`test_story_1_2_windows_subsystems.py`) | Complete (`hyperv-isolation/SKILL.md`) | Complete (`hyperv_subsystems.py`) | Complete (2 contracts + 58 suite pass) | Complete (`17c924e2`) | Ready for merge |
+| Story 1.2 | Complete (`feat/story-1.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-001 / WBS 2.2) | Complete (`test_story_1_2_windows_subsystems.py`) | Complete (`hyperv-isolation/SKILL.md`) | Complete (`hyperv_subsystems.py`) | Complete (2 contracts + 58 suite pass) | Complete (`17c924e2`) | Merged (`a994569e`) |
 
 ## When a story's steps don't match this template's own assumed shape
 
