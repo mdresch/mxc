@@ -48,7 +48,7 @@ outputs:
 
 ## Story 2.3 — Dual routing rules
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Completed — contracts passing (`tests/contracts/test_story_2_3_dual_routing_rules.py`)  
 **As a** DevOps Engineer, **I want** route by path and by catalogued listen port, **so that** the request reaches the owning image.
 
 **Acceptance Criteria:**
