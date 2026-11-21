@@ -34,8 +34,8 @@ outputs:
 **As a** CISO, **I want** run a session that writes disk state, **so that** no residue remains after release.
 
 **Acceptance Criteria:**
-- Given files written on `.avhdx`, when session ends or 300 s idle with no open requests, then `.avhdx` is deleted (`AC-02.1`).
-- Given parent `winserv2025-prod-adpa.vhdx`, when SHA-256 compared before and after, then hash is unchanged (`AC-02.2`).
+- **AC1:** Given files written on `.avhdx`, when session ends or 300 s idle with no open requests, then `.avhdx` is deleted (`AC-02.1`).
+- **AC2:** Given parent `winserv2025-prod-adpa.vhdx`, when SHA-256 compared before and after, then hash is unchanged (`AC-02.2`).
 
 ## Story 5.2 — Egress whitelist
 
@@ -43,8 +43,8 @@ outputs:
 **As a** CISO, **I want** control guest outbound traffic, **so that** only approved internal endpoints are reachable.
 
 **Acceptance Criteria:**
-- Given active guest, when connection targets public internet, then it is dropped (`AC-02.3`).
-- Given SQL, PostgreSQL, private blob, DNS, and Kerberos to approved endpoints, then connections are allowed.
+- **AC1:** Given active guest, when connection targets public internet, then it is dropped (`AC-02.3`).
+- **AC2:** Given SQL, PostgreSQL, private blob, DNS, and Kerberos to approved endpoints, then connections are allowed.
 
 ## Story 5.3 — Discard and reproduce
 
@@ -52,8 +52,8 @@ outputs:
 **As a** SecOps Engineer, **I want** end a session by two discard paths, **so that** the next session does not inherit the previous disk.
 
 **Acceptance Criteria:**
-- Given Path A whole-guest removal, when next guest is provisioned, then parent is approved production image (`BEN-12`).
-- Given Path B `.avhdx` only, when next session starts, then parent is still approved production image and guest may remain.
+- **AC1:** Given Path A whole-guest removal, when next guest is provisioned, then parent is approved production image (`BEN-12`).
+- **AC2:** Given Path B `.avhdx` only, when next session starts, then parent is still approved production image and guest may remain.
 
 ## Before running `implement-story`
 
