@@ -137,3 +137,25 @@ Copy this block per story.
   - Image compliance audit must verify required runtime baselines (`vmbus.sys`, `vmictimeprovider.dll`, `bcrypt.dll`) and fail if missing per FDD-003.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 3.2 — Warm baseline checkpoint]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-3.2`
+- **Commit:** Pending commit
+- **Merge Commit:** Pending merge
+- **Deliverables:**
+  - Implementation: `scripts/lib/production_image.py` (`ProductionImageBakeEngine`, `WarmCheckpointState`, `BakeHealthSmokeResult`, `CheckpointMetadata`)
+  - Component Skill: `.claude/skills/production-image/SKILL.md`
+  - Contract: `tests/contracts/test_story_3_2_warm_baseline_checkpoint.py`
+  - Spec Gate: `scripts/spec_gate.py 3.2` (Passed, margin +0.2129, episode `spec-3_2-66cac289`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'BakeCheckpointError'`).
+  - Story contract: `tests/contracts/test_story_3_2_warm_baseline_checkpoint.py` 5 passed.
+  - Full suite: `pytest tests` 93 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Checkpoint name must strictly be `baseline-hot-ready` (ADR-003 §4.4); arbitrary names are rejected.
+  - Any remaining unclosed database connection handles abort checkpoint capture citing `BRU-003-03` to prevent cross-checkpoint handle corruption.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

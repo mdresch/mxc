@@ -38,7 +38,7 @@ outputs:
 
 ## Story 3.2 — Warm baseline checkpoint
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`tests/contracts/test_story_3_2_warm_baseline_checkpoint.py` passing)  
 **As a** Software Release Engineer, **I want** bake and checkpoint the production image, **so that** first wake avoids JIT compile stall.
 
 **Acceptance Criteria:**
