@@ -38,12 +38,12 @@ outputs:
 
 ## Story 1.2 — Windows subsystems on the guest
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Completed — contracts passing (`tests/contracts/test_story_1_2_windows_subsystems.py`)  
 **As a** Software Release Engineer, **I want** run WMI, COM+, a Windows service, and Group Policy inside the guest, **so that** legacy Windows automation required by ADPA/SIDPA remains in scope.
 
 **Acceptance Criteria:**
-- Given the Generation 2 guest from Story 1.1, when each named subsystem is invoked, then the call succeeds in the guest.
-- Given the same calls attempted in a container namespace baseline, then they fail or are unsupported, and the difference is recorded for `BEN-05`.
+- **AC1:** Given the Generation 2 guest from Story 1.1, when each named subsystem (WMI, COM+, Windows Services, Group Policy) is invoked, then the call succeeds in the guest.
+- **AC2:** Given the same calls attempted in a container namespace baseline, then they fail or are unsupported, and the difference is recorded for `BEN-05`.
 
 ## Before running `implement-story`
 

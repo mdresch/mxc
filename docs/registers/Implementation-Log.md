@@ -34,3 +34,23 @@ Copy this block per story.
   - I1: Passing zero records or an empty sequence must return an empty result without raising an error (derived by `scripts/spec_gate.py 1.1`).
 - **Open for a human:** None.
 - **Breakout recap:** pending, last story of the epic (Story 1.2 remaining).
+
+## Story 1.2 — Windows subsystems on the guest
+- **Commit:** `17c924e2`
+- **Date:** 2026-11-21
+- **Branch:** `feat/story-1.2`
+- **Source ADR / BRD / FDD:** ADR-001, BRD-001, FDD-001
+- **Files Modified/Created:**
+  - `scripts/lib/hyperv_subsystems.py` (Windows subsystems probe and differential audit engine)
+  - `tests/contracts/test_story_1_2_windows_subsystems.py` (Contract tests for AC-1 and AC-2)
+  - `.claude/skills/hyperv-isolation/SKILL.md` (Updated component skill definition)
+- **Validation:**
+  - AC-1: All 4 named Windows automation subsystems (WMI, COM+, Windows Services, Group Policy) verified to succeed natively in Generation 2 guest.
+  - AC-2: Probes executed in container namespace baseline confirmed to fail or be unsupported; differential audit record generated and verified against BEN-05.
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'hyperv_subsystems'`) prior to implementation.
+  - Story contract: `tests/contracts/test_story_1_2_windows_subsystems.py` 2 passed.
+  - Full suite: `pytest tests` 58 passed.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - None (zero findings flagged by `scripts/spec_gate.py 1.2`).
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
