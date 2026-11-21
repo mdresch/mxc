@@ -319,8 +319,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-6.2`
-- **Commit:** `76401d81`
-- **Merge Commit:** `pending`
+- **Commit:** `09aa7090`
+- **Merge Commit:** `aed05fe6`
 - **Deliverables:**
   - Implementation: `scripts/lib/watermark_pool.py` (`SurgeExpansionResult`, `evaluate_surge`, `pre_warm_pool`)
   - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
