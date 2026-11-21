@@ -209,7 +209,7 @@ Copy this block per story.
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-4.3`
 - **Commit:** `fb072ee5`
-- **Merge Commit:** Merging
+- **Merge Commit:** `c69bb35b`
 - **Deliverables:**
   - Implementation: `scripts/lib/paused_ram.py` (`ResumeResult`, `resume_vm`)
   - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
