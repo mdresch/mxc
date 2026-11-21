@@ -39,7 +39,7 @@ outputs:
 
 ## Story 2.2 — No wake-caused 502/504
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Completed — contracts passing (`tests/contracts/test_story_2_2_no_wake_caused_502_504.py`)  
 **As a** Enterprise Automation Operator, **I want** send HTTPS during wake, **so that** I do not see gateway 502 or 504 caused by wake latency.
 
 **Acceptance Criteria:**
