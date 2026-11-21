@@ -76,7 +76,7 @@ Copy this block per story.
 - **Breakout recap:** pending, last story of the epic (Stories 2.2 and 2.3 remaining).
 
 ## Story 2.2 — No wake-caused 502/504
-- **Commit:** `pending`
+- **Commit:** `e9e6e1c1`
 - **Date:** 2026-11-21
 - **Branch:** `feat/story-2.2`
 - **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
