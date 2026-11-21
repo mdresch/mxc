@@ -34,7 +34,7 @@ outputs:
 **As a** Software Release Engineer, **I want** audit a baked production VHDX, **so that** production carries no developer debris.
 
 **Acceptance Criteria:**
-- Given `winserv2025-prod-adpa.vhdx`, when audit runs, then Scoop, uv, cargo, git, compilers, and source repos are absent (`AC-04.1`).
+- **AC1:** Given `winserv2025-prod-adpa.vhdx`, when audit runs, then Scoop, uv, cargo, git, compilers, and source repos are absent (`AC-04.1`).
 
 ## Story 3.2 — Warm baseline checkpoint
 
@@ -42,7 +42,7 @@ outputs:
 **As a** Software Release Engineer, **I want** bake and checkpoint the production image, **so that** first wake avoids JIT compile stall.
 
 **Acceptance Criteria:**
-- Given bake completes, when service answers smoke on `localhost:8080/health`, then DB handles are closed and `baseline-hot-ready` is captured (`AC-04.2`).
+- **AC1:** Given bake completes, when service answers smoke on `localhost:8080/health`, then DB handles are closed and `baseline-hot-ready` is captured (`AC-04.2`).
 
 ## Before running `implement-story`
 
