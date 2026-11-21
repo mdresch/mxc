@@ -56,7 +56,7 @@ Copy this block per story.
 - **Breakout recap:** Pending Step 9 epic closeout.
 
 ## Story 2.1 — Cold wake TTFB
-- **Commit:** `pending`
+- **Commit:** `4d1fd8ca`
 - **Date:** 2026-11-21
 - **Branch:** `feat/story-2.1`
 - **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
