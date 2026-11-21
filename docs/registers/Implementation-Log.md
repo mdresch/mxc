@@ -187,7 +187,7 @@ Copy this block per story.
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-4.2`
 - **Commit:** `2a4c5f64`
-- **Merge Commit:** Merging
+- **Merge Commit:** `32812d30`
 - **Deliverables:**
   - Implementation: `scripts/lib/paused_ram.py` (`MemoryFootprintReading`, `TrimExecutionError`, `trim_working_set`, `release_restore_and_suspend`)
   - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
