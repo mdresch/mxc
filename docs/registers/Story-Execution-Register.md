@@ -29,6 +29,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 6.1 | Complete (`feat/story-6.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.1) | Complete (`test_story_6_1_buffer_replenishment.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (3 contracts + 144 suite pass) | Complete (`0dfde56c`) | Merged (`ff8e1b50`) |
 | Story 6.2 | Complete (`feat/story-6.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.2) | Complete (`test_story_6_2_surge_expansion.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (6 contracts + 150 suite pass) | Complete (`09aa7090`) | Merged (`aed05fe6`) |
 | Story 6.3 | Complete (`feat/story-6.3`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.3) | Complete (`test_story_6_3_wake_hygiene.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (7 contracts + 157 suite pass) | Complete (`6d392717`) | Merged (`e96fe50b`) |
+| Story 6.4 | Complete (`feat/story-6.4`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-006 / WBS 7.4) | Complete (`test_story_6_4_scale_down.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (5 contracts + 162 suite pass) | Complete (`d6ca765e`) | Merged (pending merge) |
 
 ## When a story's steps don't match this template's own assumed shape
 

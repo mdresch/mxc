@@ -57,7 +57,7 @@ outputs:
 
 ## Story 6.4 — Scale down
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-6.4`) — Contract: `tests/contracts/test_story_6_4_scale_down.py` (5 passed)  
 **As a** SRE, **I want** cool surplus guests, **so that** host RAM returns toward baseline.
 
 **Acceptance Criteria:**

@@ -360,3 +360,25 @@ Copy this block per story.
   - [I1] Empty Collection Base Case: Passing an empty list to `batch_wake_hygiene` returns an empty dict without raising an exception.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 6.4 — Scale down]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-6.4`
+- **Commit:** `d6ca765e`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/watermark_pool.py` (`ScaleDownResult`, `reap_idle_surplus`, `audit_cooldown_reaping`)
+  - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
+  - Contract: `tests/contracts/test_story_6_4_scale_down.py`
+  - Spec Gate: `scripts/spec_gate.py 6.4` (Passed, margin +0.2153, episode `spec-6_4-b2040c67`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'audit_cooldown_reaping'`).
+  - Story contract: `tests/contracts/test_story_6_4_scale_down.py` 5 passed.
+  - Full suite: `pytest tests` 162 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Cooldown reaping evaluates whether idle time exceeds the configured threshold (recording explicitly whether 180 s or 300 s was configured per `BEN-09` and `AC-05.4`).
+  - Low watermark preservation: The ready pool never drops below $K_{\min}$; surplus instances are reaped back to cold inventory, freeing host physical RAM, while $K_{\min}$ ready instances stay resident.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
