@@ -54,6 +54,8 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 | `IMP-MXC-002` | Epic 02 | Early TLS ClientHello Interception for Predictive Hyper-V Resume | Performance / Architecture | Trigger hypervisor `Resume-VM` upon TCP connection establishment and receipt of TLS SNI hostname during the TLS handshake, overlapping the ~220ms hypervisor wake latency with TLS negotiation. | Reduces observed cold wake TTFB from ~350ms down to near-warm latency (~120ms total TTFB), accelerating sub-800ms margins (`BEN-02`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-003` | Epic 03 | Automated Image Cryptographic Signature & SBOM Attestation Gate | Security / Supply Chain | Implement a cryptographic signing and in-toto / cosign attestation check into `PoolRegistrationGuard` for production images, pairing the existing offline VHDX compliance audit with signed SBOM validation (`HYP-mxc-017` horizon). | Guarantees verifiable provenance, zero tampering, and complete supply-chain attestation before allowing any VHDX parent into the standby pool (`BEN-08`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-004` | Epic 04 | Dynamic Host Memory Pressure-Sensitive Standby Density Autotuner | Resource Optimization | Introduce a feedback control loop between host committed physical RAM pressure and the standby fleet controller, dynamically shuttling idle guests between Paused RAM (~1.1 GB, ~215ms wake) and deep compressed NVMe saved state (`HYP-mxc-018` horizon). | Prevents host swapping or commit limit exhaustion during standby fleet scaling beyond 16+ concurrent guests while retaining sub-800ms cold wake margins (`BEN-01`, `BEN-10`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-005` | Epic 04 | Lifecycle Discard Decoupling: In-Session Trim Bypass for Disposable Guests | Architecture / Efficiency | Selectively bypass in-session working set trimming when operating under ADR-005 §4.3 (Whole-Guest Discard). In a disposable model, memory is reclaimed instantly by hypervisor VM teardown, so post-request trim is redundant and skipping it eliminates ~50–100ms teardown overhead. | Streamlines session release latency and CPU overhead while preserving pre-suspend trimming strictly for golden bake and recycled standby replenishment (`BEN-07`, `BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-006` | Epic 04 | Ultra-Lean Golden Bake Memory Compression Floor (~512MB–640MB) | Sizing / Density | Challenge the 1.0–1.2 GB paused baseline by integrating prompt-centric OS stripping (`shrink_to_prompt.ps1`), disabling non-essential background daemons (Search, Update, Spooler), and applying Win32 `EmptyWorkingSet` at bake time with Dynamic Memory `MinimumRAM = 512MB`. | Squeezes warm paused baseline from ~1100 MB down to ~640 MB, unlocking an ~80% increase in host standby fleet density (~80 VMs on a 64 GB host) with zero wake page thrashing (`BEN-01`, `BEN-10`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 
 ---
 
@@ -77,7 +79,10 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 ### Epic 04: Paused RAM standby, trimmed before suspend
 - **Cadence Date:** 2026-11-21
 - **Defensive Review (`LL-###`):** `LL-005` (Pre-suspend working set trimming sequence & vCPU execution state).
-- **Positive Improvement Harvest:** Identified `IMP-MXC-004` (Dynamic Host Memory Pressure-Sensitive Standby Density Autotuner).
+- **Positive Improvement Harvest:**
+  - `IMP-MXC-004`: Dynamic Host Memory Pressure-Sensitive Standby Density Autotuner (`HYP-mxc-018` horizon).
+  - `IMP-MXC-005`: Lifecycle Discard Decoupling (In-session trim bypass for disposable whole-guest teardown).
+  - `IMP-MXC-006`: Ultra-Lean Golden Bake Memory Compression Floor (~512MB–640MB target, ~80% density boost).
 
 ---
 
