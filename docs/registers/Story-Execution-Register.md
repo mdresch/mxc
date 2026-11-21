@@ -23,7 +23,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 4.1 | Complete (`feat/story-4.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-004 / WBS 5.1) | Complete (`test_story_4_1_zero_idle_cpu.py`) | Complete (`paused-ram-standby/SKILL.md`) | Complete (`paused_ram.py`) | Complete (5 contracts + 98 suite pass) | Complete (`55bafe4f`) | Merged (`67db083c`) |
 | Story 4.2 | Complete (`feat/story-4.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-004 / WBS 5.2) | Complete (`test_story_4_2_trimmed_paused_footprint.py`) | Complete (`paused-ram-standby/SKILL.md`) | Complete (`paused_ram.py`) | Complete (4 contracts + 102 suite pass) | Complete (`2a4c5f64`) | Merged (`32812d30`) |
 | Story 4.3 | Complete (`feat/story-4.3`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-004 / WBS 5.3) | Complete (`test_story_4_3_sub_300ms_resume.py`) | Complete (`paused-ram-standby/SKILL.md`) | Complete (`paused_ram.py`) | Complete (4 contracts + 106 suite pass) | Complete (`fb072ee5`) | Merged (`c69bb35b`) |
-| Story 5.1 | Complete (`feat/story-5.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-005 / WBS 6.1) | Complete (`test_story_5_1_ephemeral_session_disk.py`) | Complete (`session-sterility/SKILL.md`) | Complete (`session_sterility.py`) | Complete (5 contracts + 111 suite pass) | Complete (`00a6bc86`) | Merged (pending merge) |
+| Story 5.1 | Complete (`feat/story-5.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-005 / WBS 6.1) | Complete (`test_story_5_1_ephemeral_session_disk.py`) | Complete (`session-sterility/SKILL.md`) | Complete (`session_sterility.py`) | Complete (5 contracts + 111 suite pass) | Complete (`94ac04d0`) | Merged (`e78991cd`) |
 
 ## When a story's steps don't match this template's own assumed shape
 

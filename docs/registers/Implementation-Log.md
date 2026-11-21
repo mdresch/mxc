@@ -229,8 +229,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-5.1`
-- **Commit:** `00a6bc86`
-- **Merge Commit:** `pending`
+- **Commit:** `94ac04d0`
+- **Merge Commit:** `e78991cd`
 - **Deliverables:**
   - Implementation: `scripts/lib/session_sterility.py` (`SessionDiskManager`, `SessionRecord`, `DifferencingDiskStatus`, `ParentIntegrityStatus`, `evaluate_outbound_traffic`, `execute_discard_path`)
   - Component Skill: `.claude/skills/session-sterility/SKILL.md`
