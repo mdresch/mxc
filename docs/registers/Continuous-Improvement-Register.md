@@ -61,6 +61,7 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 | `IMP-MXC-009` | Peer Review | Host-Level Hyper-V Memory Combining & Page Deduplication | Hypervisor Sizing | Exploit identical Windows Server 2025 kernel (`ntoskrnl.exe`), .NET runtime, user32, and CLR assemblies across 80+ fleet instances via Hyper-V Memory Combining / Page Sharing, compressing a 640 MB logical allocation down to 300–450 MB effective physical host RAM. | Surpasses guest trimming alone, enabling 120–160 concurrent micro-instances per 64 GB host (`BEN-01`, `BEN-10`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-010` | Peer Review | End-to-End Cryptographic Supply Chain & SLSA Attestation Pipeline | Zero Trust / SecOps | Implement an unbroken chain of custody: Source Git commit $\rightarrow$ Build Pipeline $\rightarrow$ SPDX/CycloneDX SBOM Generation $\rightarrow$ Image Hash $\rightarrow$ Sigstore/Cosign Signature $\rightarrow$ Golden Snapshot $\rightarrow$ Pre-Dispatch Runtime Gate in `PoolRegistrationGuard` (`HYP-mxc-017` horizon). | Guarantees verifiable provenance, zero tampering, and regulatory compliance (SLSA Level 3) for enterprise workloads (`BEN-08`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-011` | Peer Review | Autonomous Fleet-Level Economics & Dynamic Sizing Scheduler | Autonomous Operations | Deploy an autonomous control loop that continuously optimizes cost-per-session, cost-per-wake, memory efficiency, and host saturation to dynamically decide fleet tier depth (Hot/Warm/Cold), scale-out replenishment, and instance consolidation. | Elevates MXC from a raw virtualization engine into an intelligent, enterprise-grade serverless execution fabric (`BEN-01`..`BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-012` | Epic 005 Recap | Pure In-Memory Ephemeral RAM-Disk Differencing Layers | Storage / I/O Acceleration | Expand file-backed `.avhdx` transient differencing disks into direct host RAM disks or non-volatile DAX memory blocks (`HYP-mxc-019` horizon), eliminating all NVMe write amplification and achieving sub-microsecond write and teardown latencies. | Maximizes I/O throughput and instant teardown while eliminating disk wear during high-churn bursts (`BEN-07`, `BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 
 ---
 
@@ -88,6 +89,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
   - `IMP-MXC-004`: Dynamic Host Memory Pressure-Sensitive Standby Density Autotuner (`HYP-mxc-018` horizon).
   - `IMP-MXC-005`: Lifecycle Discard Decoupling (In-session trim bypass for disposable whole-guest teardown).
   - `IMP-MXC-006`: Ultra-Lean Golden Bake Memory Compression Floor (~512MB–640MB target, ~80% density boost).
+
+### Epic 05: Transient differencing disk and egress whitelist
+- **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-006` (Session sterility, ephemeral differencing rollback & parent immutability).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-012` (Pure In-Memory Ephemeral RAM-Disk Differencing Layers).
 
 ---
 

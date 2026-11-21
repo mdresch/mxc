@@ -66,3 +66,17 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 - **The Root Cause:** Hyper-V `Suspend-VM` (Paused state) completely halts guest vCPU scheduling. The Windows in-guest memory manager (`EmptyWorkingSet`) and Hyper-V integration components require active vCPUs to page out unneeded working set pages.
 - **Actionable Invariant / Rule:** Enforce `BRU-004-04` & FDD-004: All memory compaction, garbage collection, and working set trimming must execute *before* `Suspend-VM` while guest vCPUs are in `Running` state. Only after trimming brings memory into the ~1.0–1.2 GB target window may `Suspend-VM` be invoked. Attempting to trim while `Paused` must immediately raise `TrimExecutionError`.
 - **Scope Boundary & Lifecycle Caveat:** Pre-suspend trimming applies to the **golden image bake pipeline** (capturing `baseline-hot-ready`) and **recycled standby pool fleets** (ADR-005 §4.2 differencing-disk discard). In a **pure disposable whole-guest model** (ADR-005 §4.3), in-session post-request trimming is redundant and bypassed because memory is reclaimed by immediate hypervisor instance teardown (`Remove-VM`). Replenished standby instances spawn pre-trimmed directly from the warm golden checkpoint.
+
+### LL-006 — Session Sterility, Ephemeral Differencing Rollback & Parent Immutability
+- **Epic / Story:** Epic 005 / Stories 5.1..5.3 (commits `94ac04d0`, `9c05c98e`, `572b2c97`)
+- **Scope:** Transient differencing disk lifecycle, vSwitch port ACLs, and dual discard reproduction (`scripts/lib/session_sterility.py`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `.claude/skills/session-sterility/SKILL.md`
+- **The Trap / Problem:** Reusing a virtual machine or its underlying disk across micro-execution sessions risks data bleed between tenants, lingering scratch files, and covert channel persistence.
+- **The Root Cause:** File writes in a guest touch the filesystem. If stateful virtual hard disks persist after connection release, or if the parent baseline image is mutated by the guest OS, subsequent callers inherit previous session artifacts.
+- **Actionable Invariant / Rule:** Enforce `AC-02.1`, `AC-02.2`, `AC-02.3`, `BEN-07`, and `BEN-12`:
+  1. All guest writes must be strictly isolated to an ephemeral child `.avhdx` anchored at `baseline-hot-ready`.
+  2. Upon session release or after 300 s idle with `active_open_requests == 0`, the `.avhdx` is deleted.
+  3. Parent `winserv2025-prod-adpa.vhdx` SHA-256 hash must be verified bit-for-bit before and after session execution.
+  4. Outbound network traffic is default-deny public internet; only approved internal endpoints on whitelisted ports (DNS `:53`, Kerberos `:88`, SQL `:1433`, PostgreSQL `:5432`, Private Blob `:443`) are permitted. Inbound is restricted strictly to reverse proxy on `:8080`.
+  5. Both Path A (whole guest destruction) and Path B (`.avhdx` discard only) guarantee that subsequent sessions reproduce from the approved production image (`winserv2025-prod-adpa.vhdx`), strictly rejecting developer or unapproved parent images.
