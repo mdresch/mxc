@@ -48,7 +48,7 @@ outputs:
 
 ## Story 6.3 — Wake hygiene
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-6.3`) — Contract: `tests/contracts/test_story_6_3_wake_hygiene.py` (7 passed)  
 **As a** SRE, **I want** wake a guest from checkpoint, **so that** cryptography, time, and DB pools are safe before traffic.
 
 **Acceptance Criteria:**
