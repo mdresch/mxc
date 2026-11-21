@@ -15,18 +15,25 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 
 | ID | Title | Epic / Source | Tier Scope | Date |
 |---|---|---|---|---|
+| `LL-001` | Zero-Padded Epic File Matching & AC Parsing Fallback | Epic 01 / Story 1.1 | Tier 2 (`scripts/spec_gate.py`) | 2026-11-21 |
+| `LL-002` | Local Store Dir Environment Isolation for Pytest Session | Epic 01 / Story 1.1 | Tier 2 (`tests/conftest.py`) | 2026-11-21 |
 
 ## Entries
 
-<!--
-Copy this block per lesson. Required fields: title in the heading, Epic / Story, The Trap / Problem, The Root Cause, Actionable Invariant / Rule, Tier 2/3 Propagation Target (may read `Tier 1 only`).
+### LL-001 — Zero-Padded Epic File Matching & AC Parsing Fallback
+- **Epic / Story:** Epic 001 / Story 1.1 (commit `9e454974`)
+- **Scope:** Specification gatekeeper script (`scripts/spec_gate.py`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `scripts/spec_gate.py`
+- **The Trap / Problem:** `scripts/spec_gate.py` raised `FileNotFoundError` when invoked on Epic 1 (`spec_gate.py 1.1`) because `find_epic_file` globbed only `epic-1-*.md` and `epic-1.md`, failing to match standard 3-digit zero-padded names like `epic-001-type-1-hyperv-generation-2.md`. Additionally, `parse_story_spec` failed to extract criteria when lines lacked `**AC_1:**` bold tags.
+- **The Root Cause:** Inflexible file globbing and regex assumptions in `find_epic_file()` and `parse_story_spec()`.
+- **Actionable Invariant / Rule:** Support zero-padded globs (`epic-{n:03d}-*.md`, `epic-{n:02d}-*.md`, `epic-{n}-*.md`) and provide a fallback bullet-point extractor for criteria under `**Acceptance Criteria:**`.
 
-### LL-001 — <title>
-- **Epic / Story:** Epic <N> / Story <N.M> (PR <link>, commit <hash>)
-- **Scope:** <where the lesson applies>
-- **Date:** <date>
-- **Tier 2/3 Propagation Target:** <skill path, or `Tier 1 only`>
-- **The Trap / Problem:** <the real defect or hazard observed>
-- **The Root Cause:** <the underlying mechanism>
-- **Actionable Invariant / Rule:** <the rule or snippet that prevents recurrence>
--->
+### LL-002 — Local Store Dir Environment Isolation for Pytest Session
+- **Epic / Story:** Epic 001 / Story 1.1 (commit `9e454974`)
+- **Scope:** Governance test runner environment (`tests/conftest.py`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `tests/conftest.py` / `implement-story`
+- **The Trap / Problem:** When `$env:AGENT_LEARNING_LOCAL_STORE_DIR` was set at the user OS level to an external inaccessible path, `conftest.py` failed during session setup with `WinError 5 Access is denied`, halting all pytest tests.
+- **The Root Cause:** `conftest.py` captures `os.environ.get("AGENT_LEARNING_LOCAL_STORE_DIR")` at initial import before fixtures run.
+- **Actionable Invariant / Rule:** Set `$env:AGENT_LEARNING_LOCAL_STORE_DIR = "data/agent-learning/store"` at process scope before invoking python/pytest runners.

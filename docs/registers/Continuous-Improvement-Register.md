@@ -14,12 +14,12 @@ outputs:
   - "docs/project-docs/Intent-Refinement-Proposal.md (Phase Next Catalyst Feed)"
 ---
 
-# Continuous Improvement & Idea Register — {PROJECT_NAME}
+# Continuous Improvement & Idea Register — MXC Hyper-V for ADPA / SIDPA
 
 | Field | Value |
 |---|---|
 | **Version** | `1.0.0` (Active — Ratified under `PMP-BL-v1.0.0`) |
-| **Date** | {DATE} |
+| **Date** | 2026-11-21 |
 | **Status** | Active — Continuous In-Flight Idea & Innovation Backlog |
 | **Governance Authority** | `approve-pmp` / PMBOK 8 Continuous Improvement & Organizational Learning |
 | **Trigger Cadence** | Executed at the end of every Epic during `implement-story` Step 9 |
@@ -50,16 +50,16 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 
 | ID | Originating Epic | Idea Title | Category | Description & Technical Value | Target Benefit / Outcome | Disposition & Status |
 |---|---|---|---|---|---|---|
-| `IMP-{PROJECT_PREFIX}-001` | Epic 01 | {Title} | Architecture / DX / Product | {Description} | {Target Benefit} | ⚪ `In-Flight Candidate` / `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-001` | Epic 01 | Automated Subsystem Differential Telemetry Matrix | Architecture / Verification | Generalize the differential subsystem probe from Story 1.2 into an automated telemetry probe executed during JIT guest provisioning to stream structured WMI, COM+, Services, and GPO health directly to the pool controller. | Instantaneous detection of guest image degradation or missing Windows subsystem prerequisites prior to session dispatch (`BEN-05`). | ⚪ `In-Flight Candidate` |
 
 ---
 
 ## 3. Epic-by-Epic Recap Log
 
-### Epic 01: {Epic Title}
-- **Cadence Date:** {YYYY-MM-DD}
-- **Defensive Review (`LL-###`):** `LL-###` (or "No new lessons identified").
-- **Positive Improvement Harvest:** Identified `IMP-{PROJECT_PREFIX}-001` (or "Epic 01 Recap: No new improvement ideas identified.").
+### Epic 01: Type-1 Hyper-V Generation 2 instead of a container namespace
+- **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-001` (zero-padded epic file matching in `spec_gate.py`), `LL-002` (local store dir process environment isolation for pytest).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-001` (Automated Subsystem Differential Telemetry Matrix).
 
 ---
 

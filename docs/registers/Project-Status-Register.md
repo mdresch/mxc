@@ -41,27 +41,32 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | *(e.g. "Phase 2")* |
-| **Current PMP Baseline** | *(e.g. `PMP-BL-v2.0.0`)* |
-| **Session close-off checkpoint** | *(Phase, Stage, and Epic/Story in flight right now — cite the `GOV-EX-###` gate-closure entries in `Audit-Register.md` that establish it, not any single document's own `lifecycle_stage` frontmatter. This is the line to re-read first when resuming work, or if a session ends without a clean handoff.)* |
-| **Current macro Stage** (this methodology's lifecycle chain, see `docs/chain-coverage.md`) | *(state both the aggregate project-level stage AND whether the specific Epic/Story in flight has actually reached it yet — they can differ.)* |
-| **Last Epic/unit of work fully completed** | *(what, and its closing evidence — breakout recap register entries, audit record ID)* |
-| **Next Epic/unit of work to implement** | *(what, and its current readiness — which gates are already cleared, which story is first)* |
-| **Last commit on the base branch** | *(hash + one-line summary)* |
-| **Open side-thread outside the formal loop** | *(anything implemented directly without a dedicated ADR/BRD/FDD/Story — name it here so it isn't lost, don't retroactively fabricate governance paperwork for it)* |
-| **Stage-label overload caveat (if this project's docs exhibit it)** | *(if more than one document type in this project reuses the same stage number for different meanings — confirmed true in Enterprise Work Hierarchy — record which document types do it and what each means by it, so a future reader doesn't repeat the Why-this-exists mistake above.)* |
+| **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) |
+| **Current PMP Baseline** | `PMP-BL-v1.0.0` |
+| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 001 Stories 1.1 & 1.2 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
+| **Current macro Stage** | Stage 10 (Execution & Verification) |
+| **Last Epic/unit of work fully completed** | Epic 001: Type-1 Hyper-V Generation 2 instead of a container namespace (`LL-001`, `LL-002`, `IMP-MXC-001`) |
+| **Next Epic/unit of work to implement** | Epic 002: Connection-buffering ingress gateway (Story 2.1 — Cold wake TTFB & connection hold) |
+| **Last commit on the base branch** | `a3600bd7` (docs(US-01.2): update story execution register merge status) |
+| **Open side-thread outside the formal loop** | None |
+| **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
 ## 2. Phase Status
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| *(row per phase)* | | | *(cite the Stage 17 Adaptation Plan / Stage 18 Intent Refinement gate records that closed it, if closed)* |
+| Phase 1 | `PMP-BL-v1.0.0` | Active (Epic 001 complete, Epic 002 in flight) | — |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
 | Epic | Title | Phase | Status | Stories Executed |
 |---|---|---|---|---|
-| *(one row per Epic or equivalent unit of work; keep this in sync with `Story-Execution-Register.md`, don't duplicate its per-story detail — just the completion status)* | | | | |
+| Epic 001 | Type-1 Hyper-V Generation 2 instead of a container namespace | Phase 1 | Complete | Story 1.1, Story 1.2 (2/2) |
+| Epic 002 | Connection-buffering ingress gateway | Phase 1 | Ready | Story 2.1, Story 2.2, Story 2.3 (0/3) |
+| Epic 003 | Production base image and warm checkpoint | Phase 1 | Ready | Story 3.1, Story 3.2 (0/2) |
+| Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Ready | Story 4.1, Story 4.2, Story 4.3 (0/3) |
+| Epic 005 | Transient differencing disk and session sterility | Phase 1 | Ready | Story 5.1, Story 5.2, Story 5.3 (0/3) |
+| Epic 006 | Watermark pool and wake hygiene | Phase 1 | Ready | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (0/4) |
 
 ## 4. How to keep this current
 
