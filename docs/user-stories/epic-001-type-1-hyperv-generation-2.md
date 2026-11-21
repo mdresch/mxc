@@ -29,12 +29,12 @@ outputs:
 
 ## Story 1.1 — Generation 2 isolation boundary
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Completed — contracts passing (`tests/contracts/test_story_1_1_gen2_isolation.py`)  
 **As a** Platform Engineer, **I want** provision ADPA and SIDPA on Generation 2 Hyper-V guests, **so that** confidential workloads never share the host kernel.
 
 **Acceptance Criteria:**
-- Given a new pool member, when provisioned, then Hyper-V reports Generation 2 and a guest kernel distinct from the host.
-- Given a shared-kernel container proposal for the same records, when evaluated against this epic, then it is rejected with reference to `BRU-001-02`.
+- **AC1:** Given a new pool member, when provisioned, then Hyper-V reports Generation 2 and a guest kernel distinct from the host.
+- **AC2:** Given a shared-kernel container proposal for the same records, when evaluated against this epic, then it is rejected with reference to `BRU-001-02`.
 
 ## Story 1.2 — Windows subsystems on the guest
 
