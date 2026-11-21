@@ -36,7 +36,7 @@ Copy this block per story.
 - **Breakout recap:** pending, last story of the epic (Story 1.2 remaining).
 
 ## Story 1.2 — Windows subsystems on the guest
-- **Commit:** `pending`
+- **Commit:** `17c924e2`
 - **Date:** 2026-11-21
 - **Branch:** `feat/story-1.2`
 - **Source ADR / BRD / FDD:** ADR-001, BRD-001, FDD-001
