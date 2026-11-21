@@ -48,7 +48,7 @@ outputs:
 
 ## Story 5.3 — Discard and reproduce
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-5.3`) — Contract: `tests/contracts/test_story_5_3_discard_and_reproduce.py` (7 passed)  
 **As a** SecOps Engineer, **I want** end a session by two discard paths, **so that** the next session does not inherit the previous disk.
 
 **Acceptance Criteria:**
