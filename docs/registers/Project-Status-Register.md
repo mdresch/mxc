@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) |
+| **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) — Complete |
 | **Current PMP Baseline** | `PMP-BL-v1.0.0` |
-| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 005 Stories 5.1..5.3 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
-| **Current macro Stage** | Stage 10 (Execution & Verification) |
-| **Last Epic/unit of work fully completed** | Epic 005: Transient differencing disk and session sterility (`LL-006`, `IMP-MXC-012`) |
-| **Next Epic/unit of work to implement** | Epic 006: Watermark pool and wake hygiene (Story 6.1 — Watermark pool manager) |
-| **Last commit on the base branch** | `04add475` (docs: record Story 5.3 commit and merge hashes in registers) |
+| **Session close-off checkpoint** | Phase 1 Complete (Epics 001..006 fully implemented, 162 contracts passing, merged to `feat/hyperv-v2-rebased`) |
+| **Current macro Stage** | Stage 10 (Execution & Verification) Complete $\rightarrow$ Transitioning to Stage 11 (Audit Record) |
+| **Last Epic/unit of work fully completed** | Epic 006: Watermark pool, replenish, and wake hygiene (`LL-007`, `IMP-MXC-013`) |
+| **Next Epic/unit of work to implement** | Stage 11 Audit Record & Phase 1 Closeout / Phase 2 Planning (`SPARK-MXC-vNext`) |
+| **Last commit on the base branch** | `2a03560f` (docs: record Story 6.4 commit and merge hashes in registers) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -55,7 +55,7 @@ caused this, both worth guarding against here:
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| Phase 1 | `PMP-BL-v1.0.0` | Active (Epic 001 & Epic 002 complete, Epic 003 in flight) | — |
+| Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | All 162 contract tests pass |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -66,7 +66,7 @@ caused this, both worth guarding against here:
 | Epic 003 | Production base image and warm checkpoint | Phase 1 | Complete | Story 3.1, Story 3.2 (2/2) |
 | Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Complete | Story 4.1, Story 4.2, Story 4.3 (3/3) |
 | Epic 005 | Transient differencing disk and session sterility | Phase 1 | Complete | Story 5.1, Story 5.2, Story 5.3 (3/3) |
-| Epic 006 | Watermark pool and wake hygiene | Phase 1 | Ready | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (0/4) |
+| Epic 006 | Watermark pool and wake hygiene | Phase 1 | Complete | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (4/4) |
 
 ## 4. How to keep this current
 

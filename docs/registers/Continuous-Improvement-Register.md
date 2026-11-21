@@ -62,6 +62,7 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 | `IMP-MXC-010` | Peer Review | End-to-End Cryptographic Supply Chain & SLSA Attestation Pipeline | Zero Trust / SecOps | Implement an unbroken chain of custody: Source Git commit $\rightarrow$ Build Pipeline $\rightarrow$ SPDX/CycloneDX SBOM Generation $\rightarrow$ Image Hash $\rightarrow$ Sigstore/Cosign Signature $\rightarrow$ Golden Snapshot $\rightarrow$ Pre-Dispatch Runtime Gate in `PoolRegistrationGuard` (`HYP-mxc-017` horizon). | Guarantees verifiable provenance, zero tampering, and regulatory compliance (SLSA Level 3) for enterprise workloads (`BEN-08`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-011` | Peer Review | Autonomous Fleet-Level Economics & Dynamic Sizing Scheduler | Autonomous Operations | Deploy an autonomous control loop that continuously optimizes cost-per-session, cost-per-wake, memory efficiency, and host saturation to dynamically decide fleet tier depth (Hot/Warm/Cold), scale-out replenishment, and instance consolidation. | Elevates MXC from a raw virtualization engine into an intelligent, enterprise-grade serverless execution fabric (`BEN-01`..`BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-012` | Epic 005 Recap | Pure In-Memory Ephemeral RAM-Disk Differencing Layers | Storage / I/O Acceleration | Expand file-backed `.avhdx` transient differencing disks into direct host RAM disks or non-volatile DAX memory blocks (`HYP-mxc-019` horizon), eliminating all NVMe write amplification and achieving sub-microsecond write and teardown latencies. | Maximizes I/O throughput and instant teardown while eliminating disk wear during high-churn bursts (`BEN-07`, `BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-013` | Epic 006 Recap | Predictive Pre-Warming via Time-Series Workload Forecasting | Machine Learning / Telemetry | Expand manual CLI / API pre-warming (`mxc-pool-warm`) into an autonomous time-series predictor (`HYP-mxc-020` horizon) that analyzes historical tenant invocation schedules and automatically raises standby depth 60 seconds prior to burst onset. | Eliminates reactive surge wake overhead, delivering 0ms cold starts without human intervention (`BEN-09`, `BEN-02`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 
 ---
 
@@ -94,6 +95,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 - **Cadence Date:** 2026-11-21
 - **Defensive Review (`LL-###`):** `LL-006` (Session sterility, ephemeral differencing rollback & parent immutability).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-012` (Pure In-Memory Ephemeral RAM-Disk Differencing Layers).
+
+### Epic 06: Watermark pool, replenish, and wake hygiene
+- **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-007` (Watermark pool sizing, non-blocking refill, and wake hygiene triple-gate).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-013` (Predictive Pre-Warming via Time-Series Workload Forecasting).
 
 ---
 

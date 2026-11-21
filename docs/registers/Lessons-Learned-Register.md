@@ -80,3 +80,17 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   3. Parent `winserv2025-prod-adpa.vhdx` SHA-256 hash must be verified bit-for-bit before and after session execution.
   4. Outbound network traffic is default-deny public internet; only approved internal endpoints on whitelisted ports (DNS `:53`, Kerberos `:88`, SQL `:1433`, PostgreSQL `:5432`, Private Blob `:443`) are permitted. Inbound is restricted strictly to reverse proxy on `:8080`.
   5. Both Path A (whole guest destruction) and Path B (`.avhdx` discard only) guarantee that subsequent sessions reproduce from the approved production image (`winserv2025-prod-adpa.vhdx`), strictly rejecting developer or unapproved parent images.
+
+### LL-007 — Watermark Pool Sizing, Non-Blocking Refill, and Wake Hygiene Triple-Gate
+- **Epic / Story:** Epic 006 / Stories 6.1..6.4 (commits `0dfde56c`, `09aa7090`, `6d392717`, `61c79d45`)
+- **Scope:** Standby watermark pool replenishment, surge expansion, wake hygiene verification, and surplus cooldown (`scripts/lib/watermark_pool.py`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `.claude/skills/watermark-pool/SKILL.md`
+- **The Trap / Problem:** Static standby pools either run dry during request bursts (causing cold boot delays $\approx 3.5\text{ s}$) or consume excessive host RAM during idle lulls. Furthermore, waking suspended guests without re-synchronizing entropy, clock, and connection pools causes cryptographic duplicate states, Kerberos authentication token failures, and database protocol errors.
+- **The Root Cause:** Snapshots freeze ephemeral in-guest state. On resume, PRNG state is deterministic unless reseeded from hardware, the guest clock lags host UTC by the duration of sleep, and client TCP sockets point to dead server-side handles.
+- **Actionable Invariant / Rule:** Enforce `AC-05.1`, `AC-05.2`, `AC-02.4`, `AC-05.4`, and `BEN-09`:
+  1. Maintain a 3-tier instance state model: `ColdProvisioned` (0 MB RAM), `StandbyPaused` (1024–1228.8 MB RAM), and `ActiveRunning`.
+  2. When a ready standby guest is leased, an asynchronous background worker replenishes the buffer by promoting the next cold instance in $\approx 1.5\text{ s}$ ($\le 1.8\text{ s}$) without blocking the leased caller (`AC-05.1`).
+  3. Under request velocity bursts ($\ge 10\text{ rps}$ or $5\text{ rps}$) or queue depth $> 0$, expand ready instances up to $K_{\max}$ (default 5); strictly clamp at $K_{\max}$ ceiling.
+  4. Before accepting traffic on resume from `baseline-hot-ready`, the first `/health` probe must enforce three discrete gates: hardware PRNG reseed, clock sync within $50\text{ ms}$ of host UTC, and 100% database connection pool handle purge; failure immediately quarantines the instance and returns HTTP 503 (`AC-02.4`).
+  5. After traffic normalizes and idle exceeds configured cooldown ($180\text{ s}$ or $300\text{ s}$), reap surplus instances back to cold inventory, strictly preserving the $K_{\min}$ low watermark (`AC-05.4`).
