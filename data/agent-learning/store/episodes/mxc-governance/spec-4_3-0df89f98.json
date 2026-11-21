@@ -1,0 +1,60 @@
+{
+  "id": "spec-4_3-0df89f98",
+  "agent_id": "mxc-governance",
+  "action_id": "proceed_to_implementation",
+  "task_id": "story-4.3-spec-readiness",
+  "task_name": "Story 4.3 Spec Gate",
+  "policy_id": "default",
+  "policy_version": 1,
+  "intent_summary": "Pre-flight specification gate evaluation for Story 4.3",
+  "user_input": "Story 4.3: Sub-300 ms resume",
+  "assistant_output": "Spec readiness verdict: PASSED",
+  "metadata": {
+    "story_id": "4.3",
+    "title": "Sub-300 ms resume",
+    "status": "Ready for review \u2014 not yet run through `implement-story`",
+    "margin": 0.2153,
+    "feedback_status": "accepted",
+    "critique_adjustments": [
+      {
+        "criterion_id": "specification_completeness",
+        "support_before": 0.75,
+        "support_after": 0.7683,
+        "confidence_before": 0.7,
+        "confidence_after": 0.7,
+        "doubt_before": 0.3,
+        "doubt_after": 0.3,
+        "applied_delta": 0.1,
+        "source_id": "review_critique",
+        "basis": "explicit",
+        "rubric_delta": null,
+        "override": false,
+        "rubric_version": "1",
+        "finding_id": null,
+        "claim_type": "confirmation",
+        "verified": "yes",
+        "comment_text": null
+      },
+      {
+        "criterion_id": "architectural_boundaries",
+        "support_before": 0.85,
+        "support_after": 0.8623,
+        "confidence_before": 0.8,
+        "confidence_after": 0.8,
+        "doubt_before": 0.2,
+        "doubt_after": 0.2,
+        "applied_delta": 0.1,
+        "source_id": "review_critique",
+        "basis": "explicit",
+        "rubric_delta": null,
+        "override": false,
+        "rubric_version": "1",
+        "finding_id": null,
+        "claim_type": "confirmation",
+        "verified": "yes",
+        "comment_text": null
+      }
+    ]
+  },
+  "created_at": "2026-11-21T09:06:24.695731+00:00"
+}
