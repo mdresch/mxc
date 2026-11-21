@@ -96,7 +96,7 @@ Copy this block per story.
 - **Breakout recap:** pending, last story of the epic (Story 2.3 remaining).
 
 ## Story 2.3 — Dual routing rules
-- **Commit:** `pending`
+- **Commit:** `12659be9`
 - **Date:** 2026-11-21
 - **Branch:** `feat/story-2.3`
 - **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
