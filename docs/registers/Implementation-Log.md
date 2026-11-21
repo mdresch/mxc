@@ -181,3 +181,25 @@ Copy this block per story.
   - Absent GPU partition is accounted as 0.0% with an audit record citing partition absence per `BRU-004-02`.
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 4.2 — Trimmed paused footprint]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-4.2`
+- **Commit:** Pending commit
+- **Merge Commit:** Pending merge
+- **Deliverables:**
+  - Implementation: `scripts/lib/paused_ram.py` (`MemoryFootprintReading`, `TrimExecutionError`, `trim_working_set`, `release_restore_and_suspend`)
+  - Component Skill: `.claude/skills/paused-ram-standby/SKILL.md`
+  - Contract: `tests/contracts/test_story_4_2_trimmed_paused_footprint.py`
+  - Spec Gate: `scripts/spec_gate.py 4.2` (Passed, margin +0.2153, episode `spec-4_2-3a78f2fe`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'MemoryFootprintReading'`).
+  - Story contract: `tests/contracts/test_story_4_2_trimmed_paused_footprint.py` 4 passed.
+  - Full suite: `pytest tests` 102 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Working set trim must execute prior to `Suspend-VM` while vCPUs still run; attempting to trim a frozen `Paused` VM raises `TrimExecutionError` (FDD-004).
+  - Telemetry output explicitly records the configured target band (1024.0 MB to 1228.8 MB) alongside resident RAM per `AC-03.2` and `BEN-10`.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

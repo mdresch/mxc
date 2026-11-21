@@ -38,7 +38,7 @@ outputs:
 
 ## Story 4.2 — Trimmed paused footprint
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`tests/contracts/test_story_4_2_trimmed_paused_footprint.py` passing)  
 **As a** Infrastructure Platform Engineer, **I want** trim before suspend, **so that** paused guests hold a lean RAM allocation.
 
 **Acceptance Criteria:**
