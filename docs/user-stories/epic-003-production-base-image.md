@@ -30,7 +30,7 @@ outputs:
 
 ## Story 3.1 — Clean production VHDX
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`tests/contracts/test_story_3_1_production_image_audit.py` passing)  
 **As a** Software Release Engineer, **I want** audit a baked production VHDX, **so that** production carries no developer debris.
 
 **Acceptance Criteria:**

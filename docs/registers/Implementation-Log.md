@@ -115,3 +115,25 @@ Copy this block per story.
   - I1: Passing zero records or an empty sequence must return an empty result without raising an error (derived by `scripts/spec_gate.py 2.3`).
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 3.1 — Clean production VHDX]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-3.1`
+- **Commit:** `836aadcc`
+- **Merge Commit:** Merging
+- **Deliverables:**
+  - Implementation: `scripts/lib/production_image.py` (`ProductionImageAuditEngine`, `PoolRegistrationGuard`, `ImageAuditResult`)
+  - Component Skill: `.claude/skills/production-image/SKILL.md`
+  - Contract: `tests/contracts/test_story_3_1_production_image_audit.py`
+  - Spec Gate: `scripts/spec_gate.py 3.1` (Passed, margin +0.2153, episode `spec-3_1-94b0b3d8`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'scripts.lib.production_image'`).
+  - Story contract: `tests/contracts/test_story_3_1_production_image_audit.py` 23 passed.
+  - Full suite: `pytest tests` 88 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Production pool parent registration rejection must explicitly cite `BRU-003-01` when attempting to register `winserv2025-mxc-dev.vhdx` or any non-prod image.
+  - Image compliance audit must verify required runtime baselines (`vmbus.sys`, `vmictimeprovider.dll`, `bcrypt.dll`) and fail if missing per FDD-003.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
