@@ -34,7 +34,7 @@ outputs:
 **As a** Infrastructure Platform Engineer, **I want** keep dormant VMs Paused, **so that** idle guests consume no processor.
 
 **Acceptance Criteria:**
-- Given 10 standby VMs Paused, when host CPU is read, then total CPU for those guests is 0.0% (`AC-03.1`).
+- **AC1:** Given 10 standby VMs Paused, when host CPU is read, then total CPU for those guests is 0.0% (`AC-03.1`).
 
 ## Story 4.2 — Trimmed paused footprint
 
@@ -42,7 +42,7 @@ outputs:
 **As a** Infrastructure Platform Engineer, **I want** trim before suspend, **so that** paused guests hold a lean RAM allocation.
 
 **Acceptance Criteria:**
-- Given release restores `baseline-hot-ready` then suspends, when RAM is measured, then footprint is about 1.0–1.2 GB and the configured target is recorded (`AC-03.2`, `BEN-10`).
+- **AC1:** Given release restores `baseline-hot-ready` then suspends, when RAM is measured, then footprint is about 1.0–1.2 GB and the configured target is recorded (`AC-03.2`, `BEN-10`).
 
 ## Story 4.3 — Sub-300 ms resume
 
@@ -50,7 +50,7 @@ outputs:
 **As a** Infrastructure Platform Engineer, **I want** resume a Paused guest, **so that** wake stays inside the platform ceiling.
 
 **Acceptance Criteria:**
-- Given ingress dispatches wake, when `Resume-VM` completes, then elapsed time ≤ 300 ms (`AC-03.3`).
+- **AC1:** Given ingress dispatches wake, when `Resume-VM` completes, then elapsed time ≤ 300 ms (`AC-03.3`).
 
 ## Before running `implement-story`
 
