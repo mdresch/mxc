@@ -39,7 +39,7 @@ outputs:
 
 ## Story 6.2 — Surge expansion
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-6.2`) — Contract: `tests/contracts/test_story_6_2_surge_expansion.py` (6 passed)  
 **As a** SRE, **I want** handle request bursts, **so that** concurrent callers avoid cold boot.
 
 **Acceptance Criteria:**
