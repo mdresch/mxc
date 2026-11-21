@@ -252,8 +252,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-5.2`
-- **Commit:** `180dc16b`
-- **Merge Commit:** `pending`
+- **Commit:** `9c05c98e`
+- **Merge Commit:** `24c0322c`
 - **Deliverables:**
   - Implementation: `scripts/lib/session_sterility.py` (`is_approved_internal_endpoint`, `generate_hyperv_port_acls`, `evaluate_outbound_traffic`, `evaluate_inbound_traffic`)
   - Component Skill: `.claude/skills/session-sterility/SKILL.md`
