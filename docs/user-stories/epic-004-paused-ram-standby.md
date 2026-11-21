@@ -30,7 +30,7 @@ outputs:
 
 ## Story 4.1 — Zero idle CPU
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`tests/contracts/test_story_4_1_zero_idle_cpu.py` passing)  
 **As a** Infrastructure Platform Engineer, **I want** keep dormant VMs Paused, **so that** idle guests consume no processor.
 
 **Acceptance Criteria:**
