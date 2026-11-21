@@ -14,7 +14,7 @@ Copy this block per story.
 -->
 
 ## Story 1.1 — Generation 2 isolation boundary
-- **Commit:** `pending`
+- **Commit:** `9e454974`
 - **Date:** 2026-11-21
 - **Branch:** `feat/story-1.1`
 - **Source ADR / BRD / FDD:** ADR-001, BRD-001, FDD-001
