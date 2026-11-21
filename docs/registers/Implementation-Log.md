@@ -342,8 +342,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-6.3`
-- **Commit:** `fc49e9b0`
-- **Merge Commit:** `pending`
+- **Commit:** `6d392717`
+- **Merge Commit:** `e96fe50b`
 - **Deliverables:**
   - Implementation: `scripts/lib/watermark_pool.py` (`WakeHygieneError`, `WakeHygieneResult`, `perform_wake_hygiene`, `verify_health_endpoint`, `batch_wake_hygiene`)
   - Component Skill: `.claude/skills/watermark-pool/SKILL.md`
