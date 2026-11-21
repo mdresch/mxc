@@ -43,11 +43,11 @@ caused this, both worth guarding against here:
 |---|---|
 | **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) |
 | **Current PMP Baseline** | `PMP-BL-v1.0.0` |
-| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 003 Stories 3.1..3.2 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
+| **Session close-off checkpoint** | Phase 1, Stage 10 (Execution: Epic 004 Stories 4.1..4.3 completed, contracts verified, merged to `feat/hyperv-v2-rebased`) |
 | **Current macro Stage** | Stage 10 (Execution & Verification) |
-| **Last Epic/unit of work fully completed** | Epic 003: Production base image and warm checkpoint (`LL-004`, `IMP-MXC-003`) |
-| **Next Epic/unit of work to implement** | Epic 004: Paused RAM standby and footprint readings (Story 4.1 — Paused memory cap) |
-| **Last commit on the base branch** | `00043287` (docs(story-3.2): record merge commit 18892234) |
+| **Last Epic/unit of work fully completed** | Epic 004: Paused RAM standby and footprint readings (`LL-005`, `IMP-MXC-004`) |
+| **Next Epic/unit of work to implement** | Epic 005: Transient differencing disk and session sterility (Story 5.1 — Differencing disk allocation) |
+| **Last commit on the base branch** | `d76751c8` (docs(story-4.3): record merge commit c69bb35b) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -64,7 +64,7 @@ caused this, both worth guarding against here:
 | Epic 001 | Type-1 Hyper-V Generation 2 instead of a container namespace | Phase 1 | Complete | Story 1.1, Story 1.2 (2/2) |
 | Epic 002 | Connection-buffering ingress gateway | Phase 1 | Complete | Story 2.1, Story 2.2, Story 2.3 (3/3) |
 | Epic 003 | Production base image and warm checkpoint | Phase 1 | Complete | Story 3.1, Story 3.2 (2/2) |
-| Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Ready | Story 4.1, Story 4.2, Story 4.3 (0/3) |
+| Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Complete | Story 4.1, Story 4.2, Story 4.3 (3/3) |
 | Epic 005 | Transient differencing disk and session sterility | Phase 1 | Ready | Story 5.1, Story 5.2, Story 5.3 (0/3) |
 | Epic 006 | Watermark pool and wake hygiene | Phase 1 | Ready | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (0/4) |
 

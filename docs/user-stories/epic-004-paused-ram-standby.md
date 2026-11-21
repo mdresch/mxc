@@ -25,7 +25,7 @@ outputs:
 **Source ADR:** [ADR-004](../07-architecture/ADR-004-paused-ram-standby.md) — Accepted.  
 **Source BRD/FDD:** [BRD-004](../project-docs/Business-Requirements/BRD-004-paused-ram-standby.md) — Approved (2026-10-30) / [FDD-004](../project-docs/Functional-Design/FDD-004-paused-ram-standby.md) — Approved (2026-10-30).
 **Governing Baseline:** `PMP-BL-v1.0.0`  
-**Status:** **Approved (2026-10-30)** — `approve-user-stories` accepted `approve_user_stories` on 2026-10-30 (policy `f864addc-593f-46b1-93e0-0720f6d18a6b`, human acceptance). Gate record: [approve-user-stories-004-2026-10-30.adjudication.json](../project-docs/gates/approve-user-stories-004-2026-10-30.adjudication.json).
+**Status:** **Completed & Validated (2026-11-21)** — Stories 4.1, 4.2, and 4.3 implemented and contract-verified (`test_story_4_1_zero_idle_cpu.py`, `test_story_4_2_trimmed_paused_footprint.py`, `test_story_4_3_sub_300ms_resume.py`).  
 **Suite anchor:** [US-03](../hyperv/architecture/USER_STORIES.md) in the monolith user-story document.
 
 ## Story 4.1 — Zero idle CPU

@@ -180,7 +180,7 @@ Copy this block per story.
   - Standby fleet guests must be strictly in `Paused` state; any `Running` guest spends ~1.2% idle processor time and fails the zero idle CPU invariant citing `BRU-004-01`.
   - Absent GPU partition is accounted as 0.0% with an audit record citing partition absence per `BRU-004-02`.
 - **Open for a human:** None.
-- **Breakout recap:** Pending Step 9 epic closeout.
+- **Breakout recap:** Complete. Logged `LL-005` (pre-suspend working set trimming sequence) and `IMP-MXC-004` (dynamic memory pressure standby autotuner).
 
 ## [Story 4.2 — Trimmed paused footprint]
 
@@ -202,7 +202,7 @@ Copy this block per story.
   - Working set trim must execute prior to `Suspend-VM` while vCPUs still run; attempting to trim a frozen `Paused` VM raises `TrimExecutionError` (FDD-004).
   - Telemetry output explicitly records the configured target band (1024.0 MB to 1228.8 MB) alongside resident RAM per `AC-03.2` and `BEN-10`.
 - **Open for a human:** None.
-- **Breakout recap:** Pending Step 9 epic closeout.
+- **Breakout recap:** Complete. Logged `LL-005` and `IMP-MXC-004`.
 
 ## [Story 4.3 — Sub-300 ms resume]
 
@@ -223,4 +223,4 @@ Copy this block per story.
 - **Interpretations not stated verbatim in the acceptance criteria:**
   - Resuming from `Paused` state leverages host RAM resident pages without disk page-in delays; resuming from `Saved` or `Stopped` state incurs disk page-in penalty and fails the sub-300ms ceiling (ADR-004 §5).
 - **Open for a human:** None.
-- **Breakout recap:** Pending Step 9 epic closeout.
+- **Breakout recap:** Complete. Epic 004 fully verified and closed out. Transitioned to Epic 005 in `Project-Status-Register.md`.

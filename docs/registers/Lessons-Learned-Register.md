@@ -56,3 +56,12 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 - **The Trap / Problem:** Checkpointing a running VM immediately after warm-up smoke tests captures open TCP sockets and database pool handles in the saved guest RAM image. When instances wake from the checkpoint later, stale socket descriptors trigger immediate protocol reset exceptions (ECONNRESET/broken pipe) and connection pool corruption.
 - **The Root Cause:** Synthetic smoke probes initialize database client drivers and connection pools. Unless connection pools are explicitly purged and closed before hypervisor memory checkpointing, stateful network connections persist into the immutable snapshot.
 - **Actionable Invariant / Rule:** Enforce `BRU-003-03`: Execute HTTP smoke on `localhost:8080/health` to trigger JIT compilation, invoke `/admin/clear-pools` to flush all open database handles to zero, pre-trim memory working sets, and abort checkpoint capture if any unclosed DB handles remain. Checkpoint must be named strictly `baseline-hot-ready`.
+
+### LL-005 — Pre-Suspend Working Set Trimming Sequence & vCPU Execution State
+- **Epic / Story:** Epic 004 / Story 4.2 (commit `2a4c5f64`)
+- **Scope:** Hyper-V standby pool memory optimization (`scripts/lib/paused_ram.py`, `scripts/hyperv/mxc-hyperv.ps1`)
+- **Date:** 2026-11-21
+- **Tier 2/3 Propagation Target:** `.claude/skills/paused-ram-standby/SKILL.md`
+- **The Trap / Problem:** Attempting to trim a guest's working set or engage the Hyper-V dynamic memory balloon driver after calling `Suspend-VM` fails or hangs indefinitely.
+- **The Root Cause:** Hyper-V `Suspend-VM` (Paused state) completely halts guest vCPU scheduling. The Windows in-guest memory manager (`EmptyWorkingSet`) and Hyper-V integration components require active vCPUs to page out unneeded working set pages.
+- **Actionable Invariant / Rule:** Enforce `BRU-004-04` & FDD-004: All memory compaction, garbage collection, and working set trimming must execute *before* `Suspend-VM` while guest vCPUs are in `Running` state. Only after trimming brings memory into the ~1.0–1.2 GB target window may `Suspend-VM` be invoked. Attempting to trim while `Paused` must immediately raise `TrimExecutionError`.
