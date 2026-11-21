@@ -142,8 +142,8 @@ Copy this block per story.
 
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-3.2`
-- **Commit:** Pending commit
-- **Merge Commit:** Pending merge
+- **Commit:** `af0b7bc3`
+- **Merge Commit:** Merging
 - **Deliverables:**
   - Implementation: `scripts/lib/production_image.py` (`ProductionImageBakeEngine`, `WarmCheckpointState`, `BakeHealthSmokeResult`, `CheckpointMetadata`)
   - Component Skill: `.claude/skills/production-image/SKILL.md`
