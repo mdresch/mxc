@@ -30,12 +30,12 @@ outputs:
 
 ## Story 2.1 — Cold wake TTFB
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Completed — contracts passing (`tests/contracts/test_story_2_1_cold_wake_ttfb.py`)  
 **As a** Enterprise Automation Operator, **I want** POST to ADPA/SIDPA while the guest is Paused, **so that** I receive the first byte without a cold boot.
 
 **Acceptance Criteria:**
-- Given target VM Paused, when POST arrives, then gateway holds, wakes, and first byte ≤ 800 ms (`AC-01.1`).
-- Given VM Running, when subsequent requests arrive, then proxy overhead ≤ 5 ms plus app time (`AC-01.2`).
+- **AC1:** Given target VM Paused, when POST arrives, then gateway holds, wakes, and first byte ≤ 800 ms (`AC-01.1`).
+- **AC2:** Given VM Running, when subsequent requests arrive, then proxy overhead ≤ 5 ms plus app time (`AC-01.2`).
 
 ## Story 2.2 — No wake-caused 502/504
 
@@ -43,8 +43,8 @@ outputs:
 **As a** Enterprise Automation Operator, **I want** send HTTPS during wake, **so that** I do not see gateway 502 or 504 caused by wake latency.
 
 **Acceptance Criteria:**
-- Given normal conditions, when the guest wakes, then response is not HTTP 502 or 504 because of wake (`AC-01.3`, `BEN-03`).
-- Given wake exceeds wake_timeout_ms, when timer fires, then HTTP 503 with Retry-After is returned.
+- **AC1:** Given normal conditions, when the guest wakes, then response is not HTTP 502 or 504 because of wake (`AC-01.3`, `BEN-03`).
+- **AC2:** Given wake exceeds wake_timeout_ms, when timer fires, then HTTP 503 with Retry-After is returned.
 
 ## Story 2.3 — Dual routing rules
 
@@ -52,8 +52,8 @@ outputs:
 **As a** DevOps Engineer, **I want** route by path and by catalogued listen port, **so that** the request reaches the owning image.
 
 **Acceptance Criteria:**
-- Given path `/api/v1/adpa`, when leased, then pool is `prod-adpa` and the check records path routing (`HYP-mxc-004`).
-- Given listen port `:8091`, when accepted, then image is the catalogued ADPA PoC image and the check records port routing.
+- **AC1:** Given path `/api/v1/adpa`, when leased, then pool is `prod-adpa` and the check records path routing (`HYP-mxc-004`).
+- **AC2:** Given listen port `:8091`, when accepted, then image is the catalogued ADPA PoC image and the check records port routing.
 
 ## Before running `implement-story`
 

@@ -54,3 +54,23 @@ Copy this block per story.
   - None (zero findings flagged by `scripts/spec_gate.py 1.2`).
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.
+
+## Story 2.1 — Cold wake TTFB
+- **Commit:** `4d1fd8ca`
+- **Date:** 2026-11-21
+- **Branch:** `feat/story-2.1`
+- **Source ADR / BRD / FDD:** ADR-002, BRD-002, FDD-002
+- **Files Modified/Created:**
+  - `scripts/lib/ingress_gateway.py` (Connection buffering ingress reverse proxy engine)
+  - `tests/contracts/test_story_2_1_cold_wake_ttfb.py` (Contract tests for AC-1 cold wake TTFB and AC-2 warm proxy overhead)
+  - `.claude/skills/ingress-gateway/SKILL.md` (Component skill definition)
+- **Validation:**
+  - AC-1: Cold wake from Paused VM verified: request held in buffer, VM awakened, first byte returned in <= 800 ms (`AC-01.1`, `BEN-02`).
+  - AC-2: Warm path forwarding to active Running VM verified: proxy overhead <= 5 ms (`AC-01.2`).
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'ingress_gateway'`) prior to implementation.
+  - Story contract: `tests/contracts/test_story_2_1_cold_wake_ttfb.py` 2 passed.
+  - Full suite: `pytest tests` 60 passed.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - None (zero findings flagged by `scripts/spec_gate.py 2.1`).
+- **Open for a human:** None.
+- **Breakout recap:** pending, last story of the epic (Stories 2.2 and 2.3 remaining).
