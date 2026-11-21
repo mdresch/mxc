@@ -267,6 +267,27 @@ Copy this block per story.
 - **Interpretations not stated verbatim in the acceptance criteria:**
   - Egress filtering evaluates destination addressing in addition to port numbers: public IPs (e.g. `8.8.8.8`, `93.184.216.34`) and public internet domains are dropped even on standard ports (`:53`, `:443`); only approved internal RFC1918 subnets and approved internal hostnames are permitted per `AC-02.3`.
   - Inbound filtering drops all unsolicited ports, permitting only TCP `:8080` from the reverse proxy.
-  - Hyper-V vSwitch port ACL generation emits discrete inbound and outbound `Add-VMNetworkAdapterAcl` commands with default deny.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.
+
+## [Story 5.3 — Discard and reproduce]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-5.3`
+- **Commit:** `9a970a3b`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/session_sterility.py` (`UnapprovedParentImageError`, `APPROVED_PRODUCTION_PARENT`, `execute_discard_path`, `record_session_file`)
+  - Component Skill: `.claude/skills/session-sterility/SKILL.md`
+  - Contract: `tests/contracts/test_story_5_3_discard_and_reproduce.py`
+  - Spec Gate: `scripts/spec_gate.py 5.3` (Passed, margin +0.2153, episode `spec-5_3-ed8edfb4`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ImportError: cannot import name 'UnapprovedParentImageError'`).
+  - Story contract: `tests/contracts/test_story_5_3_discard_and_reproduce.py` 7 passed.
+  - Full suite: `pytest tests` 141 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Invariant enforcement: Session parent must strictly match `winserv2025-prod-adpa.vhdx`; any attempt to initialize with `winserv2025-mxc-dev.vhdx` or unapproved images raises `UnapprovedParentImageError` citing `BRU-003-01` and `BRU-005-02`.
+  - Both Path A (whole guest destruction) and Path B (`.avhdx` only discard) wipe all session ephemeral files and guarantee subsequent guest sessions spawn from approved parent (`BEN-12`).
 - **Open for a human:** None.
 - **Breakout recap:** Pending Step 9 epic closeout.

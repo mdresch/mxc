@@ -66,11 +66,19 @@ class SessionSterilityError(Exception):
     pass
 
 
+class UnapprovedParentImageError(Exception):
+    """Raised when attempting to anchor sessions on developer or unapproved parent images."""
+    pass
+
+
 class HungRequestError(Exception):
     """Raised when a request hangs past 900s, returning HTTP 504 (BRU-005-04)."""
     def __init__(self, message: str, status_code: int = 504) -> None:
         super().__init__(message)
         self.status_code = status_code
+
+
+APPROVED_PRODUCTION_PARENT = "winserv2025-prod-adpa.vhdx"
 
 
 # -------------------------------------------------------------------------
@@ -164,9 +172,14 @@ class SessionDiskManager:
 
     def __init__(
         self,
-        parent_vhdx_name: str = "winserv2025-prod-adpa.vhdx",
+        parent_vhdx_name: str = APPROVED_PRODUCTION_PARENT,
         parent_initial_hash: str = "",
     ) -> None:
+        if parent_vhdx_name != APPROVED_PRODUCTION_PARENT:
+            raise UnapprovedParentImageError(
+                f"BRU-003-01 / BRU-005-02: Parent image '{parent_vhdx_name}' is not an approved "
+                f"production image. Must be '{APPROVED_PRODUCTION_PARENT}'."
+            )
         self.parent_vhdx_name = parent_vhdx_name
         self.parent_initial_hash = parent_initial_hash
         self._sessions: dict[str, SessionRecord] = {}
@@ -197,6 +210,10 @@ class SessionDiskManager:
         if session.state != SessionLifecycleState.ACTIVE:
             raise SessionSterilityError(f"Cannot write to inactive session '{session_id}'.")
         session.files[path.lower()] = content
+
+    def record_session_file(self, session_id: str, path: str, content: bytes = b"") -> None:
+        """Alias for write_session_file for recording guest disk modifications."""
+        self.write_session_file(session_id, path, content)
 
     def has_session_file(self, session_id: str, path: str) -> bool:
         """Check if file exists on the session differencing disk."""
