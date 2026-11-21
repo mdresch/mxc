@@ -224,3 +224,26 @@ Copy this block per story.
   - Resuming from `Paused` state leverages host RAM resident pages without disk page-in delays; resuming from `Saved` or `Stopped` state incurs disk page-in penalty and fails the sub-300ms ceiling (ADR-004 §5).
 - **Open for a human:** None.
 - **Breakout recap:** Complete. Epic 004 fully verified and closed out. Transitioned to Epic 005 in `Project-Status-Register.md`.
+
+## [Story 5.1 — Ephemeral session disk]
+
+- **Timestamp:** 2026-11-21
+- **Branch:** `feat/story-5.1`
+- **Commit:** `00a6bc86`
+- **Merge Commit:** `pending`
+- **Deliverables:**
+  - Implementation: `scripts/lib/session_sterility.py` (`SessionDiskManager`, `SessionRecord`, `DifferencingDiskStatus`, `ParentIntegrityStatus`, `evaluate_outbound_traffic`, `execute_discard_path`)
+  - Component Skill: `.claude/skills/session-sterility/SKILL.md`
+  - Contract: `tests/contracts/test_story_5_1_ephemeral_session_disk.py`
+  - Spec Gate: `scripts/spec_gate.py 5.1` (Passed, margin +0.2129, episode `spec-5_1-3380cbb0`)
+- **Validation results:**
+  - Observed RED first: 1 collection error (`ModuleNotFoundError: No module named 'scripts.lib.session_sterility'`).
+  - Story contract: `tests/contracts/test_story_5_1_ephemeral_session_disk.py` 5 passed.
+  - Full suite: `pytest tests` 111 passed.
+  - Lifecycle: `scripts/validate_lifecycle.py` `Invariants: PASS`.
+- **Interpretations not stated verbatim in the acceptance criteria:**
+  - Idle teardown timer (300 s) must strictly require `active_open_requests == 0`; if requests remain active, teardown is deferred per `AC-02.1` and `FDD-005`.
+  - Parent SHA-256 hash must be verified bit-for-bit before and after session execution to ensure zero parent corruption per `AC-02.2`.
+  - Hung requests reaching 900 s ceiling trigger HTTP 504 and instance reaping per `BRU-005-04`.
+- **Open for a human:** None.
+- **Breakout recap:** Pending Step 9 epic closeout.

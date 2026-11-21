@@ -30,7 +30,7 @@ outputs:
 
 ## Story 5.1 — Ephemeral session disk
 
-**Status:** Ready for review — not yet run through `implement-story`  
+**Status:** Implemented & Validated (`feat/story-5.1`) — Contract: `tests/contracts/test_story_5_1_ephemeral_session_disk.py` (5 passed)  
 **As a** CISO, **I want** run a session that writes disk state, **so that** no residue remains after release.
 
 **Acceptance Criteria:**
