@@ -121,7 +121,7 @@ Copy this block per story.
 - **Timestamp:** 2026-11-21
 - **Branch:** `feat/story-3.1`
 - **Commit:** `836aadcc`
-- **Merge Commit:** Merging
+- **Merge Commit:** `68fdf047`
 - **Deliverables:**
   - Implementation: `scripts/lib/production_image.py` (`ProductionImageAuditEngine`, `PoolRegistrationGuard`, `ImageAuditResult`)
   - Component Skill: `.claude/skills/production-image/SKILL.md`
