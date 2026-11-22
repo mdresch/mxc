@@ -12,7 +12,7 @@ inputs:
 process: "Decompose host-level Hyper-V Page Sharing and memory deduplication into testable user stories"
 outputs:
   - "docs/user-stories/epic-009-memory-combining-deduplication.md"
-status: "Draft / Ready for Planning"
+status: "Closed / Implemented & Validated"
 ---
 
 # Epic 009: Hyper-V Host-Level Memory Combining & Deduplication
@@ -21,7 +21,7 @@ status: "Draft / Ready for Planning"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-011](../07-architecture/ADR-011-hyperv-memory-combining-deduplication.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 10.0  
-> **Status:** Draft / Ready for Planning
+> **Status:** Closed / Implemented & Validated
 
 ---
 

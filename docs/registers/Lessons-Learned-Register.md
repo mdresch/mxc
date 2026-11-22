@@ -122,3 +122,17 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   4. Pre-warming schedules promote instances into `WarmPaused` or `HotRunning` before client requests arrive, achieving 0 ms perceived wake latency.
   5. Optional parameters and fields must be defensively handled without `AttributeError` when None.
   6. Unused pre-warmed instances are bounded by the 180s cooldown timer (`AC-05.4`) and returned to cold inventory if unleased.
+
+### LL-010 — Hyper-V Host Page Deduplication, COW Isolation & Fleet Density Floor
+- **Epic / Story:** Epic 009 / Stories 9.1 & 9.2 (commits `b00b2f12`, `30bdb0c3`)
+- **Scope:** Hyper-V memory combining configuration, diagnostic performance counters, effective host RAM floor, and COW isolation (`scripts/lib/memory_combining_probe.py`)
+- **Date:** 2026-11-22
+- **Tier 2/3 Propagation Target:** `.claude/skills/memory-deduplication/SKILL.md`
+- **The Trap / Problem:** Scaling identical Windows Server 2025 standby micro-instances beyond 40 guests on a single 64 GB host exhausts host physical RAM if instances are treated as private allocations (640–1024 MB each). Furthermore, sharing physical memory across separate tenant VMs risks cross-tenant side-channel contamination or memory corruption if page isolation is not strictly hardware-enforced.
+- **The Root Cause:** In a golden-bake Windows environment, large system regions (`ntoskrnl.exe`, .NET CLR, `user32.dll`, COM+ assemblies) are bit-for-bit identical across all guests.
+- **Actionable Invariant / Rule:** Enforce `BRU-009-01`..`04`, `AC-9.1.1`..`2`, `AC-9.2.1`..`2`, `BEN-14`, `BEN-15`, `HYP-mxc-017`:
+  1. Hypervisor memory combining scanner merges identical read-only 4 KB pages into shared physical host frames, compressing effective host RAM to $\le 450\text{ MB}$ per guest ($\le 18\text{ GB}$ total across 40 instances).
+  2. Fleet deduplication ratio must achieve $\ge 40\%$ shared memory coverage across standby cohorts.
+  3. Copy-On-Write (COW) memory isolation is strictly enforced: any guest write to a shared page triggers an immediate hardware page fault, cloning the page into private memory with 0 bytes leaked and 0 corruption of peer VMs.
+  4. Background scanner CPU overhead must be clamped $\le 0.5\%$ aggregate host CPU during steady-state.
+  5. Diagnostics monitor `\Hyper-V Dynamic Memory\Memory Combining Shared Pages`, `Saved Memory (MB)`, and `CPU Usage`.

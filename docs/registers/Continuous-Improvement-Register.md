@@ -112,6 +112,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 - **Defensive Review (`LL-###`):** `LL-009` (Early TLS SNI Pre-Wake Concurrency & Time-Series Workload Pre-Warming).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-015` (eBPF / Kernel-Bypass TLS Packet Sniffing & Continuous Neural Shift Forecaster).
 
+### Epic 09: Hyper-V host-level memory combining and deduplication
+- **Cadence Date:** 2026-11-22
+- **Defensive Review (`LL-###`):** `LL-010` (Hyper-V Host Page Deduplication, COW Isolation & Fleet Density Floor).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-016` (Deterministic NGEN / CrossGen2 ASLR Base Normalization for 65%+ Shared Page Density).
+
 ---
 
 ## 4. Phase Close Synthesis (Stage 18 Closed-Loop Link)
