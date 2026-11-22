@@ -27,6 +27,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 9.1 — Hyper-V Page Sharing Configuration & Diagnostic Probe
 - **WBS:** 10.1
+- **Status:** Implemented & Validated
 - **As a** Virtualization Infrastructure Engineer,  
   **I want** to orchestrate Hyper-V Memory Combining across identical Windows Server 2025 standby micro-instances,  
   **so that** redundant read-only system and runtime pages are shared at the hypervisor layer.
