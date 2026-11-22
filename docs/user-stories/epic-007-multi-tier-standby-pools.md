@@ -40,6 +40,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 7.2 — Tenant Tier Classification & Dispatch Routing
 - **WBS:** 8.2
+- **Status:** **Implemented & Validated (`feat/story-7.2`)** — Contract: `tests/contracts/test_story_7_2_tenant_tier_routing.py` (4 passed)
 - **As an** Ingress Proxy Router,  
   **I want** to route incoming tenant requests to their designated execution tier based on tenant profile and SLA,  
   **so that** premium tenants experience instant response while standard tenants minimize infrastructure cost.

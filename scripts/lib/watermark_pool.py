@@ -236,6 +236,70 @@ class WatermarkPoolManager:
             guest.last_active_timestamp = time.time()
             return guest, dispatch_latency_ms
 
+    def lease_instance_tiered(
+        self,
+        tier: str,
+        session_id: str,
+        allow_cascade: bool = True,
+    ) -> tuple[PoolGuestRecord, float, str]:
+        """Lease an instance matching the requested tier (AC-7.2.1..3) with fallback cascade."""
+        norm_tier = tier.lower().strip()
+        with self._lock:
+            # 1. Platinum Tier -> HotRunning (<= 5 ms)
+            if norm_tier == "platinum":
+                hot_candidates = [g for g in self._guests.values() if g.state == PoolInstanceState.HOT_RUNNING]
+                if hot_candidates:
+                    t0 = time.perf_counter()
+                    guest = hot_candidates[0]
+                    time.sleep(0.0015)
+                    latency_ms = (time.perf_counter() - t0) * 1000.0
+                    guest.state = PoolInstanceState.ACTIVE_RUNNING
+                    guest.session_id = session_id
+                    guest.last_active_timestamp = time.time()
+                    return guest, latency_ms, "platinum"
+
+                if not allow_cascade:
+                    raise PoolExhaustedError("No instances available in Platinum (HotRunning) tier.")
+                norm_tier = "gold"
+
+            # 2. Gold Tier -> WarmPaused (<= 250 ms)
+            if norm_tier == "gold":
+                warm_candidates = [
+                    g for g in self._guests.values()
+                    if g.state in (PoolInstanceState.WARM_PAUSED, PoolInstanceState.STANDBY_PAUSED)
+                ]
+                if warm_candidates:
+                    t0 = time.perf_counter()
+                    guest = warm_candidates[0]
+                    time.sleep(0.015)
+                    latency_ms = (time.perf_counter() - t0) * 1000.0
+                    guest.state = PoolInstanceState.ACTIVE_RUNNING
+                    guest.session_id = session_id
+                    guest.last_active_timestamp = time.time()
+                    return guest, latency_ms, "gold"
+
+                if not allow_cascade:
+                    raise PoolExhaustedError("No instances available in Gold (WarmPaused) tier.")
+                norm_tier = "silver"
+
+            # 3. Silver Tier -> ColdSaved (<= 4.0 s)
+            if norm_tier == "silver":
+                cold_candidates = [
+                    g for g in self._guests.values()
+                    if g.state in (PoolInstanceState.COLD_SAVED, PoolInstanceState.COLD_PROVISIONED)
+                ]
+                if cold_candidates:
+                    t0 = time.perf_counter()
+                    guest = cold_candidates[0]
+                    time.sleep(0.030)
+                    latency_ms = (time.perf_counter() - t0) * 1000.0
+                    guest.state = PoolInstanceState.ACTIVE_RUNNING
+                    guest.session_id = session_id
+                    guest.last_active_timestamp = time.time()
+                    return guest, latency_ms, "silver"
+
+            raise PoolExhaustedError(f"Multi-tier pool exhausted: unable to satisfy lease for tier '{tier}'.")
+
     def get_tier_breakdown(self) -> Dict[str, int]:
         """Return count breakdown across Hot, Warm, and Cold tiers."""
         with self._lock:
