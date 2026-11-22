@@ -94,3 +94,16 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   3. Under request velocity bursts ($\ge 10\text{ rps}$ or $5\text{ rps}$) or queue depth $> 0$, expand ready instances up to $K_{\max}$ (default 5); strictly clamp at $K_{\max}$ ceiling.
   4. Before accepting traffic on resume from `baseline-hot-ready`, the first `/health` probe must enforce three discrete gates: hardware PRNG reseed, clock sync within $50\text{ ms}$ of host UTC, and 100% database connection pool handle purge; failure immediately quarantines the instance and returns HTTP 503 (`AC-02.4`).
   5. After traffic normalizes and idle exceeds configured cooldown ($180\text{ s}$ or $300\text{ s}$), reap surplus instances back to cold inventory, strictly preserving the $K_{\min}$ low watermark (`AC-05.4`).
+
+### LL-008 — Multi-Tier Standby Partitioning, Hot Dispatch Bounds & Dynamic Idle Demotion
+- **Epic / Story:** Epic 007 / Stories 7.1..7.3 (commits `eb5e2754`, `823d617e`, `0d14ccba`)
+- **Scope:** Multi-tier standby pool architecture, dispatch routing, and promotion/demotion lifecycle (`scripts/lib/watermark_pool.py`)
+- **Date:** 2026-11-22
+- **Tier 2/3 Propagation Target:** `.claude/skills/watermark-pool/SKILL.md`
+- **The Trap / Problem:** Treating all standby instances identically under a single paused RAM state causes severe host memory pressure as tenant counts scale beyond 40 guests, while still subjecting premium interactive callers to ~200ms unpause latency. Conversely, moving instances to disk checkpoints naively risks tenant starvation if cold restore is called on a live critical path.
+- **The Root Cause:** Homogeneous standby pools fail to differentiate between tenant SLAs and request velocity profiles. A running VM guarantees sub-5ms response but costs ~1.0–1.2 GB host RAM; a saved disk checkpoint costs 0.0 MB host RAM but takes 2–4 seconds to restore.
+- **Actionable Invariant / Rule:** Enforce `BRU-007-01`..`05`, `AC-7.1.1`..`3`, `AC-7.2.1`..`3`, `AC-7.3.1`..`2`, and `BEN-15`/`BEN-17`:
+  1. Maintain a three-tier instance state hierarchy: `HotRunning` (running wait loop, $\le 5\text{ ms}$ dispatch), `WarmPaused` (RAM standby, $\le 250\text{ ms}$ unpause), and `ColdSaved` (disk checkpoint, 0.0 MB host RAM, $\le 4.0\text{ s}$ restore).
+  2. Map incoming tenant SLA tiers to dispatch targets (Platinum $\rightarrow$ Hot, Gold $\rightarrow$ Warm, Silver/Batch $\rightarrow$ Cold) with automatic cascade fallback if higher tiers are temporarily exhausted.
+  3. All promotion from `ColdSaved` to `WarmPaused` must execute asynchronously in the background (~1.5 s) without blocking concurrent in-flight requests (`AC-7.3.1`).
+  4. Instances remaining idle in `WarmPaused` exceeding the demotion threshold ($\ge 600\text{ s}$) must automatically save checkpoint state to disk and reclaim host RAM down to 0.0 MB (`AC-7.3.2`).

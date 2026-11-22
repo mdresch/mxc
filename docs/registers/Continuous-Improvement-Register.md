@@ -63,6 +63,7 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 | `IMP-MXC-011` | Peer Review | Autonomous Fleet-Level Economics & Dynamic Sizing Scheduler | Autonomous Operations | Deploy an autonomous control loop that continuously optimizes cost-per-session, cost-per-wake, memory efficiency, and host saturation to dynamically decide fleet tier depth (Hot/Warm/Cold), scale-out replenishment, and instance consolidation. | Elevates MXC from a raw virtualization engine into an intelligent, enterprise-grade serverless execution fabric (`BEN-01`..`BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-012` | Epic 005 Recap | Pure In-Memory Ephemeral RAM-Disk Differencing Layers | Storage / I/O Acceleration | Expand file-backed `.avhdx` transient differencing disks into direct host RAM disks or non-volatile DAX memory blocks (`HYP-mxc-019` horizon), eliminating all NVMe write amplification and achieving sub-microsecond write and teardown latencies. | Maximizes I/O throughput and instant teardown while eliminating disk wear during high-churn bursts (`BEN-07`, `BEN-12`). | 🔵 `Rolled into Phase Next Intent Refinement` |
 | `IMP-MXC-013` | Epic 006 Recap | Predictive Pre-Warming via Time-Series Workload Forecasting | Machine Learning / Telemetry | Expand manual CLI / API pre-warming (`mxc-pool-warm`) into an autonomous time-series predictor (`HYP-mxc-020` horizon) that analyzes historical tenant invocation schedules and automatically raises standby depth 60 seconds prior to burst onset. | Eliminates reactive surge wake overhead, delivering 0ms cold starts without human intervention (`BEN-09`, `BEN-02`). | 🔵 `Rolled into Phase Next Intent Refinement` |
+| `IMP-MXC-014` | Epic 007 Recap | Predictive Micro-Tier Transitioning via Early Kernel TLS Probes | Networking / Kernel Probes | Expand tier dispatching with eBPF/WFP kernel socket filters snooping initial TLS handshake frames directly on the hypervisor root partition, triggering background Cold-to-Warm or Warm-to-Hot promotions prior to user-space proxy routing. | Shaves an additional 2–3 ms off dispatch latency, enabling instantaneous execution across distributed clusters (`BEN-13`, `BEN-17`). | 🟢 `In-Flight Candidate` |
 
 ---
 
@@ -98,6 +99,13 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 
 ### Epic 06: Watermark pool, replenish, and wake hygiene
 - **Cadence Date:** 2026-11-21
+- **Defensive Review (`LL-###`):** `LL-007` (Watermark pool sizing, non-blocking refill, and wake hygiene triple-gate).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-013` (Predictive Pre-Warming via Time-Series Workload Forecasting).
+
+### Epic 07: Multi-tier standby pools (Hot, Warm, Cold)
+- **Cadence Date:** 2026-11-22
+- **Defensive Review (`LL-###`):** `LL-008` (Multi-tier standby partitioning, hot dispatch bounds & dynamic idle demotion).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-014` (Predictive Micro-Tier Transitioning via Early Kernel TLS Probes).
 - **Defensive Review (`LL-###`):** `LL-007` (Watermark pool sizing, non-blocking refill, and wake hygiene triple-gate).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-013` (Predictive Pre-Warming via Time-Series Workload Forecasting).
 

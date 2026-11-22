@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 1 (Core Foundation & Standby Fleet) — Complete |
-| **Current PMP Baseline** | `PMP-BL-v1.0.0` |
-| **Session close-off checkpoint** | Phase 1 Complete (Epics 001..006 fully implemented, 162 contracts passing, merged to `feat/hyperv-v2-rebased`) |
-| **Current macro Stage** | Stage 10 (Execution & Verification) Complete $\rightarrow$ Transitioning to Stage 11 (Audit Record) |
-| **Last Epic/unit of work fully completed** | Epic 006: Watermark pool, replenish, and wake hygiene (`LL-007`, `IMP-MXC-013`) |
-| **Next Epic/unit of work to implement** | Stage 11 Audit Record & Phase 1 Closeout / Phase 2 Planning (`SPARK-MXC-vNext`) |
-| **Last commit on the base branch** | `2a03560f` (docs: record Story 6.4 commit and merge hashes in registers) |
+| **Current Phase** | Phase 2 (Predictive Orchestration & Enterprise Execution Fabric) — Active |
+| **Current PMP Baseline** | `PMP-BL-v2.0.0` |
+| **Session close-off checkpoint** | Epic 007 (Multi-Tier Standby Pools) Complete (Stories 7.1..7.3 validated, 173 contracts passing, merged to `feat/hyperv-v2-rebased`) |
+| **Current macro Stage** | Stage 9 / 10 (Execution & Verification: Phase 2 Sprints) |
+| **Last Epic/unit of work fully completed** | Epic 007: Multi-Tier Standby Pools (`LL-008`, `IMP-MXC-014`, `AUDIT-007`) |
+| **Next Epic/unit of work to implement** | Epic 008: Predictive Wake Interception & Activity Forecasting (`Story 8.1`, WBS 9.0) |
+| **Last commit on the base branch** | `7175c908` (merge: feat(US-7.3) dynamic tier promotion and demotion lifecycle) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -55,7 +55,8 @@ caused this, both worth guarding against here:
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | All 162 contract tests pass |
+| Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
+| Phase 2 | `PMP-BL-v2.0.0` | In Progress (Epic 007 complete, Epics 008..011 planned) | Active development |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
