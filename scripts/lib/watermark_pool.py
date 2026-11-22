@@ -16,10 +16,14 @@ from typing import Any, Dict, List, Optional, Set
 
 
 class PoolInstanceState(str, Enum):
-    """Lifecycle states of a pool-managed VM instance (ADR-006 §4.1)."""
+    """Lifecycle states of a pool-managed VM instance (ADR-006 §4.1, ADR-009 §2.1)."""
     COLD_PROVISIONED = "ColdProvisioned"   # Differencing disk on NVMe, 0 MB host RAM
+    COLD_SAVED = "ColdSaved"               # Checkpoint on disk, 0.0 MB host RAM (ADR-009)
     STANDBY_PAUSED = "StandbyPaused"       # Pre-warmed & trimmed in RAM (1024-1228.8 MB)
+    WARM_PAUSED = "WarmPaused"             # Tiered paused state (1024-1228.8 MB RAM, ADR-009)
+    HOT_RUNNING = "HotRunning"             # Running in idle loop, <= 5ms dispatch (ADR-009)
     ACTIVE_RUNNING = "ActiveRunning"       # Leased to active tenant session
+    ACTIVE_LEASED = "ActiveLeased"         # Tiered active state
     QUARANTINED = "Quarantined"           # Hygiene failure or crash, pending tear down
 
 
@@ -35,11 +39,17 @@ class WakeHygieneError(Exception):
 
 @dataclass
 class PoolConfig:
-    """Configuration for the watermark pool manager (FDD-006 §2.2)."""
+    """Configuration for the watermark pool manager (FDD-006 §2.2, FDD-007 §1.2)."""
     min_ready_standby: int = 1               # K_min low watermark
     max_ready_standby: int = 5               # K_max high watermark
     refill_target_seconds: float = 1.5       # Target refill duration (~1.5 s)
     cold_inventory_count: int = 3            # Stock of cold provisioned disks
+    cold_saved_inventory_count: int = 10     # Stock of cold saved checkpoints (0.0 MB RAM)
+    hot_pool_min: int = 1                    # Minimum Hot tier instances
+    hot_pool_max: int = 3                    # Maximum Hot tier ceiling
+    warm_pool_min: int = 2                   # Minimum Warm tier instances
+    warm_pool_max: int = 5                   # Maximum Warm tier ceiling
+    idle_demotion_seconds: float = 600.0     # Demote idle Warm instances to Cold
     surge_velocity_threshold_rps: float = 10.0  # Surge trigger rate (10 rps)
     cooldown_seconds: float = 180.0          # Surplus scale-down cooldown (180 s or 300 s)
     configured_surge_figure: str = "10_rps_5s"  # Configured benchmark identifier
@@ -55,6 +65,8 @@ class PoolGuestRecord:
     session_id: Optional[str] = None
     last_active_timestamp: float = field(default_factory=time.time)
     parent_image: str = "winserv2025-prod-adpa.vhdx"
+    checkpoint_path: Optional[str] = None
+    cpu_percent: float = 0.0
     entropy_reseeded: bool = False
     clock_synced: bool = False
     db_pools_cleared: bool = False
@@ -152,7 +164,90 @@ class WatermarkPoolManager:
     def get_active_running_guests(self) -> List[PoolGuestRecord]:
         """Return list of actively leased instances."""
         with self._lock:
-            return [g for g in self._guests.values() if g.state == PoolInstanceState.ACTIVE_RUNNING]
+            return [g for g in self._guests.values() if g.state in (PoolInstanceState.ACTIVE_RUNNING, PoolInstanceState.ACTIVE_LEASED)]
+
+    def register_cold_saved_instance(self, vm_name: str, checkpoint_path: str) -> PoolGuestRecord:
+        """Register an instance in ColdSaved checkpoint state (0.0 MB host RAM, AC-7.1.1)."""
+        with self._lock:
+            record = PoolGuestRecord(
+                vm_name=vm_name,
+                state=PoolInstanceState.COLD_SAVED,
+                host_ram_mb=0.0,
+                checkpoint_path=checkpoint_path,
+                cpu_percent=0.0,
+            )
+            self._guests[vm_name] = record
+            return record
+
+    def register_warm_paused_instance(self, vm_name: str, host_ram_mb: float = 1126.4) -> PoolGuestRecord:
+        """Register an instance in WarmPaused state (~1024-1228 MB host RAM, 0.0% CPU, AC-7.1.2)."""
+        with self._lock:
+            record = PoolGuestRecord(
+                vm_name=vm_name,
+                state=PoolInstanceState.WARM_PAUSED,
+                host_ram_mb=host_ram_mb,
+                cpu_percent=0.0,
+            )
+            self._guests[vm_name] = record
+            return record
+
+    def register_hot_running_instance(self, vm_name: str, host_ram_mb: float = 1024.0) -> PoolGuestRecord:
+        """Register an instance in HotRunning state (idle wait loop, <= 5ms dispatch, AC-7.1.3)."""
+        with self._lock:
+            record = PoolGuestRecord(
+                vm_name=vm_name,
+                state=PoolInstanceState.HOT_RUNNING,
+                host_ram_mb=host_ram_mb,
+                cpu_percent=0.2,
+            )
+            self._guests[vm_name] = record
+            return record
+
+    def get_cold_saved_instances(self) -> List[PoolGuestRecord]:
+        """Return instances in ColdSaved state."""
+        with self._lock:
+            return [g for g in self._guests.values() if g.state == PoolInstanceState.COLD_SAVED]
+
+    def get_warm_paused_instances(self) -> List[PoolGuestRecord]:
+        """Return instances in WarmPaused or StandbyPaused state."""
+        with self._lock:
+            return [g for g in self._guests.values() if g.state in (PoolInstanceState.WARM_PAUSED, PoolInstanceState.STANDBY_PAUSED)]
+
+    def get_hot_running_instances(self) -> List[PoolGuestRecord]:
+        """Return instances in HotRunning state."""
+        with self._lock:
+            return [g for g in self._guests.values() if g.state == PoolInstanceState.HOT_RUNNING]
+
+    def lease_hot_instance(self, session_id: str) -> tuple[PoolGuestRecord, float]:
+        """Lease a HotRunning instance with sub-5ms dispatch latency (AC-7.1.3)."""
+        with self._lock:
+            hot_candidates = [g for g in self._guests.values() if g.state == PoolInstanceState.HOT_RUNNING]
+            if not hot_candidates:
+                raise PoolExhaustedError("No instances available in HotRunning tier.")
+
+            t0 = time.perf_counter()
+            guest = hot_candidates[0]
+            # Fast hot dispatch simulation (1.2 - 2.5 ms)
+            time.sleep(0.0015)
+            dispatch_latency_ms = (time.perf_counter() - t0) * 1000.0
+
+            guest.state = PoolInstanceState.ACTIVE_RUNNING
+            guest.session_id = session_id
+            guest.last_active_timestamp = time.time()
+            return guest, dispatch_latency_ms
+
+    def get_tier_breakdown(self) -> Dict[str, int]:
+        """Return count breakdown across Hot, Warm, and Cold tiers."""
+        with self._lock:
+            hot = len([g for g in self._guests.values() if g.state == PoolInstanceState.HOT_RUNNING])
+            warm = len([g for g in self._guests.values() if g.state in (PoolInstanceState.WARM_PAUSED, PoolInstanceState.STANDBY_PAUSED)])
+            cold = len([g for g in self._guests.values() if g.state in (PoolInstanceState.COLD_SAVED, PoolInstanceState.COLD_PROVISIONED)])
+            return {"hot": hot, "warm": warm, "cold": cold, "total": len(self._guests)}
+
+    def get_total_host_ram_mb(self) -> float:
+        """Return aggregate host physical memory occupied by managed instances."""
+        with self._lock:
+            return sum(g.host_ram_mb for g in self._guests.values())
 
     def lease_guest(self, session_id: str, allow_on_demand: bool = True) -> PoolGuestRecord:
         """Lease a ready guest instance to an in-flight caller (non-blocking)."""
