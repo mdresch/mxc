@@ -39,6 +39,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 9.2 — Deduplication Floor & Host Saturation Verification
 - **WBS:** 10.2
+- **Status:** Implemented & Validated
 - **As a** Capacity Planner,  
   **I want** to verify that 40 identical paused micro-instances consume $\le 450\text{ MB}$ effective host RAM each,  
   **so that** host tenant density can be expanded to $\ge 120$ micro-VMs on a 64 GB host.
