@@ -39,6 +39,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 8.2 — Time-Series Workload Forecasting Engine
 - **WBS:** 9.2
+- **Status:** Implemented & Validated
 - **As a** SRE Platform Manager,  
   **I want** historical tenant activity patterns to drive automated pre-warming schedules,  
   **so that** recurring enterprise workloads experience 0 ms perceived wake latency without manual intervention.
