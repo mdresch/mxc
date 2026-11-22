@@ -27,6 +27,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 8.1 — Early TLS ClientHello SNI Snooper
 - **WBS:** 9.1
+- **Status:** Implemented & Validated
 - **As an** Ingress Gateway Proxy,  
   **I want** to parse incoming TLS `ClientHello` frames and extract the SNI host immediately upon TCP connection establishment,  
   **so that** dormant micro-VM unpausing begins concurrently with the TLS handshake.
