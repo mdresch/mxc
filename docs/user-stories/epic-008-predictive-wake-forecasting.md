@@ -12,7 +12,7 @@ inputs:
 process: "Decompose predictive wake interception and activity forecasting into testable user stories"
 outputs:
   - "docs/user-stories/epic-008-predictive-wake-forecasting.md"
-status: "Draft / Ready for Planning"
+status: "Closed / Implemented & Validated"
 ---
 
 # Epic 008: Predictive Wake Interception & Activity Forecasting
@@ -21,7 +21,7 @@ status: "Draft / Ready for Planning"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-010](../07-architecture/ADR-010-predictive-wake-interception.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 9.0  
-> **Status:** Draft / Ready for Planning
+> **Status:** Closed / Implemented & Validated
 
 ---
 

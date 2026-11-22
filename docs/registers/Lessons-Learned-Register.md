@@ -107,3 +107,18 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   2. Map incoming tenant SLA tiers to dispatch targets (Platinum $\rightarrow$ Hot, Gold $\rightarrow$ Warm, Silver/Batch $\rightarrow$ Cold) with automatic cascade fallback if higher tiers are temporarily exhausted.
   3. All promotion from `ColdSaved` to `WarmPaused` must execute asynchronously in the background (~1.5 s) without blocking concurrent in-flight requests (`AC-7.3.1`).
   4. Instances remaining idle in `WarmPaused` exceeding the demotion threshold ($\ge 600\text{ s}$) must automatically save checkpoint state to disk and reclaim host RAM down to 0.0 MB (`AC-7.3.2`).
+
+### LL-009 — Early TLS SNI Pre-Wake Concurrency & Time-Series Workload Pre-Warming
+- **Epic / Story:** Epic 008 / Stories 8.1 & 8.2 (commits `290ed4c7`, `ef390897`)
+- **Scope:** Early TLS ClientHello SNI snooper (`scripts/lib/tls_snooper.py`) and Time-series workload forecasting engine (`scripts/lib/workload_forecaster.py`)
+- **Date:** 2026-11-22
+- **Tier 2/3 Propagation Target:** `.claude/skills/ingress-gateway/SKILL.md`, `.claude/skills/workload-forecasting/SKILL.md`
+- **The Trap / Problem:** Reactive wake imposes $\approx 200\text{--}280\text{ ms}$ pause while micro-instances unpause on the live request path. Even if buffered safely by the reverse proxy without 502/504 errors, interactive enterprise callers perceive delays $> 100\text{ ms}$. Furthermore, naively triggering pre-warm without forecasting leads to idle standby instance sprawl and memory pressure.
+- **The Root Cause:** Waiting for the full TLS session handshake and HTTP header completion before dispatching `Resume-VM` wastes 40–80 ms of network negotiation time that could run concurrently with Hyper-V unpause. At macro scale, recurring shift start times (e.g. 08:55 AM) are highly predictable and should be pre-warmed ahead of time.
+- **Actionable Invariant / Rule:** Enforce `BRU-008-01`..`05`, `AC-8.1.1`..`2`, `AC-8.2.1`..`2`, `BEN-13`, `HYP-mxc-016`, `HYP-mxc-020`:
+  1. Ingress gateway must parse TLS `ClientHello` frames and extract SNI within $\le 5\text{ ms}$ non-blocking, immediately dispatching async wake to pool manager before TLS session key exchange completes.
+  2. Non-TLS or malformed traffic must pass through safely to standard HTTP handler without throwing exceptions.
+  3. Workload forecaster models recurring shift start times and cron patterns, issuing pre-warm predictions $\ge 60\text{ s}$ in advance with $\ge 90\%$ accuracy.
+  4. Pre-warming schedules promote instances into `WarmPaused` or `HotRunning` before client requests arrive, achieving 0 ms perceived wake latency.
+  5. Optional parameters and fields must be defensively handled without `AttributeError` when None.
+  6. Unused pre-warmed instances are bounded by the 180s cooldown timer (`AC-05.4`) and returned to cold inventory if unleased.

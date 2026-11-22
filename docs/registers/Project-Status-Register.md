@@ -43,11 +43,11 @@ caused this, both worth guarding against here:
 |---|---|
 | **Current Phase** | Phase 2 (Predictive Orchestration & Enterprise Execution Fabric) — Active |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` |
-| **Session close-off checkpoint** | Epic 007 (Multi-Tier Standby Pools) Complete (Stories 7.1..7.3 validated, 173 contracts passing, merged to `feat/hyperv-v2-rebased`) |
+| **Session close-off checkpoint** | Epic 008 (Predictive Wake Interception & Activity Forecasting) Complete (Stories 8.1..8.2 validated, 181 contracts passing, merged to `feat/hyperv-v2-rebased`) |
 | **Current macro Stage** | Stage 9 / 10 (Execution & Verification: Phase 2 Sprints) |
-| **Last Epic/unit of work fully completed** | Epic 007: Multi-Tier Standby Pools (`LL-008`, `IMP-MXC-014`, `AUDIT-007`) |
-| **Next Epic/unit of work to implement** | Epic 008: Predictive Wake Interception & Activity Forecasting (`Story 8.1`, WBS 9.0) |
-| **Last commit on the base branch** | `7175c908` (merge: feat(US-7.3) dynamic tier promotion and demotion lifecycle) |
+| **Last Epic/unit of work fully completed** | Epic 008: Predictive Wake Interception & Activity Forecasting (`LL-009`, `IMP-MXC-015`, `AUDIT-008`) |
+| **Next Epic/unit of work to implement** | Epic 009: Hyper-V Memory Combining & Host RAM Deduplication (`Story 9.1`, WBS 10.0, ADR-011) |
+| **Last commit on the base branch** | `cc0d6e67` (merge: Story 8.2 Time-Series Workload Forecasting Engine) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -56,7 +56,7 @@ caused this, both worth guarding against here:
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
-| Phase 2 | `PMP-BL-v2.0.0` | In Progress (Epic 007 complete, Epics 008..011 planned) | Active development |
+| Phase 2 | `PMP-BL-v2.0.0` | In Progress (Epics 007 & 008 complete, Epics 009..011 planned) | Active development |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -68,6 +68,9 @@ caused this, both worth guarding against here:
 | Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Complete | Story 4.1, Story 4.2, Story 4.3 (3/3) |
 | Epic 005 | Transient differencing disk and session sterility | Phase 1 | Complete | Story 5.1, Story 5.2, Story 5.3 (3/3) |
 | Epic 006 | Watermark pool and wake hygiene | Phase 1 | Complete | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (4/4) |
+| Epic 007 | Multi-tier standby pools (Hot, Warm, Cold) | Phase 2 | Complete | Story 7.1, Story 7.2, Story 7.3 (3/3) |
+| Epic 008 | Predictive wake interception and activity forecasting | Phase 2 | Complete | Story 8.1, Story 8.2 (2/2) |
+| Epic 009 | Hyper-V memory combining and deduplication | Phase 2 | Ready for Implementation | Pending Story 9.1 |
 
 ## 4. How to keep this current
 

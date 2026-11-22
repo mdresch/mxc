@@ -106,8 +106,11 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 - **Cadence Date:** 2026-11-22
 - **Defensive Review (`LL-###`):** `LL-008` (Multi-tier standby partitioning, hot dispatch bounds & dynamic idle demotion).
 - **Positive Improvement Harvest:** Identified `IMP-MXC-014` (Predictive Micro-Tier Transitioning via Early Kernel TLS Probes).
-- **Defensive Review (`LL-###`):** `LL-007` (Watermark pool sizing, non-blocking refill, and wake hygiene triple-gate).
-- **Positive Improvement Harvest:** Identified `IMP-MXC-013` (Predictive Pre-Warming via Time-Series Workload Forecasting).
+
+### Epic 08: Predictive wake interception and activity forecasting
+- **Cadence Date:** 2026-11-22
+- **Defensive Review (`LL-###`):** `LL-009` (Early TLS SNI Pre-Wake Concurrency & Time-Series Workload Pre-Warming).
+- **Positive Improvement Harvest:** Identified `IMP-MXC-015` (eBPF / Kernel-Bypass TLS Packet Sniffing & Continuous Neural Shift Forecaster).
 
 ---
 
