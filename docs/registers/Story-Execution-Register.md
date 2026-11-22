@@ -36,7 +36,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 8.1 | Complete (`feat/story-8.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-010 / WBS 9.1) | Complete (`test_story_8_1_early_tls_sni.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`tls_snooper.py`) | Complete (4 contracts + 177 suite pass) | Complete (`290ed4c7`) | Merged |
 | Story 8.2 | Complete (`feat/story-8.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-010 / WBS 9.2) | Complete (`test_story_8_2_workload_forecasting.py`) | Complete (`workload-forecasting/SKILL.md`) | Complete (`workload_forecaster.py`) | Complete (4 contracts + 181 suite pass) | Complete (`ef390897`) | Merged |
 | Story 9.1 | Complete (`feat/story-9.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-011 / WBS 10.1) | Complete (`test_story_9_1_page_sharing_probe.py`) | Complete (`memory-deduplication/SKILL.md`) | Complete (`memory_combining_probe.py`) | Complete (4 contracts + 185 suite pass) | Complete (`b00b2f12`) | Merged |
-| Story 9.2 | Complete (`feat/story-9.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-011 / WBS 10.2) | Complete (`test_story_9_2_deduplication_floor_and_cow.py`) | Complete (`memory-deduplication/SKILL.md`) | Complete (`memory_combining_probe.py`) | Complete (3 contracts + 188 suite pass) | Complete | In Progress |
+| Story 9.2 | Complete (`feat/story-9.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-011 / WBS 10.2) | Complete (`test_story_9_2_deduplication_floor_and_cow.py`) | Complete (`memory-deduplication/SKILL.md`) | Complete (`memory_combining_probe.py`) | Complete (3 contracts + 188 suite pass) | Complete (`30bdb0c3`) | Merged |
 
 ## When a story's steps don't match this template's own assumed shape
 
