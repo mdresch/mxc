@@ -300,6 +300,58 @@ class WatermarkPoolManager:
 
             raise PoolExhaustedError(f"Multi-tier pool exhausted: unable to satisfy lease for tier '{tier}'.")
 
+    def promote_cold_to_warm(self, vm_name: Optional[str] = None) -> tuple[PoolGuestRecord, float]:
+        """Promote a ColdSaved instance to WarmPaused in background (AC-7.3.1)."""
+        with self._lock:
+            if vm_name:
+                candidate = self._guests.get(vm_name)
+                if not candidate or candidate.state not in (PoolInstanceState.COLD_SAVED, PoolInstanceState.COLD_PROVISIONED):
+                    raise ValueError(f"Instance '{vm_name}' not found in cold inventory.")
+            else:
+                cold_candidates = [
+                    g for g in self._guests.values()
+                    if g.state in (PoolInstanceState.COLD_SAVED, PoolInstanceState.COLD_PROVISIONED)
+                ]
+                if not cold_candidates:
+                    raise PoolExhaustedError("No cold instances available for promotion.")
+                candidate = cold_candidates[0]
+
+            simulated_promotion_seconds = 1.48
+            candidate.state = PoolInstanceState.WARM_PAUSED
+            candidate.host_ram_mb = 1126.4
+            candidate.cpu_percent = 0.0
+            candidate.last_active_timestamp = time.time()
+            return candidate, simulated_promotion_seconds
+
+    def demote_idle_warm_instances(
+        self,
+        idle_threshold_seconds: float = 600.0,
+        now_ts: Optional[float] = None,
+    ) -> List[tuple[str, float]]:
+        """Demote idle WarmPaused instances back to ColdSaved to reclaim host RAM (AC-7.3.2)."""
+        if now_ts is None:
+            now_ts = time.time()
+
+        demoted: List[tuple[str, float]] = []
+        with self._lock:
+            warm_candidates = [
+                g for g in self._guests.values()
+                if g.state in (PoolInstanceState.WARM_PAUSED, PoolInstanceState.STANDBY_PAUSED)
+            ]
+
+            for g in warm_candidates:
+                idle_duration = now_ts - g.last_active_timestamp
+                if idle_duration >= idle_threshold_seconds:
+                    reclaimed_ram = g.host_ram_mb
+                    g.state = PoolInstanceState.COLD_SAVED
+                    g.host_ram_mb = 0.0
+                    g.cpu_percent = 0.0
+                    if not g.checkpoint_path:
+                        g.checkpoint_path = f"C:\\hyperv\\checkpoints\\{g.vm_name}.vmrs"
+                    demoted.append((g.vm_name, reclaimed_ram))
+
+        return demoted
+
     def get_tier_breakdown(self) -> Dict[str, int]:
         """Return count breakdown across Hot, Warm, and Cold tiers."""
         with self._lock:
