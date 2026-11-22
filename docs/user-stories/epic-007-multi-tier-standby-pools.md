@@ -27,6 +27,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 7.1 — Three-Tier State Management & Inventory
 - **WBS:** 8.1
+- **Status:** **Implemented & Validated (`feat/story-7.1`)** — Contract: `tests/contracts/test_story_7_1_three_tier_state_management.py` (4 passed)
 - **As a** Cloud Platform Engineer,  
   **I want** the pool manager to manage instances across `HotRunning`, `WarmPaused`, and `ColdSaved` states,  
   **so that** host memory is conserved while supporting high-speed execution tiers.
