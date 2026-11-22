@@ -21,7 +21,7 @@ status: "Draft / Ready for Planning"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-009](../07-architecture/ADR-009-multi-tier-standby-pools.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 8.0  
-> **Status:** Draft / Ready for Planning
+> **Status:** **Completed & Validated (2026-11-22)** — Stories 7.1..7.3 implemented and verified against contracts (173 suite tests passing).
 
 ---
 
@@ -53,6 +53,7 @@ status: "Draft / Ready for Planning"
 
 ## Story 7.3 — Dynamic Tier Promotion & Demotion Lifecycle
 - **WBS:** 8.3
+- **Status:** **Implemented & Validated (`feat/story-7.3`)** — Contract: `tests/contracts/test_story_7_3_tier_promotion_demotion.py` (3 passed)
 - **As an** Autonomous Tier Controller,  
   **I want** to promote instances from Cold to Warm ahead of anticipated usage and demote idle Warm instances to Cold,  
   **so that** host memory saturation is continuously managed within safe operational margins.
