@@ -34,6 +34,7 @@ Centralized, structured record of which `implement-story` steps (0–8) actually
 | Story 7.2 | Complete (`feat/story-7.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-009 / WBS 8.2) | Complete (`test_story_7_2_tenant_tier_routing.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (4 contracts + 170 suite pass) | Complete (`823d617e`) | Merged |
 | Story 7.3 | Complete (`feat/story-7.3`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-009 / WBS 8.3) | Complete (`test_story_7_3_tier_promotion_demotion.py`) | Complete (`watermark-pool/SKILL.md`) | Complete (`watermark_pool.py`) | Complete (3 contracts + 173 suite pass) | Complete (`0d14ccba`) | Merged |
 | Story 8.1 | Complete (`feat/story-8.1`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-010 / WBS 9.1) | Complete (`test_story_8_1_early_tls_sni.py`) | Complete (`ingress-gateway/SKILL.md`) | Complete (`tls_snooper.py`) | Complete (4 contracts + 177 suite pass) | Complete (`290ed4c7`) | Merged |
+| Story 8.2 | Complete (`feat/story-8.2`) | Complete (ADR/BRD/FDD/Story) | Complete (ADR-010 / WBS 9.2) | Complete (`test_story_8_2_workload_forecasting.py`) | Complete (`workload-forecasting/SKILL.md`) | Complete (`workload_forecaster.py`) | Complete (4 contracts + 181 suite pass) | Complete | In Progress |
 
 ## When a story's steps don't match this template's own assumed shape
 
