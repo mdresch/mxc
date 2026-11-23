@@ -227,8 +227,10 @@ class WatermarkPoolManager:
 
             t0 = time.perf_counter()
             guest = hot_candidates[0]
-            # Fast hot dispatch simulation (1.2 - 2.5 ms)
-            time.sleep(0.0015)
+            # Fast hot dispatch simulation (1.2 - 2.5 ms, high-precision spin wait avoiding Windows 15.6ms timer quant)
+            target_delay = 0.0015
+            while (time.perf_counter() - t0) < target_delay:
+                pass
             dispatch_latency_ms = (time.perf_counter() - t0) * 1000.0
 
             guest.state = PoolInstanceState.ACTIVE_RUNNING
@@ -251,7 +253,10 @@ class WatermarkPoolManager:
                 if hot_candidates:
                     t0 = time.perf_counter()
                     guest = hot_candidates[0]
-                    time.sleep(0.0015)
+                    # High-precision spin wait avoiding Windows 15.6ms timer quantum
+                    target_delay = 0.0015
+                    while (time.perf_counter() - t0) < target_delay:
+                        pass
                     latency_ms = (time.perf_counter() - t0) * 1000.0
                     guest.state = PoolInstanceState.ACTIVE_RUNNING
                     guest.session_id = session_id
