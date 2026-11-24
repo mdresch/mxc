@@ -82,6 +82,7 @@ foreach ($h in 'api2.cursor.sh','api2direct.cursor.sh','api3.cursor.sh','downloa
 | Wrong repo | `git -C C:\workspace remote -v`; re-run configure script or `git remote set-url origin …` |
 | `not a git checkout` after sync | Expected once: re-run configure (bootstraps git). Pull latest `guest_configure_cursor_worker.ps1` |
 | Worker stops after VM pause | Resume VM; `mxc-net-enable`; start scheduled task |
+| `Git for Windows is required` on `worker start` | Guest has portable/scoop git only. Run `guest_install_git_for_windows.ps1` or `winget install Git.Git` in the guest |
 | JIT pool recycled VM | Re-run `configure_cursor_my_machines.ps1` after `mxc-pool-release` on a fresh lease |
 
 Official reference: [My Machines](https://cursor.com/docs/cloud-agent/self-hosted/my-machines).

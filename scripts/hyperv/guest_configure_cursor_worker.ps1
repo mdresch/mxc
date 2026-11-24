@@ -42,6 +42,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+. (Join-Path $PSScriptRoot 'guest_git_for_windows.ps1')
 
 function Test-AgentCli {
     $cmd = Get-Command agent -ErrorAction SilentlyContinue
@@ -49,29 +50,6 @@ function Test-AgentCli {
     $localApp = Join-Path $env:LOCALAPPDATA 'Programs\cursor-agent\agent.exe'
     if (Test-Path $localApp) { return $localApp }
     return $null
-}
-
-function Ensure-GitBashForWorker {
-    $bashCandidates = @(
-        (Join-Path ${env:ProgramFiles} 'Git\bin\bash.exe'),
-        (Join-Path ${env:ProgramFiles(x86)} 'Git\bin\bash.exe'),
-        (Join-Path $env:LOCALAPPDATA 'Programs\Git\bin\bash.exe')
-    )
-    foreach ($bash in $bashCandidates) {
-        if (Test-Path $bash) {
-            Write-Host "Git Bash found: $bash"
-            return
-        }
-    }
-
-    Write-Host 'Cursor worker requires Git for Windows (Git Bash). Installing via scoop if available...' -ForegroundColor Yellow
-    if (Get-Command scoop -ErrorAction SilentlyContinue) {
-        & scoop install git 2>$null
-        foreach ($bash in $bashCandidates) {
-            if (Test-Path $bash) { return }
-        }
-    }
-    Write-Host 'Install Git for Windows from https://git-scm.com/download/win and re-run this script.' -ForegroundColor Yellow
 }
 
 function Ensure-AgentCli {
