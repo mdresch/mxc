@@ -51,6 +51,29 @@ function Test-AgentCli {
     return $null
 }
 
+function Ensure-GitBashForWorker {
+    $bashCandidates = @(
+        (Join-Path ${env:ProgramFiles} 'Git\bin\bash.exe'),
+        (Join-Path ${env:ProgramFiles(x86)} 'Git\bin\bash.exe'),
+        (Join-Path $env:LOCALAPPDATA 'Programs\Git\bin\bash.exe')
+    )
+    foreach ($bash in $bashCandidates) {
+        if (Test-Path $bash) {
+            Write-Host "Git Bash found: $bash"
+            return
+        }
+    }
+
+    Write-Host 'Cursor worker requires Git for Windows (Git Bash). Installing via scoop if available...' -ForegroundColor Yellow
+    if (Get-Command scoop -ErrorAction SilentlyContinue) {
+        & scoop install git 2>$null
+        foreach ($bash in $bashCandidates) {
+            if (Test-Path $bash) { return }
+        }
+    }
+    Write-Host 'Install Git for Windows from https://git-scm.com/download/win and re-run this script.' -ForegroundColor Yellow
+}
+
 function Ensure-AgentCli {
     $existing = Test-AgentCli
     if ($existing) {
@@ -130,6 +153,7 @@ function Ensure-GuestGitRepo {
     Push-Location $Dir
     try {
         & git init
+        & git branch -M main 2>$null
         & git remote add origin $RemoteUrl
         & git add -A
         & git -c user.email='mxc-hyperv@guest.local' -c user.name='MXC Hyper-V Guest' commit -m 'mxc-sync baseline' 2>$null
@@ -146,6 +170,7 @@ if (-not (Test-Path $WorkerDir)) {
 }
 
 Ensure-GuestGitRepo -Dir $WorkerDir -RemoteUrl $RepoRemoteUrl
+Ensure-GitBashForWorker
 
 $agentExe = Ensure-AgentCli
 
@@ -163,12 +188,18 @@ if (-not $SkipScheduledTask) {
         $workerArgs += " --api-key `"$resolvedKey`""
     }
 
+    $agentLine = if ($agentExe -like '*.ps1') {
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$agentExe`" $workerArgs"
+    } else {
+        "`"$agentExe`" $workerArgs"
+    }
+
     @"
 @echo off
 setlocal
 cd /d "$WorkerDir"
 echo [%DATE% %TIME%] Starting Cursor My Machines worker ($WorkerName) >> "$logDir\worker.log"
-"$agentExe" $workerArgs >> "$logDir\worker.log" 2>&1
+$agentLine >> "$logDir\worker.log" 2>&1
 "@ | Set-Content -Path $runnerPath -Encoding ASCII
 
     $action = New-ScheduledTaskAction -Execute $runnerPath
