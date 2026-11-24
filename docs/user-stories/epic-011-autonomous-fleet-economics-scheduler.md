@@ -12,7 +12,7 @@ inputs:
 process: "Decompose autonomous fleet economics, host RAM pressure autotuning, and archetype sizing enforcement into testable user stories"
 outputs:
   - "docs/user-stories/epic-011-autonomous-fleet-economics-scheduler.md"
-status: "Approved — Ready for Implementation"
+status: "Closed / Implemented & Validated"
 ---
 
 # Epic 011: Autonomous Fleet Economics & Dynamic Sizing Scheduler
@@ -21,13 +21,13 @@ status: "Approved — Ready for Implementation"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-013](../07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 12.0 | **Topic Pillar:** `TP-11`  
-> **Status:** Approved — Ready for Implementation (2026-11-24)
+> **Status:** Closed / Implemented & Validated (2026-11-24)
 
 ---
 
 ## Story 11.1 — Host RAM Pressure Autotuner & Anti-Thrash Hysteresis Controller
 - **WBS:** 12.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Platform Operations Engineer,  
   **I want** a closed-loop pressure autotuner that monitors host physical RAM utilization and sheds idle lower-priority `WarmPaused` guests to `ColdSaved` above 85% commit while enforcing a 60-second anti-thrash dwell window,  
   **so that** high-density Hyper-V hosts never swap or starve Platinum tenants during burst traffic.
@@ -39,7 +39,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 11.2 — Archetype Sizing Floor Guard & FinOps Cost-per-Session Estimator
 - **WBS:** 12.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** FinOps & Capacity Lead,  
   **I want** image-archetype RAM/vCPU minimums enforced at provisioning time alongside deterministic cost-per-session telemetry per scheduling cycle,  
   **so that** desktop/agent VMs never stall from under-allocation and leadership can track exact unit economics across Hot, Warm, and Cold tiers.

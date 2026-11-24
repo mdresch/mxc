@@ -149,3 +149,15 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   2. Evaluate admission fail-closed in deterministic order: key revocation (`ERR_KEY_REVOKED`) $\rightarrow$ signature (`ERR_SIGNATURE_INVALID`) $\rightarrow$ expiry (`ERR_EXPIRED`) $\rightarrow$ VHDX digest (`ERR_DIGEST_MISMATCH`) $\rightarrow$ SBOM digest & forbidden packages (`ERR_SBOM_INVALID`).
   3. Execute 100% offline with zero network calls (verified with `socket.create_connection` monkeypatched to fail).
   4. Cache verified admissions in `PoolRegistrationGuard` so hot/warm dispatch checks remain O(1) in-memory (`0 ms` crypto overhead).
+
+### LL-012 — Closed-Loop Host RAM Pressure Shedding, Hysteresis Override & Archetype Floor Guards
+- **Epic / Story:** Epic 011 / Stories 11.1 & 11.2 (`spec-11_1-25e32156`, `spec-11_2-98b76e43`)
+- **Scope:** Autonomous fleet economics scheduler, host pressure bands, anti-thrash hysteresis, and archetype sizing floor guard (`scripts/lib/fleet_economics.py`)
+- **Date:** 2026-11-24
+- **Tier 2/3 Propagation Target:** `.claude/skills/fleet-economics/SKILL.md`
+- **The Trap / Problem:** Uniformly blocking all transitions during an anti-thrash dwell window delays emergency RAM shedding during sudden >85% host saturation, while allowing Hyper-V Dynamic Memory on Windows Desktop GUI guests causes silent `MemoryStatus: Low` VMConnect display stalls.
+- **The Root Cause:** Treating emergency OOM protection and routine SLA rebalancing with the same hysteresis rule, and applying headless memory profiles to full GUI images.
+- **Actionable Invariant / Rule:** Enforce `BRU-011-01`..`05` and `AC-11.1.1`..`11.2.2`:
+  1. `CRITICAL` RAM pressure (`>85%`) MUST immediately override dwell hysteresis to shed idle `WarmPaused` guests to `ColdSaved` back to `<=80%`, while strictly preserving `target_hot >= platinum_k_min`.
+  2. Non-critical transitions within `min_dwell_seconds` (`60s`) MUST hold to eliminate NVMe checkpoint thrashing.
+  3. Enforce `desktop_gui >= 4096 MB` static RAM (`dynamic_memory_enabled=False`) and `>= 4` vCPUs, rejecting non-compliant specs with `ERR_ARCHETYPE_FLOOR_VIOLATION`.
