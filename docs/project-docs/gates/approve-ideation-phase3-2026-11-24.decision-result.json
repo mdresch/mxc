@@ -1,0 +1,122 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-ideation",
+  "policy_id": "dcdf7865-7d06-40cd-b282-18c01c3aaed0",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_ideation",
+    "description": "The Phase 3 Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+    "name": null
+  },
+  "decision_margin": 0.7918,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_ideation",
+        "description": "The Phase 3 Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+        "name": null
+      },
+      "expected_utility": 0.9188,
+      "robust_utility": 0.9101,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "problem_definition": {
+          "support": 0.915,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.905
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.9152,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9072
+        },
+        "grounded_scope": {
+          "support": 0.9101,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9011
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+        "name": null
+      },
+      "expected_utility": 0.1325,
+      "robust_utility": 0.1183,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "problem_definition": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.1551,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.1411
+        },
+        "grounded_scope": {
+          "support": 0.1249,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.1109
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_ideation",
+        "description": "The Phase 3 Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+        "name": null
+      },
+      "expected_utility": 0.0512,
+      "robust_utility": 0.0405,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.045,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.035
+        },
+        "problem_definition": {
+          "support": 0.055,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.043
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.0549,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0449
+        },
+        "grounded_scope": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        }
+      }
+    }
+  ]
+}

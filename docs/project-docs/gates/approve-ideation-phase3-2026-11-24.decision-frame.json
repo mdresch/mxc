@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 Stage 1 Ideation (SPARK-MXC-Phase3-v3.0.0): approve, reject, or request revision before Charter and Business Case",
+  "options": [
+    {
+      "action": {
+        "id": "approve_ideation",
+        "description": "The Phase 3 Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/registers/Continuous-Improvement-Register.md",
+          "support": 0.9,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.9,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_ideation",
+        "description": "The Phase 3 Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/registers/Continuous-Improvement-Register.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.87
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.16,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/registers/Continuous-Improvement-Register.md",
+          "support": 0.15,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "strategic_motivation",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Spark and ideation articulate why MXC must advance beyond Phase 2 into a Sovereign Zero-Secret Agentic Execution Fabric and EU Regulated Appliance."
+    },
+    {
+      "id": "problem_definition",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Problems are framed as concrete operational tensions (secret exposure, parallel coding forks, EU AI Act/DORA/NIS2 silos, airgapped on-prem demand, density/GPU limits) rather than premature Charter/Budget commitments."
+    },
+    {
+      "id": "falsifiable_hypotheses",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "HYP-mxc-023..030 (plus carried-forward HYP-mxc-019 and HYP-mxc-021) each state empirical evaluation criteria and remain strictly Formulated."
+    },
+    {
+      "id": "grounded_scope",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Scope remains bounded to Stage 1 intent and hypotheses; Charter, Business Case, Pillars, and Stage 6 ADRs/BRDs/FDDs/Stories are explicitly deferred."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0-candidate"
+  }
+}

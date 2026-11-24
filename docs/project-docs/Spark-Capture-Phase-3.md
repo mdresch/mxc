@@ -13,7 +13,7 @@ inputs:
 process: "Capture Phase 3 strategic catalysts for Sovereign Zero-Secret Agentic Execution, Millisecond Snapshot Forking, EU Compliance Evidence, and MXC Embed Appliance"
 outputs:
   - "docs/project-docs/Spark-Capture-Phase-3.md"
-status: "Draft / Ready for Approval"
+status: "Approved"
 ---
 
 # Spark Capture — Phase 3: Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance
@@ -57,3 +57,11 @@ With Phases 1 and 2 complete (`12/12` Epics, `204` Python contract tests + `83` 
 ## 3. Immediate Next Step (Phase 3 Stage 1 Gate)
 
 Submit `SPARK-MXC-Phase3-v3.0.0` for sponsor approval under `approve-ideation` and select the first Phase 3 Wave (recommended Wave 1: **Epic 013 Zero-Secret + Epic 014 Snapshot Forking / CLI Ergonomics + Epic 015 EU Evidence Ledger**).
+
+---
+
+## 4. Gate Approval Record
+
+- **Gate:** `approve-ideation` (`approve_ideation`, policy `dcdf7865-7d06-40cd-b282-18c01c3aaed0`) — **Approved (`2026-11-24`)**
+- **Adjudication Record:** [approve-ideation-phase3-2026-11-24.adjudication.json](gates/approve-ideation-phase3-2026-11-24.adjudication.json)
+- **Ideation Companion:** [Ideation-Document-Phase-3.md](Ideation-Document-Phase-3.md) (`HYP-mxc-023`..`030` + `HYP-mxc-019`, `HYP-mxc-021` `Formulated`)

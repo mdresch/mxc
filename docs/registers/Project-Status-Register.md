@@ -41,12 +41,12 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 1 Initiated |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 1 Approved |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` (Closed) $\rightarrow$ `PMP-BL-v3.0.0-candidate` |
-| **Session close-off checkpoint** | Phase 2 Formally Closed via `IR-PROP-MXC-Phase2-Closeout` (`OUTCOME-Phase-2-Actual-Outcomes.md` validated, 12/12 Epics complete, 204 Python contracts + 83 Rust Hyper-V tests passing); Phase 3 `SPARK-MXC-Phase3-v3.0.0` drafted |
-| **Current macro Stage** | Stage 18 Phase 2 Closeout Complete $\rightarrow$ Stage 1 (Phase 3 Intent Capture) |
-| **Last Epic/unit of work fully completed** | Phase 2 Closeout (`IR-PROP-MXC-Phase2-Closeout` / `OUTCOME-Phase-2-Actual-Outcomes.md` / `Spark-Capture-Phase-3.md`) |
-| **Next Epic/unit of work to implement** | Approve `Spark-Capture-Phase-3.md` (`SPARK-MXC-Phase3-v3.0.0`) or kick off Phase 3 Wave 1 (`Epic 013` Zero-Secret / `Epic 014` Fork & CLI / `Epic 015` EU Evidence Ledger) |
+| **Session close-off checkpoint** | Phase 3 Stage 1 (`Spark-Capture-Phase-3.md` + `Ideation-Document-Phase-3.md`) Approved via `approve-ideation` (`approve-ideation-phase3-2026-11-24.adjudication.json`), `HYP-mxc-023`..`030` (+ `019`, `021`) Formulated |
+| **Current macro Stage** | Stage 1 Complete (`approve-ideation` Approved) $\rightarrow$ Stage 2 (Charter) & Stage 4 (Business Case / Benefits) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stage 1 (`Spark-Capture-Phase-3.md` & `Ideation-Document-Phase-3.md` Approved via `approve-ideation`) |
+| **Next Epic/unit of work to implement** | Phase 3 Stage 2 (`Project-Charter-Phase-3.md` / `approve-charter`) & Stage 4 (`Benefits-Statement-Phase-3.md` / `approve-business-case`) |
 | **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0-candidate` | Initiating (Stage 1 — `SPARK-MXC-Phase3-v3.0.0` Drafted) | `Spark-Capture-Phase-3.md` (WBS 14.0–18.0, `IMP-MXC-014`..`031`) |
+| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stage 1 Approved (`approve-ideation` 2026-11-24) | [Spark-Capture-Phase-3.md](../project-docs/Spark-Capture-Phase-3.md), [Ideation-Document-Phase-3.md](../project-docs/Ideation-Document-Phase-3.md), [approve-ideation-phase3-2026-11-24.adjudication.json](../project-docs/gates/approve-ideation-phase3-2026-11-24.adjudication.json) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
