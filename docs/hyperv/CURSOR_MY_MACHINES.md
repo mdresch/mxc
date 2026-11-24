@@ -30,7 +30,7 @@ The script will:
 
 1. Start or resume `mxc-hv-6b34439e`
 2. Attach the **Default Switch** for outbound HTTPS (`agent worker` needs Cursor APIs)
-3. Sync the repo to guest `C:\workspace` (`mxc-sync`)
+3. Sync the repo to guest `C:\workspace` (`mxc-sync`) — note: sync **excludes `.git`** for speed; the configure script runs `git init` + `origin` in the guest so My Machines can route `mdresch/mxc`
 4. Install the Cursor CLI in the guest and register scheduled task `MXC-Cursor-MyMachines-Worker`
 
 Guest logs: `%ProgramData%\mxc\cursor-worker\worker.log`
@@ -79,7 +79,8 @@ foreach ($h in 'api2.cursor.sh','api2direct.cursor.sh','api3.cursor.sh','downloa
 | Symptom | Check |
 |---------|--------|
 | Machine missing in picker | `agent worker debug` on guest; task running; same Cursor account as desktop |
-| Wrong repo | `git -C C:\workspace remote -v`; re-run `mxc-sync` |
+| Wrong repo | `git -C C:\workspace remote -v`; re-run configure script or `git remote set-url origin …` |
+| `not a git checkout` after sync | Expected once: re-run configure (bootstraps git). Pull latest `guest_configure_cursor_worker.ps1` |
 | Worker stops after VM pause | Resume VM; `mxc-net-enable`; start scheduled task |
 | JIT pool recycled VM | Re-run `configure_cursor_my_machines.ps1` after `mxc-pool-release` on a fresh lease |
 

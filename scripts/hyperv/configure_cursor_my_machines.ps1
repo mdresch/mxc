@@ -86,13 +86,25 @@ if ($GuestApiKey -and $StoreApiKeyInGuest) {
     mxc-exec-ps -SandboxId $SandboxId "cmdkey /generic:cursor-mxc-agent-api-key /user:cursor /pass:$GuestApiKey"
 }
 
+$repoRemote = git -C $Script:RepoRoot config --get remote.origin.url 2>$null
+if (-not $repoRemote) {
+    $repoRemote = 'https://github.com/mdresch/mxc.git'
+    Write-Host "Host git remote not found; using default $repoRemote" -ForegroundColor Yellow
+}
+
 $guestScriptPath = 'C:\workspace\scripts\hyperv\guest_configure_cursor_worker.ps1'
 Write-Host 'Running guest Cursor worker provisioning...' -ForegroundColor Cyan
+$guestParams = @(
+    '-SandboxId', $SandboxId,
+    'powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass',
+    '-File', $guestScriptPath,
+    '-WorkerName', $WorkerName,
+    '-RepoRemoteUrl', $repoRemote
+)
 if ($GuestApiKey) {
-    mxc-exec -SandboxId $SandboxId powershell.exe -NoProfile -ExecutionPolicy Bypass -File $guestScriptPath -WorkerName $WorkerName -ApiKey $GuestApiKey
-} else {
-    mxc-exec -SandboxId $SandboxId powershell.exe -NoProfile -ExecutionPolicy Bypass -File $guestScriptPath -WorkerName $WorkerName
+    $guestParams += @('-ApiKey', $GuestApiKey)
 }
+& Invoke-MxcGuest @guestParams
 
 Write-Host ''
 Write-Host 'Next steps:' -ForegroundColor Green

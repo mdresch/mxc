@@ -19,6 +19,10 @@
 .PARAMETER ApiKey
     Optional personal user API key for non-interactive worker start.
 
+.PARAMETER RepoRemoteUrl
+    Git remote registered with the worker. Required when mxc-sync mirrored the tree
+    without .git (sync excludes .git by design).
+
 .PARAMETER SkipScheduledTask
     Install CLI only; do not register the worker scheduled task.
 #>
@@ -30,6 +34,8 @@ param(
     [string]$WorkerDir = 'C:\workspace',
 
     [string]$ApiKey,
+
+    [string]$RepoRemoteUrl = 'https://github.com/mdresch/mxc.git',
 
     [switch]$SkipScheduledTask
 )
@@ -102,14 +108,44 @@ public class MxcCursorCred {
     return [MxcCursorCred]::ReadPassword('cursor-mxc-agent-api-key')
 }
 
+function Ensure-GuestGitRepo {
+    param(
+        [string]$Dir,
+        [string]$RemoteUrl
+    )
+
+    if (Test-Path (Join-Path $Dir '.git')) {
+        $existing = git -C $Dir config --get remote.origin.url 2>$null
+        if (-not $existing -and $RemoteUrl) {
+            git -C $Dir remote add origin $RemoteUrl
+        }
+        return
+    }
+
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        throw 'git is not on PATH in the guest. Run guest_bake_tools.ps1 or scoop install git first.'
+    }
+
+    Write-Host "mxc-sync omits .git; bootstrapping guest repo at $Dir with remote $RemoteUrl"
+    Push-Location $Dir
+    try {
+        & git init
+        & git remote add origin $RemoteUrl
+        & git add -A
+        & git -c user.email='mxc-hyperv@guest.local' -c user.name='MXC Hyper-V Guest' commit -m 'mxc-sync baseline' 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host 'No commit created (empty tree or commit failed); remote.origin is still registered.' -ForegroundColor Yellow
+        }
+    } finally {
+        Pop-Location
+    }
+}
+
 if (-not (Test-Path $WorkerDir)) {
     throw "Worker directory not found: $WorkerDir. Run mxc-sync from the Hyper-V host first."
 }
 
-$gitDir = Join-Path $WorkerDir '.git'
-if (-not (Test-Path $gitDir)) {
-    throw "Worker directory is not a git checkout: $WorkerDir"
-}
+Ensure-GuestGitRepo -Dir $WorkerDir -RemoteUrl $RepoRemoteUrl
 
 $agentExe = Ensure-AgentCli
 
