@@ -321,6 +321,14 @@ cargo test --features hyperv -p mxc-sdk --lib pool::tests
 cargo build --features hyperv -p wxc --bin wxc-exec
 ```
 
+### Cursor Cloud Agents on a guest VM
+
+To run Cursor Cloud Agent tool calls inside a sandbox (for example `mxc-hv-6b34439e`), see [CURSOR_MY_MACHINES.md](CURSOR_MY_MACHINES.md). From the Hyper-V host:
+
+```powershell
+.\scripts\hyperv\configure_cursor_my_machines.ps1 -VmToken 6b34439e
+```
+
 ### Step 4: Safeguard Clean Development State
 Whenever your guest toolchain is updated or clean, stamp a checkpoint:
 ```powershell
