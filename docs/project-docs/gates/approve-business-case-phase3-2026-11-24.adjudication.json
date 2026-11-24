@@ -1,0 +1,148 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-business-case",
+  "policy_id": "91a33a4f-7d22-43e1-85ff-51026f350df0",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 3 Stage 4 Business Case and Benefits Statement alongside approve-business-case gate execution.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_business_case",
+    "description": "The Phase 3 Business Case and Benefits Statement align honestly with Formulated hypotheses and capital discipline -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.7819,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_business_case",
+        "description": "The Phase 3 Business Case and Benefits Statement align honestly with Formulated hypotheses and capital discipline -- approve",
+        "name": null
+      },
+      "expected_utility": 0.9111,
+      "robust_utility": 0.9019,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "benefit_expectations": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        },
+        "financial_justification": {
+          "support": 0.8901,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.8801
+        },
+        "risk_assessment": {
+          "support": 0.9001,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.8901
+        },
+        "business_alternatives": {
+          "support": 0.9152,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9062
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Business Case needs stronger risk/alternative grounding before approval",
+        "name": null
+      },
+      "expected_utility": 0.135,
+      "robust_utility": 0.12,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "benefit_expectations": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "financial_justification": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "risk_assessment": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "business_alternatives": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_business_case",
+        "description": "The Phase 3 Business Case lacks viable justification or relies on fabricated metrics -- reject",
+        "name": null
+      },
+      "expected_utility": 0.0549,
+      "robust_utility": 0.0439,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.0549,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.0439
+        },
+        "benefit_expectations": {
+          "support": 0.0549,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.0439
+        },
+        "financial_justification": {
+          "support": 0.0549,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.0439
+        },
+        "risk_assessment": {
+          "support": 0.0549,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.0439
+        },
+        "business_alternatives": {
+          "support": 0.0549,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.0439
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-24T20:46:57.856769+00:00",
+  "artifacts": [
+    "docs/project-docs/Business-Case-Phase-3.md",
+    "docs/project-docs/Benefits-Statement-Phase-3.md"
+  ]
+}

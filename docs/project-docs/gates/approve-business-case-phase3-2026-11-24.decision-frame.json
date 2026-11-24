@@ -1,0 +1,254 @@
+{
+  "task": "Phase 3 Stage 4 Business Case & Benefits Statement (BEN-19..24): approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_business_case",
+        "description": "The Phase 3 Business Case and Benefits Statement align honestly with Formulated hypotheses and capital discipline -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.9,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Project-Charter-Phase-2.md",
+          "support": 0.88,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-3.md",
+          "support": 0.89,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.9,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_business_case",
+        "description": "The Phase 3 Business Case lacks viable justification or relies on fabricated metrics -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.06,
+          "confidence": 0.87
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Business Case needs stronger risk/alternative grounding before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "hypothesis_benefit_linkage",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each claimed benefit traces to named Formulated hypotheses (HYP-mxc-023..030, 019, 021) without claiming unverified realization."
+    },
+    {
+      "id": "benefit_expectations",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Operational benefit expectations (BEN-19..24) match concrete ceilings from Ideation-Document-Phase-3.md."
+    },
+    {
+      "id": "financial_justification",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Investment bound carries forward USD 50,000 PM authority / $0 new external capital and explicitly excludes unvalidated commercial ROI."
+    },
+    {
+      "id": "risk_assessment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Material technical, hardware-heterogeneity, and density risks are named and tied to open hypotheses."
+    },
+    {
+      "id": "business_alternatives",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Do-Nothing Phase 2, Cloud SaaS Micro-VMs, and Static Guest Credentials are compared against MXC Phase 3, naming boundaries honestly."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0-candidate"
+  }
+}

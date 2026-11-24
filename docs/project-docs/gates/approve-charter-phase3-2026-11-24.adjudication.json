@@ -1,0 +1,147 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-charter",
+  "policy_id": "8ec22760-9d76-4683-b1ff-fa4a847b73a1",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 3 Stage 2 Project Charter alongside approve-charter gate execution.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_charter",
+    "description": "The Phase 3 Project Charter authorizes clear governance authority, measurable objectives (WBS 14.0-18.0), and scope boundaries -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8032,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_charter",
+        "description": "The Phase 3 Project Charter authorizes clear governance authority, measurable objectives (WBS 14.0-18.0), and scope boundaries -- approve",
+        "name": null
+      },
+      "expected_utility": 0.923,
+      "robust_utility": 0.9142,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "sponsor_authority": {
+          "support": 0.9101,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9011
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.94,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.932
+        },
+        "scope_boundaries": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        },
+        "independent_approval_readiness": {
+          "support": 0.915,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.905
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Project Charter requires clarification of exclusions, authority, or benefit alignment before approval",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.111,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "sponsor_authority": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "scope_boundaries": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "independent_approval_readiness": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_charter",
+        "description": "The Phase 3 Project Charter lacks sponsor authority or coherent objectives -- reject",
+        "name": null
+      },
+      "expected_utility": 0.0449,
+      "robust_utility": 0.0349,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.0449,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0349
+        },
+        "sponsor_authority": {
+          "support": 0.0449,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0349
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.0449,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0349
+        },
+        "scope_boundaries": {
+          "support": 0.0449,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0349
+        },
+        "independent_approval_readiness": {
+          "support": 0.0449,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0349
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-24T20:46:57.862766+00:00",
+  "artifacts": [
+    "docs/project-docs/Project-Charter-Phase-3.md"
+  ]
+}

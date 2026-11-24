@@ -1,0 +1,254 @@
+{
+  "task": "Phase 3 Stage 2 Project Charter (WBS 14.0-18.0): approve, reject, or request revision before Stage 5 Pillars",
+  "options": [
+    {
+      "action": {
+        "id": "approve_charter",
+        "description": "The Phase 3 Project Charter authorizes clear governance authority, measurable objectives (WBS 14.0-18.0), and scope boundaries -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-2.md",
+          "support": 0.9,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "user-authorized Stage 2 Charter gate execution (2026-11-24)",
+          "support": 0.92,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_charter",
+        "description": "The Phase 3 Project Charter lacks sponsor authority or coherent objectives -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Business-Case-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 Project Charter requires clarification of exclusions, authority, or benefit alignment before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.13,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "strategic_purpose",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Charter states clear Phase 3 purpose grounded in Spark-Capture-Phase-3.md and Business-Case-Phase-3.md."
+    },
+    {
+      "id": "sponsor_authority",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Project Sponsor, PM/Lead Architect, Benefit Owner, USD 50,000 spending authority ($0 new external capital), and Steering Committee are defined."
+    },
+    {
+      "id": "measurable_benefit_alignment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Charter objectives and BEN-19..24 table match Benefits-Statement-Phase-3.md verbatim."
+    },
+    {
+      "id": "scope_boundaries",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "In-scope WBS 14.0-18.0, explicit exclusions (no custom IdP, no WAN live migration, no SaaS hosting), and hardware dependencies are clear."
+    },
+    {
+      "id": "independent_approval_readiness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Steering Committee and human sponsor governance authority are documented and ready for Stage 5 Pillars & Stage 6 Decomposition."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0-candidate"
+  }
+}

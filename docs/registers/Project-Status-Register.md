@@ -41,12 +41,12 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 1 Approved |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stages 1–4 Approved |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` (Closed) $\rightarrow$ `PMP-BL-v3.0.0-candidate` |
-| **Session close-off checkpoint** | Phase 3 Stage 1 (`Spark-Capture-Phase-3.md` + `Ideation-Document-Phase-3.md`) Approved via `approve-ideation` (`approve-ideation-phase3-2026-11-24.adjudication.json`), `HYP-mxc-023`..`030` (+ `019`, `021`) Formulated |
-| **Current macro Stage** | Stage 1 Complete (`approve-ideation` Approved) $\rightarrow$ Stage 2 (Charter) & Stage 4 (Business Case / Benefits) |
-| **Last Epic/unit of work fully completed** | Phase 3 Stage 1 (`Spark-Capture-Phase-3.md` & `Ideation-Document-Phase-3.md` Approved via `approve-ideation`) |
-| **Next Epic/unit of work to implement** | Phase 3 Stage 2 (`Project-Charter-Phase-3.md` / `approve-charter`) & Stage 4 (`Benefits-Statement-Phase-3.md` / `approve-business-case`) |
+| **Session close-off checkpoint** | Phase 3 Stages 1–4 Approved (`Spark-Capture-Phase-3.md`, `Ideation-Document-Phase-3.md`, `Business-Case-Phase-3.md`, `Benefits-Statement-Phase-3.md`, `Project-Charter-Phase-3.md` via `approve-ideation`, `approve-business-case`, `approve-charter` on `2026-11-24`) |
+| **Current macro Stage** | Stages 1–4 Complete (`approve-charter` & `approve-business-case` Approved) $\rightarrow$ Stage 5 (Pillars) & Stage 6 (ADR / BRD / FDD / Stories) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stage 2 & Stage 4 (`Business-Case-Phase-3.md`, `Benefits-Statement-Phase-3.md`, `Project-Charter-Phase-3.md` Approved) |
+| **Next Epic/unit of work to implement** | Phase 3 Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 (ADR / BRD / FDD / User Stories for `Epics 013–017`) |
 | **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stage 1 Approved (`approve-ideation` 2026-11-24) | [Spark-Capture-Phase-3.md](../project-docs/Spark-Capture-Phase-3.md), [Ideation-Document-Phase-3.md](../project-docs/Ideation-Document-Phase-3.md), [approve-ideation-phase3-2026-11-24.adjudication.json](../project-docs/gates/approve-ideation-phase3-2026-11-24.adjudication.json) |
+| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stages 1–4 Approved (`approve-ideation`, `approve-business-case`, `approve-charter` 2026-11-24) | [Project-Charter-Phase-3.md](../project-docs/Project-Charter-Phase-3.md), [Business-Case-Phase-3.md](../project-docs/Business-Case-Phase-3.md), [Benefits-Statement-Phase-3.md](../project-docs/Benefits-Statement-Phase-3.md) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
