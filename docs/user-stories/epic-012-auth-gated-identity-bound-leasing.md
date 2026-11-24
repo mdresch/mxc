@@ -12,7 +12,7 @@ inputs:
 process: "Decompose ADR-008 authentication-gated provisioning, deny-by-default claims routing, and TTL-bounded identity-bound VM leasing into testable user stories"
 outputs:
   - "docs/user-stories/epic-012-auth-gated-identity-bound-leasing.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 012: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing (`ADR-008`)
@@ -21,7 +21,7 @@ status: "Proposed — Ready for Gate Approval"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-008](../07-architecture/ADR-008-authentication-gated-session-provisioning.md) (Accepted 2026-11-04)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 3.4 / 13.0 | **Topic Pillars:** `TP-02` & `TP-05`  
-> **Status:** Proposed — Ready for Gate Approval
+> **Status:** Approved — Ready for Implementation (2026-11-24)
 
 ---
 

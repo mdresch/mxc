@@ -11,7 +11,7 @@ inputs:
 process: "Specify the closed-loop fleet economics scheduler, host pressure bands, archetype sizing guards, and anti-thrash hysteresis state machine"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-011-autonomous-fleet-economics-scheduler.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-011: Autonomous Fleet Economics & Dynamic Sizing Scheduler
@@ -24,7 +24,7 @@ status: "Proposed"
 **Source ADR:** [ADR-013](../../07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md)  
 **Source BRD:** [BRD-011](../Business-Requirements/BRD-011-autonomous-fleet-economics-scheduler.md)  
 **Governing Baseline:** `PMP-BL-v2.0.0`  
-**Status:** Proposed
+**Status:** Approved (2026-11-24)
 
 ---
 

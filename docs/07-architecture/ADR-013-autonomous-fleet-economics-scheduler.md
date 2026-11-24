@@ -18,7 +18,7 @@ inputs:
 process: "Formulate architectural decisions for autonomous fleet-level economics, host RAM pressure feedback control, and dynamic Hot/Warm/Cold sizing"
 outputs:
   - "docs/07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 013: Autonomous Fleet Economics & Dynamic Sizing Scheduler

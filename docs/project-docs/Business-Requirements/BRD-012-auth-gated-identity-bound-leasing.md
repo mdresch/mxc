@@ -14,7 +14,7 @@ inputs:
 process: "Define business requirements, claims-mapping guardrails, and binding-expiry rules for ADR-008 authentication-gated provisioning and identity-bound VM leasing"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-012-auth-gated-identity-bound-leasing.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # BRD-012: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing
@@ -26,7 +26,7 @@ status: "Proposed"
 
 **Source ADR:** [ADR-008](../../07-architecture/ADR-008-authentication-gated-session-provisioning.md) — Authentication-Gated Session Provisioning & Identity-Bound VM Leasing (Accepted 2026-11-04)  
 **Governing Baseline:** `PMP-BL-v2.0.0`  
-**Status:** Proposed  
+**Status:** Approved (2026-11-24)  
 **Stakeholders:** Menno Drescher (Product Owner / Architect), Enterprise IAM / Identity Team, CISO / SecOps
 
 ---

@@ -11,7 +11,7 @@ inputs:
 process: "Specify the auth_gated ingress state machine, claims-to-pool-target resolver, identity-bound lease table, and mandatory binding expiry sweeper"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-012-auth-gated-identity-bound-leasing.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-012: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing
@@ -24,7 +24,7 @@ status: "Proposed"
 **Source ADR:** [ADR-008](../../07-architecture/ADR-008-authentication-gated-session-provisioning.md)  
 **Source BRD:** [BRD-012](../Business-Requirements/BRD-012-auth-gated-identity-bound-leasing.md)  
 **Governing Baseline:** `PMP-BL-v2.0.0`  
-**Status:** Proposed *(Resolves the mandatory binding-expiry follow-up named in `ADR-008 §4.5`)*
+**Status:** Approved (2026-11-24) *(Resolves the mandatory binding-expiry follow-up named in `ADR-008 §4.5`)*
 
 ---
 

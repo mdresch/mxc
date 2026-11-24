@@ -1,0 +1,23 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-stage6-epics-010-012",
+  "pmp_baseline": "PMP-BL-v2.0.0",
+  "date": "2026-11-24",
+  "status": "resolved",
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "reason": "Human project sponsor explicitly approved Stage 6 ADRs, BRDs, FDDs, and User Stories for Epic 010, Epic 011, and ADR-008 (Epic 012).",
+  "approved_artifacts": [
+    "docs/07-architecture/ADR-012-cryptographic-supply-chain-slsa.md",
+    "docs/07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md",
+    "docs/project-docs/Business-Requirements/BRD-010-cryptographic-supply-chain-slsa.md",
+    "docs/project-docs/Business-Requirements/BRD-011-autonomous-fleet-economics-scheduler.md",
+    "docs/project-docs/Business-Requirements/BRD-012-auth-gated-identity-bound-leasing.md",
+    "docs/project-docs/Functional-Design/FDD-010-cryptographic-supply-chain-slsa.md",
+    "docs/project-docs/Functional-Design/FDD-011-autonomous-fleet-economics-scheduler.md",
+    "docs/project-docs/Functional-Design/FDD-012-auth-gated-identity-bound-leasing.md",
+    "docs/user-stories/epic-010-cryptographic-supply-chain-slsa.md",
+    "docs/user-stories/epic-011-autonomous-fleet-economics-scheduler.md",
+    "docs/user-stories/epic-012-auth-gated-identity-bound-leasing.md"
+  ]
+}

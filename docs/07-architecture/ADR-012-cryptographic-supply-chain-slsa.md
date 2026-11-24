@@ -17,7 +17,7 @@ inputs:
 process: "Formulate architectural decisions for end-to-end cryptographic golden-image supply chain, SBOM generation, SLSA Level 3 provenance, and pre-dispatch signature verification"
 outputs:
   - "docs/07-architecture/ADR-012-cryptographic-supply-chain-slsa.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 012: Cryptographic Image Supply Chain, Signed SBOM & SLSA Level 3 Attestation

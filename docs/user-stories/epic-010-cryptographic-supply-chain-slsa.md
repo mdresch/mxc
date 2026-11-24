@@ -12,7 +12,7 @@ inputs:
 process: "Decompose cryptographic image supply chain, signed SBOM generation, and PoolRegistrationGuard admission gate into testable user stories"
 outputs:
   - "docs/user-stories/epic-010-cryptographic-supply-chain-slsa.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 010: Cryptographic Image Supply Chain & Signed SBOM Attestation
@@ -21,7 +21,7 @@ status: "Proposed — Ready for Gate Approval"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-012](../07-architecture/ADR-012-cryptographic-supply-chain-slsa.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 11.0 | **Topic Pillar:** `TP-10`  
-> **Status:** Proposed — Ready for Gate Approval
+> **Status:** Approved — Ready for Implementation (2026-11-24)
 
 ---
 

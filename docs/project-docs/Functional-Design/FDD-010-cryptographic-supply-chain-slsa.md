@@ -11,7 +11,7 @@ inputs:
 process: "Specify SLSA provenance envelope schema, SBOM generator interface, offline Ed25519/Cosign verifier, and PoolRegistrationGuard fail-closed contracts"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-010-cryptographic-supply-chain-slsa.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-010: Cryptographic Image Supply Chain & Signed SBOM Attestation
@@ -24,7 +24,7 @@ status: "Proposed"
 **Source ADR:** [ADR-012](../../07-architecture/ADR-012-cryptographic-supply-chain-slsa.md)  
 **Source BRD:** [BRD-010](../Business-Requirements/BRD-010-cryptographic-supply-chain-slsa.md)  
 **Governing Baseline:** `PMP-BL-v2.0.0`  
-**Status:** Proposed
+**Status:** Approved (2026-11-24)
 
 ---
 

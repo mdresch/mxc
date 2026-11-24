@@ -13,7 +13,7 @@ inputs:
 process: "Define business requirements and compliance rules for cryptographic golden-image supply chain, SBOM attestation, and fail-closed pool admission"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-010-cryptographic-supply-chain-slsa.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # BRD-010: Cryptographic Image Supply Chain & Signed SBOM Attestation
@@ -25,7 +25,7 @@ status: "Proposed"
 
 **Source ADR:** [ADR-012](../../07-architecture/ADR-012-cryptographic-supply-chain-slsa.md) — Cryptographic Image Supply Chain, Signed SBOM & SLSA Level 3 Attestation  
 **Governing Baseline:** `PMP-BL-v2.0.0`  
-**Status:** Proposed  
+**Status:** Approved (2026-11-24)  
 **Stakeholders:** Menno Drescher (Product Owner / Architect), CISO / SecOps, Enterprise Compliance (EU AI Act / DORA / NIS2)
 
 ---

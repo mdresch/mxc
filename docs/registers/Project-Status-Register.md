@@ -71,7 +71,9 @@ caused this, both worth guarding against here:
 | Epic 007 | Multi-tier standby pools (Hot, Warm, Cold) | Phase 2 | Complete | Story 7.1, Story 7.2, Story 7.3 (3/3) |
 | Epic 008 | Predictive wake interception and activity forecasting | Phase 2 | Complete | Story 8.1, Story 8.2 (2/2) |
 | Epic 009 | Hyper-V memory combining and deduplication | Phase 2 | Complete | Story 9.1, Story 9.2 (2/2) |
-| Epic 010 | Cryptographic image supply chain and SLSA attestation | Phase 2 | Ready for Implementation | Pending Story 10.1 |
+| Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Approved — Ready for Implementation | Pending Story 10.1 (`BRD-010` / `FDD-010` Approved) |
+| Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Approved — Ready for Implementation | Pending Story 11.1 (`BRD-011` / `FDD-011` Approved) |
+| Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Approved — Ready for Implementation | Pending Story 12.1 (`BRD-012` / `FDD-012` Approved) |
 
 ## 4. How to keep this current
 

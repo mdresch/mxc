@@ -12,7 +12,7 @@ inputs:
 process: "Decompose autonomous fleet economics, host RAM pressure autotuning, and archetype sizing enforcement into testable user stories"
 outputs:
   - "docs/user-stories/epic-011-autonomous-fleet-economics-scheduler.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 011: Autonomous Fleet Economics & Dynamic Sizing Scheduler
@@ -21,7 +21,7 @@ status: "Proposed — Ready for Gate Approval"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-013](../07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 12.0 | **Topic Pillar:** `TP-11`  
-> **Status:** Proposed — Ready for Gate Approval
+> **Status:** Approved — Ready for Implementation (2026-11-24)
 
 ---
 
