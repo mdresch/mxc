@@ -146,7 +146,7 @@ var SCENARIOS: Scenario[] = [
     description: 'Makes an HTTPS request with outbound network enabled.',
     expectedOutcome: 'succeed', expectedLabel: 'Should succeed',
     script: 'curl.exe -s --max-time 10 https://www.example.com',
-    policy: { network: { egress: { default: 'allow' } }, ui: { allowWindows: true } },
+    policy: { network: { allowOutbound: true }, ui: { allowWindows: true } },
     successMarker: 'Example Domain' },
   { id: 'cmd-net-blocked', name: 'Internet blocked', category: 'Network Tests', categoryIcon: '🌐', shell: 'cmd',
     description: 'Tries to reach example.com with no network access. Should fail.',
@@ -207,7 +207,7 @@ var SCENARIOS: Scenario[] = [
     description: 'Makes an HTTPS request with outbound network enabled.',
     expectedOutcome: 'succeed', expectedLabel: 'Should succeed',
     script: 'powershell.exe -NoProfile -Command "$ProgressPreference=\'SilentlyContinue\'; (Invoke-WebRequest -Uri \'https://www.example.com\' -UseBasicParsing -TimeoutSec 10).Content"',
-    policy: { network: { egress: { default: 'allow' } }, ui: { allowWindows: true } },
+    policy: { network: { allowOutbound: true }, ui: { allowWindows: true } },
     successMarker: 'Example Domain' },
   { id: 'ps51-net-blocked',name: 'Internet blocked', category: 'Network Tests', categoryIcon: '🌐', shell: 'ps51',
     description: 'Tries to make an HTTPS request with no network access. Should fail.',
@@ -263,7 +263,7 @@ var SCENARIOS: Scenario[] = [
     description: 'Makes an HTTPS request with outbound network enabled.',
     expectedOutcome: 'succeed', expectedLabel: 'Should succeed',
     script: 'pwsh.exe -NoProfile -Command "(Invoke-WebRequest -Uri \'https://www.example.com\' -UseBasicParsing -TimeoutSec 10).Content"',
-    policy: { network: { egress: { default: 'allow' } }, ui: { allowWindows: true } },
+    policy: { network: { allowOutbound: true }, ui: { allowWindows: true } },
     successMarker: 'Example Domain' },
   { id: 'ps7-net-blocked', name: 'Internet blocked', category: 'Network Tests', categoryIcon: '🌐', shell: 'ps7',
     description: 'Tries to make an HTTPS request with no network access. Should fail.',
@@ -314,7 +314,7 @@ var SCENARIOS: Scenario[] = [
     description: 'Makes an HTTPS request with outbound network enabled.',
     expectedOutcome: 'succeed', expectedLabel: 'Should succeed',
     script: 'python -c "import urllib.request; print(urllib.request.urlopen(\'https://www.example.com\',timeout=10).read().decode()[:200])"',
-    policy: { network: { egress: { default: 'allow' } }, ui: { allowWindows: true } },
+    policy: { network: { allowOutbound: true }, ui: { allowWindows: true } },
     successMarker: 'Example Domain' },
   { id: 'py-net-blocked', name: 'Internet blocked', category: 'Network Tests', categoryIcon: '🌐', shell: 'python',
     description: 'Tries to make an HTTPS request with no network access. Should fail.',
@@ -668,7 +668,7 @@ function isAdvancedNeeded(): boolean {
 // ============================================================
 
 function buildPolicy(): any {
-  var policy: any = {};
+  var policy: any = { version: state.version };
 
   // Filesystem
   if (state.fsEnabled) {
@@ -683,19 +683,19 @@ function buildPolicy(): any {
 
   // Network
   if (state.netEnabled) {
-    policy.network = { egress: { default: 'allow' } };
+    policy.network = { allowOutbound: true };
     var proxyVal = $sel('proxySelect').value;
     if (proxyVal === 'builtin') {
-      policy.runtimeConfig = { networkProxy: 'http://127.0.0.1:8888' };
+      policy.network.proxy = { builtinTestServer: true };
     } else if (proxyVal === 'localhost') {
       var port = parseInt($num('proxyPort').value, 10);
       if (port > 0 && port <= 65535) {
-        policy.runtimeConfig = { networkProxy: 'http://127.0.0.1:' + port };
+        policy.network.proxy = { localhost: port };
       }
     } else if (proxyVal === 'url') {
       var urlVal = ($('proxyUrl') as HTMLInputElement).value.trim();
       if (urlVal) {
-        policy.runtimeConfig = { networkProxy: urlVal };
+        policy.network.proxy = { url: urlVal };
       }
     }
   }
@@ -1130,16 +1130,12 @@ function loadScenario(id: string): void {
   refreshPathLists();
 
   // Network
-  state.netEnabled = !!(scenario.policy.network && (scenario.policy.network.allowOutbound || scenario.policy.network.egress));
+  state.netEnabled = !!(scenario.policy.network && scenario.policy.network.allowOutbound);
   $chk('netToggle').checked = state.netEnabled;
 
   // Proxy
-  var p = scenario.policy.network?.proxy;
-  var proxyUrl = scenario.policy.runtimeConfig?.networkProxy;
-  if (proxyUrl) {
-    $sel('proxySelect').value = 'url';
-    ($('proxyUrl') as HTMLInputElement).value = proxyUrl;
-  } else if (p) {
+  if (scenario.policy.network && scenario.policy.network.proxy) {
+    var p = scenario.policy.network.proxy;
     if (p.builtinTestServer) {
       $sel('proxySelect').value = 'builtin';
     } else if (p.localhost) {
@@ -2016,12 +2012,11 @@ function updateDevSidebar(): void {
       var config = JSON.parse(result.config);
       config.process.commandLine = getCurrentScript();
       // Overlay advanced process container UI fields
-      var pc = config.processContainer || config.appContainer;
-      if (pc && pc.ui) {
-        pc.ui.isolation = $sel('uiIsolation').value || 'container';
-        pc.ui.desktopSystemControl = $chk('uiDesktopControl').checked || false;
-        pc.ui.systemSettings = $sel('uiSystemSettings').value || 'none';
-        pc.ui.ime = $chk('uiIME').checked || false;
+      if (config.appContainer && config.appContainer.ui) {
+        config.appContainer.ui.isolation = $sel('uiIsolation').value || 'container';
+        config.appContainer.ui.desktopSystemControl = $chk('uiDesktopControl').checked || false;
+        config.appContainer.ui.systemSettings = $sel('uiSystemSettings').value || 'none';
+        config.appContainer.ui.ime = $chk('uiIME').checked || false;
       }
       var formatted = JSON.stringify(config, null, 2);
       $('devConfigJson').innerHTML = highlightJson(escapeHtml(formatted));

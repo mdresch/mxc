@@ -10,8 +10,6 @@ pub enum Containment {
     WindowsSandbox,
     /// WSL container backend.
     Wslc,
-    /// Hyper-V backend.
-    HyperV,
 }
 
 impl Containment {
@@ -21,7 +19,6 @@ impl Containment {
             Containment::IsolationSession => "isolation_session",
             Containment::WindowsSandbox => "windows_sandbox",
             Containment::Wslc => "wslc",
-            Containment::HyperV => "hyperv",
         }
     }
 
@@ -33,7 +30,6 @@ impl Containment {
             "isolation_session" => Some(Containment::IsolationSession),
             "windows_sandbox" => Some(Containment::WindowsSandbox),
             "wslc" => Some(Containment::Wslc),
-            "hyperv" => Some(Containment::HyperV),
             _ => None,
         }
     }
@@ -110,12 +106,6 @@ mod tests {
     fn probe_accepts_wslc() {
         let json = r#"{"containment": "wslc"}"#;
         assert_eq!(probe_containment(json).unwrap(), Containment::Wslc);
-    }
-
-    #[test]
-    fn probe_accepts_hyperv() {
-        let json = r#"{"containment": "hyperv"}"#;
-        assert_eq!(probe_containment(json).unwrap(), Containment::HyperV);
     }
 
     #[test]

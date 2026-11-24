@@ -181,8 +181,7 @@ that can be executed independently.
 ```json
 {
     "version": "1.0.0",                    // Exact schema version. Minimum supported: "0.9.0-alpha"; current stable: "1.0.0".
-    "containerId": "my-container",         // Optional externally assigned container ID.
-                                           //  Omit it to use backend-defined internal naming.
+    "containerId": "my-container",         // Externally assigned container ID
     "containment": "processcontainer",     // Backend (see table below)
 
     "lifecycle": {

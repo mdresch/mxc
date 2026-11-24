@@ -838,7 +838,7 @@ mod tests {
     ) -> CaptureVerboseLoggingSignature {
         CaptureVerboseLoggingSignature {
             provider: CaptureVerboseLoggingProvider::LearningModeNetworkDecision,
-            provider_guid: "{301EC03D-2951-5EFB-6D99-59C64628BBFC}".to_string(),
+            provider_guid: "{71237669-21C3-4101-BD2F-FF38945D725A}".to_string(),
             event_id: 1,
             event_name: Some("NetworkDecisionV1".to_string()),
             reason,
@@ -982,7 +982,7 @@ mod tests {
             "signatures": [{
                 "signature": {
                     "provider": "learningModeNetworkDecision",
-                    "providerGuid": "{301EC03D-2951-5EFB-6D99-59C64628BBFC}",
+                    "providerGuid": "{71237669-21C3-4101-BD2F-FF38945D725A}",
                     "eventId": 1,
                     "eventName": "NetworkDecisionV1",
                     "reason": "schemaUnavailable",

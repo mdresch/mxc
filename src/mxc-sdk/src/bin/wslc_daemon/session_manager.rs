@@ -16,9 +16,7 @@
 //! utility VM, booted lazily on first provision and amortised across all
 //! sandboxes) and a refcounted `sandbox_id -> container` map. The session is
 //! released when the last container is deprovisioned and the idle timeout
-//! elapses. Its image store is leased from
-//! [`mxc_sdk::wslc_common::store_slots`], which keeps the daemon off the store
-//! create-and-run execution defaults to.
+//! elapses.
 //!
 //! Each phase drives the real WSLc SDK via the reusable steps in
 //! [`mxc_sdk::wslc_common::container_steps`] and [`mxc_sdk::wslc_common::image`]: `provision`
@@ -49,7 +47,6 @@ use mxc_sdk::wslc_common::daemon_protocol::{
 use mxc_sdk::wslc_common::image;
 use mxc_sdk::wslc_common::policy_mapping;
 use mxc_sdk::wslc_common::process_env::EnvScope;
-use mxc_sdk::wslc_common::store_slots::{self, StoreSlotError, StoreSlotLease, StoreSlotPool};
 use mxc_sdk::wslc_common::wslc_bindings::{
     WslcContainer, WslcContainerGuard, WslcContainerNetworkingMode, WslcSdk, WslcSessionGuard,
 };
@@ -77,6 +74,15 @@ fn wait_for_execs_in_flight(in_flight: &AtomicUsize, budget: Duration) -> bool {
         std::thread::sleep(Duration::from_millis(50));
     }
     true
+}
+
+/// Default on-disk WSLc image/session store. Matches the one-shot runner's
+/// default so both surfaces read and fill the same cache.
+fn default_storage_path() -> String {
+    std::env::temp_dir()
+        .join("mxc-wslc-sessions")
+        .to_string_lossy()
+        .to_string()
 }
 
 /// Convert a step helper's `failure_phase` into a typed failure, since the wire
@@ -812,12 +818,6 @@ struct Worker {
     next_pull_token: u64,
     session: Option<WslcSessionGuard>,
 
-    /// The store the live session holds, returned to the pool when the session
-    /// is released. Teardown that leaks the session leaks this with it, since
-    /// the leaked session keeps the store's VHDX mounted.
-    store_lease: Option<StoreSlotLease>,
-    store_slots: StoreSlotPool,
-
     /// Boxed so the address an off-worker pull or exec was handed survives this
     /// struct being moved or the field being taken, which teardown does to leak
     /// the SDK rather than unload it under a running thread.
@@ -831,8 +831,6 @@ impl Worker {
             start_run: start_run_on_sdk,
             sdk: None,
             session: None,
-            store_lease: None,
-            store_slots: StoreSlotPool::new(),
             containers: HashMap::new(),
             pending: HashMap::new(),
             exec_in_flight: HashMap::new(),
@@ -850,33 +848,19 @@ impl Worker {
             self.sdk = Some(Box::new(sdk));
         }
         if self.session.is_none() {
-            let Self {
-                store_slots,
-                sdk,
-                logger,
-                ..
-            } = self;
-            let sdk = sdk.as_ref().expect("sdk loaded above");
-
-            let (lease, session) = store_slots
-                .lease_with(|store| {
-                    // SAFETY: `sdk` holds valid pointers and COM is initialised.
-                    unsafe {
-                        container_steps::create_daemon_session(
-                            sdk,
-                            SESSION_NAME,
-                            &store.to_string_lossy(),
-                            logger,
-                        )
-                    }
-                })
-                .map_err(|e| match e {
-                    StoreSlotError::Refused { source, .. } => sr_err(source),
-                    pool_failure => WorkerError::Backend(anyhow::anyhow!("{pool_failure}")),
-                })?;
-
+            let storage = default_storage_path();
+            let sdk = self.sdk.as_ref().expect("sdk loaded above");
+            // SAFETY: `sdk` holds valid pointers and COM is initialised.
+            let session = unsafe {
+                container_steps::create_daemon_session(
+                    sdk,
+                    SESSION_NAME,
+                    &storage,
+                    &mut self.logger,
+                )
+            }
+            .map_err(sr_err)?;
             self.session = Some(session);
-            self.store_lease = Some(lease);
         }
         Ok(())
     }
@@ -899,11 +883,6 @@ impl Worker {
 
         let sdk = self.sdk.as_ref().expect("session ensured");
         let session = self.session.as_ref().expect("session ensured").as_raw();
-        let store = image::StoreHint::DaemonSlot(
-            self.store_lease
-                .as_ref()
-                .map_or(0, store_slots::StoreSlotLease::index),
-        );
 
         // SAFETY: `sdk`/`session` are valid.
         let step = unsafe {
@@ -912,7 +891,7 @@ impl Worker {
                 session,
                 &config.image,
                 config.image_tar_path.as_deref(),
-                &store,
+                None,
                 match config.network {
                     NetworkMode::None => image::RegistryAccess::Denied,
                     NetworkMode::Bridged => image::RegistryAccess::Allowed,
@@ -943,7 +922,7 @@ impl Worker {
                         sdk,
                         session,
                         &config.image,
-                        &store,
+                        None,
                         "[WSLC][daemon]",
                         move |outcome| {
                             let _ = done.send(WorkerCommand::PullFinished { token, outcome });
@@ -1401,7 +1380,6 @@ impl Worker {
         if execs_in_flight > 0 || pull_outstanding {
             std::mem::forget(std::mem::take(&mut self.containers));
             std::mem::forget(self.session.take());
-            std::mem::forget(self.store_lease.take());
             std::mem::forget(self.sdk.take());
         }
 
@@ -1503,7 +1481,6 @@ impl Worker {
             );
             std::mem::forget(std::mem::take(&mut self.containers));
             std::mem::forget(self.session.take());
-            std::mem::forget(self.store_lease.take());
             std::mem::forget(self.sdk.take());
             return;
         }
@@ -1540,14 +1517,12 @@ impl Worker {
                  releasing a handle it is using",
             );
             std::mem::forget(self.session.take());
-            std::mem::forget(self.store_lease.take());
             std::mem::forget(self.sdk.take());
             return;
         }
 
         // Session guard drops before the SDK unloads the DLL.
         self.session = None;
-        self.store_lease = None;
         self.sdk = None;
     }
 }
@@ -3095,13 +3070,11 @@ mod tests {
     // Exercises the real SDK path end to end: provision (boot VM + create
     // container) → start → exec → stop → deprovision → refcount back to 0. It
     // provisions with the default isolated posture, which refuses a registry
-    // pull, so `alpine:latest` has to be cached in the store slot this worker
-    // leases — slot 0 of the pool, since it holds one session. Warm it with
-    // `scripts\setup-wslc.ps1 -DaemonSlots 1`. It is `#[ignore]`d and run
-    // explicitly with:
-    // `cargo test -p mxc-sdk --features wslc --bin wxc-wslc-daemon -- --ignored`
+    // pull, so `alpine:latest` has to be in the daemon session cache already
+    // (`%TEMP%\mxc-wslc-sessions`). It is `#[ignore]`d and run explicitly with
+    // `cargo test -p wxc_wslc_daemon -- --ignored`.
     #[tokio::test]
-    #[ignore = "requires a WSL2 host with alpine:latest cached in daemon store slot 0"]
+    #[ignore = "requires a WSL2 host with alpine:latest already in the daemon session cache"]
     async fn full_lifecycle_on_wsl_host() {
         let handle = spawn().unwrap();
         assert_eq!(count(&handle).await, 0);

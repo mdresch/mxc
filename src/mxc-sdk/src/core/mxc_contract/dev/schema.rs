@@ -7,9 +7,8 @@ use schemars::{gen::SchemaGenerator, JsonSchema};
 use serde_json::{json, Value};
 
 use super::{
-    DeprovisionRequest, ExecRequest, HypervProvisionRequest, IsolationSessionProvisionRequest,
-    OneShotRequest, StartRequest, StopRequest, WindowsSandboxProvisionRequest,
-    WslcProvisionRequest,
+    DeprovisionRequest, ExecRequest, IsolationSessionProvisionRequest, OneShotRequest,
+    StartRequest, StopRequest, WindowsSandboxProvisionRequest, WslcProvisionRequest,
 };
 
 fn subschema<T: JsonSchema>(generator: &mut SchemaGenerator) -> Value {
@@ -35,13 +34,7 @@ fn branch(condition: Value, selected: Value, otherwise: Value) -> Value {
     })
 }
 
-#[allow(clippy::too_many_arguments)]
-fn provision_dispatch(
-    windows_sandbox: Value,
-    isolation_session: Value,
-    wslc: Value,
-    hyperv: Value,
-) -> Value {
+fn provision_dispatch(windows_sandbox: Value, isolation_session: Value, wslc: Value) -> Value {
     branch(
         discriminator("containment", "windows_sandbox"),
         windows_sandbox,
@@ -51,11 +44,7 @@ fn provision_dispatch(
             branch(
                 discriminator("containment", "wslc"),
                 wslc,
-                branch(
-                    discriminator("containment", "hyperv"),
-                    hyperv,
-                    Value::Bool(false),
-                ),
+                Value::Bool(false),
             ),
         ),
     )
@@ -151,13 +140,12 @@ pub fn development_schema() -> Value {
     let windows_sandbox = subschema::<WindowsSandboxProvisionRequest>(&mut generator);
     let isolation_session = subschema::<IsolationSessionProvisionRequest>(&mut generator);
     let wslc = subschema::<WslcProvisionRequest>(&mut generator);
-    let hyperv = subschema::<HypervProvisionRequest>(&mut generator);
     let start = subschema::<StartRequest>(&mut generator);
     let exec = subschema::<ExecRequest>(&mut generator);
     let stop = subschema::<StopRequest>(&mut generator);
     let deprovision = subschema::<DeprovisionRequest>(&mut generator);
 
-    let provision = provision_dispatch(windows_sandbox, isolation_session, wslc, hyperv);
+    let provision = provision_dispatch(windows_sandbox, isolation_session, wslc);
     let state_aware = phase_dispatch(provision, start, exec, stop, deprovision);
     let dispatch = branch(
         json!({ "required": ["phase"] }),
@@ -187,7 +175,6 @@ mod tests {
         "WindowsSandboxProvisionRequest",
         "IsolationSessionProvisionRequest",
         "WslcProvisionRequest",
-        "HypervProvisionRequest",
         "StartRequest",
         "ExecRequest",
         "StopRequest",
@@ -205,7 +192,6 @@ mod tests {
                 ("WindowsSandboxProvisionRequest", "provision"),
                 ("IsolationSessionProvisionRequest", "provision"),
                 ("WslcProvisionRequest", "provision"),
-                ("HypervProvisionRequest", "provision"),
                 ("StartRequest", "start"),
                 ("ExecRequest", "exec"),
                 ("StopRequest", "stop"),
@@ -215,7 +201,6 @@ mod tests {
                 ("WindowsSandboxProvisionRequest", "windows_sandbox"),
                 ("IsolationSessionProvisionRequest", "isolation_session"),
                 ("WslcProvisionRequest", "wslc"),
-                ("HypervProvisionRequest", "hyperv"),
             ],
             compatibility_aliases: false,
             one_shot_required: &["process"],

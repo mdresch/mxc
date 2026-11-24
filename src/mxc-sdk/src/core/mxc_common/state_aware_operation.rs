@@ -8,8 +8,7 @@
 //! an ID, whose contents are validated at the existing dispatch boundary.
 
 use crate::mxc_common::models::{
-    ContainmentBackend, HypervProvisionConfig, IsolationSessionProvisionConfig,
-    WslcProvisionConfig,
+    ContainmentBackend, IsolationSessionProvisionConfig, WslcProvisionConfig,
 };
 use crate::mxc_common::state_aware_request::Phase;
 
@@ -22,9 +21,6 @@ pub enum StateAwareProvision {
     WindowsSandbox,
     /// An omitted image remains absent until the WSLC backend chooses a default.
     Wslc(Option<WslcProvisionConfig>),
-    /// An omitted `baseImagePath` remains absent until the backend's own
-    /// `validate_provision` rejects it — required there, not here.
-    HyperV(Option<HypervProvisionConfig>),
 }
 
 impl StateAwareProvision {
@@ -34,7 +30,6 @@ impl StateAwareProvision {
             Self::IsolationSession(_) => ContainmentBackend::IsolationSession,
             Self::WindowsSandbox => ContainmentBackend::WindowsSandbox,
             Self::Wslc(_) => ContainmentBackend::Wslc,
-            Self::HyperV(_) => ContainmentBackend::HyperV,
         }
     }
 }
@@ -127,7 +122,6 @@ mod tests {
                 ContainmentBackend::WindowsSandbox,
             ),
             (StateAwareProvision::Wslc(None), ContainmentBackend::Wslc),
-            (StateAwareProvision::HyperV(None), ContainmentBackend::HyperV),
         ] {
             let operation = StateAwareOperation::Provision(provision);
             assert_eq!(operation.phase(), Phase::Provision);
@@ -186,10 +180,6 @@ mod tests {
         assert_ne!(
             StateAwareProvision::Wslc(None),
             StateAwareProvision::Wslc(Some(WslcProvisionConfig::default()))
-        );
-        assert_ne!(
-            StateAwareProvision::HyperV(None),
-            StateAwareProvision::HyperV(Some(HypervProvisionConfig::default()))
         );
     }
 }

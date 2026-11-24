@@ -31,7 +31,6 @@ default = []
 wslc = ["link-wslcsdk", "dep:libloading", "dep:tar"]
 link-wslcsdk = ["dep:zip"]
 isolation_session = ["dep:windows-collections", "dep:windows-future"]
-hyperv = []
 test-support = []
 microvm = []
 hyperlight = [

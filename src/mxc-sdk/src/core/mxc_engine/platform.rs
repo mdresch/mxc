@@ -14,8 +14,6 @@
 
 use serde::Serialize;
 
-use crate::mxc_common::models::ContainmentBackend;
-
 /// Whether the host can enforce Bubblewrap proxy-only egress.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -91,10 +89,10 @@ where
     // `getPlatformSupport` reads the same answer.
     let mut available_methods = Vec::new();
     if lxc_available {
-        available_methods.push(ContainmentBackend::Lxc.wire_name().to_string());
+        available_methods.push("lxc".to_string());
     }
     if bwrap_probe.is_ok() {
-        available_methods.push(ContainmentBackend::Bubblewrap.wire_name().to_string());
+        available_methods.push("bubblewrap".to_string());
     }
 
     match bwrap_probe {
@@ -140,16 +138,16 @@ where
 pub fn platform_support() -> PlatformSupport {
     #[cfg(target_os = "macos")]
     {
-        if crate::seatbelt_common::seatbelt_runner::sandbox_init_available() {
+        if std::path::Path::new("/usr/bin/sandbox-exec").exists() {
             PlatformSupport {
                 is_supported: true,
-                available_methods: vec![ContainmentBackend::Seatbelt.wire_name().to_string()],
+                available_methods: vec!["seatbelt".to_string()],
                 ..Default::default()
             }
         } else {
             PlatformSupport {
                 reason: Some(
-                    "Seatbelt could not be found on this installation of macOS. Your macOS install might be incomplete. (sandbox_init not found)".to_string(),
+                    "/usr/bin/sandbox-exec not found; macOS install is incomplete".to_string(),
                 ),
                 ..Default::default()
             }
@@ -171,18 +169,17 @@ pub fn platform_support() -> PlatformSupport {
 
     #[cfg(target_os = "windows")]
     {
-        let mut available_methods =
-            vec![ContainmentBackend::ProcessContainer.wire_name().to_string()];
+        let mut available_methods = vec!["processcontainer".to_string()];
         // `windows_sandbox` is a host-capability backend the SDK can't launch,
         // so it is reported by `available_backends()` rather than here.
         //
         // WSLC and IsolationSession are additional explicit backends rather
         // than fallbacks: report each only when the host has it.
         if wslc_available() {
-            available_methods.push(ContainmentBackend::Wslc.wire_name().to_string());
+            available_methods.push("wslc".to_string());
         }
         if isolation_session_present() {
-            available_methods.push(ContainmentBackend::IsolationSession.wire_name().to_string());
+            available_methods.push("isolation_session".to_string());
         }
         PlatformSupport {
             is_supported: true,
@@ -272,7 +269,20 @@ mod tests {
     };
     #[cfg(target_os = "linux")]
     use crate::bwrap_common::bwrap_version::{BwrapUnavailable, BwrapVersion, MIN_BWRAP_VERSION};
-    use crate::mxc_engine::backend_registry::{self, CANONICAL_BACKEND_NAMES};
+    use crate::mxc_common::models::ContainmentBackend;
+
+    const CANONICAL_BACKEND_NAMES: &[(ContainmentBackend, &str)] = &[
+        (ContainmentBackend::ProcessContainer, "processcontainer"),
+        (ContainmentBackend::Wslc, "wslc"),
+        (ContainmentBackend::Lxc, "lxc"),
+        (ContainmentBackend::Vm, "vm"),
+        (ContainmentBackend::MicroVm, "microvm"),
+        (ContainmentBackend::Hyperlight, "hyperlight"),
+        (ContainmentBackend::WindowsSandbox, "windows_sandbox"),
+        (ContainmentBackend::IsolationSession, "isolation_session"),
+        (ContainmentBackend::Seatbelt, "seatbelt"),
+        (ContainmentBackend::Bubblewrap, "bubblewrap"),
+    ];
 
     #[cfg(target_os = "linux")]
     #[test]
@@ -311,7 +321,10 @@ mod tests {
     }
 
     fn all_containment_names() -> Vec<String> {
-        backend_registry::all_containment_names()
+        CANONICAL_BACKEND_NAMES
+            .iter()
+            .map(|(_, name)| (*name).to_string())
+            .collect()
     }
 
     /// Guards the reported string literals against drift from canonical runtime

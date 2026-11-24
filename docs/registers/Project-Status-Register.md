@@ -6,15 +6,20 @@ lifecycle_stage: "Live — tracks whichever stage is currently active"
 governance_policy: "none (orientation snapshot, not a governed approval artifact)"
 artifact_id: "project-status-register"
 version: "1.0 (live — overwritten in place, not re-versioned, every time orientation changes)"
-owner: "<project sponsor / lead>"
-last_updated: "<date this project starts using it>"
+owner: "Menno Drescher"
+last_updated: "2026-11-11"
 ---
 
-# Project Status Register — <project>
+# Project Status Register — MXC Hyper-V JIT (ADPA / SIDPA)
 
 > **Purpose:** The single place to answer, in under a minute, "which Phase and which Stage is this project
 > at right now, what just finished, and what's next." Every other register answers a narrower question
 > (risks, audits, lessons, improvements, story steps) — this one is the index into all of them.
+>
+> Read this file for the active phase, stage, and epic. Story-by-story implementation evidence stays in
+> [`Story-Execution-Register.md`](Story-Execution-Register.md) on `feat/hyperv-v2-rebased` (still the empty
+> template there) and in the point-in-time audit [`docs/status/adr-story-audit.md`](../status/adr-story-audit.md).
+> Do not re-audit every story to answer the orientation question.
 >
 > **This is not a governed approval artifact** (no `approve-*` policy gates it) and it is not append-only.
 > It is overwritten in place whenever the project's orientation changes.
@@ -41,37 +46,34 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 2 (Predictive Orchestration & Enterprise Execution Fabric) — Active |
-| **Current PMP Baseline** | `PMP-BL-v2.0.0` |
-| **Session close-off checkpoint** | Epic 009 (Hyper-V Memory Combining & Host RAM Deduplication) Complete (Stories 9.1..9.2 validated, 188 contracts passing, merged to `feat/hyperv-v2-rebased`) |
-| **Current macro Stage** | Stage 9 / 10 (Execution & Verification: Phase 2 Sprints) |
-| **Last Epic/unit of work fully completed** | Epic 009: Hyper-V Host-Level Memory Combining & Deduplication (`LL-010`, `IMP-MXC-016`, `AUDIT-009`) |
-| **Next Epic/unit of work to implement** | Epic 010: Cryptographic Image Supply Chain & Signed SBOM Attestation (`Story 10.1`, WBS 11.0, TP-10) |
-| **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
-| **Open side-thread outside the formal loop** | None |
-| **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
+| **Current Phase** | Initial phase. One open phase. The delivery slices in `docs/hyperv/architecture/IMPLEMENTATION_PLAN.md` (Phase 1–4) are inside this phase. They are not separate SIDPA phases and have no Stage 17 or Stage 18 close. |
+| **Current PMP Baseline** | `PMP-BL-v1.0.0`, printed on the PMP and on ADR/BRD/FDD/epic 001–006. No `approve-pmp` gate file is in `docs/project-docs/gates/`. |
+| **Session close-off checkpoint** | Initial phase. Stage 6 packs 001–006 are approved. Stage 7 PMP is a scaffold and `approve-pmp` has no gate. Stage 8 has not been issued. No story in flight. Chain source: `sidpa-template` @ `0e88dd0` (11 Nov 2026, 01:59 Europe/Amsterdam), applied on `cursor/sidpa-stage-alignment-73a6`. Evidence: `docs/status/sidpa-alignment.md`. |
+| **Current macro Stage** (`docs/chain-coverage.md` §2) | **Stage 6 (Requirement) for Epics 001–006.** Accepted ADRs and approved BRDs, FDDs, and story packs (30 Oct 2026). **Stage 7 (PMP) is not approved.** **Stage 8 (`validate-intent-foundation`) has no notice.** **Stage 9 (`implement-story`) has no Story Execution Register row.** |
+| **Last Epic/unit of work fully completed** | None. No epic has a Step 9 breakout. `Lessons-Learned-Register.md` and `Continuous-Improvement-Register.md` are not instantiated. |
+| **Next Epic/unit of work to implement** | **Epic 001 — Type-1 Hyper-V Generation 2**, after Stage 7 `approve-pmp` and the Stage 8 notice. First story after that gate is **1.1 Generation 2 isolation boundary**, then 1.2. Rust contracts use `cargo test`. Story worktrees branch from `feat/hyperv-v2-rebased`, not `main`. |
+| **Last commit on the base branch** | Story base `feat/hyperv-v2-rebased` @ `06a630d4` (30 Oct 2026, 15:44 Europe/Amsterdam), `feat(hyperv): Server Core WebDev golden image, ADR-008, and harness tooling`. Repository default `main` @ `3d0d9dd0` (15 Oct 2026, 16:17 Europe/Amsterdam) has no Hyper-V ADR chain. |
+| **Open side-thread outside the formal loop** | Hyper-V control plane, warm pool, JIT ingress harness, image bake/audit scripts, and the implementation plan's "complete" marks were built on `feat/hyperv-v2-rebased` with no `implement-story` row. Leave them in this cell. Do not invent epic or story paperwork to match that code. A later story run re-walks the code with `heal-contract-failure` and shows the new contract failing before trusting it. ADR-008 (authentication-gated leasing) was accepted under `approve-adr` on 4 Nov 2026, Europe/Amsterdam (gate `approve-adr-008-2026-11-04` on `cursor/approve-adr-008-73a6`, off `feat/hyperv-v2-rebased`). It still has no BRD, FDD, or epic, and no spark, hypothesis, or benefit id. ADR-007 stays inside accepted ADR-006 as story 6.3. |
+| **Stage-label overload caveat (if this project's docs exhibit it)** | On `cursor/sidpa-stage-alignment-73a6`, requirement frontmatter says Stage 6 and the PMP says Stage 7, matching `chain-coverage.md` §2. Older commits still say Stage 7 for requirements and Stage 6 for the PMP. Use the macro Stage cell above. |
 
 ## 2. Phase Status
 
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
-| Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
-| Phase 2 | `PMP-BL-v2.0.0` | In Progress (Epics 007..009 complete, Epics 010..011 planned) | Active development |
+| Initial | `PMP-BL-v1.0.0` | Open. Stage 6 packs 001–006 approved on 30 Oct 2026. Stage 7 `approve-pmp` and Stage 2 `approve-charter` have no gate file. Stage 8 not issued. | Not closed. No approved Stage 17 Adaptation Plan and no approved Stage 18 Intent Refinement. |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
+Story counts below are pack size only. Executed counts stay 0 until `Story-Execution-Register.md` gains a row. Per-story step detail belongs in that register, not here.
+
 | Epic | Title | Phase | Status | Stories Executed |
 |---|---|---|---|---|
-| Epic 001 | Type-1 Hyper-V Generation 2 instead of a container namespace | Phase 1 | Complete | Story 1.1, Story 1.2 (2/2) |
-| Epic 002 | Connection-buffering ingress gateway | Phase 1 | Complete | Story 2.1, Story 2.2, Story 2.3 (3/3) |
-| Epic 003 | Production base image and warm checkpoint | Phase 1 | Complete | Story 3.1, Story 3.2 (2/2) |
-| Epic 004 | Paused RAM standby and footprint readings | Phase 1 | Complete | Story 4.1, Story 4.2, Story 4.3 (3/3) |
-| Epic 005 | Transient differencing disk and session sterility | Phase 1 | Complete | Story 5.1, Story 5.2, Story 5.3 (3/3) |
-| Epic 006 | Watermark pool and wake hygiene | Phase 1 | Complete | Story 6.1, Story 6.2, Story 6.3, Story 6.4 (4/4) |
-| Epic 007 | Multi-tier standby pools (Hot, Warm, Cold) | Phase 2 | Complete | Story 7.1, Story 7.2, Story 7.3 (3/3) |
-| Epic 008 | Predictive wake interception and activity forecasting | Phase 2 | Complete | Story 8.1, Story 8.2 (2/2) |
-| Epic 009 | Hyper-V memory combining and deduplication | Phase 2 | Complete | Story 9.1, Story 9.2 (2/2) |
-| Epic 010 | Cryptographic image supply chain and SLSA attestation | Phase 2 | Ready for Implementation | Pending Story 10.1 |
+| 001 | Type-1 Hyper-V Generation 2 | Initial | Approved 30 Oct 2026. Next to implement after Stage 8. | 0 / 2 |
+| 002 | Connection-buffering ingress gateway | Initial | Approved 30 Oct 2026. Waits on Epic 004 and Epic 006. | 0 / 3 |
+| 003 | Production base image | Initial | Approved 30 Oct 2026. Image `winserv2025-prod-adpa.vhdx` is not in the catalog. | 0 / 2 |
+| 004 | Paused RAM standby | Initial | Approved 30 Oct 2026. Follows Epic 001. | 0 / 3 |
+| 005 | Transient differencing disk and egress whitelist | Initial | Approved 30 Oct 2026. Follows Epic 003. | 0 / 3 |
+| 006 | Watermark pool, replenish, and wake hygiene | Initial | Approved 30 Oct 2026. Follows Epics 004 and 005. ADR-007 has no epic of its own; its behavior is story 6.3. | 0 / 4 |
 
 ## 4. How to keep this current
 
@@ -81,3 +83,5 @@ caused this, both worth guarding against here:
 - **At any natural pause, not only at Epic boundaries** — a decision made, a correction applied, before starting work that will take many steps. Session/model cutoffs do not always announce themselves in advance; treat this update as cheap, frequent insurance, not a formal gate.
 - **Any out-of-loop work** (built directly, no ADR/BRD/FDD/Story) gets one line in §1's "Open side-thread" field, not a fabricated Epic/Story entry elsewhere.
 - This register is **not** append-only and carries **no version bump on every edit** — same convention as `Story-Execution-Register.template.md`'s "live" framing. Only `last_updated` changes.
+- When `validate-intent-foundation` clears an epic, record that on the story status line and move the macro Stage cell to Stage 8 for that epic only. The other epics stay at Stage 7 until their own gate.
+- When `npm run story:done` (or the Rust equivalent, a `cargo test` contract plus a Story Execution Register row) finishes a story, increment that epic's executed count here and leave the step grid in `Story-Execution-Register.md`.

@@ -334,10 +334,6 @@ fn resolve_runner_inner_windows(
                 ))
             }
         }
-        ContainmentBackend::HyperV => Err(MxcError::unsupported_containment(
-            "the Hyper-V backend supports only the state-aware lifecycle \
-             (provision/start/exec/stop/deprovision), not one-shot execution",
-        )),
     }
 }
 

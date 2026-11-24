@@ -41,18 +41,13 @@ pub enum ContainmentBackend {
     IsolationSession,
     /// macOS Seatbelt sandbox backend.
     /// Implemented on top of the OS-bundled sandbox facility (Apple's
-    /// internal codename for the App Sandbox / `sandbox_init` machinery
+    /// internal codename for the App Sandbox / `sandbox-exec` machinery
     /// is "Seatbelt"); selected on the wire as `"seatbelt"`.
     Seatbelt,
     /// Bubblewrap — unprivileged Linux sandboxing via user namespaces.
     /// Uses `bwrap` to create namespace-isolated processes without root
     /// privileges. Selected on the wire as `"bubblewrap"`.
     Bubblewrap,
-    /// Hyper-V — real, standalone Hyper-V VMs with persistent state and
-    /// backend-private pause/resume + checkpoint/rollback. State-aware only
-    /// (no one-shot surface); experimental, requires --experimental.
-    #[serde(rename = "hyperv")]
-    HyperV,
 }
 
 impl ContainmentBackend {
@@ -69,7 +64,6 @@ impl ContainmentBackend {
             ContainmentBackend::IsolationSession => "isolation_session",
             ContainmentBackend::Seatbelt => "seatbelt",
             ContainmentBackend::Bubblewrap => "bubblewrap",
-            ContainmentBackend::HyperV => "hyperv",
         }
     }
 
@@ -85,7 +79,6 @@ impl ContainmentBackend {
             ContainmentBackend::Seatbelt => Some("seatbelt"),
             ContainmentBackend::IsolationSession => Some("isolationSession"),
             ContainmentBackend::Hyperlight => Some("hyperlight"),
-            ContainmentBackend::HyperV => Some("hyperv"),
             ContainmentBackend::Bubblewrap
             | ContainmentBackend::MicroVm
             | ContainmentBackend::Vm => None,
@@ -138,7 +131,6 @@ impl From<crate::mxc_common::wire::Containment> for ContainmentBackend {
             W::Seatbelt => Self::Seatbelt,
             W::IsolationSession => Self::IsolationSession,
             W::Bubblewrap => Self::Bubblewrap,
-            W::HyperV => Self::HyperV,
         }
     }
 }
@@ -158,6 +150,19 @@ pub struct SeatbeltConfig {
     /// be killed by the system on launch.
     #[serde(rename = "guiAccess", default)]
     pub gui_access: bool,
+
+    /// How to launch the sandboxed process.
+    ///
+    /// - `"exec"` (default): fork → sandbox_init() → exec. Stdio is inherited
+    ///   when `guiAccess` is true, piped otherwise. Works for most
+    ///   third-party GUI apps and all CLI commands.
+    /// - `"open"`: launch via macOS LaunchServices (`open -n -W`). Required
+    ///   for Apple system apps (e.g. Terminal.app) that have Launch
+    ///   Constraints preventing direct exec from third-party processes.
+    ///   The sandbox is applied to the shell/command running *inside* the
+    ///   launched app via the `sandbox-exec` CLI tool, not to the app itself.
+    #[serde(rename = "launchMethod", default)]
+    pub launch_method: LaunchMethod,
 
     /// Allow the inner process to allocate its own pseudo-terminals via
     /// `posix_openpt`. Defaults to `true` because most agent-style
@@ -202,9 +207,31 @@ impl Default for SeatbeltConfig {
         Self {
             profile_override: None,
             gui_access: false,
+            launch_method: LaunchMethod::default(),
             nested_pty: true,
             keychain_access: false,
             extra_mach_lookups: Vec::new(),
+        }
+    }
+}
+
+/// How to launch the sandboxed process in the Seatbelt backend.
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum LaunchMethod {
+    /// Direct fork → sandbox_init() → exec (default).
+    #[default]
+    Exec,
+    /// Launch via macOS LaunchServices (`open`). The sandbox is applied to
+    /// the command running inside the launched terminal app via sandbox-exec.
+    Open,
+}
+
+impl From<crate::mxc_common::wire::LaunchMethod> for LaunchMethod {
+    fn from(m: crate::mxc_common::wire::LaunchMethod) -> Self {
+        match m {
+            crate::mxc_common::wire::LaunchMethod::Exec => Self::Exec,
+            crate::mxc_common::wire::LaunchMethod::Open => Self::Open,
         }
     }
 }
@@ -266,30 +293,6 @@ pub struct WslcProvisionConfig {
 
     /// Host-to-container TCP forwards applied to the sandbox's own container.
     pub port_mappings: Option<Vec<PortMapping>>,
-}
-
-/// Runtime-owned state-aware provision config for the Hyper-V backend.
-///
-/// `base_image_path` is required by the exact contract; this type keeps it
-/// `Option` like every other state-aware provision config (absent/empty
-/// values must round-trip distinctly through `CommonRequestIR`), with the
-/// backend re-validating its presence. Image authoring (sysprep, DISM,
-/// Packer) is an operator prerequisite — MXC only provisions a differencing
-/// disk off the supplied parent VHDX.
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
-pub struct HypervProvisionConfig {
-    /// Path to the operator-supplied parent VHDX/VHD.
-    pub base_image_path: Option<String>,
-    /// Windows Credential Manager target name to resolve the PowerShell
-    /// Direct guest credential from (`cmdkey /generic:<target> ...`). The
-    /// secret itself never appears here or anywhere on the wire.
-    pub guest_credential_target: Option<String>,
-    /// VM generation (1 or 2). The backend defaults to 2 when absent.
-    pub generation: Option<u8>,
-    /// Guest startup memory in bytes. The backend chooses a default when absent.
-    pub memory_startup_bytes: Option<u64>,
-    /// Virtual processor count. The backend chooses a default when absent.
-    pub cpu_count: Option<u32>,
 }
 
 /// Configuration specific to the LXC container backend.

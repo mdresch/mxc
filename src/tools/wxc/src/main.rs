@@ -72,7 +72,6 @@ struct Cli {
             "setup_wslc",
             "image",
             "storage_path",
-            "wslc_daemon_slots",
             "probe",
             "force_reclaim"
         ]
@@ -86,59 +85,6 @@ struct Cli {
     /// Opaque lifecycle ID (`sandboxId` in JSON) used by start, exec, stop, or deprovision.
     #[arg(long = "container-id", requires = "operation")]
     container_id: Option<String>,
-
-    /// Hyper-V backend-private operation: pause/resume/checkpoint/rollback,
-    /// entirely outside the 5-phase state-aware lifecycle (provision/start/
-    /// exec/stop/deprovision). See `hyperv_lifecycle::backend_ops`. Requires
-    /// --hyperv-sandbox-id; checkpoint and restore additionally require
-    /// --hyperv-checkpoint-name.
-    #[arg(long = "hyperv-op", value_enum, conflicts_with = "operation")]
-    hyperv_op: Option<HypervOp>,
-
-    /// Sandbox targeted by --hyperv-op.
-    #[arg(long = "hyperv-sandbox-id", requires = "hyperv_op")]
-    hyperv_sandbox_id: Option<String>,
-
-    /// Checkpoint name for --hyperv-op checkpoint|restore.
-    #[arg(long = "hyperv-checkpoint-name", requires = "hyperv_op")]
-    hyperv_checkpoint_name: Option<String>,
-
-    /// Host source path for --hyperv-op copy-file.
-    #[arg(long = "hyperv-source-path", requires = "hyperv_op")]
-    hyperv_source_path: Option<std::path::PathBuf>,
-
-    /// Guest destination path for --hyperv-op copy-file.
-    #[arg(long = "hyperv-dest-path", requires = "hyperv_op")]
-    hyperv_dest_path: Option<String>,
-
-    /// Pool targeted by --hyperv-op pool-* (defaults to `default`).
-    #[arg(long = "pool", requires = "hyperv_op")]
-    pool: Option<String>,
-
-    /// Target size (minimum ready standby VMs) for --hyperv-op pool-config.
-    #[arg(long = "pool-target-size", requires = "hyperv_op")]
-    pool_target_size: Option<usize>,
-
-    /// Ceiling on ready standby VMs for --hyperv-op pool-config (bounds pool-warm).
-    #[arg(long = "pool-max-size", requires = "hyperv_op")]
-    pool_max_size: Option<usize>,
-
-    /// Number of ready standby VMs to pre-warm for --hyperv-op pool-warm, or an
-    /// override of the target size for --hyperv-op pool-replenish.
-    #[arg(long = "pool-count", requires = "hyperv_op")]
-    pool_count: Option<usize>,
-
-    /// Base image path for --hyperv-op pool-config.
-    #[arg(long = "pool-base-image", requires = "hyperv_op")]
-    pool_base_image: Option<String>,
-
-    /// Guest credential target for --hyperv-op pool-config.
-    #[arg(long = "pool-credential-target", requires = "hyperv_op")]
-    pool_credential_target: Option<String>,
-
-    /// Lease holder tag for --hyperv-op pool-lease.
-    #[arg(long = "pool-lease-holder", requires = "hyperv_op")]
-    pool_lease_holder: Option<String>,
 
     /// Path to diagnostic log file (appends, creates if missing)
     #[arg(long = "log-file")]
@@ -178,11 +124,9 @@ struct Cli {
     setup_wslc: bool,
 
     /// Image reference to pre-pull (e.g. `alpine:latest`,
-    /// `ghcr.io/owner/image:tag`). Repeat to pull several images, which fills
-    /// each store in one session rather than one per image. Required with
-    /// `--setup-wslc`.
+    /// `ghcr.io/owner/image:tag`). Required with `--setup-wslc`.
     #[arg(long = "image", requires = "setup_wslc")]
-    image: Vec<String>,
+    image: Option<String>,
 
     /// Optional WSLC storage path. When omitted the runner default is used
     /// (`%TEMP%\mxc-wslc-sessions`). Pass the same value here that your
@@ -191,26 +135,9 @@ struct Cli {
     #[arg(long = "storage-path", requires = "setup_wslc")]
     storage_path: Option<String>,
 
-    /// Also warm the first N container-lifecycle store slots, which the
-    /// lifecycle daemon leases from and `--storage-path` does not reach.
-    /// Defaults to 0 so warming a create-and-run cache stays one pull per
-    /// image; each slot warmed adds a pull and a multi-GiB store.
-    /// Requires `--setup-wslc`.
-    #[arg(
-        long = "wslc-daemon-slots",
-        value_name = "N",
-        value_parser = clap::value_parser!(u16).range(0..=64),
-        requires = "setup_wslc"
-    )]
-    wslc_daemon_slots: Option<u16>,
-
     /// Run the fallback detector and emit JSON, without spawning a sandbox.
     #[arg(long)]
     probe: bool,
-
-    /// Emit the host capability report and exit, without spawning a sandbox.
-    #[arg(long = "available-backends")]
-    available_backends: bool,
 
     /// Manage telemetry consent without spawning a sandbox.
     #[arg(
@@ -230,7 +157,6 @@ struct Cli {
             "setup_wslc",
             "image",
             "storage_path",
-            "wslc_daemon_slots",
             "probe",
             "force_reclaim",
             "operation",
@@ -308,28 +234,6 @@ impl From<CliOperation> for mxc_sdk::mxc_common::state_aware_request::Phase {
     }
 }
 
-/// Hyper-V backend-private operation selected by `--hyperv-op`. Deliberately
-/// not a `Phase` or `CliOperation` variant: these never touch the shared
-/// 5-phase lifecycle contract — see `hyperv_lifecycle::backend_ops`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
-enum HypervOp {
-    Pause,
-    Resume,
-    ForcePoweroff,
-    Checkpoint,
-    Restore,
-    ListCheckpoints,
-    CopyFile,
-    PoolStatus,
-    PoolList,
-    PoolConfig,
-    PoolReplenish,
-    PoolWarm,
-    PoolLease,
-    PoolRelease,
-    PoolDrain,
-}
-
 fn parse_cli() -> Cli {
     match Cli::try_parse() {
         Ok(cli) => cli,
@@ -362,7 +266,7 @@ fn log_request(request: &ExecutionRequest, logger: &mut Logger) {
         logger,
         "Container name: {}",
         if request.container_id.is_empty() {
-            "(assigned by the backend)"
+            "CLI"
         } else {
             &request.container_id
         }
@@ -1107,163 +1011,6 @@ fn install_dacl_ctrl_handler() {
     let _ = unsafe { SetConsoleCtrlHandler(Some(dacl_ctrl_handler), true) };
 }
 
-/// Run a `--hyperv-op` request and return the process exit code. Prints a
-/// single `{"result": ...}` or `{"error": ...}` JSON line to stdout,
-/// matching the lifecycle envelope convention.
-fn run_hyperv_op(op: HypervOp, cli: &Cli) -> i32 {
-    #[cfg(all(target_os = "windows", feature = "hyperv"))]
-    {
-        let require_sandbox_id = || -> Result<&str, MxcError> {
-            cli.hyperv_sandbox_id.as_deref().ok_or_else(|| {
-                MxcError::malformed_request("--hyperv-sandbox-id is required for this --hyperv-op")
-            })
-        };
-        // The pool targeted by pool-* ops; `default` keeps single-pool callers unchanged.
-        let pool_id = || -> &str {
-            cli.pool
-                .as_deref()
-                .unwrap_or(mxc_sdk::hyperv_lifecycle::pool::DEFAULT_POOL_ID)
-        };
-        let checkpoint_name = || -> Result<&str, MxcError> {
-            cli.hyperv_checkpoint_name.as_deref().ok_or_else(|| {
-                MxcError::malformed_request(
-                    "--hyperv-checkpoint-name is required with --hyperv-op checkpoint|restore",
-                )
-            })
-        };
-        let result: Result<serde_json::Value, MxcError> = (|| -> Result<serde_json::Value, MxcError> {
-            match op {
-                HypervOp::Pause => {
-                    let id = require_sandbox_id()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::pause(id).map(|()| serde_json::json!({}))
-                }
-                HypervOp::Resume => {
-                    let id = require_sandbox_id()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::resume(id).map(|()| serde_json::json!({}))
-                }
-                HypervOp::ForcePoweroff => {
-                    let id = require_sandbox_id()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::force_poweroff(id)
-                        .map(|()| serde_json::json!({}))
-                }
-                HypervOp::Checkpoint => {
-                    let id = require_sandbox_id()?;
-                    let name = checkpoint_name()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::checkpoint(id, name)
-                        .map(|()| serde_json::json!({}))
-                }
-                HypervOp::Restore => {
-                    let id = require_sandbox_id()?;
-                    let name = checkpoint_name()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::restore(id, name)
-                        .map(|()| serde_json::json!({}))
-                }
-                HypervOp::ListCheckpoints => {
-                    let id = require_sandbox_id()?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::list_checkpoints(id).map(|snapshots| {
-                        serde_json::json!({
-                            "checkpoints": snapshots
-                                .into_iter()
-                                .map(|s| serde_json::json!({
-                                    "name": s.name,
-                                    "creationTime": s.creation_time,
-                                }))
-                                .collect::<Vec<_>>()
-                        })
-                    })
-                }
-                HypervOp::CopyFile => {
-                    let id = require_sandbox_id()?;
-                    let source = cli.hyperv_source_path.as_deref().ok_or_else(|| {
-                        MxcError::malformed_request(
-                            "--hyperv-source-path is required with --hyperv-op copy-file",
-                        )
-                    })?;
-                    let dest = cli.hyperv_dest_path.as_deref().ok_or_else(|| {
-                        MxcError::malformed_request(
-                            "--hyperv-dest-path is required with --hyperv-op copy-file",
-                        )
-                    })?;
-                    mxc_sdk::hyperv_lifecycle::backend_ops::copy_file_to_guest(id, source, dest)
-                        .map(|()| serde_json::json!({}))
-                }
-                HypervOp::PoolStatus => mxc_sdk::hyperv_lifecycle::pool::get_pool_status(pool_id())
-                    .map(|report| serde_json::to_value(report).unwrap_or_default()),
-                HypervOp::PoolList => {
-                    let reports = mxc_sdk::hyperv_lifecycle::pool::list_pool_ids()
-                        .iter()
-                        .map(|id| mxc_sdk::hyperv_lifecycle::pool::get_pool_status(id))
-                        .collect::<Result<Vec<_>, _>>();
-                    reports.map(|reports| serde_json::json!({ "pools": reports }))
-                }
-                HypervOp::PoolConfig => {
-                    let target_size = cli
-                        .pool_target_size
-                        .unwrap_or(mxc_sdk::hyperv_lifecycle::pool::DEFAULT_POOL_TARGET_SIZE);
-                    let base_image = cli.pool_base_image.as_deref().unwrap_or("");
-                    let cred = cli.pool_credential_target.clone();
-                    mxc_sdk::hyperv_lifecycle::pool::configure_pool(
-                        pool_id(),
-                        target_size,
-                        cli.pool_max_size,
-                        base_image,
-                        cred,
-                    )
-                    .map(|report| serde_json::to_value(report).unwrap_or_default())
-                }
-                HypervOp::PoolReplenish => {
-                    mxc_sdk::hyperv_lifecycle::pool::replenish_pool(pool_id(), cli.pool_count)
-                        .map(|report| serde_json::to_value(report).unwrap_or_default())
-                }
-                HypervOp::PoolWarm => {
-                    let count = cli.pool_count.ok_or_else(|| {
-                        MxcError::malformed_request(
-                            "--pool-count is required with --hyperv-op pool-warm",
-                        )
-                    })?;
-                    mxc_sdk::hyperv_lifecycle::pool::replenish_pool(pool_id(), Some(count))
-                        .map(|report| serde_json::to_value(report).unwrap_or_default())
-                }
-                HypervOp::PoolLease => {
-                    let holder = cli.pool_lease_holder.as_deref();
-                    mxc_sdk::hyperv_lifecycle::pool::lease_from_pool(pool_id(), holder)
-                        .map(|sandbox_id| serde_json::json!({ "sandboxId": sandbox_id }))
-                }
-                HypervOp::PoolRelease => {
-                    let id = require_sandbox_id()?;
-                    // Without --pool the owning pool is found by scanning every pool.
-                    mxc_sdk::hyperv_lifecycle::pool::release_to_pool(cli.pool.as_deref(), id)
-                        .map(|()| serde_json::json!({}))
-                }
-                HypervOp::PoolDrain => mxc_sdk::hyperv_lifecycle::pool::drain_pool(pool_id())
-                    .map(|()| serde_json::json!({})),
-            }
-        })();
-        match result {
-            Ok(value) => {
-                println!("{}", serde_json::json!({ "result": value }));
-                0
-            }
-            Err(error) => {
-                println!("{}", error_envelope_string(&error));
-                1
-            }
-        }
-    }
-    #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
-    {
-        let _ = (op, cli);
-        println!(
-            "{}",
-            error_envelope_string(&MxcError::backend_unavailable(
-                "the Hyper-V backend is not available in this build (requires Windows with the \
-                 `hyperv` feature)"
-            ))
-        );
-        1
-    }
-}
-
 fn main() {
     let cli = parse_cli().normalize_named_config_command();
 
@@ -1273,14 +1020,6 @@ fn main() {
             cli.telemetry_consent_locale.as_deref(),
         );
         process::exit(outcome.emit());
-    }
-
-    // Hyper-V backend-private pause/resume/checkpoint/rollback. Dispatched
-    // here, before any config decoding or `Phase` conversion: these never
-    // construct a `ParsedStateAwareRequest` or touch the shared lifecycle
-    // dispatch path at all. See `hyperv_lifecycle::backend_ops`.
-    if let Some(op) = cli.hyperv_op {
-        process::exit(run_hyperv_op(op, &cli));
     }
     // Decode the request source (file path / base64) once, up front.
     let decoded_config: Option<Result<String, RequestInputError>> = decode_config_input_once(&cli);
@@ -1314,20 +1053,6 @@ fn main() {
             }
         }
         Err(e) => eprintln!("DACL recovery failed: {e}"),
-    }
-
-    // Detection-only fast path used by SDK `getPlatformSupport()`; runs before
-    // config handling so no JSON file is needed just to ask what the host can
-    // do, and mutates no host state.
-    if cli.available_backends {
-        match mxc_sdk::mxc_engine::to_json_pretty(&mxc_sdk::mxc_engine::available_backends()) {
-            Ok(json) => println!("{json}"),
-            Err(e) => {
-                eprintln!("Error: probe serialization failed: {e}");
-                process::exit(1);
-            }
-        }
-        return;
     }
 
     // --probe is a detection-only fast path used by SDK
@@ -1470,16 +1195,13 @@ fn main() {
     if cli.setup_wslc {
         #[cfg(feature = "wslc")]
         {
-            let images: Vec<&str> = cli
-                .image
-                .iter()
-                .map(String::as_str)
-                .filter(|name| !name.is_empty())
-                .collect();
-            if images.is_empty() {
-                eprintln!("Error: --setup-wslc requires --image <name>");
-                process::exit(1);
-            }
+            let image = match cli.image.as_deref() {
+                Some(s) if !s.is_empty() => s,
+                _ => {
+                    eprintln!("Error: --setup-wslc requires --image <name>");
+                    process::exit(1);
+                }
+            };
             let mut logger = Logger::new(if cli.debug {
                 Mode::Console
             } else {
@@ -1491,9 +1213,8 @@ fn main() {
             // `init_and_load_sdk`.
             let result = unsafe {
                 mxc_sdk::wslc_common::image::setup_pull_image(
-                    &images,
+                    image,
                     cli.storage_path.as_deref(),
-                    cli.wslc_daemon_slots.unwrap_or(0) as usize,
                     &mut logger,
                 )
             };
