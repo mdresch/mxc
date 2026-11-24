@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stages 1–4 Approved |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 5 & Stage 6 Drafted |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` (Closed) $\rightarrow$ `PMP-BL-v3.0.0-candidate` |
-| **Session close-off checkpoint** | Phase 3 Stages 1–4 Approved (`Spark-Capture-Phase-3.md`, `Ideation-Document-Phase-3.md`, `Business-Case-Phase-3.md`, `Benefits-Statement-Phase-3.md`, `Project-Charter-Phase-3.md` via `approve-ideation`, `approve-business-case`, `approve-charter` on `2026-11-24`) |
-| **Current macro Stage** | Stages 1–4 Complete (`approve-charter` & `approve-business-case` Approved) $\rightarrow$ Stage 5 (Pillars) & Stage 6 (ADR / BRD / FDD / Stories) |
-| **Last Epic/unit of work fully completed** | Phase 3 Stage 2 & Stage 4 (`Business-Case-Phase-3.md`, `Benefits-Statement-Phase-3.md`, `Project-Charter-Phase-3.md` Approved) |
-| **Next Epic/unit of work to implement** | Phase 3 Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 (ADR / BRD / FDD / User Stories for `Epics 013–017`) |
-| **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
+| **Session close-off checkpoint** | Phase 3 Stages 1–4 Approved; Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 (`ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017`, 12/12 stories `spec_gate --no-persist` PASSED) Drafted across all 21 improvements |
+| **Current macro Stage** | Stage 5 & Stage 6 Drafted (Proposed) $\rightarrow$ Awaiting Stage 5/6 Gate Approvals (`approve-adr`, `approve-brd`, `approve-fdd`, `approve-user-stories`) & Stage 7 (`PMP`) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 Suites (`Epics 013–017` Drafted & `spec_gate` Verified) |
+| **Next Epic/unit of work to implement** | Approve Phase 3 Stage 5/6 (`ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017`), complete Stage 7 (`Project-Management-Plan-Phase-3.md` / `approve-pmp`), and authorize Stage 8 execution |
+| **Last commit on the base branch** | `4b55b05a` (Phase 3 Stage 2 & Stage 4 Charter/Business Case/Benefits gates) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stages 1–4 Approved (`approve-ideation`, `approve-business-case`, `approve-charter` 2026-11-24) | [Project-Charter-Phase-3.md](../project-docs/Project-Charter-Phase-3.md), [Business-Case-Phase-3.md](../project-docs/Business-Case-Phase-3.md), [Benefits-Statement-Phase-3.md](../project-docs/Benefits-Statement-Phase-3.md) |
+| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stage 5 & Stage 6 Drafted (`Proposed`, 12/12 `spec_gate` PASS) | [PILLARS-Phase-3.md](../07-architecture/PILLARS-Phase-3.md), `ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017` |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -75,6 +75,11 @@ caused this, both worth guarding against here:
 | Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Complete | Story 10.1, Story 10.2 (2/2) |
 | Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Complete | Story 11.1, Story 11.2 (2/2) |
 | Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Complete | Story 12.1, Story 12.2 (2/2) |
+| Epic 013 | Zero-secret guest git sync, sidecar proxy & MCP firewall (`ADR-014`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 13.1, 13.2 (0/2) |
+| Epic 014 | Parallel snapshot branching, chunked VMBus & IDE workers (`ADR-015`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 14.1, 14.2, 14.3 (0/3) |
+| Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 15.1, 15.2 (0/2) |
+| Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 16.1, 16.2 (0/2) |
+| Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 17.1, 17.2, 17.3 (0/3) |
 
 ## 4. How to keep this current
 
