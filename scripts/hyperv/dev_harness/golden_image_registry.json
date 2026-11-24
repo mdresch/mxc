@@ -203,6 +203,34 @@
         "Hardware PRNG Re-Seed + DB Pool Flush + VMBus Clock Sync Hook (:8080/health)"
       ],
       "notes": "Dedicated image for developing and testing SIDPA in hardware-isolated ephemeral sessions. Requests on Port 8092 wake only the SIDPA VM pool."
+    },
+    {
+      "image_id": "img-win11-agent-lean",
+      "name": "Windows 11 Pro Lean Prompt-Only Agent Image (Build 26300)",
+      "role": "agent-sandbox",
+      "application": "MXC Autonomous Agent Core Runtime (Git, Python/uv, Node/TS, pwsh)",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\win11-agent-lean.vhdx",
+      "archive_vhdx_path": "F:\\HyperV\\BaseImages\\win11-agent-lean.vhdx",
+      "source_iso_path": "C:\\HyperV\\Windows11_Client_x64_en-us_26300_9457.iso",
+      "parent_image_id": null,
+      "size_gb": 22.91,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows 11 Pro (x64 en-US Build 26300) — Prompt-Only PowerShell Shell (explorer.exe bypassed)",
+        "CompactOS Transparent LZX Compression + Optimize-VHD Full",
+        "Debloated: 44 provisioned & 46 installed AppX removed, 10 Optional Features disabled, 7 FoD Capabilities removed, OneDrive uninstalled, 23 background services disabled",
+        "Git 2.56.1 + GitHub CLI (gh 2.105.0) + 7zip 26.06",
+        "PowerShell 7.7.0 + ripgrep 16.0.0 + fd 10.5.2 + jq 1.8.2",
+        "Python 3.15.2 + uv 0.13.9 + ruff 0.17.6 + pytest, httpx, pydantic, mcp, requests",
+        "Node.js LTS v26.13.1 + pnpm 12.23.0 + TypeScript 7.0.2 + tsx",
+        "Hyper-V Integration Services (VMBus, PowerShell Direct, RDP Enhanced Session)"
+      ],
+      "notes": "Self-contained, zero-OOBE, ultra-lean Windows 11 Pro Agent image built directly from ISO via build_win11_agent_from_iso.ps1 and bake_win11_agent_lean.ps1."
     }
   ]
 }
