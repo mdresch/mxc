@@ -161,3 +161,16 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   1. `CRITICAL` RAM pressure (`>85%`) MUST immediately override dwell hysteresis to shed idle `WarmPaused` guests to `ColdSaved` back to `<=80%`, while strictly preserving `target_hot >= platinum_k_min`.
   2. Non-critical transitions within `min_dwell_seconds` (`60s`) MUST hold to eliminate NVMe checkpoint thrashing.
   3. Enforce `desktop_gui >= 4096 MB` static RAM (`dynamic_memory_enabled=False`) and `>= 4` vCPUs, rejecting non-compliant specs with `ERR_ARCHETYPE_FLOOR_VIOLATION`.
+
+### LL-013 — Auth-Before-Wake Invariance, Deny-by-Default Claims Routing & Mandatory TTL Reclamation (`ADR-008`)
+- **Epic / Story:** Epic 012 / Stories 12.1 & 12.2 (`spec-12_1-0a227e26`, `spec-12_2-06896982`)
+- **Scope:** Authentication-gated ingress, human OIDC/SAML & Entra Agent ID claims resolver, and TTL-bounded identity-bound VM leasing (`scripts/lib/auth_gated_leasing.py`)
+- **Date:** 2026-11-24
+- **Tier 2/3 Propagation Target:** `.claude/skills/auth-gated-leasing/SKILL.md`
+- **The Trap / Problem:** Persisting identity-bound VM mappings without a hard TTL ceiling traps standby VMs indefinitely and breaks pool economics, while falling back to a default pool on unmapped claims opens a privilege-escalation vector to higher-trust golden images.
+- **The Root Cause:** Leaving binding expiry unspecified (`ADR-008 §4.5`) and treating optional assertion/TTL parameters without defensive `None` guards.
+- **Actionable Invariant / Rule:** Enforce `BRU-012-01`..`05` and `AC-12.1.1`..`12.2.3`:
+  1. `route_mode="path_only"` keeps `ADR-002` path-routed leasing and `ADR-005` sterile rollback completely untouched.
+  2. `route_mode="auth_gated"` MUST reject missing (`None`) or expired assertions before calling `pool_allocator` (`0` VMs woken).
+  3. Claims mapping is strictly deny-by-default (`ERR_CLAIM_UNMAPPED`), supporting both `"human"` and `"entra_agent_id"` assertions.
+  4. `binding_ttl_seconds` is strictly clamped to `[300, 86400]` (default `14400s`), and `sweep_expired_bindings()` returns expired `vm_id`s for mandatory `ADR-005` `.avhdx` sterile discard.

@@ -12,7 +12,7 @@ inputs:
 process: "Decompose ADR-008 authentication-gated provisioning, deny-by-default claims routing, and TTL-bounded identity-bound VM leasing into testable user stories"
 outputs:
   - "docs/user-stories/epic-012-auth-gated-identity-bound-leasing.md"
-status: "Approved — Ready for Implementation"
+status: "Closed / Implemented & Validated"
 ---
 
 # Epic 012: Authentication-Gated Session Provisioning & Identity-Bound VM Leasing (`ADR-008`)
@@ -21,13 +21,13 @@ status: "Approved — Ready for Implementation"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-008](../07-architecture/ADR-008-authentication-gated-session-provisioning.md) (Accepted 2026-11-04)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 3.4 / 13.0 | **Topic Pillars:** `TP-02` & `TP-05`  
-> **Status:** Approved — Ready for Implementation (2026-11-24)
+> **Status:** Closed / Implemented & Validated (2026-11-24)
 
 ---
 
 ## Story 12.1 — `auth_gated` Ingress Gate & Deny-by-Default Claims-to-Pool Resolver
 - **WBS:** 3.4.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As an** Enterprise IAM Architect,  
   **I want** routes configured with `leasing_mode: "auth_gated"` to require a verified OIDC/SAML/Entra Agent ID assertion before calling `pool_lease` and to select the target golden-image pool via a deny-by-default claims map,  
   **so that** unauthenticated traffic wakes zero VMs and callers only access pools authorized by their verified claims.
@@ -40,7 +40,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 12.2 — Opt-In Identity-Bound VM Leasing & Mandatory TTL Expiry Reclamation
 - **WBS:** 3.4.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Security & Platform Operations Lead,  
   **I want** opt-in identity-bound leases `(subject_id, pool_target) -> vm_id` to reconnect returning users/agents to their warm VM within a bounded TTL and automatically reclaim expired bindings via `ADR-005` sterile `.avhdx` discard,  
   **so that** personalized desktops/agents persist safely without cross-user leakage or indefinite pool starvation.

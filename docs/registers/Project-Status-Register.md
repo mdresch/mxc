@@ -43,10 +43,10 @@ caused this, both worth guarding against here:
 |---|---|
 | **Current Phase** | Phase 2 (Predictive Orchestration & Enterprise Execution Fabric) — Active |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` |
-| **Session close-off checkpoint** | Epic 011 (Autonomous Fleet Economics & Dynamic Sizing Scheduler) Complete (Stories 11.1..11.2 validated, 199 contracts passing on `feat/hyperv-v2-rebased`) |
-| **Current macro Stage** | Stage 9 / 10 (Execution & Verification: Phase 2 Sprints) |
-| **Last Epic/unit of work fully completed** | Epic 011: Autonomous Fleet Economics & Dynamic Sizing Scheduler (`LL-012`, `IMP-MXC-004` / `011` / `020` Delivered) |
-| **Next Epic/unit of work to implement** | Epic 012: Authentication-Gated Provisioning & Identity-Bound Leasing (`ADR-008`, `Story 12.1`, WBS 3.4 / 13.0) |
+| **Session close-off checkpoint** | All Phase 2 Epics Complete — Epic 012 (`ADR-008` Auth-Gated & Identity-Bound Leasing) Complete (Stories 12.1..12.2 validated, 204 Python contracts + 83 Rust Hyper-V tests passing on `feat/hyperv-v2-rebased`) |
+| **Current macro Stage** | Stage 10 Complete → Ready for Stage 17/18 (Phase 2 Closeout) or In-Flight Candidates |
+| **Last Epic/unit of work fully completed** | Epic 012: Authentication-Gated Provisioning & Identity-Bound Leasing (`ADR-008`, `LL-013`, `IMP-MXC-025` core delivered) |
+| **Next Epic/unit of work to implement** | Phase 2 Closeout (Stage 17/18) or In-Flight Candidates (`IMP-MXC-019`, `IMP-MXC-027`, `IMP-MXC-030`, `IMP-MXC-031`) |
 | **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
@@ -56,7 +56,7 @@ caused this, both worth guarding against here:
 | Phase | Baseline | Status | Closed via |
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
-| Phase 2 | `PMP-BL-v2.0.0` | In Progress (Epics 007..009 complete, Epics 010..011 planned) | Active development |
+| Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contract tests + 83 Rust Hyper-V unit tests passing |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -73,7 +73,7 @@ caused this, both worth guarding against here:
 | Epic 009 | Hyper-V memory combining and deduplication | Phase 2 | Complete | Story 9.1, Story 9.2 (2/2) |
 | Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Complete | Story 10.1, Story 10.2 (2/2) |
 | Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Complete | Story 11.1, Story 11.2 (2/2) |
-| Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Approved — Ready for Implementation | Pending Story 12.1 (`BRD-012` / `FDD-012` Approved) |
+| Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Complete | Story 12.1, Story 12.2 (2/2) |
 
 ## 4. How to keep this current
 
