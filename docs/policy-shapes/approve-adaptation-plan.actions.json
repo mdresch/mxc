@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_adaptation_plan",
+    "description": "The Adaptation Plan soundly operationalizes validated governance changes into behavioral, tooling, and workflow modifications, and explicitly tailors updates to affected Subsidiary Management Plans feeding back to the Project Management Plan -- approve it for rollout",
+    "parameters": {}
+  },
+  {
+    "id": "reject_adaptation_plan",
+    "description": "The Adaptation Plan introduces ungrounded workflow disruptions, violates architectural boundaries, or fails to specify which management plans require updates following governance changes -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Adaptation Plan requires clearer transition milestones, risk mitigations, or more precise tailoring of subsidiary management plan updates before execution",
+    "parameters": {}
+  }
+]

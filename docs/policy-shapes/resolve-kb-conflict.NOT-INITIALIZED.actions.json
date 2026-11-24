@@ -1,0 +1,8 @@
+{
+  "_note": "Reference only, NOT initialized. The three actions are named in docs/chain-coverage.md (Stages 14-15) and were first written down as a shape in Kayros Bay's PROP-002 (2026-10-27), which keeps them under the shared obsidian-brain-ingestor with FULL authority and requires_human_approval true. No project has recorded a resolve-kb-conflict decision yet, and only one project has adopted this shape, so it is not independently confirmed (sequence-and-lessons.md Rule #17). The first real adjudication, and a deliberately wrong frame to validate it (Rule #10), should settle the shape, not this file.",
+  "actions": [
+    {"id": "trust_existing", "description": "The existing knowledge-base node stands; the new insight is recorded and linked to it. If the node is an accepted project document, the conflicting note is corrected instead", "parameters": {}},
+    {"id": "supersede", "description": "The new insight replaces the existing knowledge-base node, which is marked superseded and not deleted. Never available against an accepted project document", "parameters": {}},
+    {"id": "flag", "description": "The conflict is not decidable from the evidence; it is held for the Project Owner (a possible defect in a project document then goes through the baseline feedback route)", "parameters": {}}
+  ]
+}

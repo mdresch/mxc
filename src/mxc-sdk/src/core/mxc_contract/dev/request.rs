@@ -74,6 +74,7 @@ fn parse_provision(json: &str) -> Result<ProvisionRequest, RequestParseError> {
             deserialize(json, "IsolationSession provision").map(ProvisionRequest::IsolationSession)
         }
         Containment::Wslc => deserialize(json, "WSLC provision").map(ProvisionRequest::Wslc),
+        Containment::HyperV => deserialize(json, "Hyper-V provision").map(ProvisionRequest::HyperV),
     }
 }
 

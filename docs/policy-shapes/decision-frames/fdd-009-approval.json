@@ -1,0 +1,131 @@
+{
+  "task": "FDD-009 (Intent Refinement and Cognitive Feedback Loop): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Functional design traces directly to BRD-009 rules and ADR-009 double-loop architecture"
+    },
+    {
+      "id": "fix_location_correct",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Contracts placed correctly in pmbok/models/intent_refinement.py and orchestrator CLI workflows"
+    },
+    {
+      "id": "no_invented_implementation",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Validated against real Pydantic v2 model, Bayes factor bounds, and low-pass filter math"
+    },
+    {
+      "id": "compatibility_preserved",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Zero storage expansion (ADR-002), PMBOK 4.7 phase close alignment, and ADR-001/008 authority preservation"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "fdd_009_architecture_traces_to_brd_009_bru_01_through_11_and_adr_009",
+          "support": 0.96,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "fdd_009_contracts_located_in_pmbok_models_intent_refinement_py_and_scripts",
+          "support": 0.95,
+          "confidence": 0.90
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "pydantic_v2_code_citations_and_bayes_factor_formula_bf10_evaluation",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "preserves_adr_002_five_records_and_adr_001_full_authority_governance",
+          "support": 0.95,
+          "confidence": 0.90
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "fdd_009_architecture_traces_to_brd_009_bru_01_through_11_and_adr_009",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "fdd_009_contracts_located_in_pmbok_models_intent_refinement_py_and_scripts",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "pydantic_v2_code_citations_and_bayes_factor_formula_bf10_evaluation",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "preserves_adr_002_five_records_and_adr_001_full_authority_governance",
+          "support": 0.05,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "fdd_009_architecture_traces_to_brd_009_bru_01_through_11_and_adr_009",
+          "support": 0.08,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "fdd_009_contracts_located_in_pmbok_models_intent_refinement_py_and_scripts",
+          "support": 0.08,
+          "confidence": 0.78
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "pydantic_v2_code_citations_and_bayes_factor_formula_bf10_evaluation",
+          "support": 0.09,
+          "confidence": 0.78
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "preserves_adr_002_five_records_and_adr_001_full_authority_governance",
+          "support": 0.08,
+          "confidence": 0.80
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

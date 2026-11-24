@@ -1,0 +1,335 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-business-case",
+  "policy_id": "91a33a4f-7d22-43e1-85ff-51026f350df0",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "reason": "The policy requires human approval; accept or reject the reasoned recommendation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_business_case",
+    "description": "The Business Case establishes a grounded value premise tied to hypotheses, credible ROI/benefit expectations, realistic risk assessments, and sound business alternatives -- approve it to authorize project chartering",
+    "parameters": {}
+  },
+  "candidate_actions": [
+    {
+      "id": "approve_business_case",
+      "description": "The Business Case establishes a grounded value premise tied to hypotheses, credible ROI/benefit expectations, realistic risk assessments, and sound business alternatives -- approve it to authorize project chartering",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_business_case",
+        "description": "The Business Case establishes a grounded value premise tied to hypotheses, credible ROI/benefit expectations, realistic risk assessments, and sound business alternatives -- approve it to authorize project chartering",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "support": 0.9803840673392912,
+          "entropy_bits": 0.13927865270682968,
+          "disagreement_bits": 0.003228278930111683,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "support": 0.9521370267202373,
+          "entropy_bits": 0.27724871195966894,
+          "disagreement_bits": 0.0005660565797093176,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "financial_justification",
+          "support": 0.41219115121522176,
+          "entropy_bits": 0.9776367133216084,
+          "disagreement_bits": 0.00029112959165644714,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "support": 0.8777700578560657,
+          "entropy_bits": 0.5357369772926646,
+          "disagreement_bits": 0.0015824333682139535,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "support": 0.9764947317014449,
+          "entropy_bits": 0.16069323043284167,
+          "disagreement_bits": 0.0007374153088847701,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.8397954069664522,
+      "uncertainty": 0.4181188571427226,
+      "robust_utility": 0.7979835212521799,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_business_case",
+        "description": "The Business Case fails to justify investment, presents unviable economics or unsubstantiated value premises -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "support": 0.013098345874231254,
+          "entropy_bits": 0.10069584725381125,
+          "disagreement_bits": 0.00025985944288486884,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "support": 0.02216570868752744,
+          "entropy_bits": 0.1534335424343089,
+          "disagreement_bits": 0.0002096455106952444,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "financial_justification",
+          "support": 0.5884912869943962,
+          "entropy_bits": 0.9772858952850394,
+          "disagreement_bits": 0.002621985307701191,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "support": 0.032733253499326376,
+          "entropy_bits": 0.20791901541966804,
+          "disagreement_bits": 0.00017692909100130993,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "support": 0.010818868580596256,
+          "entropy_bits": 0.0861741181147308,
+          "disagreement_bits": 0.00111088557216793,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.1334614927272155,
+      "uncertainty": 0.3051016837015117,
+      "robust_utility": 0.10295132435706433,
+      "ruled_out_by": [
+        "pareto_dominated_by:request_revision_before_decision"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Business Case requires further financial justification, risk quantification, or clearer hypothesis-to-benefit linkage before it can be judged",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "support": 0.048150093575354234,
+          "entropy_bits": 0.2784861002717711,
+          "disagreement_bits": 0.0005655746032502407,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "support": 0.09750720296747811,
+          "entropy_bits": 0.4610434360318395,
+          "disagreement_bits": 0.00043457385186962405,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "financial_justification",
+          "support": 0.828429860282639,
+          "entropy_bits": 0.661284020724848,
+          "disagreement_bits": 0.003155805589774796,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "support": 0.4022464961429829,
+          "entropy_bits": 0.9722495512894679,
+          "disagreement_bits": 0.0011696870595440112,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "support": 0.05420619585877474,
+          "entropy_bits": 0.3040027463972323,
+          "disagreement_bits": 0.0021487734750796905,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.2861079697654458,
+      "uncertainty": 0.5354131709430318,
+      "robust_utility": 0.2325666526711426,
+      "ruled_out_by": []
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": null,
+  "action_probabilities": {
+    "approve_business_case": 0.3333333333333333,
+    "reject_business_case": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_context": "Given a drafted Business Case or Benefits Statement, decide whether to approve it to justify investment, reject it, or request revision before deciding -- validating Stage 4 Benefit",
+  "decision_authority": "full",
+  "selection_mode": "reasoned",
+  "selected_action_feedback": {
+    "attempts": 0,
+    "correctness_evaluated": 0,
+    "correct": 0,
+    "correctness_rate": null,
+    "rewarded_episodes": 0,
+    "mean_reward": null,
+    "recent_outcomes": []
+  },
+  "historical_feedback": {
+    "episodes_reviewed": 0,
+    "actions": {
+      "approve_business_case": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "reject_business_case": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "request_revision_before_decision": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      }
+    }
+  },
+  "autonomy": {
+    "eligible": false,
+    "authorization_basis": "none",
+    "decision_authority": "full",
+    "mode": "supervised",
+    "execute_without_confirmation": false,
+    "request_user_feedback": true,
+    "observable_outcome_satisfies_feedback": false,
+    "feedback_reason": "human_approval_required",
+    "outcome_recording": "user_feedback",
+    "complexity": {
+      "tier": "standard",
+      "score": 4,
+      "intent_score": 1,
+      "decision_score": 3,
+      "action_count": 3,
+      "action_space_points": 1,
+      "profile_source": "configured",
+      "profile": {
+        "intent_ambiguity": "low",
+        "context_variability": "variable",
+        "outcome_observability": "direct",
+        "decision_impact": "high",
+        "reversibility": "reversible",
+        "requires_human_approval": true,
+        "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+      },
+      "risk_floors": []
+    },
+    "learned_policy_assessment": {
+      "eligible": false,
+      "authorization_basis": "none",
+      "user_feedback_status": null,
+      "user_feedback_episode_id": null,
+      "recommended_action_id": "approve_business_case",
+      "scored_outcomes": 0,
+      "correctness_evaluated": 0,
+      "correct_outcomes": 0,
+      "correctness_rate": null,
+      "correctness_lower_bound": 0.0,
+      "mean_reward": null,
+      "action_probability": 0.3333333333333333,
+      "probability_margin": 0.0,
+      "stable_snapshots": 0,
+      "audit_rate": 0.1,
+      "complexity": {
+        "tier": "standard",
+        "score": 4,
+        "intent_score": 1,
+        "decision_score": 3,
+        "action_count": 3,
+        "action_space_points": 1,
+        "profile_source": "configured",
+        "profile": {
+          "intent_ambiguity": "low",
+          "context_variability": "variable",
+          "outcome_observability": "direct",
+          "decision_impact": "high",
+          "reversibility": "reversible",
+          "requires_human_approval": true,
+          "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+        },
+        "risk_floors": []
+      },
+      "criteria": {
+        "minimum_outcomes": {
+          "actual": 0,
+          "required": 20,
+          "met": false
+        },
+        "correctness_lower_bound": {
+          "actual": 0.0,
+          "required": 0.9,
+          "wilson_z": 1.96,
+          "met": false
+        },
+        "positive_mean_reward": {
+          "actual": null,
+          "required_greater_than": 0.0,
+          "met": false
+        },
+        "action_probability": {
+          "actual": 0.3333333333333333,
+          "required": 0.6,
+          "met": false
+        },
+        "probability_margin": {
+          "actual": 0.0,
+          "required": 0.15,
+          "met": false
+        },
+        "stable_snapshots": {
+          "actual": 0,
+          "required": 3,
+          "met": false
+        },
+        "human_approval_not_required": {
+          "actual": true,
+          "required": false,
+          "met": false
+        },
+        "latest_user_feedback_not_rejected": {
+          "actual": null,
+          "required_not": "rejected",
+          "met": true
+        }
+      }
+    }
+  }
+}

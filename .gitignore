@@ -56,3 +56,12 @@ output
 
 # OS generated files
 .DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Hyper-V screenshots
+scripts/hyperv/screenshots/
+

@@ -1,0 +1,205 @@
+{
+  "task": "ADR-001 brd: approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "traceable_to_adr",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Business rules cite ADR sections and match Accepted decisions"
+    },
+    {
+      "id": "honest_metrics",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Metrics name Formulated, blocked, or unmeasured states instead of inventing pass/fail"
+    },
+    {
+      "id": "out_of_scope_accurate",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Out-of-scope matches sibling ADR boundaries"
+    },
+    {
+      "id": "rules_actionable",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "BRU rules are concrete enough to drive FDD and stories"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.89,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.89,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.89,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.89,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.10999999999999997,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/project-docs/Business-Requirements/BRD-001-type-1-hyperv-generation-2.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "docs/07-architecture/ADR-001-type-1-hyperv-generation-2.md",
+          "support": 0.18,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

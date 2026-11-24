@@ -1,0 +1,205 @@
+{
+  "task": "ADR-004 user-stories: approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "testable_ac",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Acceptance criteria are contract-testable or name the blocking measurement"
+    },
+    {
+      "id": "traceable_to_brd_fdd",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Stories map to BRU rules and FDD sections"
+    },
+    {
+      "id": "suite_alignment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "AC numbers align with USER_STORIES.md where a suite anchor exists"
+    },
+    {
+      "id": "not_forced_shape",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "No filler stories for out-of-scope horizon items"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.92,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.9,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.92,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.9,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.92,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.9,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.92,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.9,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.07999999999999996,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.09999999999999996,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.07999999999999996,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.09999999999999996,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.07999999999999996,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.09999999999999996,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.07999999999999996,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.09999999999999996,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "testable_ac",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_brd_fdd",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "suite_alignment",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/user-stories/epic-004-paused-ram-standby.md",
+          "support": 0.15,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "not_forced_shape",
+          "source": "docs/project-docs/Functional-Design/FDD-004-paused-ram-standby.md",
+          "support": 0.18,
+          "confidence": 0.86
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

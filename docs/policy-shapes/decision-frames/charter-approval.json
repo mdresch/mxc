@@ -1,0 +1,133 @@
+{
+  "task": "Project Charter (Stage 2: Objective): approve, reject, or request revision before proceeding to Stage 6 PMP orchestration",
+  "criteria": [
+    {
+      "id": "strategic_alignment_and_purpose",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Clear strategic purpose and alignment with Stage 4 business foundation (Business Case, Benefits Statement, and Spark Capture)"
+    },
+    {
+      "id": "measurable_success_criteria",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Explicit, quantifiable success criteria traceable 1:1 to approved business benefits"
+    },
+    {
+      "id": "delegated_authority_and_governance",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Codified Project Manager delegated authorities (spending limits, resource leveling, change control) and binding Steering Committee escalation thresholds"
+    },
+    {
+      "id": "scope_and_constraint_boundaries",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Unambiguous scope inclusions, exclusions, and architectural constraints"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_charter",
+      "evidence": [
+        {
+          "criterion_id": "strategic_alignment_and_purpose",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "measurable_success_criteria",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "scope_and_constraint_boundaries",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_charter",
+      "evidence": [
+        {
+          "criterion_id": "strategic_alignment_and_purpose",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.04,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "measurable_success_criteria",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.03,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "scope_and_constraint_boundaries",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.04,
+          "confidence": 0.84
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "strategic_alignment_and_purpose",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.08,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "measurable_success_criteria",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.07,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.06,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "scope_and_constraint_boundaries",
+          "source": "docs/project-docs/Project-Charter.md",
+          "support": 0.07,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

@@ -1,0 +1,316 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-adr",
+  "policy_id": "0063adbf-5659-426d-950b-b2eaab87fb34",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "reason": "The policy requires human approval; accept or reject the reasoned recommendation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_adr",
+    "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+    "parameters": {}
+  },
+  "candidate_actions": [
+    {
+      "id": "approve_adr",
+      "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.9880266034581164,
+          "entropy_bits": 0.09360857818422234,
+          "disagreement_bits": 0.0009827514312955032,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.9834596578716837,
+          "entropy_bits": 0.12154777077346064,
+          "disagreement_bits": 0.0008826466774265462,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.9636106339174993,
+          "entropy_bits": 0.22548527356653222,
+          "disagreement_bits": 0.0006384223452507998,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.9745942961905777,
+          "entropy_bits": 0.17080039377867448,
+          "disagreement_bits": 0.0007378568404003416,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9774227978594693,
+      "uncertainty": 0.15286050407572244,
+      "robust_utility": 0.962136747451897,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "The ADR has a fundamental, unfixed flaw in its own decision or reasoning -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.4962294997135271,
+          "entropy_bits": 0.9999589789656378,
+          "disagreement_bits": 0.6523810232540133,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.5411855099131233,
+          "entropy_bits": 0.9951001182235557,
+          "disagreement_bits": 0.6343288925907273,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.6468886594592844,
+          "entropy_bits": 0.9368160936479181,
+          "disagreement_bits": 0.5685853214089028,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.5999477460437213,
+          "entropy_bits": 0.9709811528529666,
+          "disagreement_bits": 0.6000857614032249,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.5710628537824141,
+      "uncertainty": 0.9757140859225195,
+      "robust_utility": 0.4734914451901621,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_adr"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The ADR's own decision or reasoning needs a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the ADR itself already scoped correctly",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.07809284322821934,
+          "entropy_bits": 0.3954232950001672,
+          "disagreement_bits": 0.00046889880615574864,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.07809284322821934,
+          "entropy_bits": 0.3954232950001672,
+          "disagreement_bits": 0.00046889880615574864,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.07809284322821934,
+          "entropy_bits": 0.3954232950001672,
+          "disagreement_bits": 0.00046889880615574864,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.07809284322821934,
+          "entropy_bits": 0.3954232950001672,
+          "disagreement_bits": 0.00046889880615574864,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.07809284322821934,
+      "uncertainty": 0.3954232950001672,
+      "robust_utility": 0.03855051372820262,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_adr"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": null,
+  "action_probabilities": {
+    "approve_adr": 0.3333333333333333,
+    "reject_adr": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_context": "Given a drafted ADR, decide whether to approve it, reject it, or request revision before deciding -- shape independently converged by ADPA and SocialEngage",
+  "decision_authority": "full",
+  "selection_mode": "reasoned",
+  "selected_action_feedback": {
+    "attempts": 0,
+    "correctness_evaluated": 0,
+    "correct": 0,
+    "correctness_rate": null,
+    "rewarded_episodes": 0,
+    "mean_reward": null,
+    "recent_outcomes": []
+  },
+  "historical_feedback": {
+    "episodes_reviewed": 0,
+    "actions": {
+      "approve_adr": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "reject_adr": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      },
+      "request_revision_before_decision": {
+        "attempts": 0,
+        "correctness_evaluated": 0,
+        "correct": 0,
+        "correctness_rate": null,
+        "rewarded_episodes": 0,
+        "mean_reward": null,
+        "recent_outcomes": []
+      }
+    }
+  },
+  "autonomy": {
+    "eligible": false,
+    "authorization_basis": "none",
+    "decision_authority": "full",
+    "mode": "supervised",
+    "execute_without_confirmation": false,
+    "request_user_feedback": true,
+    "observable_outcome_satisfies_feedback": false,
+    "feedback_reason": "human_approval_required",
+    "outcome_recording": "user_feedback",
+    "complexity": {
+      "tier": "standard",
+      "score": 4,
+      "intent_score": 1,
+      "decision_score": 3,
+      "action_count": 3,
+      "action_space_points": 1,
+      "profile_source": "configured",
+      "profile": {
+        "intent_ambiguity": "low",
+        "context_variability": "variable",
+        "outcome_observability": "direct",
+        "decision_impact": "high",
+        "reversibility": "reversible",
+        "requires_human_approval": true,
+        "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+      },
+      "risk_floors": []
+    },
+    "learned_policy_assessment": {
+      "eligible": false,
+      "authorization_basis": "none",
+      "user_feedback_status": null,
+      "user_feedback_episode_id": null,
+      "recommended_action_id": "approve_adr",
+      "scored_outcomes": 0,
+      "correctness_evaluated": 0,
+      "correct_outcomes": 0,
+      "correctness_rate": null,
+      "correctness_lower_bound": 0.0,
+      "mean_reward": null,
+      "action_probability": 0.3333333333333333,
+      "probability_margin": 0.0,
+      "stable_snapshots": 0,
+      "audit_rate": 0.1,
+      "complexity": {
+        "tier": "standard",
+        "score": 4,
+        "intent_score": 1,
+        "decision_score": 3,
+        "action_count": 3,
+        "action_space_points": 1,
+        "profile_source": "configured",
+        "profile": {
+          "intent_ambiguity": "low",
+          "context_variability": "variable",
+          "outcome_observability": "direct",
+          "decision_impact": "high",
+          "reversibility": "reversible",
+          "requires_human_approval": true,
+          "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+        },
+        "risk_floors": []
+      },
+      "criteria": {
+        "minimum_outcomes": {
+          "actual": 0,
+          "required": 20,
+          "met": false
+        },
+        "correctness_lower_bound": {
+          "actual": 0.0,
+          "required": 0.9,
+          "wilson_z": 1.96,
+          "met": false
+        },
+        "positive_mean_reward": {
+          "actual": null,
+          "required_greater_than": 0.0,
+          "met": false
+        },
+        "action_probability": {
+          "actual": 0.3333333333333333,
+          "required": 0.6,
+          "met": false
+        },
+        "probability_margin": {
+          "actual": 0.0,
+          "required": 0.15,
+          "met": false
+        },
+        "stable_snapshots": {
+          "actual": 0,
+          "required": 3,
+          "met": false
+        },
+        "human_approval_not_required": {
+          "actual": true,
+          "required": false,
+          "met": false
+        },
+        "latest_user_feedback_not_rejected": {
+          "actual": null,
+          "required_not": "rejected",
+          "met": true
+        }
+      }
+    }
+  }
+}

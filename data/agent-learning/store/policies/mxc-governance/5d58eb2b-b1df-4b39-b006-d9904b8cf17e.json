@@ -1,0 +1,48 @@
+{
+  "id": "5d58eb2b-b1df-4b39-b006-d9904b8cf17e",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-adaptation-plan",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_adaptation_plan",
+      "description": "The Adaptation Plan soundly operationalizes validated governance changes into behavioral, tooling, and workflow modifications, and explicitly tailors updates to affected Subsidiary Management Plans feeding back to the Project Management Plan -- approve it for rollout",
+      "parameters": {}
+    },
+    {
+      "id": "reject_adaptation_plan",
+      "description": "The Adaptation Plan introduces ungrounded workflow disruptions, violates architectural boundaries, or fails to specify which management plans require updates following governance changes -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The Adaptation Plan requires clearer transition milestones, risk mitigations, or more precise tailoring of subsidiary management plan updates before execution",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_adaptation_plan": 0.0,
+    "reject_adaptation_plan": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a drafted Adaptation Plan translating governance changes into operational adjustments and tailoring subsidiary management plan updates feeding the PMP, decide whether to approve rollout, reject it, or request revision before deciding",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:11:35.345594+00:00"
+}

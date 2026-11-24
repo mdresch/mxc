@@ -1,0 +1,89 @@
+{
+  "task": "Stage 4 Benefits Statement: approve, reject, or request revision before the Project Charter",
+  "criteria": [
+    {
+      "id": "hypothesis_benefit_linkage",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each benefit names the hypotheses it checks, and research hypotheses stay out of the register"
+    },
+    {
+      "id": "measurable_targets",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each benefit has a measure, a target threshold, an owner, and a check that can fail"
+    },
+    {
+      "id": "realization_sequence",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "The realization plan orders checks so a later benefit is not treated as passed when an earlier dependency has failed"
+    },
+    {
+      "id": "financial_justification",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Currency value is either quantified or explicitly not claimed, with an owner only for the benefits that exist"
+    },
+    {
+      "id": "open_items_named",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Unresolved numbers, an unfinished production image, and an unnamed second factor are stated as open checks rather than as already realized"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_business_case",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.93, "confidence": 0.92},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.90, "confidence": 0.88},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.88, "confidence": 0.90},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Ideation-Document.md", "support": 0.80, "confidence": 0.84},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.91, "confidence": 0.92},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Business-Case.md", "support": 0.72, "confidence": 0.80},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.48, "confidence": 0.92},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.46, "confidence": 0.90},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.86, "confidence": 0.90},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Business-Case.md", "support": 0.80, "confidence": 0.86}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "reject_business_case",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.06, "confidence": 0.90},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.07, "confidence": 0.86},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.08, "confidence": 0.88},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Ideation-Document.md", "support": 0.10, "confidence": 0.82},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.07, "confidence": 0.90},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Business-Case.md", "support": 0.12, "confidence": 0.78},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.40, "confidence": 0.88},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.36, "confidence": 0.86},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.08, "confidence": 0.88},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Business-Case.md", "support": 0.10, "confidence": 0.82}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.12, "confidence": 0.90},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.14, "confidence": 0.84},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.28, "confidence": 0.88},
+        {"criterion_id": "measurable_targets", "source": "docs/project-docs/Ideation-Document.md", "support": 0.24, "confidence": 0.80},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.14, "confidence": 0.90},
+        {"criterion_id": "realization_sequence", "source": "docs/project-docs/Business-Case.md", "support": 0.22, "confidence": 0.78},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.70, "confidence": 0.90},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.66, "confidence": 0.86},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Benefits-Statement.md", "support": 0.22, "confidence": 0.88},
+        {"criterion_id": "open_items_named", "source": "docs/project-docs/Business-Case.md", "support": 0.26, "confidence": 0.82}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

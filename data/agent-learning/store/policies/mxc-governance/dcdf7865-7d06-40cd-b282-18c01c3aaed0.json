@@ -1,0 +1,48 @@
+{
+  "id": "dcdf7865-7d06-40cd-b282-18c01c3aaed0",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-ideation",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_ideation",
+      "description": "The Ideation document defines clear strategic motivation, falsifiable hypotheses, and grounded scope -- approve it to proceed to Charter and Business Case",
+      "parameters": {}
+    },
+    {
+      "id": "reject_ideation",
+      "description": "The Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_ideation": 0.0,
+    "reject_ideation": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a Spark Capture / Ideation Document, decide whether to approve it to proceed to Charter and Business Case, reject it, or request revision before deciding -- validating Stage 1 Intent",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:11:35.345594+00:00"
+}

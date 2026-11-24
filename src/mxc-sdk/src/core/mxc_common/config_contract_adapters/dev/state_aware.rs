@@ -5,7 +5,9 @@ use crate::mxc_common::config_contract_adapters::dev::common::{
     convert_filesystem, convert_network, convert_process, convert_runtime_config, convert_telemetry,
 };
 use crate::mxc_common::error::WxcError;
-use crate::mxc_common::models::{IsolationSessionProvisionConfig, WslcProvisionConfig};
+use crate::mxc_common::models::{
+    HypervProvisionConfig, IsolationSessionProvisionConfig, WslcProvisionConfig,
+};
 use crate::mxc_common::state_aware_input::StateAwareInput;
 use crate::mxc_common::state_aware_operation::{StateAwareOperation, StateAwareProvision};
 use crate::mxc_common::wire;
@@ -91,6 +93,28 @@ fn convert_state_aware_wslc(value: contract::StateAwareWslc) -> Option<WslcProvi
     provision.into_option().map(convert_wslc_provision)
 }
 
+fn convert_hyperv_provision(value: contract::HypervProvision) -> HypervProvisionConfig {
+    let contract::HypervProvision {
+        base_image_path,
+        guest_credential_target,
+        generation,
+        memory_startup_bytes,
+        cpu_count,
+    } = value;
+    HypervProvisionConfig {
+        base_image_path: Some(base_image_path),
+        guest_credential_target: guest_credential_target.into_option(),
+        generation: generation.into_option(),
+        memory_startup_bytes: memory_startup_bytes.into_option(),
+        cpu_count: cpu_count.into_option(),
+    }
+}
+
+fn convert_state_aware_hyperv(value: contract::StateAwareHyperv) -> HypervProvisionConfig {
+    let contract::StateAwareHyperv { provision } = value;
+    convert_hyperv_provision(provision)
+}
+
 fn state_aware_common(
     schema: contract::OptionalField<String>,
     comment: contract::OptionalField<serde_json::Value>,
@@ -134,6 +158,7 @@ pub(super) fn provision_into_input(
             windows_sandbox_provision_into_input(request)
         }
         contract::ProvisionRequest::Wslc(request) => wslc_provision_into_input(request),
+        contract::ProvisionRequest::HyperV(request) => hyperv_provision_into_input(request),
     }
 }
 
@@ -202,6 +227,26 @@ fn wslc_provision_into_input(
     StateAwareInput::new(
         common,
         StateAwareOperation::Provision(StateAwareProvision::Wslc(provision)),
+    )
+}
+
+fn hyperv_provision_into_input(
+    request: contract::HypervProvisionRequest,
+) -> Result<StateAwareInput, WxcError> {
+    let contract::HypervProvisionRequest {
+        schema,
+        comment,
+        version,
+        phase: contract::ProvisionPhase,
+        containment: contract::HypervContainment,
+        telemetry,
+        hyperv,
+    } = request;
+    let provision = convert_state_aware_hyperv(hyperv);
+    let common = state_aware_common(schema, comment, version, telemetry);
+    StateAwareInput::new(
+        common,
+        StateAwareOperation::Provision(StateAwareProvision::HyperV(Some(provision))),
     )
 }
 

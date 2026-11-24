@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_plan",
+    "description": "The subsidiary management plan establishes sound baseline definitions, meets technical integrity criteria, and is consistent with upstream plans -- approve it to authorize baseline formalization",
+    "parameters": {}
+  },
+  {
+    "id": "reject_plan",
+    "description": "The subsidiary management plan has critical deficiencies, ungrounded assumptions, or irreconcilable contradictions with upstream plans -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The subsidiary management plan requires minor clarifications, boundary sharpening, or terminology reconciliation with upstream plans before authorization",
+    "parameters": {}
+  }
+]

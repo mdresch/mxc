@@ -1,0 +1,131 @@
+{
+  "task": "BRD-009 (Intent Refinement and Cognitive Feedback Loop): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "traceable_to_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Business rules trace directly to ADR-009's double-loop cybernetic design and 16 invariants"
+    },
+    {
+      "id": "honest_metrics",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Success metrics are concrete, measurable, and tied to verifiable contract checks"
+    },
+    {
+      "id": "out_of_scope_accurate",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Out-of-scope list correctly excludes autonomous unaligned drift, tactical sprint changes, and storage bloat"
+    },
+    {
+      "id": "rules_actionable",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "BRU-009-01..11 are concrete and machine-enforceable, driving an actionable FDD"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "brd_009_section_1_and_2_cites_adr_009_invariants",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "brd_009_success_metrics_table_verifiable_via_pydantic_and_pmbok_cli",
+          "support": 0.94,
+          "confidence": 0.90
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "brd_009_section_4_out_of_scope_exclusions",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "bru_009_01_through_11_specifying_exact_bayes_factors_and_lineage_contracts",
+          "support": 0.94,
+          "confidence": 0.90
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "brd_009_section_1_and_2_cites_adr_009_invariants",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "brd_009_success_metrics_table_verifiable_via_pydantic_and_pmbok_cli",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "brd_009_section_4_out_of_scope_exclusions",
+          "support": 0.05,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "bru_009_01_through_11_specifying_exact_bayes_factors_and_lineage_contracts",
+          "support": 0.05,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "brd_009_section_1_and_2_cites_adr_009_invariants",
+          "support": 0.08,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "brd_009_success_metrics_table_verifiable_via_pydantic_and_pmbok_cli",
+          "support": 0.10,
+          "confidence": 0.78
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "brd_009_section_4_out_of_scope_exclusions",
+          "support": 0.08,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "bru_009_01_through_11_specifying_exact_bayes_factors_and_lineage_contracts",
+          "support": 0.09,
+          "confidence": 0.78
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

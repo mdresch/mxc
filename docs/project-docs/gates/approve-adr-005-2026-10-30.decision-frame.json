@@ -1,0 +1,205 @@
+{
+  "task": "ADR-005 (Transient differencing disk and egress whitelist): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "The decision is traceable to spark, hypotheses, or benefits, names its topic pillar, and states what is out of scope"
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Real alternatives are named with reasons for rejection, not strawmen"
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Negative consequences and open measurements are stated; hypotheses stay Formulated where no live proof exists"
+    },
+    {
+      "id": "adr_consistency",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Boundaries with sibling ADRs and the architecture-suite record are consistent"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.91,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.89,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.9,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.88,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.89,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.87,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.89,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.87,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.08999999999999997,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.9299999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.09999999999999998,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.9299999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.10999999999999999,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.9299999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.10999999999999999,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.9299999999999999,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.17,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.19,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.17,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.19,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.17,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.19,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/07-architecture/ADR-005-transient-differencing-disk.md",
+          "support": 0.17,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source": "docs/hyperv/architecture/USER_STORIES.md US-02",
+          "support": 0.19,
+          "confidence": 0.84
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

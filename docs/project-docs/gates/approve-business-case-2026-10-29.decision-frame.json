@@ -1,0 +1,89 @@
+{
+  "task": "Stage 4 Business Case: approve, reject, or request revision before the Benefits Statement and Charter",
+  "criteria": [
+    {
+      "id": "hypothesis_benefit_linkage",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each claimed benefit is tied to a named hypothesis, and research hypotheses are excluded from the claim"
+    },
+    {
+      "id": "benefit_expectations",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Operational benefit expectations are concrete ceilings taken from the hypotheses, not invented metrics"
+    },
+    {
+      "id": "financial_justification",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Investment limit, ROI, or an explicit bound that currency value is not yet claimed"
+    },
+    {
+      "id": "risk_assessment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Material risks are named, tied to open hypotheses, and not treated as already realized"
+    },
+    {
+      "id": "business_alternatives",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "The always-on server, the cold boot, and the shared-kernel container are compared, and the recommendation states what it does not prove"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_business_case",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.92, "confidence": 0.90},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Ideation-Document.md", "support": 0.88, "confidence": 0.86},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Business-Case.md", "support": 0.86, "confidence": 0.88},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Ideation-Document.md", "support": 0.84, "confidence": 0.84},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.46, "confidence": 0.92},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Ideation-Document.md", "support": 0.44, "confidence": 0.86},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Business-Case.md", "support": 0.78, "confidence": 0.88},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Ideation-Document.md", "support": 0.74, "confidence": 0.82},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Business-Case.md", "support": 0.88, "confidence": 0.90},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Spark-Capture.md", "support": 0.90, "confidence": 0.88}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "reject_business_case",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.08, "confidence": 0.88},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Ideation-Document.md", "support": 0.07, "confidence": 0.84},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Business-Case.md", "support": 0.10, "confidence": 0.86},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Ideation-Document.md", "support": 0.09, "confidence": 0.82},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.58, "confidence": 0.90},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Ideation-Document.md", "support": 0.52, "confidence": 0.84},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Business-Case.md", "support": 0.12, "confidence": 0.86},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Ideation-Document.md", "support": 0.11, "confidence": 0.80},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Business-Case.md", "support": 0.08, "confidence": 0.88},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Spark-Capture.md", "support": 0.06, "confidence": 0.86}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Business-Case.md", "support": 0.16, "confidence": 0.88},
+        {"criterion_id": "hypothesis_benefit_linkage", "source": "docs/project-docs/Ideation-Document.md", "support": 0.14, "confidence": 0.84},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Business-Case.md", "support": 0.22, "confidence": 0.86},
+        {"criterion_id": "benefit_expectations", "source": "docs/project-docs/Ideation-Document.md", "support": 0.20, "confidence": 0.82},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Business-Case.md", "support": 0.74, "confidence": 0.90},
+        {"criterion_id": "financial_justification", "source": "docs/project-docs/Ideation-Document.md", "support": 0.68, "confidence": 0.84},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Business-Case.md", "support": 0.46, "confidence": 0.86},
+        {"criterion_id": "risk_assessment", "source": "docs/project-docs/Ideation-Document.md", "support": 0.42, "confidence": 0.80},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Business-Case.md", "support": 0.18, "confidence": 0.88},
+        {"criterion_id": "business_alternatives", "source": "docs/project-docs/Spark-Capture.md", "support": 0.14, "confidence": 0.84}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

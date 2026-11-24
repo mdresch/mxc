@@ -1,0 +1,164 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-brd",
+  "policy_id": "d72b24a8-0fb3-4735-aade-81ec7991c837",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "The user accepted the proposed option to resolve the tie.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_brd",
+    "description": "The BRD's business rules are traceable to its source ADR, named honestly without inventing unmeasurable success metrics, and its out-of-scope list is accurate -- approve it",
+    "parameters": {}
+  },
+  "proposed_action": null,
+  "candidate_actions": [
+    {
+      "id": "approve_brd",
+      "description": "The BRD's business rules are traceable to its source ADR, named honestly without inventing unmeasurable success metrics, and its out-of-scope list is accurate -- approve it",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_brd",
+        "description": "The BRD's business rules are traceable to its source ADR, named honestly without inventing unmeasurable success metrics, and its out-of-scope list is accurate -- approve it",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "support": 0.9826877746921354,
+          "entropy_bits": 0.1260710736947101,
+          "disagreement_bits": 0.0008826479001695642,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9826877746921354,
+      "uncertainty": 0.1260710736947101,
+      "robust_utility": 0.9700806673226644,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_brd",
+        "description": "The BRD has a fundamental, unfixed flaw in its own business rules or traceability -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "support": 0.017312225307864484,
+          "entropy_bits": 0.12607107369470952,
+          "disagreement_bits": 0.0008826479001696197,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.017312225307864484,
+      "uncertainty": 0.12607107369470952,
+      "robust_utility": 0.004705117938393531,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_brd"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The BRD's own business rules or scope need a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the BRD itself already scoped correctly",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "support": 0.05569768553062416,
+          "entropy_bits": 0.3101241026415732,
+          "disagreement_bits": 0.0011795750509001612,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "support": 0.05569768553062416,
+          "entropy_bits": 0.3101241026415732,
+          "disagreement_bits": 0.0011795750509001612,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "support": 0.05569768553062416,
+          "entropy_bits": 0.3101241026415732,
+          "disagreement_bits": 0.0011795750509001612,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "support": 0.05569768553062416,
+          "entropy_bits": 0.3101241026415732,
+          "disagreement_bits": 0.0011795750509001612,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.05569768553062416,
+      "uncertainty": 0.3101241026415732,
+      "robust_utility": 0.024685275266466838,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_brd"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": "user_acceptance",
+  "action_probabilities": {
+    "approve_brd": 0.3333333333333333,
+    "reject_brd": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_authority": "full"
+}

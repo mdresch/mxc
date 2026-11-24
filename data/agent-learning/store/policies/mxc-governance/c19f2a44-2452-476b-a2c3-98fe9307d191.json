@@ -1,0 +1,51 @@
+{
+  "id": "c19f2a44-2452-476b-a2c3-98fe9307d191",
+  "agent_id": "mxc-governance",
+  "task_id": "escalate-diff-response",
+  "version": 0,
+  "actions": [
+    {
+      "id": "escalate_to_human",
+      "description": "Halts execution, blocks automated merging, and prompts a human maintainer for sign-off",
+      "parameters": {}
+    },
+    {
+      "id": "apply_with_notification",
+      "description": "Automatically applies the change, emits an immutable Episode audit record, and sends a notification",
+      "parameters": {}
+    },
+    {
+      "id": "apply_automatically",
+      "description": "Automatically applies the change and commits directly, with mandatory immutable Episode audit record emission",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "escalate_to_human": 0.0,
+    "apply_with_notification": 0.0,
+    "apply_automatically": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Decides whether a classified diff category warrants human escalation, notification, or autonomous application with mandatory audit logging (ADR-007)",
+    "decision_authority": "low",
+    "decision_authority_source": "configured",
+    "capture_decision_evidence": true,
+    "complexity_tier": "standard",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "stable",
+      "outcome_observability": "direct",
+      "decision_impact": "medium",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Learned SoftmaxPolicy bandit operating under low authority; receives classification context via audit_evidence envelope without featurizing the policy."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:00:00.000000+00:00"
+}
+

@@ -1,0 +1,68 @@
+{
+  "task": "ADR-009 (Intent Refinement — Closing the Cybernetic Loop from Outcomes and Lessons Learned back to Strategic Spark and Hypotheses): approve, reject, or request revision",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Double-loop cybernetic feedback model (PMBOK 8 4.7 Close Project or Phase), formal approve-intent-refinement gate, hypothesis resolution and promotion protocol, and generative Spark inheritance, preserving ADR-001 authority decoupling, ADR-002 5-record storage boundary, and ADR-005 progression verification"
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Four real alternatives named and rejected: linear phase close, autonomous self-refining intent, conflating adaptation and intent refinement, and free-form unverified retrospective notes"
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately name phase transition review overhead and telemetry logging discipline as deliberate tradeoffs"
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Formally completes the 18-stage Intent-to-Outcome chain by mechanizing Stage 18 (Intent Refinement) back into Stage 1 (Spark Capture), resolving zombie hypotheses and enabling continuous double-loop learning"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {"criterion_id": "architectural_soundness", "source": "direct_doc_read:docs/adr/ADR-009-intent-refinement-and-cognitive-feedback-loop.md", "support": 0.96, "confidence": 0.94},
+        {"criterion_id": "alternatives_considered", "source": "adr_009_section_6_four_rows", "support": 0.93, "confidence": 0.90},
+        {"criterion_id": "consequences_honest", "source": "adr_009_section_7_two_tradeoffs_named", "support": 0.91, "confidence": 0.88},
+        {"criterion_id": "gap_disclosure_quality", "source": "adr_009_section_1_and_4_double_loop", "support": 0.95, "confidence": 0.92}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {"criterion_id": "architectural_soundness", "source": "direct_doc_read:docs/adr/ADR-009-intent-refinement-and-cognitive-feedback-loop.md", "support": 0.03, "confidence": 0.85},
+        {"criterion_id": "alternatives_considered", "source": "adr_009_section_6_four_rows", "support": 0.04, "confidence": 0.80},
+        {"criterion_id": "consequences_honest", "source": "adr_009_section_7_two_tradeoffs_named", "support": 0.05, "confidence": 0.81},
+        {"criterion_id": "gap_disclosure_quality", "source": "adr_009_section_1_and_4_double_loop", "support": 0.04, "confidence": 0.84}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {"criterion_id": "architectural_soundness", "source": "direct_doc_read:docs/adr/ADR-009-intent-refinement-and-cognitive-feedback-loop.md", "support": 0.07, "confidence": 0.85},
+        {"criterion_id": "alternatives_considered", "source": "adr_009_section_6_four_rows", "support": 0.06, "confidence": 0.80},
+        {"criterion_id": "consequences_honest", "source": "adr_009_section_7_two_tradeoffs_named", "support": 0.07, "confidence": 0.81},
+        {"criterion_id": "gap_disclosure_quality", "source": "adr_009_section_1_and_4_double_loop", "support": 0.08, "confidence": 0.83}
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    }
+  ],
+  "context": {
+    "project": "agent-learning",
+    "adr_number": "009",
+    "title": "Intent Refinement — Closing the Cybernetic Loop from Outcomes and Lessons Learned back to Strategic Spark and Hypotheses",
+    "pmbok_process": "4.7 Close Project or Phase",
+    "stage": "Stage 18 (Intent Refinement)"
+  }
+}

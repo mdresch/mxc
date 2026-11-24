@@ -1,0 +1,48 @@
+{
+  "id": "d7b7aed8-c94a-4712-a711-2fd249b36f52",
+  "agent_id": "mxc-governance",
+  "task_id": "validate-intent-foundation",
+  "version": 0,
+  "actions": [
+    {
+      "id": "accept_foundation_proceed",
+      "description": "The named ADR/BRD/FDD/Story chain is already accepted and grounded enough (real traceability, testable acceptance criteria, no unresolved prerequisite) to enter the implement-story pipeline (worktree -> contract RED -> SKILL.md -> implement GREEN -> validate -> log -> PR)",
+      "parameters": {}
+    },
+    {
+      "id": "reject_needs_rework",
+      "description": "The chain has a real, fixable gap -- e.g. acceptance criteria that cannot actually be contract-tested, or missing traceability to an accepted ADR/BRD/FDD -- that must be fixed before this can enter the pipeline",
+      "parameters": {}
+    },
+    {
+      "id": "flag_for_human_review",
+      "description": "Whether this chain's grounding is actually sufficient to proceed is ambiguous enough that a human should decide directly",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "accept_foundation_proceed": 0.0,
+    "reject_needs_rework": 0.0,
+    "flag_for_human_review": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given an already-accepted ADR/BRD/FDD/Story chain, decide whether it is grounded enough to enter the implement-story pipeline -- shape independently converged by ADPA and SocialEngage; full authority only, a learned low-authority version hit a hard entropy ceiling",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T06:48:25.842707+00:00"
+}

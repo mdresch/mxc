@@ -50,6 +50,15 @@ fn isolation_session_unavailable() -> MxcError {
     )
 }
 
+/// The Hyper-V counterpart to [`wslc_unavailable`].
+#[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+fn hyperv_unavailable() -> MxcError {
+    MxcError::backend_unavailable(
+        "the Hyper-V backend is not available in this build (requires Windows with the `hyperv` \
+         feature)",
+    )
+}
+
 /// This phase's telemetry correlation vector, purely internal to MXC: no
 /// caller ever supplies or relays one. `provision` (whose `sandboxId` doesn't
 /// exist yet) mints a fresh vector; every later phase recalls the same
@@ -143,12 +152,24 @@ pub fn run_state_aware(
                 dry_run,
             )
         }
+        #[cfg(all(target_os = "windows", feature = "hyperv"))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => {
+            let bound = crate::mxc_common::state_aware_binding::bind_hyperv(parsed)?;
+            let mut runner = crate::hyperv_lifecycle::HypervRunner::new();
+            crate::mxc_common::state_aware_dispatch::dispatch_state_aware(
+                &mut runner,
+                bound,
+                dry_run,
+            )
+        }
         #[cfg(not(all(target_os = "windows", feature = "wslc")))]
         crate::mxc_common::models::ContainmentBackend::Wslc => Err(wslc_unavailable()),
         #[cfg(not(all(target_os = "windows", feature = "isolation_session")))]
         crate::mxc_common::models::ContainmentBackend::IsolationSession => {
             Err(isolation_session_unavailable())
         }
+        #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => Err(hyperv_unavailable()),
         _ => run_state_aware_fallback(parsed, dry_run),
     }
 }
@@ -305,12 +326,28 @@ fn run_state_aware_typed(
             )?;
             typed_dispatch_result(outcome, no_provision_metadata)
         }
+        #[cfg(all(target_os = "windows", feature = "hyperv"))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => {
+            let bound = crate::mxc_common::state_aware_binding::bind_hyperv(parsed)?;
+            let mut runner = crate::hyperv_lifecycle::HypervRunner::new();
+            let outcome = crate::mxc_common::state_aware_dispatch::dispatch_state_aware_typed(
+                &mut runner,
+                bound,
+                dry_run,
+            )?;
+            // The typed Rust/FFI SDK does not yet represent Hyper-V's
+            // provision metadata (vmName) — raw exact JSON/FFI already
+            // carries it in full; typed-SDK representation is a follow-up.
+            typed_dispatch_result(outcome, no_provision_metadata)
+        }
         #[cfg(not(all(target_os = "windows", feature = "wslc")))]
         crate::mxc_common::models::ContainmentBackend::Wslc => Err(wslc_unavailable()),
         #[cfg(not(all(target_os = "windows", feature = "isolation_session")))]
         crate::mxc_common::models::ContainmentBackend::IsolationSession => {
             Err(isolation_session_unavailable())
         }
+        #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => Err(hyperv_unavailable()),
         _ => {
             let _ = dry_run;
             Err(MxcError::unsupported_phase(format!(
@@ -373,12 +410,24 @@ pub fn exec_state_aware(
                 crate::mxc_common::exec_stream::ExecSandboxProcess::from_exec_handle(handle)?,
             ))
         }
+        #[cfg(all(target_os = "windows", feature = "hyperv"))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => {
+            let bound = crate::mxc_common::state_aware_binding::bind_hyperv(parsed)?;
+            let mut runner = crate::hyperv_lifecycle::HypervRunner::new();
+            let handle =
+                crate::mxc_common::state_aware_dispatch::dispatch_state_aware_exec(&mut runner, bound)?;
+            Ok(Box::new(
+                crate::mxc_common::exec_stream::ExecSandboxProcess::from_exec_handle(handle)?,
+            ))
+        }
         #[cfg(not(all(target_os = "windows", feature = "wslc")))]
         crate::mxc_common::models::ContainmentBackend::Wslc => Err(wslc_unavailable()),
         #[cfg(not(all(target_os = "windows", feature = "isolation_session")))]
         crate::mxc_common::models::ContainmentBackend::IsolationSession => {
             Err(isolation_session_unavailable())
         }
+        #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+        crate::mxc_common::models::ContainmentBackend::HyperV => Err(hyperv_unavailable()),
         _ => Err(MxcError::unsupported_phase(format!(
             "backend {:?} does not implement the state-aware lifecycle",
             backend
@@ -1406,6 +1455,37 @@ mod tests {
 
         assert_eq!(error.code, MxcErrorCode::BackendUnavailable);
         assert!(error.message.contains("experimental"));
+    }
+
+    #[test]
+    fn hyperv_experimental_backend_requires_optin() {
+        let parsed = parse_state_aware(
+            r#"{"version":"1.1.0-alpha","phase":"provision","containment":"hyperv","hyperv":{"provision":{"baseImagePath":"C:\\images\\golden.vhdx"}}}"#,
+            false,
+            &mut Logger::new(Mode::Buffer),
+        )
+        .unwrap();
+
+        let error = run_state_aware(parsed, false).unwrap_err();
+
+        assert_eq!(error.code, MxcErrorCode::BackendUnavailable);
+        assert!(error.message.contains("experimental"));
+    }
+
+    #[cfg(not(all(target_os = "windows", feature = "hyperv")))]
+    #[test]
+    fn hyperv_without_the_feature_is_backend_unavailable_even_with_optin() {
+        let parsed = parse_state_aware(
+            r#"{"version":"1.1.0-alpha","phase":"provision","containment":"hyperv","hyperv":{"provision":{"baseImagePath":"C:\\images\\golden.vhdx"}}}"#,
+            true,
+            &mut Logger::new(Mode::Buffer),
+        )
+        .unwrap();
+
+        let error = run_state_aware(parsed, false).unwrap_err();
+
+        assert_eq!(error.code, MxcErrorCode::BackendUnavailable);
+        assert!(error.message.contains("hyperv"));
     }
 
     #[test]

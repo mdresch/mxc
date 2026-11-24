@@ -1,0 +1,48 @@
+{
+  "id": "ada1bc73-753a-450b-b640-6b6fedd5493c",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-fdd",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_fdd",
+      "description": "The FDD's design is traceable to its source BRD/ADR, honestly distinguishes real code-shaped deliverables from documentation-only items, and does not invent implementation detail beyond what is grounded in real code -- approve it",
+      "parameters": {}
+    },
+    {
+      "id": "reject_fdd",
+      "description": "The FDD has a fundamental, unfixed flaw in its own design or traceability -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The FDD's own design or scope needs a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the FDD itself already scoped correctly",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_fdd": 0.0,
+    "reject_fdd": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given a drafted FDD, decide whether to approve it, reject it, or request revision before deciding -- shape independently converged by ADPA and SocialEngage",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T06:48:23.148720+00:00"
+}

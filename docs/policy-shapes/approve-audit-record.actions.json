@@ -1,0 +1,17 @@
+[
+  {
+    "id": "approve_audit_record",
+    "description": "The Audit Record provides substantiated evidence of compliance or non-conformance, clear impact classification, and actionable remediation actions -- approve it into the formal audit register",
+    "parameters": {}
+  },
+  {
+    "id": "reject_audit_record",
+    "description": "The Audit Record is unsubstantiated, misclassifies governance boundaries, or lacks factual verification -- reject it outright",
+    "parameters": {}
+  },
+  {
+    "id": "request_revision_before_decision",
+    "description": "The Audit Record requires additional evidence verification, clearer finding descriptions, or refined corrective actions before formal recording",
+    "parameters": {}
+  }
+]

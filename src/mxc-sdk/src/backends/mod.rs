@@ -10,6 +10,14 @@ pub mod hyperlight {
 }
 
 #[cfg(target_os = "windows")]
+pub mod hyperv {
+    #[cfg(feature = "hyperv")]
+    pub mod common;
+    #[cfg(feature = "hyperv")]
+    pub mod lifecycle;
+}
+
+#[cfg(target_os = "windows")]
 pub mod isolation_session {
     #[cfg(feature = "isolation_session")]
     pub mod bindings;

@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-10-19T09:05:20.341764+00:00",
+  "target_pool": "all",
+  "steps_completed": 4,
+  "pools_discovered": [
+    "default",
+    "prod-adpa"
+  ],
+  "acl_status": "VERIFIED_AIRGAPPED",
+  "gateway_status": "OFFLINE",
+  "findings": [
+    "Found 2 node(s) hot-ready in paused RAM: mxc-hv-a7df7452, mxc-hv-c8b255f2",
+    "Discovered Windows 11 Enterprise Image: img-os-win11-ent at C:\\HyperV\\BaseImages\\win11-golden.vhdx (14.47 GB)"
+  ],
+  "operational_readiness": "OPTIMAL_ENTERPRISE_GRADE",
+  "windows_11_image": {
+    "image_id": "img-os-win11-ent",
+    "name": "Windows 11 Enterprise Client Golden Baseline (Build 26300.9457)",
+    "vhdx_path": "C:\\HyperV\\BaseImages\\win11-golden.vhdx",
+    "physical_present": true,
+    "size_gb": 14.47,
+    "status": "baked_ready"
+  },
+  "completed_at": "2026-10-19T09:05:23.889493+00:00"
+}

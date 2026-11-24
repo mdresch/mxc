@@ -1,0 +1,197 @@
+{
+  "task": "Stage 1 Ideation: approve, reject, or request revision before Charter and Business Case",
+  "criteria": [
+    {
+      "id": "strategic_motivation",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "The spark and ideation state why ADPA and SIDPA should sleep in an isolated Hyper-V guest instead of staying always-on, cold-booting, or sharing the host kernel"
+    },
+    {
+      "id": "problem_definition",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "The problem is a named operational trilemma for confidential long-running services, not a solution already collapsed into pool size or cost"
+    },
+    {
+      "id": "falsifiable_hypotheses",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each hypothesis has a statement, empirical criteria, and a Formulated status that is not upgraded without a live outcome"
+    },
+    {
+      "id": "grounded_scope",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Scope stays at intent and hypotheses. Business case, benefits, charter, pool size, and density multiples are deferred"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_ideation",
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.92,
+          "confidence": 0.90
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.90,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.91,
+          "confidence": 0.90
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.88,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.83,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/hyperv/architecture/USER_STORIES.md",
+          "support": 0.86,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.88,
+          "confidence": 0.90
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.86,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "reject_ideation",
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.08,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.07,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.09,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/hyperv/architecture/USER_STORIES.md",
+          "support": 0.08,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.07,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.06,
+          "confidence": 0.84
+        }
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.14,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.12,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.16,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.15,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.34,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source": "docs/hyperv/architecture/USER_STORIES.md",
+          "support": 0.28,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.18,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source": "docs/project-docs/Spark-Capture.md",
+          "support": 0.16,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {"no_unfixed_critical_flaw": true}
+    }
+  ],
+  "constraints": ["no_unfixed_critical_flaw"],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}

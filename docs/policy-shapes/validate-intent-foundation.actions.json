@@ -1,0 +1,17 @@
+[
+  {
+    "id": "accept_foundation_proceed",
+    "description": "The named ADR/BRD/FDD/Story chain is already accepted and grounded enough (real traceability, testable acceptance criteria, no unresolved prerequisite) to enter the implement-story pipeline (worktree -> contract RED -> SKILL.md -> implement GREEN -> validate -> log -> PR)",
+    "parameters": {}
+  },
+  {
+    "id": "reject_needs_rework",
+    "description": "The chain has a real, fixable gap -- e.g. acceptance criteria that cannot actually be contract-tested, or missing traceability to an accepted ADR/BRD/FDD -- that must be fixed before this can enter the pipeline",
+    "parameters": {}
+  },
+  {
+    "id": "flag_for_human_review",
+    "description": "Whether this chain's grounding is actually sufficient to proceed is ambiguous enough that a human should decide directly",
+    "parameters": {}
+  }
+]

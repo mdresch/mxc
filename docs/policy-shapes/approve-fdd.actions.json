@@ -1,0 +1,5 @@
+[
+  {"id": "approve_fdd", "description": "The FDD's design is traceable to its source BRD/ADR, honestly distinguishes real code-shaped deliverables from documentation-only items, and does not invent implementation detail beyond what is grounded in real code -- approve it", "parameters": {}},
+  {"id": "reject_fdd", "description": "The FDD has a fundamental, unfixed flaw in its own design or traceability -- reject it outright", "parameters": {}},
+  {"id": "request_revision_before_decision", "description": "The FDD's own design or scope needs a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the FDD itself already scoped correctly", "parameters": {}}
+]

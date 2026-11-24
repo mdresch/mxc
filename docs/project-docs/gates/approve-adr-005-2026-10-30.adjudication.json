@@ -1,0 +1,164 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-adr",
+  "policy_id": "0063adbf-5659-426d-950b-b2eaab87fb34",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "The user accepted the proposed option to resolve the tie.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_adr",
+    "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+    "parameters": {}
+  },
+  "proposed_action": null,
+  "candidate_actions": [
+    {
+      "id": "approve_adr",
+      "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+      "parameters": {}
+    }
+  ],
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "The ADR is architecturally sound, considers real alternatives, states clear consequences, and is consistent with prior ADRs -- approve it",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.9797289033155215,
+          "entropy_bits": 0.14295997884527584,
+          "disagreement_bits": 0.0008028731288765023,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.9745942961905777,
+          "entropy_bits": 0.17080039377867448,
+          "disagreement_bits": 0.0007378568404003416,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.9699585924265268,
+          "entropy_bits": 0.19459947227307023,
+          "disagreement_bits": 0.0006838921787895025,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.968773377669049,
+          "entropy_bits": 0.20050649372559712,
+          "disagreement_bits": 0.0006838922617975474,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.9732637924004188,
+      "uncertainty": 0.17721658465565443,
+      "robust_utility": 0.9555421339348534,
+      "ruled_out_by": []
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "The ADR has a fundamental, unfixed flaw in its own decision or reasoning -- reject it outright",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.5348312056941763,
+          "entropy_bits": 0.9964965707402429,
+          "disagreement_bits": 0.5979920474542835,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.5658965245824092,
+          "entropy_bits": 0.9874340950546141,
+          "disagreement_bits": 0.5814709799787721,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.5887580951141577,
+          "entropy_bits": 0.9771479840706971,
+          "disagreement_bits": 0.5654389328152729,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.5938106791468768,
+          "entropy_bits": 0.9744561712945421,
+          "disagreement_bits": 0.5656315673756547,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.570824126134405,
+      "uncertainty": 0.983883705290024,
+      "robust_utility": 0.47243575560540263,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_adr"
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The ADR's own decision or reasoning needs a real change before it can be judged -- distinct from a named, deliberately out-of-scope follow-on item the ADR itself already scoped correctly",
+        "parameters": {}
+      },
+      "feasible": true,
+      "criteria": [
+        {
+          "criterion_id": "architectural_soundness",
+          "support": 0.0703289041710681,
+          "entropy_bits": 0.36714985981952125,
+          "disagreement_bits": 0.0004889419429097153,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "support": 0.0703289041710681,
+          "entropy_bits": 0.36714985981952125,
+          "disagreement_bits": 0.0004889419429097153,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "support": 0.0703289041710681,
+          "entropy_bits": 0.36714985981952125,
+          "disagreement_bits": 0.0004889419429097153,
+          "source_count": 2
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "support": 0.0703289041710681,
+          "entropy_bits": 0.36714985981952125,
+          "disagreement_bits": 0.0004889419429097153,
+          "source_count": 2
+        }
+      ],
+      "expected_utility": 0.0703289041710681,
+      "uncertainty": 0.36714985981952125,
+      "robust_utility": 0.03361391818911597,
+      "ruled_out_by": [
+        "pareto_dominated_by:approve_adr"
+      ]
+    }
+  ],
+  "information_needs": [],
+  "rejected_action_ids": [],
+  "authorization_basis": "user_acceptance",
+  "action_probabilities": {
+    "approve_adr": 0.3333333333333333,
+    "reject_adr": 0.3333333333333333,
+    "request_revision_before_decision": 0.3333333333333333
+  },
+  "action_logprob": null,
+  "decision_authority": "full"
+}

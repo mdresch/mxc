@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated_utc": "2026-10-18T23:20:00Z",
+  "cluster_ready": true,
+  "storage_tiers": {
+    "nvme_hot_tier": "C:\\HyperV\\BaseImages",
+    "archive_capacity_tier": "F:\\HyperV\\BaseImages",
+    "cluster_shared_volume_template": "C:\\ClusterStorage\\Volume1\\HyperV\\BaseImages"
+  },
+  "images": [
+    {
+      "image_id": "img-os-ws2025-base",
+      "name": "Windows Server 2025 Golden OS Baseline",
+      "role": "os-foundation",
+      "application": "Windows Server 2025 Datacenter/Standard",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\winserv2025-golden.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": null,
+      "size_gb": 10.88,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows Server 2025 Core/Desktop",
+        "Hyper-V Integration Services (VMBus, PowerShell Direct, Time Sync)"
+      ],
+      "notes": "Clean, immutable OS parent image used to stamp new application/workload golden images (ADPA PoC, SIDPA Dev)."
+    },
+    {
+      "image_id": "img-servercore-webdev-v1",
+      "name": "Windows Server 2025 Core Lean WebDev & PostgreSQL",
+      "role": "webdev-sandbox",
+      "application": "Node.js 24 LTS, TypeScript, Next.js, React, PostgreSQL 18.6",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\winserv2025-servercore-webdev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": 10.85,
+      "max_size_gb": 64,
+      "vhd_type": "Differencing",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "ingress_route": {
+        "listen_port": 8093,
+        "guest_port": 5432,
+        "health_path": null,
+        "idle_timeout_seconds": 300,
+        "active_vm_name": "MXC-Bake-WebDev-Temp"
+      },
+      "installed_stack": [
+        "Windows Server 2025 Core Headless Baseline (No GUI / No Explorer)",
+        "CompactOS Transparent LZX Filesystem Compression (1.7:1 Ratio)",
+        "Node.js LTS v24.22.0 + NPM 11.19.1",
+        "PNPM 12.14.0 + Bun 1.4.3",
+        "TypeScript 7.0.2 (tsc, ts-node, tsx)",
+        "Next.js (create-next-app 16.4.2) & React/Vite (create-vite 9.3.0)",
+        "PostgreSQL 18.6 Database Service (UTF-8 cluster, port 5432, auto-start)",
+        "Git 2.56.0, 7zip, curl, jq, ripgrep, pwsh 7.6.7",
+        "Microsoft Visual C++ 2015-2022 x64 Runtime"
+      ],
+      "notes": "Ultra-lean headless Server Core developer image stamped from winserv2025-golden.vhdx. Explorer bypassed, idle RAM <450MB, frozen in RAM state ready for <300ms JIT wake-up."
+    },
+    {
+      "image_id": "img-os-win11-ent",
+      "name": "Windows 11 Enterprise Client Golden Baseline (Build 26300.9457)",
+      "role": "os-client-baseline",
+      "application": "Windows 11 Enterprise / Client (Build 26300)",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\win11-golden.vhdx",
+      "source_iso_path": "C:\\Users\\MennoDrescher\\Downloads\\Windows11_Client_x64_en-us_26300_9457.iso",
+      "parent_image_id": null,
+      "size_gb": 14.47,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows 11 Enterprise Client (x64 en-US Build 26300.9457)",
+        "Hyper-V Integration Services"
+      ],
+      "notes": "Windows 11 Enterprise client golden image located at C:\\HyperV\\BaseImages\\win11-golden.vhdx (built from Windows11_Client_x64_en-us_26300_9457.iso)."
+    },
+    {
+      "image_id": "img-mxc-dev-v2.3",
+      "name": "MXC Core Developer & JIT Test Harness Image",
+      "role": "mxc-development",
+      "application": "MXC SDK / wxc-exec / JIT Harness Prototype",
+      "status": "baked_ready",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-mxc-dev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": 39.25,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "mxc-dev-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8090,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": "mxc-hv-a7df7452",
+        "standby_vm_name": "mxc-hv-0b1e0d7e",
+        "guest_ip": "172.24.173.100"
+      },
+      "installed_stack": [
+        "Rust 1.94.1 + MSVC Build Tools 2022 + Windows SDK",
+        ".NET SDK 8.0.419",
+        "Python 3.14.3 + python-docx",
+        "Node.js v25.9.0",
+        "Git 2.53.0 + Scoop + hey HTTP load generator",
+        "Synced C:\\workspace (mxc repository)",
+        "Auto-start Scheduled Task: MXC-ADPA-MockService (:8080)"
+      ],
+      "notes": "Primary developer & benchmarking image for MXC control-plane engineering and JIT Scale-to-Zero verification."
+    },
+    {
+      "image_id": "img-adpa-poc-v1",
+      "name": "ADPA Production Proof-of-Concept Appliance",
+      "role": "poc-workload",
+      "application": "ADPA (Automated Data Processing Appliance)",
+      "status": "poc_planned",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-adpa-poc.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-os-ws2025-base",
+      "size_gb": null,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8091,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": "mxc-hv-0b1e0d7e",
+        "standby_vm_name": null,
+        "guest_ip": "172.24.175.141"
+      },
+      "egress_whitelist": [
+        "UDP/TCP 53 (Internal DNS)",
+        "UDP/TCP 88 (Active Directory Kerberos)",
+        "TCP 1433 (SQL Server)",
+        "TCP 5432 (PostgreSQL)",
+        "TCP 443 (Private S3/Blob Endpoints)"
+      ],
+      "installed_stack": [
+        "Windows Server 2025 Hardened Baseline",
+        "ADPA Service Daemon (:8080)",
+        "Hardware PRNG Re-Seed (BCryptGenRandom) + DB Pool Flush (ClearAllPools) + VMBus Clock Sync Hook"
+      ],
+      "notes": "Dedicated Proof-of-Concept image for ADPA. Requests arriving on Port 8091 wake only the ADPA VM pool."
+    },
+    {
+      "image_id": "img-sidpa-dev-v1",
+      "name": "SIDPA Development & Integration Appliance",
+      "role": "workload-development",
+      "application": "SIDPA (Secure Isolated Data Processing Appliance)",
+      "status": "in_development",
+      "vhdx_path": "F:\\HyperV\\BaseImages\\winserv2025-sidpa-dev.vhdx",
+      "source_iso_path": null,
+      "parent_image_id": "img-mxc-dev-v2.3",
+      "size_gb": null,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": "baseline-hot-ready",
+      "pool_baseline_checkpoint": "pool-clean-baseline",
+      "ingress_route": {
+        "listen_port": 8092,
+        "guest_port": 8080,
+        "health_path": "/health",
+        "pre_trim_path": "/admin/pre-trim",
+        "idle_timeout_seconds": 300,
+        "max_request_execution_timeout_seconds": 900,
+        "host_node": "localhost",
+        "active_vm_name": null,
+        "standby_vm_name": null,
+        "guest_ip": null
+      },
+      "egress_whitelist": [
+        "UDP/TCP 53 (Internal DNS)",
+        "UDP/TCP 88 (Active Directory Kerberos)",
+        "TCP 1433 (SQL Server)",
+        "TCP 5432 (PostgreSQL)",
+        "TCP 443 (Private S3/Blob Endpoints)"
+      ],
+      "installed_stack": [
+        "SIDPA Application Runtime & SDKs",
+        "SIDPA Integration Test Suite",
+        "Hardware PRNG Re-Seed + DB Pool Flush + VMBus Clock Sync Hook (:8080/health)"
+      ],
+      "notes": "Dedicated image for developing and testing SIDPA in hardware-isolated ephemeral sessions. Requests on Port 8092 wake only the SIDPA VM pool."
+    },
+    {
+      "image_id": "img-win11-agent-lean",
+      "name": "Windows 11 Pro Lean Prompt-Only Agent Image (Build 26300)",
+      "role": "agent-sandbox",
+      "application": "MXC Autonomous Agent Core Runtime (Git, Python/uv, Node/TS, pwsh)",
+      "status": "baked_ready",
+      "vhdx_path": "C:\\HyperV\\BaseImages\\win11-agent-lean.vhdx",
+      "archive_vhdx_path": "F:\\HyperV\\BaseImages\\win11-agent-lean.vhdx",
+      "source_iso_path": "C:\\HyperV\\Windows11_Client_x64_en-us_26300_9457.iso",
+      "parent_image_id": null,
+      "size_gb": 22.91,
+      "max_size_gb": 64,
+      "vhd_type": "Dynamic",
+      "credential_target": "mxc-guest",
+      "baseline_checkpoint": null,
+      "ingress_route": null,
+      "installed_stack": [
+        "Windows 11 Pro (x64 en-US Build 26300) — Prompt-Only PowerShell Shell (explorer.exe bypassed)",
+        "CompactOS Transparent LZX Compression + Optimize-VHD Full",
+        "Debloated: 44 provisioned & 46 installed AppX removed, 10 Optional Features disabled, 7 FoD Capabilities removed, OneDrive uninstalled, 23 background services disabled",
+        "Git 2.56.1 + GitHub CLI (gh 2.105.0) + 7zip 26.06",
+        "PowerShell 7.7.0 + ripgrep 16.0.0 + fd 10.5.2 + jq 1.8.2",
+        "Python 3.15.2 + uv 0.13.9 + ruff 0.17.6 + pytest, httpx, pydantic, mcp, requests",
+        "Node.js LTS v26.13.1 + pnpm 12.23.0 + TypeScript 7.0.2 + tsx",
+        "Hyper-V Integration Services (VMBus, PowerShell Direct, RDP Enhanced Session)"
+      ],
+      "notes": "Self-contained, zero-OOBE, ultra-lean Windows 11 Pro Agent image built directly from ISO via build_win11_agent_from_iso.ps1 and bake_win11_agent_lean.ps1."
+    }
+  ]
+}

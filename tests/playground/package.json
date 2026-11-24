@@ -8,7 +8,7 @@
     "build:renderer": "tsc -p tsconfig.renderer.json && node build-renderer.js",
     "build": "npm run build:main && npm run build:renderer",
     "start": "npm run build && electron .",
-    "dev": "npm run build:main && electron .",
+    "dev": "npm run build && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },

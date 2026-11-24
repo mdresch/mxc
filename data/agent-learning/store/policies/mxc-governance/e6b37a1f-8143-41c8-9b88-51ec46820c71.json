@@ -1,0 +1,73 @@
+{
+  "id": "e6b37a1f-8143-41c8-9b88-51ec46820c71",
+  "agent_id": "mxc-governance",
+  "task_id": "classify-diff-type",
+  "version": 0,
+  "actions": [
+    {
+      "id": "new_superseding_adr",
+      "description": "Alters core architecture, principles, or system topology; mandates drafting a full superseding ADR",
+      "parameters": {}
+    },
+    {
+      "id": "amendment_log_entry",
+      "description": "Updates operational parameters, timeouts, or thresholds while preserving core architectural intent",
+      "parameters": {}
+    },
+    {
+      "id": "correction_note",
+      "description": "Errata, broken citations, typographical errors, or non-semantic formatting fixes",
+      "parameters": {}
+    },
+    {
+      "id": "clarification_section",
+      "description": "Additional explanatory prose or diagrams resolving ambiguity without altering decision boundary",
+      "parameters": {}
+    },
+    {
+      "id": "provenance_note",
+      "description": "Lineage, authorship, or upstream specification references updated",
+      "parameters": {}
+    },
+    {
+      "id": "pending_supersession_note",
+      "description": "Marks active artifact indicating replacement is currently drafted; permanently frozen from autonomy",
+      "parameters": {}
+    },
+    {
+      "id": "supersession_update",
+      "description": "Marks older artifact superseded once replacement is formally accepted; permanently frozen from autonomy",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "new_superseding_adr": 0.0,
+    "amendment_log_entry": 0.0,
+    "correction_note": 0.0,
+    "clarification_section": 0.0,
+    "provenance_note": 0.0,
+    "pending_supersession_note": 0.0,
+    "supersession_update": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Inspects candidate diff against frozen accepted baseline to determine the structural form of governance change (Tier 1 Substantive, Tier 2 Documentation, Tier 3 Lifecycle)",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Full authority Bayesian reasoning per ADR-007; semantic interpretation cannot be learned statistically."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:00:00.000000+00:00"
+}
+

@@ -1,0 +1,48 @@
+{
+  "id": "e3f5727d-ee48-4be0-bddd-273e1b823981",
+  "agent_id": "mxc-governance",
+  "task_id": "approve-audit-record",
+  "version": 0,
+  "actions": [
+    {
+      "id": "approve_audit_record",
+      "description": "The Audit Record provides substantiated evidence of compliance or non-conformance, clear impact classification, and actionable remediation actions -- approve it into the formal audit register",
+      "parameters": {}
+    },
+    {
+      "id": "reject_audit_record",
+      "description": "The Audit Record is unsubstantiated, misclassifies governance boundaries, or lacks factual verification -- reject it outright",
+      "parameters": {}
+    },
+    {
+      "id": "request_revision_before_decision",
+      "description": "The Audit Record requires additional evidence verification, clearer finding descriptions, or refined corrective actions before formal recording",
+      "parameters": {}
+    }
+  ],
+  "logits": {
+    "approve_audit_record": 0.0,
+    "reject_audit_record": 0.0,
+    "request_revision_before_decision": 0.0
+  },
+  "baseline": 0.0,
+  "episodes_seen": 0,
+  "updates_applied": 0,
+  "metadata": {
+    "policy_scope": "delegated_decision",
+    "decision_context": "Given an Audit Finding or Audit Register entry, decide whether to approve it into the formal audit register, reject it, or request revision before deciding -- validating Stage 11 Audit Record",
+    "decision_authority": "full",
+    "decision_authority_source": "configured",
+    "complexity_profile": {
+      "intent_ambiguity": "low",
+      "context_variability": "variable",
+      "outcome_observability": "direct",
+      "decision_impact": "high",
+      "reversibility": "reversible",
+      "requires_human_approval": true,
+      "rationale": "Defaults to true for every policy in this template, learned from a real correction (ADPA's own approve-adr was first built with requires_human_approval: false, and the resolver's own execute_without_confirmation logic would have bypassed a real governance rule as a result). Correct this down per-policy only with real evidence the specific decision doesn't need a human sign-off -- never flip it the other direction speculatively."
+    },
+    "complexity_profile_source": "configured"
+  },
+  "created_at": "2026-10-23T14:11:35.345594+00:00"
+}

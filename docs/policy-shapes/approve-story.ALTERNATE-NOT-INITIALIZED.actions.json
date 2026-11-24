@@ -1,0 +1,8 @@
+{
+  "_note": "SocialEngage's own real shape for the same conceptual decision as approve-user-stories.actions.json. NOT initialized in this template's store -- the two source projects did not converge here (see docs/root-cause-log.md). Kept as reference only. Whichever real third case comes along should settle which shape fits, not this template guessing.",
+  "actions": [
+    {"id": "mark_ready", "description": "The story is ready -- real, testable acceptance criteria, traceable to its BRD/FDD/ADR", "parameters": {}},
+    {"id": "mark_blocked", "description": "The story is blocked on a named, real prerequisite", "parameters": {}},
+    {"id": "request_revision_before_decision", "description": "The story needs a real change before it can be judged", "parameters": {}}
+  ]
+}
