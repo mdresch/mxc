@@ -12,7 +12,7 @@ inputs:
 process: "Decompose cryptographic image supply chain, signed SBOM generation, and PoolRegistrationGuard admission gate into testable user stories"
 outputs:
   - "docs/user-stories/epic-010-cryptographic-supply-chain-slsa.md"
-status: "Approved — Ready for Implementation"
+status: "Closed / Implemented & Validated"
 ---
 
 # Epic 010: Cryptographic Image Supply Chain & Signed SBOM Attestation
@@ -21,13 +21,13 @@ status: "Approved — Ready for Implementation"
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-012](../07-architecture/ADR-012-cryptographic-supply-chain-slsa.md)  
 > **Target Baseline:** `PMP-BL-v2.0.0` | **WBS Index:** 11.0 | **Topic Pillar:** `TP-10`  
-> **Status:** Approved — Ready for Implementation (2026-11-24)
+> **Status:** Closed / Implemented & Validated (2026-11-24)
 
 ---
 
 ## Story 10.1 — Deterministic SLSA Provenance Envelope & CycloneDX SBOM Generator
 - **WBS:** 11.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Platform Security Engineer,  
   **I want** golden image builds to emit a CycloneDX SBOM and a cryptographically signed in-toto/SLSA provenance envelope binding the VHDX SHA-256 digest to the source Git commit,  
   **so that** every production image carries verifiable, tamper-evident build lineage.
@@ -39,7 +39,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 10.2 — Fail-Closed `PoolRegistrationGuard` Offline Attestation Gate
 - **WBS:** 11.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** CISO / Compliance Auditor,  
   **I want** `PoolRegistrationGuard` to verify signature validity, VHDX SHA-256 digest, SBOM policy compliance, key revocation, and expiry completely offline before admitting any image into a standby pool,  
   **so that** tampered, unsigned, or revoked images can never boot in production.

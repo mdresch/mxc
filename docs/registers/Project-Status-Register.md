@@ -43,10 +43,10 @@ caused this, both worth guarding against here:
 |---|---|
 | **Current Phase** | Phase 2 (Predictive Orchestration & Enterprise Execution Fabric) — Active |
 | **Current PMP Baseline** | `PMP-BL-v2.0.0` |
-| **Session close-off checkpoint** | Epic 009 (Hyper-V Memory Combining & Host RAM Deduplication) Complete (Stories 9.1..9.2 validated, 188 contracts passing, merged to `feat/hyperv-v2-rebased`) |
+| **Session close-off checkpoint** | Epic 010 (Cryptographic Image Supply Chain & Signed SBOM Attestation) Complete (Stories 10.1..10.2 validated, 194 contracts passing on `feat/hyperv-v2-rebased`) |
 | **Current macro Stage** | Stage 9 / 10 (Execution & Verification: Phase 2 Sprints) |
-| **Last Epic/unit of work fully completed** | Epic 009: Hyper-V Host-Level Memory Combining & Deduplication (`LL-010`, `IMP-MXC-016`, `AUDIT-009`) |
-| **Next Epic/unit of work to implement** | Epic 010: Cryptographic Image Supply Chain & Signed SBOM Attestation (`Story 10.1`, WBS 11.0, TP-10) |
+| **Last Epic/unit of work fully completed** | Epic 010: Cryptographic Image Supply Chain & Signed SBOM Attestation (`LL-011`, `IMP-MXC-003` / `IMP-MXC-010` Delivered) |
+| **Next Epic/unit of work to implement** | Epic 011: Autonomous Fleet Economics & Dynamic Sizing Scheduler (`Story 11.1`, WBS 12.0, TP-11) |
 | **Last commit on the base branch** | `b6ed68d0` (merge: Story 9.2 Deduplication Floor & Host Saturation Verification) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
@@ -71,7 +71,7 @@ caused this, both worth guarding against here:
 | Epic 007 | Multi-tier standby pools (Hot, Warm, Cold) | Phase 2 | Complete | Story 7.1, Story 7.2, Story 7.3 (3/3) |
 | Epic 008 | Predictive wake interception and activity forecasting | Phase 2 | Complete | Story 8.1, Story 8.2 (2/2) |
 | Epic 009 | Hyper-V memory combining and deduplication | Phase 2 | Complete | Story 9.1, Story 9.2 (2/2) |
-| Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Approved — Ready for Implementation | Pending Story 10.1 (`BRD-010` / `FDD-010` Approved) |
+| Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Complete | Story 10.1, Story 10.2 (2/2) |
 | Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Approved — Ready for Implementation | Pending Story 11.1 (`BRD-011` / `FDD-011` Approved) |
 | Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Approved — Ready for Implementation | Pending Story 12.1 (`BRD-012` / `FDD-012` Approved) |
 

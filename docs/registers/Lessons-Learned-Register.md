@@ -136,3 +136,16 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   3. Copy-On-Write (COW) memory isolation is strictly enforced: any guest write to a shared page triggers an immediate hardware page fault, cloning the page into private memory with 0 bytes leaked and 0 corruption of peer VMs.
   4. Background scanner CPU overhead must be clamped $\le 0.5\%$ aggregate host CPU during steady-state.
   5. Diagnostics monitor `\Hyper-V Dynamic Memory\Memory Combining Shared Pages`, `Saved Memory (MB)`, and `CPU Usage`.
+
+### LL-011 — Airgapped Cryptographic Supply Chain, Fail-Closed Precedence & Zero Hot-Path Verification
+- **Epic / Story:** Epic 010 / Stories 10.1 & 10.2 (`spec-10_1-33cdce90`, `spec-10_2-0c4ffc6d`)
+- **Scope:** Golden-image SLSA provenance envelope, CycloneDX 1.5 SBOM generator, and offline `PoolRegistrationGuard` (`scripts/lib/supply_chain_attestation.py`)
+- **Date:** 2026-11-24
+- **Tier 2/3 Propagation Target:** `.claude/skills/supply-chain-attestation/SKILL.md`
+- **The Trap / Problem:** Relying on static SHA-256 registry entries alone leaves golden images vulnerable to local registry edits without cryptographic provenance, while online signature transparency lookups (e.g. live Rekor queries) break airgapped sovereign Hyper-V hosts and add unacceptable latency if placed on the VM dispatch path.
+- **The Root Cause:** Conflating build-time/registration-time provenance verification with runtime dispatch, or assuming external internet connectivity on regulated hypervisor hosts.
+- **Actionable Invariant / Rule:** Enforce `BRU-010-01`..`05` and `AC-10.1.1`..`10.2.3`:
+  1. Serialize provenance payloads canonically (`sort_keys=True`, compact separators) and compare signatures/digests with constant-time `hmac.compare_digest`.
+  2. Evaluate admission fail-closed in deterministic order: key revocation (`ERR_KEY_REVOKED`) $\rightarrow$ signature (`ERR_SIGNATURE_INVALID`) $\rightarrow$ expiry (`ERR_EXPIRED`) $\rightarrow$ VHDX digest (`ERR_DIGEST_MISMATCH`) $\rightarrow$ SBOM digest & forbidden packages (`ERR_SBOM_INVALID`).
+  3. Execute 100% offline with zero network calls (verified with `socket.create_connection` monkeypatched to fail).
+  4. Cache verified admissions in `PoolRegistrationGuard` so hot/warm dispatch checks remain O(1) in-memory (`0 ms` crypto overhead).
