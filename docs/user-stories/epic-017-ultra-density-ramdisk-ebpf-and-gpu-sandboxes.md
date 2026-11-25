@@ -12,7 +12,7 @@ inputs:
 process: "Decompose ultra-density memory floor, CrossGen2 normalization, NUMA pinning, RAM-disk/DAX differencing, kernel TLS probes, subsystem telemetry, and GPU-P sandboxes into testable user stories"
 outputs:
   - "docs/user-stories/epic-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 017: Ultra-Density Memory, RAM-Disk/DAX Differencing, Kernel TLS Probes & GPU-P Sandboxes
@@ -20,13 +20,13 @@ status: "Approved — Ready for Implementation"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-018](../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | **WBS:** `18.0` | **Topic Pillar:** `TP-16`  
-> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-001`, `005`, `006`, `012`, `014`, `015`, `016`, `029` + `HYP-mxc-019`, `021`)
+> **Status:** Closed — Implemented & Validated (2026-11-25) (`IMP-MXC-001`, `005`, `006`, `012`, `014`, `015`, `016`, `029` + `HYP-mxc-019`, `021`)
 
 ---
 
 ## Story 17.1 — 640 MB Paused Floor, CrossGen2 Alignment, Disposable Trim Bypass & Local NUMA Pinning
 - **WBS:** 18.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Hyper-V Capacity Architect,  
   **I want** `evaluate_density_and_numa()` to enforce a `<= 640 MB` paused baseline, CrossGen2 `>= 65%` page sharing (`< 350 MB` effective RAM/guest), `0` remote NUMA pages, and disposable in-session trim bypass,  
   **so that** enterprise 64 GB hosts sustain ultra-high micro-VM density with zero cross-socket bus penalty.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 17.2 — Pure In-Memory RAM-Disk/DAX Differencing, Kernel TLS Probes & Neural Forecaster
 - **WBS:** 18.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** High-Throughput Infrastructure Engineer,  
   **I want** quota-bounded RAM-disk/DAX differencing (`<= 50 ms` mount, `0` NVMe write bytes) alongside root-partition eBPF/WFP TLS ClientHello probing and continuous neural pre-warm forecasting,  
   **so that** high-churn bursts eliminate SSD wear and shave 2–3 ms off predictive tier wake.
@@ -50,7 +50,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 17.3 — Automated Subsystem Differential Telemetry Matrix & `GPU-P`/DDA Agent Sandbox Tier
 - **WBS:** 18.3
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Windows & AI Platform Lead,  
   **I want** pre-dispatch WMI/COM+/Service/GPO differential telemetry verification and an opt-in `GPU-P`/DDA sandbox profile with explicit hardware capability gating,  
   **so that** degraded Windows guests are caught prior to lease and GPU-accelerated agents achieve `>= 85%` throughput without cross-session residue.

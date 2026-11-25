@@ -12,7 +12,7 @@ inputs:
 process: "Decompose Zero-Secret Git Sync, Credential Sidecar Proxy, and Protocol-Aware MCP Firewall into testable user stories"
 outputs:
   - "docs/user-stories/epic-013-zero-secret-sidecar-and-mcp-firewall.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 013: Zero-Secret Guest Git Sync, Credential-Injecting Sidecar Proxy & MCP Firewall
@@ -20,13 +20,13 @@ status: "Approved — Ready for Implementation"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-014](../07-architecture/ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | **WBS:** `14.0` | **Topic Pillar:** `TP-12`  
-> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-017`, `024`, `026`)
+> **Status:** Closed — Implemented & Validated (2026-11-25) (`IMP-MXC-017`, `024`, `026`)
 
 ---
 
 ## Story 13.1 — Host-Side Zero-Secret Git Bundle Sync (`mxc-sync`) & Credential Sidecar Proxy
 - **WBS:** 14.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Platform Security Engineer,  
   **I want** `mxc-sync` to transfer clean bare repository bundles over airgapped VMBus and an outbound sidecar proxy to inject short-lived host credentials only on vetted requests,  
   **so that** `0` static tokens, PATs, or SSH keys ever exist inside guest sandboxes.
@@ -39,7 +39,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 13.2 — Protocol-Aware MCP JSON-RPC Firewall over VMBus
 - **WBS:** 14.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** CISO / AI Agent Governance Architect,  
   **I want** a protocol-aware MCP Firewall inspecting JSON-RPC requests across `server_id`, schema digest, `tool_name`, and arguments before dispatch,  
   **so that** rug-pull MCP servers, unauthorized tools, and path-traversal or exfiltration payloads are blocked deterministically.

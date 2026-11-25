@@ -12,7 +12,7 @@ inputs:
 process: "Decompose unified EU evidence ledger, Entra Conditional Access hook, Hit-L freeze-and-rollback kill switch, and vTPM/TEE attestation into testable user stories"
 outputs:
   - "docs/user-stories/epic-015-eu-evidence-ledger-and-confidential-attestation.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 015: Unified EU Regulatory Evidence Ledger, Kill Switch & Confidential Enclave Attestation
@@ -20,13 +20,13 @@ status: "Approved — Ready for Implementation"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-016](../07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | **WBS:** `16.0` | **Topic Pillar:** `TP-14`  
-> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-025`, `028`, `030`)
+> **Status:** Closed — Implemented & Validated (2026-11-25) (`IMP-MXC-025`, `028`, `030`)
 
 ---
 
 ## Story 15.1 — Tamper-Evident EU Evidence Ledger, Entra Conditional Access & Hit-L Kill Switch
 - **WBS:** 16.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** EU AI Act / DORA / NIS2 Compliance Lead,  
   **I want** an append-only SHA-256 hash-chained `EvidenceLedger` (`>= 180` days retention), Entra Agent ID Conditional Access posture evaluation, and a `<= 250 ms` `freeze-and-rollback` Hit-L circuit breaker,  
   **so that** every autonomous agent session is audit-traceable and immediately haltable upon anomaly.
@@ -39,7 +39,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 15.2 — vTPM 2.0 & Confidential VM (AMD SEV-SNP / Intel TDX) Remote Attestation Gate
 - **WBS:** 16.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Confidential Infrastructure Architect,  
   **I want** `PoolRegistrationGuard` to verify signed vTPM 2.0 PCR and SEV-SNP / TDX boot quotes fail-closed before releasing secrets,  
   **so that** compromised enclaves never unlock private repositories or credentials and unsupported hosts fail honestly.

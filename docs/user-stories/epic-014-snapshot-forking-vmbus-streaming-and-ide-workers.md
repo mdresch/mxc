@@ -12,7 +12,7 @@ inputs:
 process: "Decompose parallel snapshot forking, chunked VMBus streaming, BOM-tolerant CLI parsing, and IDE worker profiles into testable user stories"
 outputs:
   - "docs/user-stories/epic-014-snapshot-forking-vmbus-streaming-and-ide-workers.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 014: Parallel Snapshot Branching, Chunked VMBus Streaming, BOM-Tolerant CLI & IDE Workers
@@ -20,13 +20,13 @@ status: "Approved — Ready for Implementation"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-015](../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | **WBS:** `15.0` | **Topic Pillar:** `TP-13`  
-> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-019`, `021`, `022`, `027`)
+> **Status:** Closed — Implemented & Validated (2026-11-25) (`IMP-MXC-019`, `021`, `022`, `027`)
 
 ---
 
 ## Story 14.1 — Sub-500ms Parallel `.avhdx` Snapshot Branching (`wxc-exec --hyperv-op fork`)
 - **WBS:** 15.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As an** Autonomous Coding Agent Orchestrator,  
   **I want** to fork 3–5 concurrent sibling sandboxes from a single warm checkpoint with bounded `.avhdx` chain depth and clean rollback of losing branches,  
   **so that** competing bug fixes and test runs execute in parallel in `<= 500 ms` per branch with zero parent mutation.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 14.2 — Native Chunked VMBus Payload Streaming & UTF-8 BOM-Tolerant CLI Manifest Parser
 - **WBS:** 15.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Windows & Hyper-V Platform Engineer,  
   **I want** fixed-frame chunked VMBus payload streaming and UTF-8 BOM-tolerant `wxc-exec` manifest parsing with explicit CLI flag precedence,  
   **so that** multi-100 MB transfers bypass the `cmd.exe` 8 KB limit with bit-exact integrity and WinPS 5.1 scripts never break on leading BOM bytes or override flags.
@@ -50,7 +50,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 14.3 — Standardized Ephemeral IDE Worker Profile (`Cursor` / `Antigravity` / `Claude Code`)
 - **WBS:** 15.3
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As an** AI IDE Developer,  
   **I want** a validated declarative `IdeWorkerProfile` specifying client type, pre-installed agent tools, archetype sizing floor, and zero-secret `mxc-sync` mode,  
   **so that** ephemeral remote Hyper-V workspaces provision consistently across AI IDEs without storing Git credentials inside guests.

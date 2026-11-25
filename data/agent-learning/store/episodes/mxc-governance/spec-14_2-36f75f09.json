@@ -1,0 +1,60 @@
+{
+  "id": "spec-14_2-36f75f09",
+  "agent_id": "mxc-governance",
+  "action_id": "proceed_to_implementation",
+  "task_id": "story-14.2-spec-readiness",
+  "task_name": "Story 14.2 Spec Gate",
+  "policy_id": "default",
+  "policy_version": 1,
+  "intent_summary": "Pre-flight specification gate evaluation for Story 14.2",
+  "user_input": "Story 14.2: Native Chunked VMBus Payload Streaming & UTF-8 BOM-Tolerant CLI Manifest Parser",
+  "assistant_output": "Spec readiness verdict: PASSED",
+  "metadata": {
+    "story_id": "14.2",
+    "title": "Native Chunked VMBus Payload Streaming & UTF-8 BOM-Tolerant CLI Manifest Parser",
+    "status": "Planned",
+    "margin": 0.2153,
+    "feedback_status": "accepted",
+    "critique_adjustments": [
+      {
+        "criterion_id": "specification_completeness",
+        "support_before": 0.75,
+        "support_after": 0.7683,
+        "confidence_before": 0.7,
+        "confidence_after": 0.7,
+        "doubt_before": 0.3,
+        "doubt_after": 0.3,
+        "applied_delta": 0.1,
+        "source_id": "review_critique",
+        "basis": "explicit",
+        "rubric_delta": null,
+        "override": false,
+        "rubric_version": "1",
+        "finding_id": null,
+        "claim_type": "confirmation",
+        "verified": "yes",
+        "comment_text": null
+      },
+      {
+        "criterion_id": "architectural_boundaries",
+        "support_before": 0.85,
+        "support_after": 0.8623,
+        "confidence_before": 0.8,
+        "confidence_after": 0.8,
+        "doubt_before": 0.2,
+        "doubt_after": 0.2,
+        "applied_delta": 0.1,
+        "source_id": "review_critique",
+        "basis": "explicit",
+        "rubric_delta": null,
+        "override": false,
+        "rubric_version": "1",
+        "finding_id": null,
+        "claim_type": "confirmation",
+        "verified": "yes",
+        "comment_text": null
+      }
+    ]
+  },
+  "created_at": "2026-11-25T00:25:16.811776+00:00"
+}

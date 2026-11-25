@@ -18,6 +18,11 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 | `LL-001` | Zero-Padded Epic File Matching & AC Parsing Fallback | Epic 01 / Story 1.1 | Tier 2 (`scripts/spec_gate.py`) | 2026-11-21 |
 | `LL-002` | Local Store Dir Environment Isolation for Pytest Session | Epic 01 / Story 1.1 | Tier 2 (`tests/conftest.py`) | 2026-11-21 |
 | `LL-003` | Ingress Gateway Buffer Holding and Timeout Decoupling | Epic 02 / Story 2.2 | Tier 2 (`ingress-gateway/SKILL.md`) | 2026-11-21 |
+| `LL-014` | Host-Side Zero-Secret Boundary, Token-Boundary Env Scanning & MCP Firewall Precedence | Epic 013 / Stories 13.1..13.2 | Tier 2 (`.claude/skills/zero-secret-mcp-gateway/SKILL.md`) | 2026-11-25 |
+| `LL-015` | Bounded Snapshot Fork Depth, Chunked VMBus Digests, UTF-8 BOM Normalization & IDE Worker Guard | Epic 014 / Stories 14.1..14.3 | Tier 2 (`.claude/skills/snapshot-fork-and-vmbus/SKILL.md`) | 2026-11-25 |
+| `LL-016` | EU Evidence Ledger Retention/Tamper Invariants, Fail-Closed Enclave Precedence & Cache | Epic 015 / Stories 15.1..15.2 | Tier 2 (`.claude/skills/eu-evidence-and-enclave/SKILL.md`) | 2026-11-25 |
+| `LL-017` | Reproducible ISO-to-Lean Auto-Registry Validation, Zero-Cloud Embed & Parent HIL Gate | Epic 016 / Stories 16.1..16.2 | Tier 2 (`.claude/skills/mxc-embed-appliance/SKILL.md`) | 2026-11-25 |
+| `LL-018` | Ultra-Density Numeric Guards, Kernel TLS Pass-Through & Fail-Closed GPU-P Precedence | Epic 017 / Stories 17.1..17.3 | Tier 2 (`.claude/skills/frontier-density-and-gpu/SKILL.md`) | 2026-11-25 |
 
 ## Entries
 
@@ -174,3 +179,67 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   2. `route_mode="auth_gated"` MUST reject missing (`None`) or expired assertions before calling `pool_allocator` (`0` VMs woken).
   3. Claims mapping is strictly deny-by-default (`ERR_CLAIM_UNMAPPED`), supporting both `"human"` and `"entra_agent_id"` assertions.
   4. `binding_ttl_seconds` is strictly clamped to `[300, 86400]` (default `14400s`), and `sweep_expired_bindings()` returns expired `vm_id`s for mandatory `ADR-005` `.avhdx` sterile discard.
+
+### LL-014 — Host-Side Zero-Secret Boundary, Token-Boundary Env Scanning & Protocol-Aware MCP Firewall Precedence (`ADR-014`)
+- **Epic / Story:** Epic 013 / Stories 13.1 & 13.2 (`spec-13_1-a1cf178e`, `spec-13_2-0807f165`)
+- **Scope:** Zero-secret host-side git bundle sync (`mxc-sync`), credential-injecting sidecar proxy, and MCP JSON-RPC protocol firewall (`scripts/lib/zero_secret_mcp_gateway.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/zero-secret-mcp-gateway/SKILL.md`
+- **The Trap / Problem:** Naive substring scanning of guest environment variable names (e.g., matching `"PAT"` inside `"PATH"`) causes false-positive `ERR_STATIC_SECRET_DETECTED` failures on clean sandboxes, while unredacted failure audit logs or unpinned MCP server schemas expose host credentials or allow rug-pull tool mutations and recursive argument smuggling.
+- **The Root Cause:** Conflating token-boundary credential key matching with raw substring checks, failing to scrub vault secrets across denied/error audit paths, and treating MCP `server_id`, `schema_sha256`, `tool_name`, and nested `arguments` checks as unordered or shallow rather than deterministic fail-closed protocol inspection.
+- **Actionable Invariant / Rule:** Enforce `BRU-013-01`..`05` and `AC-13.1.1`..`13.2.3`:
+  1. Scan `remote_url` and `guest_env` using token-boundary key matching (`PAT`, `TOKEN`, `SECRET`, `PASSWORD`, `SSH_AUTH_SOCK`, `PRIVATE_KEY`, `API_KEY`) plus credential material regexes (`https?://[^/\s@]+@`, `ghp_`, `github_pat_`, `glpat-`, `AKIA`, `BEGIN ... PRIVATE KEY`) so benign variables like `PATH` pass cleanly while static secrets fail closed (`ERR_STATIC_SECRET_DETECTED`) with `nic_count == 0`.
+  2. Resolve host credentials in `CredentialSidecarProxy` (`<= 5 ms`) only for allowlisted `(target_host, secret_scope)` pairs with constant-time placeholder validation, never mutating input headers and scrubbing all vault secrets (`[REDACTED]`) from `audit_log` on both allowed and denied paths.
+  3. Enforce `evaluate_mcp_call()` (`<= 2 ms`) in strict precedence: `ERR_MCP_SERVER_UNAPPROVED` -> `ERR_MCP_SCHEMA_DRIFT` (constant-time `hmac.compare_digest`) -> `ERR_MCP_TOOL_BLOCKED` -> `ERR_MCP_ARG_VIOLATION` (non-dict/`None` arguments or recursive key/value match on `blocked_arg_patterns`), with defensive `None`/empty safety and zero network calls.
+
+### LL-015 — Bounded Snapshot Fork Depth, Chunked VMBus Digests, UTF-8 BOM Normalization & Zero-Secret IDE Worker Guard (`ADR-015`)
+- **Epic / Story:** Epic 014 / Stories 14.1, 14.2 & 14.3 (`spec-14_1-f72b6317`, `spec-14_2-36f75f09`, `spec-14_3-34aecf5b`)
+- **Scope:** Parallel `.avhdx` snapshot branching, chunked binary VMBus streaming, BOM-tolerant `wxc-exec` manifest parser, and ephemeral IDE worker profile validator (`scripts/lib/snapshot_fork_and_vmbus.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/snapshot-fork-and-vmbus/SKILL.md`
+- **The Trap / Problem:** Unbounded `.avhdx` differencing chains degrade block lookup I/O; single-shot Base64 PowerShell/VMBus transfers hit the 8 KB `cmd.exe` ceiling; Windows PowerShell 5.1 `Set-Content -Encoding utf8` prepends `\xef\xbb\xbf` UTF-8 BOM bytes that break strict JSON parsers and reject legacy `"phase"` / `"sandboxId"` keys alongside CLI override flags; and unvalidated AI IDE worker profiles risk non-zero guest secrets or RAM starvation (`< 2048 MB`).
+- **The Root Cause:** Missing depth/parallelism ceilings on snapshot branches, lack of sequenced per-chunk + stream digest framing, non-BOM-aware JSON parsing at the Windows CLI boundary, and permissive profile acceptance without zero-secret/floor guards.
+- **Actionable Invariant / Rule:** Enforce `BRU-014-01`..`04` and `AC-14.1.1`..`14.3.2`:
+  1. Bound snapshot forks to `max_parallel <= 5` (`ERR_FORK_BOUNDS_INVALID`) and `max_depth <= 4` (`ERR_FORK_DEPTH_EXCEEDED`), discarding losing branches with `0%` parent hash mutation and `None`/empty safety.
+  2. Frame VMBus payloads into bounded chunks verifying sequential `seq`, `total_frames`, per-chunk SHA-256, and stream SHA-256 via `hmac.compare_digest` (`ERR_CHUNK_CHECKSUM_MISMATCH`), cleanly round-tripping `b""` <-> `[]`.
+  3. Strip leading UTF-8 BOM bytes (`\xef\xbb\xbf`) before JSON parsing, preserve `"phase"` / `"sandboxId"` keys, and grant non-empty `cli_operation` / `cli_container_id` overrides deterministic precedence.
+  4. Validate IDE worker profiles fail-closed (`ERR_WORKER_PROFILE_INVALID`) for `ide_client in {"cursor", "antigravity", "claude-code"}`, `zero_secret is True`, `sync_mode == "mxc-sync"`, non-empty `toolchain`/`toolchain_packages`, `guest_secrets_count == 0`, and finite `ram_mb >= 2048`.
+
+### LL-016 — EU Evidence Ledger Retention/Tamper Invariants, Fail-Closed Enclave Precedence & Zero-Overhead Cache (`ADR-016`)
+- **Epic / Story:** Epic 015 / Stories 15.1 & 15.2 (`spec-15_1-13a5d912`, `spec-15_2-8cf6474a`)
+- **Scope:** Unified EU AI Act / DORA / NIS2 evidence ledger, Entra Conditional Access gate, Hit-L freeze-and-rollback circuit breaker, and vTPM 2.0 / AMD SEV-SNP / Intel TDX attestation (`scripts/lib/eu_evidence_and_enclave.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/eu-evidence-and-enclave/SKILL.md`
+- **The Trap / Problem:** Evaluating PCR quote mismatch before checking `hardware_supported` masks unsupported confidential silicon as `ERR_PCR_ATTESTATION_FAILED` or risks faking compliance on standard hosts; meanwhile, Python `bool` subclassing of `int`, unguarded `None`/empty postures, and re-running attestation checks on dispatch violate the 180-day floor, raise `AttributeError`, or add dispatch latency.
+- **The Root Cause:** Conflating missing hardware TEE support with quote mismatch, omitting explicit `bool`/`str`/`dict` type checks, and coupling admission-time verification with hot-path lookups.
+- **Actionable Invariant / Rule:** Enforce `BRU-015-01`..`04` and `AC-15.1.1`..`15.2.3`:
+  1. Reject `retention_days` on `None`, `bool`, non-`int`, or `< 180` (`ERR_RETENTION_BELOW_EU_FLOOR`); treat empty `verify_chain()` safely as `(True, "OK")`; verify `seq`, `prev_hash`, and canonical SHA-256 `entry_hash` via `hmac.compare_digest` (`ERR_LEDGER_CHAIN_BROKEN` on any single-field historical mutation).
+  2. Guard `evaluate_entra_conditional_access()` against `None`/non-`dict`/`{}` without `AttributeError`, failing closed (`ERR_CONDITIONAL_ACCESS_DENIED`) unless `device_compliant is True`, `agent_blueprint_verified` is `True` when present, a non-empty `entra_agent_id` or `subject_id` exists, and `risk_level.lower()` is in `{"low", "none"}`.
+  3. Execute `FreezeRollbackCircuitBreaker.freeze_and_rollback()` within `<= 250 ms` and append a verified `"FREEZE_AND_ROLLBACK"` event.
+  4. Execute `verify_enclave_attestation()` 100% offline, checking `hardware_supported is True` first (`ERR_TEE_UNSUPPORTED`) before TEE profile/hex/PCR equality (`ERR_PCR_ATTESTATION_FAILED`), and cache verified admissions in `EnclaveAttestationCache` for O(1) `0.0 ms` hot-dispatch lookups.
+
+### LL-017 — Reproducible ISO-to-Lean Auto-Registry Validation, Zero-Cloud Embed Precedence & Immutable Parent HIL Gate (`ADR-017`)
+- **Epic / Story:** Epic 016 / Stories 16.1 & 16.2 (`spec-16_1-2b2d6d3d`, `spec-16_2-6327b6f2`)
+- **Scope:** ISO-to-Lean CI registry entry builder, single-host "MXC Embed" preflight validator, and gated 5-Act HIL release verifier (`scripts/lib/mxc_embed_appliance.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/mxc-embed-appliance/SKILL.md`
+- **The Trap / Problem:** Manual `golden_image_registry.json` hash edits drift from the built VHDX and break `ADR-012` SLSA attestation; meanwhile naive Python validation lets bare strings pass `Sequence` checks for `toolchain_packages`, lets `bool` values pass `isinstance(x, int)` checks, accepts `NaN`/`Inf` floats, or obscures network-egress and parent-hash-drift violations behind secondary error codes.
+- **The Root Cause:** Missing strict type/shape guards (`bool` subclassing `int`, `str` implementing `Sequence`, trailing-newline `$` matching in regexes, non-finite IEEE-754 floats) and non-deterministic validation ordering across zero-cloud preflight and 5-Act HIL gates.
+- **Actionable Invariant / Rule:** Enforce `BRU-016-01`..`03` and `AC-16.1.1`..`16.2.2`:
+  1. `build_auto_registry_entry()` enforces non-blank `image_id`, non-empty non-string sequence `toolchain_packages` without blank items, strict 64-hex `iso_sha256`/`vhdx_sha256`, positive non-bool `int` `size_bytes`, `explorer_stripped=True`, and `compact_os_lzx=True`, emitting lowercase SHA-256 digests and `slsa_ready=True`.
+  2. `run_mxc_embed_preflight()` executes 100% offline (`LL-011`) and fails closed in deterministic order: `ERR_NETWORK_EGRESS_ATTEMPTED` -> `ERR_PREFLIGHT_PREREQ_MISSING` -> `ERR_INSTALL_BUDGET_EXCEEDED` (rejecting `None`, `bool`, non-finite, `<= 0.0`, or `> 15.0` min).
+  3. `evaluate_five_act_hil_gate()` checks constant-time `hmac.compare_digest` parent SHA-256 equality first (`ERR_PARENT_HASH_DRIFT`), then requires a 5-element `list` of `dict` acts all with `passed is True` (`ERR_HIL_ACT_FAILED`).
+
+### LL-018 — Ultra-Density Numeric Guards, Kernel TLS Safe Pass-Through & Fail-Closed GPU-P Precedence (`ADR-018`)
+- **Epic / Story:** Epic 017 / Stories 17.1..17.3 (`spec-17_1-4b2efa1e`, `spec-17_2-65c5c5ea`, `spec-17_3-3cb1f339`)
+- **Scope:** Frontier density/NUMA planner, RAM-disk/DAX overlay allocator, kernel TLS/neural forecaster gate, subsystem differential telemetry matrix, and GPU-P sandbox admission (`scripts/lib/frontier_density_and_gpu.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/frontier-density-and-gpu/SKILL.md`
+- **The Trap / Problem:** In Python, `bool` subclasses `int`, `NaN`/`inf` bypass simple `<=` range assertions, `None` or truncated non-TLS payloads can crash byte/dict inspectors with `AttributeError`/`IndexError`, `"COM+"` vs `"com_plus"` telemetry keys can drift across producers, and overlapping GPU-P failure conditions produce non-deterministic error codes without explicit precedence.
+- **The Root Cause:** Treating numeric validation, packet parsing, telemetry key aliases, and hardware capability checks optimistically rather than enforcing strict finite-number type guards and deterministic fail-closed ordering.
+- **Actionable Invariant / Rule:** Enforce `BRU-017-01`..`05` and `AC-17.1.1`..`17.3.2`:
+  1. Reject `None`, `bool`, and non-finite (`NaN`/`inf`) numeric inputs consistently; enforce `<= 640.0 MB` paused floor (`ERR_PAUSED_FLOOR_EXCEEDED`), `>= 0.65` CrossGen2 ratio for `< 350.0 MB` effective RAM, `50.0 ms` disposable trim bypass, and `remote_numa_pages == 0` (`ERR_NUMA_REMOTE_PAGES`).
+  2. Fail closed in `allocate_ramdisk_overlay()` (`ERR_RAMDISK_INVALID_REQUEST` -> `ERR_RAMDISK_QUOTA_EXCEEDED` -> `ERR_RAMDISK_MOUNT_LATENCY_EXCEEDED` over `50.0 ms`) without unhandled exceptions.
+  3. Treat `None`, empty, or non-TLS payloads in `inspect_kernel_tls_promotion()` as safe pass-through (`is_tls_client_hello=False`, `sni_hint=None`) while enforcing finite `[0.0, 1.0]` forecaster bounds and promoting only at `confidence >= 0.90` and `false_positive_rate <= 0.05`.
+  4. Normalize `"com+"` to `"com_plus"` case-insensitively and require all four subsystems (`wmi`, `com_plus`, `services`, `gpo`) to report `True` or `{"healthy": True}` (`ERR_SUBSYSTEM_DEGRADED` otherwise).
+  5. Enforce deterministic GPU-P admission precedence (`ERR_GPUP_UNSUPPORTED` -> `ERR_GPUP_PARTITION_INVALID` -> `ERR_GPUP_SLA_BELOW_FLOOR` `< 0.85`) and avoid `math.isclose` (`IMP-024`).

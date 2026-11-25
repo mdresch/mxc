@@ -41,14 +41,14 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 8 Implementation Authorized |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Execution Complete (Epics 013–017) |
 | **Current PMP Baseline** | `PMP-BL-v3.0.0` |
-| **Session close-off checkpoint** | Phase 3 Stages 1–8 Approved & Ratified under `PMP-BL-v3.0.0` (`AUTH-NOTICE-MXC-Phase3-001`); Epics 013–017 Ready for Execution |
-| **Current macro Stage** | Stage 8 Complete $\rightarrow$ Stage 9 / 10 (Execution & Verification: Phase 3 Sprints) |
-| **Last Epic/unit of work fully completed** | Phase 3 Stages 5–8 (Stage 5/6 Approvals, `PMP-BL-v3.0.0`, Stage 8 Implementation Authorization) |
-| **Next Epic/unit of work to implement** | Epic 013: Zero-Secret Guest Git Sync, Sidecar Proxy & MCP Firewall (`Story 13.1`, WBS 14.1, TP-12) |
-| **Last commit on the base branch** | `cc96c4b3` (Phase 3 Stage 5/6 suites across all 21 improvements) |
-| **Open side-thread outside the formal loop** | None |
+| **Session close-off checkpoint** | Phase 3 Epics 013–017 (`12/12` stories, `154` new contract tests, `358` total passing, `31/31` improvements delivered) Validated; Ready for Stage 17/18 Closeout |
+| **Current macro Stage** | Stage 10 Complete $\rightarrow$ Stage 17 / 18 (Phase 3 Actual Outcomes & Closeout) |
+| **Last Epic/unit of work fully completed** | Epics 013–017 Parallel Blitz (`12/12` stories across `TP-12`..`TP-16`; `21/21` Phase 3 improvements, `358` total Python tests green) |
+| **Next Epic/unit of work to implement** | Phase 3 Stage 17/18 Closeout (`OUTCOME-Phase-3-Actual-Outcomes.md` & `Intent-Refinement-Proposal-Phase-3.md`) |
+| **Last commit on the base branch** | `d9f1b393` (Phase 3 Stage 5–8 approved baseline; Phase 3 execution commit pending) |
+| **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
 ## 2. Phase Status
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0` | Authorized for Execution (Stages 1–8 Approved 2026-11-24) | [Project-Management-Plan-Phase-3.md](../project-docs/Project-Management-Plan-Phase-3.md), [Stage-8-Implementation-Authorization-Notice-Phase-3.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md) |
+| Phase 3 | `PMP-BL-v3.0.0` | Execution Complete — Ready for Stage 17/18 Closeout (All Epics 013..017 implemented & verified; `358` Python tests pass, `31/31` IMPs delivered) | [Project-Management-Plan-Phase-3.md](../project-docs/Project-Management-Plan-Phase-3.md), [Stage-8-Implementation-Authorization-Notice-Phase-3.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -75,11 +75,11 @@ caused this, both worth guarding against here:
 | Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Complete | Story 10.1, Story 10.2 (2/2) |
 | Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Complete | Story 11.1, Story 11.2 (2/2) |
 | Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Complete | Story 12.1, Story 12.2 (2/2) |
-| Epic 013 | Zero-secret guest git sync, sidecar proxy & MCP firewall (`ADR-014`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 13.1, 13.2 (0/2) |
-| Epic 014 | Parallel snapshot branching, chunked VMBus & IDE workers (`ADR-015`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 14.1, 14.2, 14.3 (0/3) |
-| Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 15.1, 15.2 (0/2) |
-| Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 16.1, 16.2 (0/2) |
-| Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 17.1, 17.2, 17.3 (0/3) |
+| Epic 013 | Zero-secret guest git sync, sidecar proxy & MCP firewall (`ADR-014`) | Phase 3 | Complete | Story 13.1, Story 13.2 (2/2) |
+| Epic 014 | Parallel snapshot branching, chunked VMBus & IDE workers (`ADR-015`) | Phase 3 | Complete | Story 14.1, Story 14.2, Story 14.3 (3/3) |
+| Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Complete | Story 15.1, Story 15.2 (2/2) |
+| Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Complete | Story 16.1, Story 16.2 (2/2) |
+| Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Complete | Story 17.1, Story 17.2, Story 17.3 (3/3) |
 
 ## 4. How to keep this current
 
