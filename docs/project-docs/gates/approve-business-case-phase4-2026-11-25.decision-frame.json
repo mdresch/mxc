@@ -1,0 +1,254 @@
+{
+  "task": "Phase 4 Stage 4 Business Case & Benefits Statement (PMP-BL-v4.0.0-candidate): approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_business_case",
+        "description": "The Phase 4 Business Case and Benefits Statement align honestly with Formulated hypotheses (HYP-mxc-031..034) and capital discipline -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.9,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.89,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.9,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_business_case",
+        "description": "The Phase 4 Business Case makes ungrounded ROI claims or omits material engineering risks -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Business Case or Benefits Statement needs tighter hypothesis linkage or risk controls before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "hypothesis_benefit_linkage",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "benefit_expectations",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "financial_justification",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.14,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "risk_assessment",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "business_alternatives",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "hypothesis_benefit_linkage",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "BEN-25..28 map directly to Formulated hypotheses HYP-mxc-031..034 without claiming unverified silicon outcomes."
+    },
+    {
+      "id": "benefit_expectations",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Operational targets (cargo test parity, <=5ms sidecar, <=2ms MCP PEP, <=250ms rollback, <=15m offline install) are measurable and falsifiable."
+    },
+    {
+      "id": "financial_justification",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Carries forward the USD 50,000 PM envelope with $0 new external capital and excludes unvalidated ARR projections."
+    },
+    {
+      "id": "risk_assessment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "RISK-P4-01..04 explicitly address Rust build stability, Python-Rust drift, workstation silicon heterogeneity, and offline installer egress."
+    },
+    {
+      "id": "business_alternatives",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Four distinct alternatives are weighed honestly against sovereign EU requirements and existing Rust SDK investments."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "pmp_baseline": "PMP-BL-v4.0.0-candidate"
+  }
+}

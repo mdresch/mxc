@@ -1,0 +1,254 @@
+{
+  "task": "Phase 4 Stage 2 Project Charter (WBS 19.0-22.0 / PMP-BL-v4.0.0-candidate): approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_charter",
+        "description": "The Phase 4 Project Charter authorizes clear governance authority, measurable objectives (WBS 19.0-22.0), and scope boundaries -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_charter",
+        "description": "The Phase 4 Project Charter lacks clear objectives, authority, or scope exclusions -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Project Charter needs clearer scope boundaries or measurable criteria before authorization",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "strategic_purpose",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "sponsor_authority",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.1,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "measurable_benefit_alignment",
+          "source_id": "docs/project-docs/Benefits-Statement-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "scope_boundaries",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "independent_approval_readiness",
+          "source_id": "docs/project-docs/Business-Case-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "strategic_purpose",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Charter clearly authorizes Phase 4 Rust runtime parity and bare-metal silicon productionization building on PMP-BL-v3.0.0."
+    },
+    {
+      "id": "sponsor_authority",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Named sponsor, PM/Lead Architect, Operational Benefit Owner, and USD 50,000 / $0 new capital bounds are explicitly recorded."
+    },
+    {
+      "id": "measurable_benefit_alignment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Objectives 1..4 (WBS 19.0-22.0) map 1:1 to BEN-25..28 and HYP-mxc-031..034."
+    },
+    {
+      "id": "scope_boundaries",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "In-scope Rust crates, explicit exclusions (no cloud SaaS, no faked hardware passes, no manual VM edits), and hardware dependencies are bounded."
+    },
+    {
+      "id": "independent_approval_readiness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Stage 1 Ideation (approve-ideation +0.8026) and Stage 4 Business Case / Benefits Statement are complete and linked."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "pmp_baseline": "PMP-BL-v4.0.0-candidate"
+  }
+}

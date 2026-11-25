@@ -1,0 +1,148 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-business-case",
+  "policy_id": "91a33a4f-7d22-43e1-85ff-51026f350df0",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 4 Stage 4 Business Case and Benefits Statement alongside approve-business-case gate execution.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_business_case",
+    "description": "The Phase 4 Business Case and Benefits Statement align honestly with Formulated hypotheses (HYP-mxc-031..034) and capital discipline -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.7922,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_business_case",
+        "description": "The Phase 4 Business Case and Benefits Statement align honestly with Formulated hypotheses (HYP-mxc-031..034) and capital discipline -- approve",
+        "name": null
+      },
+      "expected_utility": 0.913,
+      "robust_utility": 0.9038,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "benefit_expectations": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        },
+        "financial_justification": {
+          "support": 0.895,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.885
+        },
+        "risk_assessment": {
+          "support": 0.905,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.895
+        },
+        "business_alternatives": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Business Case or Benefits Statement needs tighter hypothesis linkage or risk controls before approval",
+        "name": null
+      },
+      "expected_utility": 0.126,
+      "robust_utility": 0.1116,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "benefit_expectations": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "financial_justification": {
+          "support": 0.14,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.125
+        },
+        "risk_assessment": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        },
+        "business_alternatives": {
+          "support": 0.12,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.106
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_business_case",
+        "description": "The Phase 4 Business Case makes ungrounded ROI claims or omits material engineering risks -- reject",
+        "name": null
+      },
+      "expected_utility": 0.051,
+      "robust_utility": 0.04,
+      "criteria": {
+        "hypothesis_benefit_linkage": {
+          "support": 0.045,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.035
+        },
+        "benefit_expectations": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        },
+        "financial_justification": {
+          "support": 0.06,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.048
+        },
+        "risk_assessment": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        },
+        "business_alternatives": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-25T06:26:54.092091+00:00",
+  "artifacts": [
+    "docs/project-docs/Business-Case-Phase-4.md",
+    "docs/project-docs/Benefits-Statement-Phase-4.md"
+  ]
+}

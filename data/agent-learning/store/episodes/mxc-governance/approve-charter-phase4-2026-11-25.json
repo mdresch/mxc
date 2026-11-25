@@ -1,0 +1,19 @@
+{
+  "id": "approve-charter-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_charter",
+  "task_id": "approve-charter",
+  "task_name": "Phase 4 Stage 2 Project Charter Approval",
+  "policy_id": "8ec22760-9d76-4683-b1ff-fa4a847b73a1",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 Stage 2 Project Charter Approval for Phase 4 (SPARK-MXC-Phase4-v4.0.0)",
+  "user_input": "Phase 4 Stage 2 & Stage 4 (Business-Case-Phase-4.md, Benefits-Statement-Phase-4.md, Project-Charter-Phase-4.md + approve-business-case and approve-charter gates)",
+  "assistant_output": "Phase 4 Project Charter approved; proceed to Stage 5 Pillars and Stage 6 ADR/BRD/FDD/Epic suites (Epics 018-021).",
+  "metadata": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "margin": 0.8146,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:26:54.109102+00:00"
+}

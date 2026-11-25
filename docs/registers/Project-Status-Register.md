@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Stage 1 Approved** |
-| **Current PMP Baseline** | `PMP-BL-v3.0.0` (Active) / `PMP-BL-v4.0.0-candidate` (Stage 1 Approved) |
-| **Session close-off checkpoint** | Phase 4 Stage 1 Approved via `approve-ideation` (`+0.8026` margin, `approve-ideation-phase4-2026-11-25`); `HYP-mxc-031..034` Formulated |
-| **Current macro Stage** | Stage 1 Complete $\rightarrow$ Stage 2 (Project Charter) & Stage 4 (Business Case / Benefits Statement) |
-| **Last Epic/unit of work fully completed** | Phase 4 Stage 1 (`Spark-Capture-Phase-4.md`, `Ideation-Document-Phase-4.md`, `approve-ideation` `+0.8026`) |
-| **Next Epic/unit of work to implement** | Phase 4 Stage 2 & Stage 4 (`Business-Case-Phase-4.md`, `Benefits-Statement-Phase-4.md`, `Project-Charter-Phase-4.md` + `approve-business-case` / `approve-charter`) |
-| **Last commit on the base branch** | `d8f00620` (Phase 4 Spark Capture; Stage 1 Ideation & gate commit pending) |
+| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Stages 1, 2 & 4 Approved** |
+| **Current PMP Baseline** | `PMP-BL-v3.0.0` (Active) / `PMP-BL-v4.0.0-candidate` (Charter & Business Case Approved) |
+| **Session close-off checkpoint** | Phase 4 Stage 2 & Stage 4 Approved (`approve-business-case` `+0.7922`, `approve-charter` `+0.8146`, `WBS 19.0–22.0`, `BEN-25..28`) |
+| **Current macro Stage** | Stage 2 & Stage 4 Complete $\rightarrow$ Stage 5 (Pillars) & Stage 6 (ADR / BRD / FDD / User Stories for Epics 018–021) |
+| **Last Epic/unit of work fully completed** | Phase 4 Stage 2 & Stage 4 (`Business-Case-Phase-4.md`, `Benefits-Statement-Phase-4.md`, `Project-Charter-Phase-4.md`) |
+| **Next Epic/unit of work to implement** | Phase 4 Stage 5 & Stage 6 (`PILLARS-Phase-4.md`, `ADR-019..022`, `BRD-018..021`, `FDD-018..021`, `Epics 018–021`) |
+| **Last commit on the base branch** | `0d6f96a5` (Phase 4 Stage 1 Ideation & gate; Stage 2 & Stage 4 commit pending) |
 | **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -58,7 +58,7 @@ caused this, both worth guarding against here:
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
 | Phase 3 | `PMP-BL-v3.0.0` | Complete (All Epics 013..017 implemented & verified; `358/358` Python tests pass, `31/31` IMPs delivered) | [OUTCOME-Phase-3-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-3-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-3.md](../project-docs/Intent-Refinement-Proposal-Phase-3.md) (`IR-PROP-MXC-Phase3-Closeout`) |
-| Phase 4 | `PMP-BL-v4.0.0-candidate` | Stage 1 Approved (`approve-ideation` `+0.8026`, `HYP-mxc-031..034` Formulated) | [Ideation-Document-Phase-4.md](../project-docs/Ideation-Document-Phase-4.md), [approve-ideation-phase4-2026-11-25.adjudication.json](../project-docs/gates/approve-ideation-phase4-2026-11-25.adjudication.json) |
+| Phase 4 | `PMP-BL-v4.0.0-candidate` | Stages 1, 2 & 4 Approved (`approve-ideation` `+0.8026`, `approve-business-case` `+0.7922`, `approve-charter` `+0.8146`) | [Project-Charter-Phase-4.md](../project-docs/Project-Charter-Phase-4.md), [Business-Case-Phase-4.md](../project-docs/Business-Case-Phase-4.md), [Benefits-Statement-Phase-4.md](../project-docs/Benefits-Statement-Phase-4.md) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 

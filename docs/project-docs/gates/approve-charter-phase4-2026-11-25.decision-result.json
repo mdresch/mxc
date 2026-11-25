@@ -1,0 +1,134 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "approve_charter",
+    "description": "The Phase 4 Project Charter authorizes clear governance authority, measurable objectives (WBS 19.0-22.0), and scope boundaries -- approve",
+    "name": null
+  },
+  "decision_margin": 0.8146,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_charter",
+        "description": "The Phase 4 Project Charter authorizes clear governance authority, measurable objectives (WBS 19.0-22.0), and scope boundaries -- approve",
+        "name": null
+      },
+      "expected_utility": 0.924,
+      "robust_utility": 0.9154,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "sponsor_authority": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.94,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.932
+        },
+        "scope_boundaries": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        },
+        "independent_approval_readiness": {
+          "support": 0.915,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.906
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Project Charter needs clearer scope boundaries or measurable criteria before authorization",
+        "name": null
+      },
+      "expected_utility": 0.115,
+      "robust_utility": 0.1008,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.11,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.096
+        },
+        "sponsor_authority": {
+          "support": 0.12,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.106
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.105,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.091
+        },
+        "scope_boundaries": {
+          "support": 0.12,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.105
+        },
+        "independent_approval_readiness": {
+          "support": 0.12,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.106
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_charter",
+        "description": "The Phase 4 Project Charter lacks clear objectives, authority, or scope exclusions -- reject",
+        "name": null
+      },
+      "expected_utility": 0.048,
+      "robust_utility": 0.0374,
+      "criteria": {
+        "strategic_purpose": {
+          "support": 0.045,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.035
+        },
+        "sponsor_authority": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        },
+        "measurable_benefit_alignment": {
+          "support": 0.045,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.035
+        },
+        "scope_boundaries": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        },
+        "independent_approval_readiness": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        }
+      }
+    }
+  ]
+}

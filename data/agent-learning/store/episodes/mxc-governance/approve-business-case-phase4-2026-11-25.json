@@ -1,0 +1,19 @@
+{
+  "id": "approve-business-case-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_business_case",
+  "task_id": "approve-business-case",
+  "task_name": "Phase 4 Stage 4 Business Case & Benefits Approval",
+  "policy_id": "91a33a4f-7d22-43e1-85ff-51026f350df0",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 Stage 4 Business Case & Benefits Approval for Phase 4 (SPARK-MXC-Phase4-v4.0.0)",
+  "user_input": "Phase 4 Stage 2 & Stage 4 (Business-Case-Phase-4.md, Benefits-Statement-Phase-4.md, Project-Charter-Phase-4.md + approve-business-case and approve-charter gates)",
+  "assistant_output": "Phase 4 Business Case and Benefits Statement approved; proceed to Stage 2 Charter and Stage 5 Pillars.",
+  "metadata": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "margin": 0.7922,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:26:54.092091+00:00"
+}
