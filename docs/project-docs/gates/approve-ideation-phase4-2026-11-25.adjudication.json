@@ -1,0 +1,130 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-ideation",
+  "policy_id": "dcdf7865-7d06-40cd-b282-18c01c3aaed0",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor initiated Phase 4 (Option A) and requested Ideation-Document-Phase-4.md (HYP-mxc-031..034) and adjudication of approve-ideation.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_ideation",
+    "description": "The Phase 4 Ideation document defines clear strategic motivation, falsifiable hypotheses (HYP-mxc-031..034), and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8026,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_ideation",
+        "description": "The Phase 4 Ideation document defines clear strategic motivation, falsifiable hypotheses (HYP-mxc-031..034), and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+        "name": null
+      },
+      "expected_utility": 0.9238,
+      "robust_utility": 0.9158,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.935,
+          "confidence": 0.93,
+          "doubt": 0.07,
+          "penalized_support": 0.928
+        },
+        "problem_definition": {
+          "support": 0.92,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.911
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.9201,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9121
+        },
+        "grounded_scope": {
+          "support": 0.9201,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9121
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+        "name": null
+      },
+      "expected_utility": 0.1275,
+      "robust_utility": 0.1132,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "problem_definition": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.145,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.131
+        },
+        "grounded_scope": {
+          "support": 0.12,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.106
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_ideation",
+        "description": "The Phase 4 Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.0395,
+      "criteria": {
+        "strategic_motivation": {
+          "support": 0.045,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.035
+        },
+        "problem_definition": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        },
+        "falsifiable_hypotheses": {
+          "support": 0.0549,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.0449
+        },
+        "grounded_scope": {
+          "support": 0.05,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.039
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-25T03:01:15.414233+00:00",
+  "artifacts": [
+    "docs/project-docs/Spark-Capture-Phase-4.md",
+    "docs/project-docs/Ideation-Document-Phase-4.md"
+  ]
+}

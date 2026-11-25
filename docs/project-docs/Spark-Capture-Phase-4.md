@@ -14,7 +14,7 @@ inputs:
 process: "Capture Phase 4 strategic intent for Native Rust wxc-exec / mxc-sdk runtime parity, bare-metal silicon verification, and turnkey commercial MXC Embed packaging"
 outputs:
   - "docs/project-docs/Spark-Capture-Phase-4.md"
-status: "Draft — Ready for Ideation & approve-ideation Gate"
+status: "Approved"
 ---
 
 # Spark Capture — Phase 4: Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization
@@ -65,3 +65,11 @@ Phase 4 strictly preserves all ratified invariants from Phases 1–3 (`ADR-001..
 ## 4. Immediate Next Step (Phase 4 Stage 1 Gate)
 
 Author **`docs/project-docs/Ideation-Document-Phase-4.md`** (formulating falsifiable Rust & silicon hypotheses `HYP-mxc-031`..`034`) and adjudicate **`approve-ideation`** before advancing to Phase 4 Stage 2/4 (`Business-Case`, `Benefits-Statement`, `Project-Charter`).
+
+---
+
+## 5. Gate Approval Record
+
+- **Gate:** `approve-ideation` (`approve_ideation`, policy `dcdf7865-7d06-40cd-b282-18c01c3aaed0`) — **Approved (`2026-11-25`, margin `+0.8026`)**
+- **Adjudication Record:** [approve-ideation-phase4-2026-11-25.adjudication.json](gates/approve-ideation-phase4-2026-11-25.adjudication.json)
+- **Ideation Companion:** [Ideation-Document-Phase-4.md](Ideation-Document-Phase-4.md) (`HYP-mxc-031`..`034` `Formulated`)

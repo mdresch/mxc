@@ -1,0 +1,19 @@
+{
+  "id": "approve-ideation-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_ideation",
+  "task_id": "approve-ideation",
+  "task_name": "Phase 4 Stage 1 Ideation Approval",
+  "policy_id": "dcdf7865-7d06-40cd-b282-18c01c3aaed0",
+  "policy_version": 1,
+  "intent_summary": "Stage 1 approve-ideation gate for Phase 4 (SPARK-MXC-Phase4-v4.0.0)",
+  "user_input": "Ideation-Document-Phase-4.md (HYP-mxc-031..034) and adjudicate the Phase 4 approve-ideation gate",
+  "assistant_output": "Phase 4 Ideation approved; proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+  "metadata": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "margin": 0.8026,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T03:01:15.414233+00:00"
+}

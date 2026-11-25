@@ -1,0 +1,212 @@
+{
+  "task": "Phase 4 Stage 1 Ideation (SPARK-MXC-Phase4-v4.0.0): approve, reject, or request revision before Charter and Business Case",
+  "options": [
+    {
+      "action": {
+        "id": "approve_ideation",
+        "description": "The Phase 4 Ideation document defines clear strategic motivation, falsifiable hypotheses (HYP-mxc-031..034), and grounded scope -- approve it to proceed to Stage 2 Charter and Stage 4 Business Case / Benefits Statement",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.91,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_ideation",
+        "description": "The Phase 4 Ideation document lacks coherent intent, viable hypotheses, or strategic alignment -- reject it outright",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.06,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 4 Ideation document needs refinement of hypothesis formulation, problem definition, or scope boundaries before it can be judged",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "strategic_motivation",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "problem_definition",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.14,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "falsifiable_hypotheses",
+          "source_id": "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md",
+          "support": 0.15,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Ideation-Document-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "grounded_scope",
+          "source_id": "docs/project-docs/Spark-Capture-Phase-4.md",
+          "support": 0.12,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "strategic_motivation",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Spark and ideation articulate why MXC must bridge the Phase 3 Python contract layer to compiled Rust wxc-exec/mxc-sdk binaries and bare-metal Hyper-V silicon proofs."
+    },
+    {
+      "id": "problem_definition",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Problems are framed as four concrete contract-to-silicon gaps (Rust CLI/SDK parity, compiled host security/EU evidence services, bare-metal HIL benchmarks, and signed offline MXC Embed packaging)."
+    },
+    {
+      "id": "falsifiable_hypotheses",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "HYP-mxc-031..034 each state measurable empirical falsification criteria and remain strictly Formulated until Phase 4 Rust and silicon evidence is observed."
+    },
+    {
+      "id": "grounded_scope",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Scope remains bounded to Stage 1 intent and hypotheses; Charter, Business Case, Pillars, and Stage 6 ADRs/BRDs/FDDs/Stories are explicitly deferred while preserving ADR-001..018 invariants."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "spark_id": "SPARK-MXC-Phase4-v4.0.0",
+    "pmp_baseline": "PMP-BL-v4.0.0-candidate"
+  }
+}
