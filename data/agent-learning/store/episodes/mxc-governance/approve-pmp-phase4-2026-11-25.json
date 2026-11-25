@@ -1,0 +1,19 @@
+{
+  "id": "approve-pmp-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_pmp",
+  "task_id": "approve-pmp",
+  "task_name": "Phase 4 Stage 7 Integrated PMP (PMP-BL-v4.0.0)",
+  "policy_id": "46c60639-c24f-4045-8ace-a3dbe2142e61",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 approve-pmp gate under PMP-BL-v4.0.0",
+  "user_input": "Approve Phase 4 Stage 5/6, ratify Project-Management-Plan-Phase-4.md (PMP-BL-v4.0.0), and issue Stage 8 Implementation Authorization",
+  "assistant_output": "approve-pmp resolved as approve_pmp with margin +0.8348",
+  "metadata": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0",
+    "margin": 0.8348,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:49:04.293134+00:00"
+}

@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Stage 5 & Stage 6 Drafted** |
-| **Current PMP Baseline** | `PMP-BL-v3.0.0` (Active) / `PMP-BL-v4.0.0-candidate` (Stage 5/6 Ready for Approval) |
-| **Session close-off checkpoint** | Phase 4 Stage 5 & Stage 6 Drafted (`PILLARS-Phase-4.md`, `ADR-019..022`, `BRD-018..021`, `FDD-018..021`, `Epics 018–021`, 8 stories) |
-| **Current macro Stage** | Stage 5 & Stage 6 Drafted $\rightarrow$ Ready for Stage 5/6 Approval (`approve-adr/brd/fdd/user-stories`), Stage 7 (`PMP-BL-v4.0.0`) & Stage 8 Authorization |
-| **Last Epic/unit of work fully completed** | Phase 4 Stage 5 & Stage 6 Suite Drafting (`TP-17..TP-20`, `Epics 018–021`) |
-| **Next Epic/unit of work to implement** | Approve Phase 4 Stage 5/6 gates, ratify `Project-Management-Plan-Phase-4.md` (`PMP-BL-v4.0.0`), and issue Stage 8 Authorization |
-| **Last commit on the base branch** | `fbe95ab6` (Phase 4 Stage 2 & Stage 4 approved; Stage 5/6 commit pending) |
+| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Stage 8 Implementation Authorized** |
+| **Current PMP Baseline** | **`PMP-BL-v4.0.0`** |
+| **Session close-off checkpoint** | Phase 4 Stages 1–8 Approved & Ratified under `PMP-BL-v4.0.0` (`AUTH-NOTICE-MXC-Phase4-001`); Epics 018–021 Ready for Execution |
+| **Current macro Stage** | Stage 8 Complete $\rightarrow$ Stage 9 / 10 (Execution & Verification: Phase 4 Sprints 19–22) |
+| **Last Epic/unit of work fully completed** | Phase 4 Stages 5–8 (Stage 5/6 Approvals, `PMP-BL-v4.0.0`, Stage 8 Implementation Authorization) |
+| **Next Epic/unit of work to implement** | Phase 4 Parallel Blitz across Epics 018–021 (`8` stories: Rust `wxc-exec`/`mxc-sdk`, Host Sidecar/MCP/EU Ledger, Silicon HIL Harness, Offline MXC Embed Installer) |
+| **Last commit on the base branch** | `088896d0` (Phase 4 Stage 5/6 suites; Stage 5–8 ratification commit pending) |
 | **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -58,7 +58,7 @@ caused this, both worth guarding against here:
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
 | Phase 3 | `PMP-BL-v3.0.0` | Complete (All Epics 013..017 implemented & verified; `358/358` Python tests pass, `31/31` IMPs delivered) | [OUTCOME-Phase-3-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-3-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-3.md](../project-docs/Intent-Refinement-Proposal-Phase-3.md) (`IR-PROP-MXC-Phase3-Closeout`) |
-| Phase 4 | `PMP-BL-v4.0.0-candidate` | Stage 5 & Stage 6 Drafted (`PILLARS-Phase-4`, `ADR-019..022`, `BRD-018..021`, `FDD-018..021`, `Epics 018–021`) | [PILLARS-Phase-4.md](../07-architecture/PILLARS-Phase-4.md) |
+| Phase 4 | `PMP-BL-v4.0.0` | Authorized for Execution (Stages 1–8 Approved 2026-11-25) | [Project-Management-Plan-Phase-4.md](../project-docs/Project-Management-Plan-Phase-4.md), [Stage-8-Implementation-Authorization-Notice-Phase-4.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -81,10 +81,10 @@ caused this, both worth guarding against here:
 | Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Complete | Story 15.1, Story 15.2 (2/2) |
 | Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Complete | Story 16.1, Story 16.2 (2/2) |
 | Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Complete | Story 17.1, Story 17.2, Story 17.3 (3/3) |
-| Epic 018 | Native Rust `wxc-exec` & `mxc-sdk` Phase 3 parity (`ADR-019`) | Phase 4 | Draft — Ready for Stage 5/6 Approval | Pending Stories 18.1, 18.2 (0/2) |
-| Epic 019 | Compiled host zero-secret sidecar, MCP firewall & EU evidence service (`ADR-020`) | Phase 4 | Draft — Ready for Stage 5/6 Approval | Pending Stories 19.1, 19.2 (0/2) |
-| Epic 020 | Bare-metal silicon HIL verification harness (`ADR-021`) | Phase 4 | Draft — Ready for Stage 5/6 Approval | Pending Stories 20.1, 20.2 (0/2) |
-| Epic 021 | Signed offline "MXC Embed" enterprise pilot installer (`ADR-022`) | Phase 4 | Draft — Ready for Stage 5/6 Approval | Pending Stories 21.1, 21.2 (0/2) |
+| Epic 018 | Native Rust `wxc-exec` & `mxc-sdk` Phase 3 parity (`ADR-019`) | Phase 4 | Approved — Ready for Implementation | Pending Stories 18.1, 18.2 (0/2) |
+| Epic 019 | Compiled host zero-secret sidecar, MCP firewall & EU evidence service (`ADR-020`) | Phase 4 | Approved — Ready for Implementation | Pending Stories 19.1, 19.2 (0/2) |
+| Epic 020 | Bare-metal silicon HIL verification harness (`ADR-021`) | Phase 4 | Approved — Ready for Implementation | Pending Stories 20.1, 20.2 (0/2) |
+| Epic 021 | Signed offline "MXC Embed" enterprise pilot installer (`ADR-022`) | Phase 4 | Approved — Ready for Implementation | Pending Stories 21.1, 21.2 (0/2) |
 
 ## 4. How to keep this current
 

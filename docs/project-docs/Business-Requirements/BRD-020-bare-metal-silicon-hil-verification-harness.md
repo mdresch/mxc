@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -12,14 +12,14 @@ inputs:
 process: "Define business rules for bare-metal silicon HIL verification and honest fail-closed hardware capability reporting"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-020-bare-metal-silicon-hil-verification-harness.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # BRD-020: Bare-Metal Silicon HIL Verification Harness
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-021](../../07-architecture/ADR-021-bare-metal-silicon-hil-verification-harness.md) | **Topic Pillar:** `TP-19` | **Baseline:** `PMP-BL-v4.0.0-candidate`
+> **Source ADR:** [ADR-021](../../07-architecture/ADR-021-bare-metal-silicon-hil-verification-harness.md) | **Topic Pillar:** `TP-19` | **Baseline:** `PMP-BL-v4.0.0`
 
 ---
 

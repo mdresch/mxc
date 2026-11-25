@@ -1,0 +1,19 @@
+{
+  "id": "approve-fdd-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_fdd",
+  "task_id": "approve-fdd",
+  "task_name": "Phase 4 Stage 6 Functional Design (FDD-018..021)",
+  "policy_id": "ada1bc73-753a-450b-b640-6b6fedd5493c",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 approve-fdd gate under PMP-BL-v4.0.0",
+  "user_input": "Approve Phase 4 Stage 5/6, ratify Project-Management-Plan-Phase-4.md (PMP-BL-v4.0.0), and issue Stage 8 Implementation Authorization",
+  "assistant_output": "approve-fdd resolved as approve_fdd with margin +0.8048",
+  "metadata": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0",
+    "margin": 0.8048,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:49:04.267011+00:00"
+}

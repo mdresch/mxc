@@ -1,0 +1,211 @@
+{
+  "task": "Phase 4 Stage 5/6 Architecture (PILLARS-Phase-4 & ADR-019..022) (PMP-BL-v4.0.0)",
+  "options": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "Approve PILLARS-Phase-4 and ADR-019..022",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.935,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.935,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "Reject ADRs",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise ADRs",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "pillar_alignment",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "tradeoff_rigor",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "invariant_preservation",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/PILLARS-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "traceability",
+          "source_id": "docs/07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "pillar_alignment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "TP-17..20 align with WBS 19.0-22.0"
+    },
+    {
+      "id": "tradeoff_rigor",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Alternatives and mitigations are explicit"
+    },
+    {
+      "id": "invariant_preservation",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "ADR-001..018 preserved"
+    },
+    {
+      "id": "traceability",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "1:1 link to BRD/FDD/Epics"
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0"
+  }
+}

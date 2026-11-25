@@ -1,0 +1,19 @@
+{
+  "id": "approve-brd-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_brd",
+  "task_id": "approve-brd",
+  "task_name": "Phase 4 Stage 6 Business Requirements (BRD-018..021)",
+  "policy_id": "d72b24a8-0fb3-4735-aade-81ec7991c837",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 approve-brd gate under PMP-BL-v4.0.0",
+  "user_input": "Approve Phase 4 Stage 5/6, ratify Project-Management-Plan-Phase-4.md (PMP-BL-v4.0.0), and issue Stage 8 Implementation Authorization",
+  "assistant_output": "approve-brd resolved as approve_brd with margin +0.8048",
+  "metadata": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0",
+    "margin": 0.8048,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:49:04.255814+00:00"
+}

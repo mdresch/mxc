@@ -1,0 +1,116 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "approve_brd",
+    "description": "Approve BRD-018..021",
+    "name": null
+  },
+  "decision_margin": 0.8048,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_brd",
+        "description": "Approve BRD-018..021",
+        "name": null
+      },
+      "expected_utility": 0.9238,
+      "robust_utility": 0.9158,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "benefit_traceability": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        },
+        "scope_fidelity": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "fail_closed_invariants": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise BRDs",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.111,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "benefit_traceability": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "scope_fidelity": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "fail_closed_invariants": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_brd",
+        "description": "Reject BRDs",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "benefit_traceability": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "scope_fidelity": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "fail_closed_invariants": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ]
+}

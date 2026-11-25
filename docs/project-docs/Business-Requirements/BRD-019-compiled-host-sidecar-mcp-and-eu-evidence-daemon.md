@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -12,14 +12,14 @@ inputs:
 process: "Define business rules for compiled host-side credential sidecar, MCP firewall PEP, and EU Evidence Ledger daemon"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # BRD-019: Compiled Host Zero-Secret Sidecar, MCP Firewall PEP & EU Evidence Service
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-020](../../07-architecture/ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | **Topic Pillar:** `TP-18` | **Baseline:** `PMP-BL-v4.0.0-candidate`
+> **Source ADR:** [ADR-020](../../07-architecture/ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | **Topic Pillar:** `TP-18` | **Baseline:** `PMP-BL-v4.0.0`
 
 ---
 

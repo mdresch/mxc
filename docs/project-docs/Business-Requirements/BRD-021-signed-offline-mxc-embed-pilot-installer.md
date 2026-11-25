@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -12,14 +12,14 @@ inputs:
 process: "Define business rules for turnkey zero-cloud MXC Embed pilot bundle packaging, integrity verification, and unattended 5-Act self-test"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-021-signed-offline-mxc-embed-pilot-installer.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # BRD-021: Signed Offline "MXC Embed" Sovereign Enterprise Pilot Installer
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-022](../../07-architecture/ADR-022-signed-offline-mxc-embed-pilot-installer.md) | **Topic Pillar:** `TP-20` | **Baseline:** `PMP-BL-v4.0.0-candidate`
+> **Source ADR:** [ADR-022](../../07-architecture/ADR-022-signed-offline-mxc-embed-pilot-installer.md) | **Topic Pillar:** `TP-20` | **Baseline:** `PMP-BL-v4.0.0`
 
 ---
 

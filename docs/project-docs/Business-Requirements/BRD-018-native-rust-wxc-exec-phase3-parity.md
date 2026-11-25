@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -12,14 +12,14 @@ inputs:
 process: "Define business rules for native Rust wxc-exec and mxc-sdk Phase 3 parity"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-018-native-rust-wxc-exec-phase3-parity.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # BRD-018: Native Rust `wxc-exec` & `mxc-sdk` Phase 3 Runtime Parity
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-019](../../07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md) | **Topic Pillar:** `TP-17` | **Baseline:** `PMP-BL-v4.0.0-candidate`
+> **Source ADR:** [ADR-019](../../07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md) | **Topic Pillar:** `TP-17` | **Baseline:** `PMP-BL-v4.0.0`
 
 ---
 

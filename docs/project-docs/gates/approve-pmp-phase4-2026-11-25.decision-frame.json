@@ -1,0 +1,211 @@
+{
+  "task": "Phase 4 Stage 7 Integrated PMP (PMP-BL-v4.0.0) (PMP-BL-v4.0.0)",
+  "options": [
+    {
+      "action": {
+        "id": "approve_pmp",
+        "description": "Ratify PMP-BL-v4.0.0",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.935,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.935,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.93,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_pmp",
+        "description": "Reject PMP",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise PMP",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.1,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "baseline_integration",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.1,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "schedule_and_cost",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.1,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "quality_loop",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.1,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "risk_controls",
+          "source_id": "docs/project-docs/Project-Charter-Phase-4.md",
+          "support": 0.11,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "baseline_integration",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "All 9 PMBOK 8 knowledge areas integrated"
+    },
+    {
+      "id": "schedule_and_cost",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Sprints 19-22 within $0 new external capital"
+    },
+    {
+      "id": "quality_loop",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "TDD spec_gate + pytest + cargo test enforced"
+    },
+    {
+      "id": "risk_controls",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "RISK-P4-01..04 mitigated"
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0"
+  }
+}

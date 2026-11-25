@@ -1,0 +1,19 @@
+{
+  "id": "approve-user-stories-phase4-2026-11-25",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_user_stories",
+  "task_id": "approve-user-stories",
+  "task_name": "Phase 4 Stage 6 User Stories (Epics 018-021, 8 Stories)",
+  "policy_id": "f864addc-593f-46b1-93e0-0720f6d18a6b",
+  "policy_version": 1,
+  "intent_summary": "Phase 4 approve-user-stories gate under PMP-BL-v4.0.0",
+  "user_input": "Approve Phase 4 Stage 5/6, ratify Project-Management-Plan-Phase-4.md (PMP-BL-v4.0.0), and issue Stage 8 Implementation Authorization",
+  "assistant_output": "approve-user-stories resolved as approve_user_stories with margin +0.8248",
+  "metadata": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0",
+    "margin": 0.8248,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-25T06:49:04.278509+00:00"
+}

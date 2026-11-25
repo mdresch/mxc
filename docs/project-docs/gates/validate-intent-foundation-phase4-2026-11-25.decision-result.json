@@ -1,0 +1,116 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "accept_foundation_proceed",
+    "description": "Accept Phase 4 intent foundation and authorize execution under PMP-BL-v4.0.0",
+    "name": null
+  },
+  "decision_margin": 0.8548,
+  "assessments": [
+    {
+      "action": {
+        "id": "accept_foundation_proceed",
+        "description": "Accept Phase 4 intent foundation and authorize execution under PMP-BL-v4.0.0",
+        "name": null
+      },
+      "expected_utility": 0.9438,
+      "robust_utility": 0.9358,
+      "criteria": {
+        "stage_1_to_7_completeness": {
+          "support": 0.945,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.937
+        },
+        "hypothesis_grounding": {
+          "support": 0.9425,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9345
+        },
+        "contract_readiness": {
+          "support": 0.945,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.937
+        },
+        "invariant_integrity": {
+          "support": 0.9425,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9345
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_clarification",
+        "description": "Clarify foundation",
+        "name": null
+      },
+      "expected_utility": 0.095,
+      "robust_utility": 0.081,
+      "criteria": {
+        "stage_1_to_7_completeness": {
+          "support": 0.095,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.081
+        },
+        "hypothesis_grounding": {
+          "support": 0.095,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.081
+        },
+        "contract_readiness": {
+          "support": 0.095,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.081
+        },
+        "invariant_integrity": {
+          "support": 0.095,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.081
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "halt_foundation_gaps",
+        "description": "Halt due to foundation gaps",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "stage_1_to_7_completeness": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "hypothesis_grounding": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "contract_readiness": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "invariant_integrity": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-19"
@@ -15,7 +15,7 @@ inputs:
 process: "Specify bare-metal Hyper-V silicon HIL benchmark harness and honest fail-closed hardware capability probing"
 outputs:
   - "docs/07-architecture/ADR-021-bare-metal-silicon-hil-verification-harness.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # ADR 021: Bare-Metal Silicon HIL Verification Harness (Density, RAM-Disk, NUMA, TEE & `GPU-P`)

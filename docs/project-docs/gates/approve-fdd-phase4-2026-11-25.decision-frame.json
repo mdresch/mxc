@@ -1,0 +1,211 @@
+{
+  "task": "Phase 4 Stage 6 Functional Design (FDD-018..021) (PMP-BL-v4.0.0)",
+  "options": [
+    {
+      "action": {
+        "id": "approve_fdd",
+        "description": "Approve FDD-018..021",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.925,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.925,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.92,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_fdd",
+        "description": "Reject FDDs",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.05,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise FDDs",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "interface_completeness",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "error_code_determinism",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "airgap_and_safety",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+          "support": 0.12,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "parity_alignment",
+          "source_id": "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+          "support": 0.13,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "interface_completeness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Exact Rust/Python signatures specified"
+    },
+    {
+      "id": "error_code_determinism",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Deterministic error precedence"
+    },
+    {
+      "id": "airgap_and_safety",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Zero-cloud and protected-VM guards"
+    },
+    {
+      "id": "parity_alignment",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Exact parity with Phase 3 contracts"
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0"
+  }
+}

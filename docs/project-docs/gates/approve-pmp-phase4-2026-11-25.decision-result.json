@@ -1,0 +1,116 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "approve_pmp",
+    "description": "Ratify PMP-BL-v4.0.0",
+    "name": null
+  },
+  "decision_margin": 0.8348,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_pmp",
+        "description": "Ratify PMP-BL-v4.0.0",
+        "name": null
+      },
+      "expected_utility": 0.9338,
+      "robust_utility": 0.9258,
+      "criteria": {
+        "baseline_integration": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "schedule_and_cost": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        },
+        "quality_loop": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "risk_controls": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise PMP",
+        "name": null
+      },
+      "expected_utility": 0.105,
+      "robust_utility": 0.091,
+      "criteria": {
+        "baseline_integration": {
+          "support": 0.105,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.091
+        },
+        "schedule_and_cost": {
+          "support": 0.105,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.091
+        },
+        "quality_loop": {
+          "support": 0.105,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.091
+        },
+        "risk_controls": {
+          "support": 0.105,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.091
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_pmp",
+        "description": "Reject PMP",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "baseline_integration": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "schedule_and_cost": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "quality_loop": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "risk_controls": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ]
+}

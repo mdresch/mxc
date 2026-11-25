@@ -1,0 +1,132 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-fdd",
+  "policy_id": "ada1bc73-753a-450b-b640-6b6fedd5493c",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 4 Stage 6 Functional Design (FDD-018..021) under PMP-BL-v4.0.0.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_fdd",
+    "description": "Approve FDD-018..021",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8048,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_fdd",
+        "description": "Approve FDD-018..021",
+        "name": null
+      },
+      "expected_utility": 0.9238,
+      "robust_utility": 0.9158,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "error_code_determinism": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        },
+        "airgap_and_safety": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "parity_alignment": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise FDDs",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.111,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "error_code_determinism": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "airgap_and_safety": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "parity_alignment": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_fdd",
+        "description": "Reject FDDs",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "error_code_determinism": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "airgap_and_safety": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "parity_alignment": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-25T06:49:04.267011+00:00",
+  "artifacts": [
+    "docs/project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md",
+    "docs/project-docs/Functional-Design/FDD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md",
+    "docs/project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md",
+    "docs/project-docs/Functional-Design/FDD-021-signed-offline-mxc-embed-pilot-installer.md"
+  ]
+}

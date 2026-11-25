@@ -1,0 +1,211 @@
+{
+  "task": "Phase 4 Stage 8 Implementation Readiness (AUTH-NOTICE-MXC-Phase4-001) (PMP-BL-v4.0.0)",
+  "options": [
+    {
+      "action": {
+        "id": "accept_foundation_proceed",
+        "description": "Accept Phase 4 intent foundation and authorize execution under PMP-BL-v4.0.0",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.945,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.945,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.94,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "halt_foundation_gaps",
+        "description": "Halt due to foundation gaps",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.05,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_clarification",
+        "description": "Clarify foundation",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.09,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "stage_1_to_7_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.09999999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.09,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "hypothesis_grounding",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.09999999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.09,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "contract_readiness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.09999999999999999,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md",
+          "support": 0.09,
+          "confidence": 0.86
+        },
+        {
+          "criterion_id": "invariant_integrity",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-4.md",
+          "support": 0.09999999999999999,
+          "confidence": 0.85
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "stage_1_to_7_completeness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "All Stages 1-7 approved with positive Bayesian margins"
+    },
+    {
+      "id": "hypothesis_grounding",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "HYP-mxc-031..034 remain Formulated and falsifiable"
+    },
+    {
+      "id": "contract_readiness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "8/8 stories passed spec_gate.py and 358/358 baseline tests green"
+    },
+    {
+      "id": "invariant_integrity",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "ADR-001..018 preserved"
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 4,
+    "pmp_baseline": "PMP-BL-v4.0.0"
+  }
+}

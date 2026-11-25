@@ -1,0 +1,116 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "approve_fdd",
+    "description": "Approve FDD-018..021",
+    "name": null
+  },
+  "decision_margin": 0.8048,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_fdd",
+        "description": "Approve FDD-018..021",
+        "name": null
+      },
+      "expected_utility": 0.9238,
+      "robust_utility": 0.9158,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "error_code_determinism": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        },
+        "airgap_and_safety": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "parity_alignment": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise FDDs",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.111,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "error_code_determinism": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "airgap_and_safety": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "parity_alignment": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_fdd",
+        "description": "Reject FDDs",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "interface_completeness": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "error_code_determinism": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "airgap_and_safety": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "parity_alignment": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ]
+}

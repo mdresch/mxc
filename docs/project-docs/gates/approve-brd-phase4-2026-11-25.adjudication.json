@@ -1,0 +1,132 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-brd",
+  "policy_id": "d72b24a8-0fb3-4735-aade-81ec7991c837",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 4 Stage 6 Business Requirements (BRD-018..021) under PMP-BL-v4.0.0.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_brd",
+    "description": "Approve BRD-018..021",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8048,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_brd",
+        "description": "Approve BRD-018..021",
+        "name": null
+      },
+      "expected_utility": 0.9238,
+      "robust_utility": 0.9158,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "benefit_traceability": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        },
+        "scope_fidelity": {
+          "support": 0.925,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.917
+        },
+        "fail_closed_invariants": {
+          "support": 0.9225,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9145
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise BRDs",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.111,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "benefit_traceability": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "scope_fidelity": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        },
+        "fail_closed_invariants": {
+          "support": 0.125,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_brd",
+        "description": "Reject BRDs",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "business_rules_clarity": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "benefit_traceability": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "scope_fidelity": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "fail_closed_invariants": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-25T06:49:04.255814+00:00",
+  "artifacts": [
+    "docs/project-docs/Business-Requirements/BRD-018-native-rust-wxc-exec-phase3-parity.md",
+    "docs/project-docs/Business-Requirements/BRD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md",
+    "docs/project-docs/Business-Requirements/BRD-020-bare-metal-silicon-hil-verification-harness.md",
+    "docs/project-docs/Business-Requirements/BRD-021-signed-offline-mxc-embed-pilot-installer.md"
+  ]
+}

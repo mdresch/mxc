@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -12,7 +12,7 @@ inputs:
 process: "Decompose compiled host credential sidecar, MCP firewall PEP, and EU Evidence Ledger daemon into testable user stories"
 outputs:
   - "docs/user-stories/epic-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 019: Compiled Host Zero-Secret Sidecar, MCP Firewall PEP & EU Evidence Service
@@ -20,7 +20,7 @@ status: "Draft — Ready for Stage 5/6 Approval"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-020](../07-architecture/ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | **WBS:** `20.0` | **Topic Pillar:** `TP-18`  
-> **Status:** Draft — Ready for Stage 5/6 Approval (`HYP-mxc-032`, `BEN-26`)
+> **Status:** Approved — Ready for Implementation (2026-11-25) (`HYP-mxc-032`, `BEN-26`)
 
 ---
 

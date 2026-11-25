@@ -1,0 +1,116 @@
+{
+  "status": "resolved",
+  "selected_action": {
+    "id": "approve_adr",
+    "description": "Approve PILLARS-Phase-4 and ADR-019..022",
+    "name": null
+  },
+  "decision_margin": 0.8248,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "Approve PILLARS-Phase-4 and ADR-019..022",
+        "name": null
+      },
+      "expected_utility": 0.9338,
+      "robust_utility": 0.9258,
+      "criteria": {
+        "pillar_alignment": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "tradeoff_rigor": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        },
+        "invariant_preservation": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "traceability": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise ADRs",
+        "name": null
+      },
+      "expected_utility": 0.115,
+      "robust_utility": 0.101,
+      "criteria": {
+        "pillar_alignment": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "tradeoff_rigor": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "invariant_preservation": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "traceability": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "Reject ADRs",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "pillar_alignment": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "tradeoff_rigor": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "invariant_preservation": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "traceability": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ]
+}

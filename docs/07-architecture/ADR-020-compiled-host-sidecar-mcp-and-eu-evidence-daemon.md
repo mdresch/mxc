@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-18"
@@ -15,7 +15,7 @@ inputs:
 process: "Specify compiled host-side credential sidecar proxy, MCP JSON-RPC firewall PEP, EU Evidence Ledger, and freeze-and-rollback daemon architecture"
 outputs:
   - "docs/07-architecture/ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # ADR 020: Compiled Host Zero-Secret Sidecar, MCP Firewall PEP & EU Evidence Service

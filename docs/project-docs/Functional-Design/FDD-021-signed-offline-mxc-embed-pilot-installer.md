@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 4)"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
+pmp_baseline: "PMP-BL-v4.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -11,7 +11,7 @@ inputs:
 process: "Specify offline MXC Embed pilot bundle packager, SHA-256 manifest verifier, and post-install 5-Act HIL gate interfaces"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-021-signed-offline-mxc-embed-pilot-installer.md"
-status: "Draft — Ready for Stage 5/6 Approval"
+status: "Approved"
 ---
 
 # FDD-021: Signed Offline "MXC Embed" Sovereign Enterprise Pilot Installer

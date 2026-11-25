@@ -1,0 +1,132 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-user-stories",
+  "policy_id": "f864addc-593f-46b1-93e0-0720f6d18a6b",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human project sponsor approved Phase 4 Stage 6 User Stories (Epics 018-021, 8 Stories) under PMP-BL-v4.0.0.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_user_stories",
+    "description": "Approve Epics 018-021",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8248,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_user_stories",
+        "description": "Approve Epics 018-021",
+        "name": null
+      },
+      "expected_utility": 0.9338,
+      "robust_utility": 0.9258,
+      "criteria": {
+        "spec_gate_readiness": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "acceptance_testability": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        },
+        "none_and_boundary_safety": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "wbs_coverage": {
+          "support": 0.9325,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9245
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Revise Stories",
+        "name": null
+      },
+      "expected_utility": 0.115,
+      "robust_utility": 0.101,
+      "criteria": {
+        "spec_gate_readiness": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "acceptance_testability": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "none_and_boundary_safety": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        },
+        "wbs_coverage": {
+          "support": 0.115,
+          "confidence": 0.86,
+          "doubt": 0.14,
+          "penalized_support": 0.101
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_user_stories",
+        "description": "Reject Stories",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.04,
+      "criteria": {
+        "spec_gate_readiness": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "acceptance_testability": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "none_and_boundary_safety": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        },
+        "wbs_coverage": {
+          "support": 0.05,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.04
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-25T06:49:04.278509+00:00",
+  "artifacts": [
+    "docs/user-stories/epic-018-native-rust-wxc-exec-phase3-parity.md",
+    "docs/user-stories/epic-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md",
+    "docs/user-stories/epic-020-bare-metal-silicon-hil-verification-harness.md",
+    "docs/user-stories/epic-021-signed-offline-mxc-embed-pilot-installer.md"
+  ]
+}

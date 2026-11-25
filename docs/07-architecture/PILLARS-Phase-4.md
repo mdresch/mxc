@@ -4,8 +4,8 @@ pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Architectural Strategy Formulation (Phase 4)"
 lifecycle_stage: "Stage 5 (Pillars & Architecture)"
 governance_policy: "approve-adr"
-pmp_baseline: "PMP-BL-v4.0.0-candidate"
-status: "Draft — Ready for Stage 5/6 Approval"
+pmp_baseline: "PMP-BL-v4.0.0"
+status: "Approved"
 inputs:
   - "docs/project-docs/Project-Charter-Phase-4.md"
   - "docs/project-docs/Ideation-Document-Phase-4.md"
@@ -21,7 +21,7 @@ outputs:
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Architectural Strategy Formulation (Phase 4)` (Planning)  
 > **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 5 (Pillars & Architecture)`  
-> **Governing Candidate Baseline:** `PMP-BL-v4.0.0-candidate` | **Status:** Draft (`2026-11-25`)  
+> **Governing Candidate Baseline:** `PMP-BL-v4.0.0` | **Status:** Approved (`2026-11-25`)  
 > **Inputs:** [Project-Charter-Phase-4.md](../project-docs/Project-Charter-Phase-4.md), [Ideation-Document-Phase-4.md](../project-docs/Ideation-Document-Phase-4.md), [Business-Case-Phase-4.md](../project-docs/Business-Case-Phase-4.md), [Benefits-Statement-Phase-4.md](../project-docs/Benefits-Statement-Phase-4.md)  
 > **Outputs:** PILLARS-Phase-4.md, Full-Traceability Architecture Matrix (Phase 4)
 
@@ -57,7 +57,7 @@ Phases 1–3 (`PMP-BL-v1.0.0`..`v3.0.0`) established the 17-Epic Hyper-V micro-V
 
 | Pillar | ADR | BRD | FDD | Epic | WBS | Target Status |
 |---|---|---|---|---|:---:|---|
-| **`TP-17`** | [ADR-019](ADR-019-native-rust-wxc-exec-phase3-parity.md) | [BRD-018](../project-docs/Business-Requirements/BRD-018-native-rust-wxc-exec-phase3-parity.md) | [FDD-018](../project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md) | [Epic 018](../user-stories/epic-018-native-rust-wxc-exec-phase3-parity.md) | 19.0 | Draft — Ready for Stage 5/6 Approval |
-| **`TP-18`** | [ADR-020](ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [BRD-019](../project-docs/Business-Requirements/BRD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [FDD-019](../project-docs/Functional-Design/FDD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [Epic 019](../user-stories/epic-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | 20.0 | Draft — Ready for Stage 5/6 Approval |
-| **`TP-19`** | [ADR-021](ADR-021-bare-metal-silicon-hil-verification-harness.md) | [BRD-020](../project-docs/Business-Requirements/BRD-020-bare-metal-silicon-hil-verification-harness.md) | [FDD-020](../project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md) | [Epic 020](../user-stories/epic-020-bare-metal-silicon-hil-verification-harness.md) | 21.0 | Draft — Ready for Stage 5/6 Approval |
-| **`TP-20`** | [ADR-022](ADR-022-signed-offline-mxc-embed-pilot-installer.md) | [BRD-021](../project-docs/Business-Requirements/BRD-021-signed-offline-mxc-embed-pilot-installer.md) | [FDD-021](../project-docs/Functional-Design/FDD-021-signed-offline-mxc-embed-pilot-installer.md) | [Epic 021](../user-stories/epic-021-signed-offline-mxc-embed-pilot-installer.md) | 22.0 | Draft — Ready for Stage 5/6 Approval |
+| **`TP-17`** | [ADR-019](ADR-019-native-rust-wxc-exec-phase3-parity.md) | [BRD-018](../project-docs/Business-Requirements/BRD-018-native-rust-wxc-exec-phase3-parity.md) | [FDD-018](../project-docs/Functional-Design/FDD-018-native-rust-wxc-exec-phase3-parity.md) | [Epic 018](../user-stories/epic-018-native-rust-wxc-exec-phase3-parity.md) | 19.0 | Approved — Ready for Implementation |
+| **`TP-18`** | [ADR-020](ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [BRD-019](../project-docs/Business-Requirements/BRD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [FDD-019](../project-docs/Functional-Design/FDD-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | [Epic 019](../user-stories/epic-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | 20.0 | Approved — Ready for Implementation |
+| **`TP-19`** | [ADR-021](ADR-021-bare-metal-silicon-hil-verification-harness.md) | [BRD-020](../project-docs/Business-Requirements/BRD-020-bare-metal-silicon-hil-verification-harness.md) | [FDD-020](../project-docs/Functional-Design/FDD-020-bare-metal-silicon-hil-verification-harness.md) | [Epic 020](../user-stories/epic-020-bare-metal-silicon-hil-verification-harness.md) | 21.0 | Approved — Ready for Implementation |
+| **`TP-20`** | [ADR-022](ADR-022-signed-offline-mxc-embed-pilot-installer.md) | [BRD-021](../project-docs/Business-Requirements/BRD-021-signed-offline-mxc-embed-pilot-installer.md) | [FDD-021](../project-docs/Functional-Design/FDD-021-signed-offline-mxc-embed-pilot-installer.md) | [Epic 021](../user-stories/epic-021-signed-offline-mxc-embed-pilot-installer.md) | 22.0 | Approved — Ready for Implementation |
