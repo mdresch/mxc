@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — **Closed (Stage 17/18 Complete)** |
-| **Current PMP Baseline** | `PMP-BL-v3.0.0` |
-| **Session close-off checkpoint** | Phase 3 Closed via `OUTCOME-Phase-3-Actual-Outcomes.md` & `IR-PROP-MXC-Phase3-Closeout` (`17/17` Epics, `358/358` Python tests, `31/31` IMPs delivered, `AUDIT-010..017` & `GOV-EX-003` confirmed accurate) |
-| **Current macro Stage** | Stage 18 Complete (Phase 3 Closed — Awaiting Sponsor Decision on Phase 4 Rust/Silicon Productionization or Program Close) |
-| **Last Epic/unit of work fully completed** | Phase 3 Stage 17/18 Closeout (`OUTCOME-Phase-3-Actual-Outcomes.md`, `Intent-Refinement-Proposal-Phase-3.md`, `Audit-Register.md` `AUDIT-010..017` / `GOV-EX-003`) |
-| **Next Epic/unit of work to implement** | Sponsor decision: Initiate Phase 4 (Rust `wxc-exec` & bare-metal silicon productionization) or conclude program at `PMP-BL-v3.0.0` |
-| **Last commit on the base branch** | `29a64829` (Phase 3 Epics 013–017 implementation; Stage 17/18 closeout commit pending) |
+| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Stage 1 Initiated** |
+| **Current PMP Baseline** | `PMP-BL-v3.0.0` (Active) / `PMP-BL-v4.0.0-candidate` (Initiating) |
+| **Session close-off checkpoint** | Phase 3 Closed (`201b79bf`); Phase 4 Initiated via [Spark-Capture-Phase-4.md](../project-docs/Spark-Capture-Phase-4.md) (`SPARK-MXC-Phase4-v4.0.0`) |
+| **Current macro Stage** | Stage 1 (Intent: Spark Captured $\rightarrow$ Ready for `Ideation-Document-Phase-4.md` & `approve-ideation`) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stage 17/18 Closeout (`201b79bf`) & Phase 4 Spark Capture (`SPARK-MXC-Phase4-v4.0.0`) |
+| **Next Epic/unit of work to implement** | Phase 4 Stage 1 Ideation (`Ideation-Document-Phase-4.md` + `approve-ideation` gate) |
+| **Last commit on the base branch** | `201b79bf` (Phase 3 Stage 17/18 Closeout; Phase 4 Spark commit pending) |
 | **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -58,6 +58,7 @@ caused this, both worth guarding against here:
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
 | Phase 3 | `PMP-BL-v3.0.0` | Complete (All Epics 013..017 implemented & verified; `358/358` Python tests pass, `31/31` IMPs delivered) | [OUTCOME-Phase-3-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-3-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-3.md](../project-docs/Intent-Refinement-Proposal-Phase-3.md) (`IR-PROP-MXC-Phase3-Closeout`) |
+| Phase 4 | `PMP-BL-v4.0.0-candidate` | Initiating — Stage 1 Spark Captured (2026-11-25) | [Spark-Capture-Phase-4.md](../project-docs/Spark-Capture-Phase-4.md) (`SPARK-MXC-Phase4-v4.0.0`) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 

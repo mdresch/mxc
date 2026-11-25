@@ -8,7 +8,8 @@ lifecycle_stage: "Stage 18 (Intent Refinement)"
 governance_policy: "approve-intent-refinement"
 readiness_audit_ref: "Audit-Register.md#AUDIT-013..017 + GOV-EX-003"
 disposition_type: "phase_handoff"
-status: "Ready for Sponsor Sign-Off (Phase 3 Closed — Optional Phase 4 Rust & Silicon Productionization)"
+status: "Approved — Phase 4 Initiated (Option A)"
+refinesIntent: "docs/project-docs/Spark-Capture-Phase-4.md"
 inputs:
   - "docs/project-docs/Project-Management-Plan-Phase-3.md"
   - "docs/project-docs/OUTCOME-Phase-3-Actual-Outcomes.md"
@@ -19,6 +20,7 @@ inputs:
 process: "Close Phase 3 (PMP-BL-v3.0.0), verify Stage 18 readiness invariants, graduate Phase 3 architectural invariants, and frame optional Phase 4 Rust/Silicon productionization"
 outputs:
   - "docs/project-docs/Intent-Refinement-Proposal-Phase-3.md"
+  - "docs/project-docs/Spark-Capture-Phase-4.md"
 lineage:
   root_spark: "docs/project-docs/Spark-Capture.md"
   parent_refinement: "docs/project-docs/Intent-Refinement-Proposal-Phase-2.md"
