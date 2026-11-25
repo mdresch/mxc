@@ -12,7 +12,7 @@ inputs:
 process: "Decompose compiled host credential sidecar, MCP firewall PEP, and EU Evidence Ledger daemon into testable user stories"
 outputs:
   - "docs/user-stories/epic-019-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 019: Compiled Host Zero-Secret Sidecar, MCP Firewall PEP & EU Evidence Service
@@ -26,7 +26,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 19.1 — Compiled Host Credential Sidecar Proxy & Protocol-Aware MCP JSON-RPC Firewall
 - **WBS:** 20.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Platform Security Engineer,  
   **I want** compiled Rust host policy evaluators in `src/host/wxc_winhttp_proxy_shim/` for allowlisted secret substitution and ordered MCP JSON-RPC tool inspection,  
   **so that** real credentials never cross into guest memory and unauthorized MCP calls fail closed in `<= 2 ms`.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 19.2 — Compiled Host EU Evidence Ledger (`>= 180d`) & Hit-L `freeze-and-rollback` Circuit Breaker
 - **WBS:** 20.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As an** EU AI Act / DORA / NIS2 Compliance Lead,  
   **I want** a compiled host SHA-256 hash-chained `EuEvidenceLedger` (`retention_days >= 180`) paired with a `<= 250 ms` `freeze-and-rollback` circuit breaker,  
   **so that** live host sessions produce tamper-evident compliance chains and halt instantaneously on anomaly.

@@ -12,7 +12,7 @@ inputs:
 process: "Decompose offline MXC Embed pilot bundle packager, integrity verifier, and unattended 5-Act installer gate into testable user stories"
 outputs:
   - "docs/user-stories/epic-021-signed-offline-mxc-embed-pilot-installer.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 021: Signed Offline "MXC Embed" Sovereign Enterprise Pilot Installer
@@ -26,7 +26,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 21.1 — Deterministic Offline Pilot Bundle Manifest Builder (`mxc-embed-manifest.json`)
 - **WBS:** 22.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Sovereign Release Engineer,  
   **I want** `build_embed_bundle_manifest()` to emit a strict SHA-256 manifest for compiled `wxc-exec.exe`, `golden_image_registry.json`, and HIL scripts with `offline_only=True`,  
   **so that** customer pilot bundles are reproducible and tamper-evident prior to airgapped delivery.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 21.2 — Zero-Cloud Offline Bundle Verifier & Unattended `<= 15 min` 5-Act Installer Gate
 - **WBS:** 22.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Sovereign Enterprise Solutions Architect,  
   **I want** `verify_embed_bundle_offline()` and `scripts/hyperv/install_mxc_embed.ps1` to verify bundle hashes, block outbound internet attempts, and gate completion on the `<= 15 min` 5-Act HIL self-test,  
   **so that** airgapped EU hosts deploy and self-verify MXC with zero cloud dependencies.

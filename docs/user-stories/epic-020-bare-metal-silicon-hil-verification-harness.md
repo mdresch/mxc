@@ -12,7 +12,7 @@ inputs:
 process: "Decompose bare-metal Hyper-V silicon HIL capability probe and benchmark verification harness into testable user stories"
 outputs:
   - "docs/user-stories/epic-020-bare-metal-silicon-hil-verification-harness.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 020: Bare-Metal Silicon HIL Verification Harness
@@ -26,7 +26,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 20.1 — Honest Fail-Closed Host Hardware Capability Probe (`TEE`, `GPU-P`, `NUMA`, `RAM-Disk`)
 - **WBS:** 21.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Hyper-V Systems Architect,  
   **I want** `evaluate_silicon_capabilities()` and `scripts/hyperv/run_silicon_hil_probe.ps1` to probe real host hardware capabilities without faking compliance on unsupported workstations,  
   **so that** Windows 11 Pro dev hosts and Windows Server 2025 servers emit honest, auditable capability verdicts.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 20.2 — Non-Destructive Bare-Metal HIL Benchmark Validator & Protected-VM Isolation Guard
 - **WBS:** 21.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Release Verification Engineer,  
   **I want** `verify_hil_benchmark_report()` to validate density, RAM-disk, parent SHA-256 invariance, and protected-VM exclusion across live silicon runs,  
   **so that** bare-metal benchmarks never mutate golden parent VHDXs or touch `Windows 11 Pro Dev` / active user sandboxes.

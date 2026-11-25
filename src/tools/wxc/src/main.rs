@@ -3,6 +3,7 @@
 
 #[cfg(target_os = "windows")]
 mod audit;
+mod phase3_parity;
 #[cfg(target_os = "windows")]
 use std::fmt::Write;
 use std::process;

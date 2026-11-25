@@ -25,6 +25,7 @@ use windows::Win32::System::Threading::{
 use mxc_sdk::mxc_common::logger::{Logger, Mode};
 use mxc_sdk::mxc_common::string_util;
 mod bindings;
+mod phase4_security_ledger;
 mod proxy_policy;
 
 use proxy_policy::ActiveProxyPolicy;

@@ -23,6 +23,10 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
 | `LL-016` | EU Evidence Ledger Retention/Tamper Invariants, Fail-Closed Enclave Precedence & Cache | Epic 015 / Stories 15.1..15.2 | Tier 2 (`.claude/skills/eu-evidence-and-enclave/SKILL.md`) | 2026-11-25 |
 | `LL-017` | Reproducible ISO-to-Lean Auto-Registry Validation, Zero-Cloud Embed & Parent HIL Gate | Epic 016 / Stories 16.1..16.2 | Tier 2 (`.claude/skills/mxc-embed-appliance/SKILL.md`) | 2026-11-25 |
 | `LL-018` | Ultra-Density Numeric Guards, Kernel TLS Pass-Through & Fail-Closed GPU-P Precedence | Epic 017 / Stories 17.1..17.3 | Tier 2 (`.claude/skills/frontier-density-and-gpu/SKILL.md`) | 2026-11-25 |
+| `LL-019` | Native Rust `wxc-exec` Phase 3 Parity (BOM, Chunked VMBus, Bounded Fork & Token-Boundary Scan) | Epic 018 / Stories 18.1..18.2 | Tier 2 (`.claude/skills/rust-wxc-phase3-parity/SKILL.md`) | 2026-11-25 |
+| `LL-020` | Zero-Secret Rust Host Sidecar, Deterministic MCP PEP & EU Evidence Ledger Precedence | Epic 019 / Stories 19.1..19.2 | Tier 2 (`.claude/skills/host-sidecar-mcp-ledger/SKILL.md`) | 2026-11-25 |
+| `LL-021` | Honest Fail-Closed Silicon Capability Probing, Protected-VM Exclusion & Parent Hash Invariance | Epic 020 / Stories 20.1..20.2 | Tier 2 (`.claude/skills/silicon-hil-harness/SKILL.md`) | 2026-11-25 |
+| `LL-022` | Signed Offline MXC Embed Bundle Manifest Hygiene & Egress/Integrity/Budget Precedence | Epic 021 / Stories 21.1..21.2 | Tier 2 (`.claude/skills/mxc-embed-packager/SKILL.md`) | 2026-11-25 |
 
 ## Entries
 
@@ -243,3 +247,52 @@ governed_by: "ADR-010 (Lessons Learned Crystallization and Register)"
   3. Treat `None`, empty, or non-TLS payloads in `inspect_kernel_tls_promotion()` as safe pass-through (`is_tls_client_hello=False`, `sni_hint=None`) while enforcing finite `[0.0, 1.0]` forecaster bounds and promoting only at `confidence >= 0.90` and `false_positive_rate <= 0.05`.
   4. Normalize `"com+"` to `"com_plus"` case-insensitively and require all four subsystems (`wmi`, `com_plus`, `services`, `gpo`) to report `True` or `{"healthy": True}` (`ERR_SUBSYSTEM_DEGRADED` otherwise).
   5. Enforce deterministic GPU-P admission precedence (`ERR_GPUP_UNSUPPORTED` -> `ERR_GPUP_PARTITION_INVALID` -> `ERR_GPUP_SLA_BELOW_FLOOR` `< 0.85`) and avoid `math.isclose` (`IMP-024`).
+
+### LL-019 — Native Rust `wxc-exec` Phase 3 Parity: BOM Stripping, Chunked VMBus Digests, Bounded Fork & Token-Boundary Scan (`ADR-019`)
+- **Epic / Story:** Epic 018 / Stories 18.1 & 18.2 (`spec-18_1-670df194`, `spec-18_2-16cbb704`)
+- **Scope:** Compiled Rust `wxc-exec` parity module (`src/tools/wxc/src/phase3_parity.rs`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/rust-wxc-phase3-parity/SKILL.md`
+- **The Trap / Problem:** Porting Python Phase 3 contracts into Rust risks silent cross-language error-code drift, false positives on benign environment variables (`PATH` vs `PAT`), or adding external crate dependencies that break offline builds.
+- **The Root Cause:** Reusing loose substring checks or divergent error strings instead of mirroring canonical Phase 3 error codes and using workspace-pinned `serde_json` + `sha2` crates offline.
+- **Actionable Invariant / Rule:** Enforce `ADR-019`, `FDD-018`, and `AC-18.1.1`..`18.2.2`:
+  1. Strip repeated leading UTF-8 BOM bytes (`\xEF\xBB\xBF` / `'\u{FEFF}'`) before `serde_json::from_str`, preserving `phase`/`sandboxId` while honoring non-empty CLI override precedence.
+  2. Frame chunked VMBus payloads using `sha2::Sha256` lowercase hex and constant-time digest comparison (`ERR_CHUNK_CHECKSUM_MISMATCH`), cleanly round-tripping `&[]` <-> `vec![]`.
+  3. Bound `.avhdx` snapshot forks with checked depth arithmetic (`ERR_FORK_DEPTH_EXCEEDED`) and unique non-blank fan-out checks (`ERR_FORK_BOUNDS_INVALID`), preserving `parent_hash` bit-for-bit on discard.
+  4. Scan `guest_env` using token-boundary key matching (`PATH` allowed, `PAT`/`TOKEN`/`SECRET`/`PASSWORD`/`SSH_AUTH_SOCK`/`PRIVATE_KEY`/`API_KEY` rejected as `ERR_STATIC_SECRET_DETECTED`).
+
+### LL-020 — Zero-Secret Rust Host Sidecar, Deterministic MCP PEP & EU Evidence Ledger Precedence (`ADR-020`)
+- **Epic / Story:** Epic 019 / Stories 19.1 & 19.2 (`spec-19_1-0250184d`, `spec-19_2-191f9baf`)
+- **Scope:** Compiled host credential sidecar, MCP JSON-RPC firewall, EU Evidence Ledger, and Hit-L kill switch (`src/host/wxc_winhttp_proxy_shim/src/phase4_security_ledger.rs`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/host-sidecar-mcp-ledger/SKILL.md`
+- **The Trap / Problem:** Leaving real vault secrets in error/denied audit logs or relaxing MCP schema-hash comparison exposes credentials or enables rug-pull tool mutations on live host proxy traffic.
+- **The Root Cause:** Scrubbing secrets only on happy paths and evaluating MCP checks without strict deterministic precedence.
+- **Actionable Invariant / Rule:** Enforce `ADR-020`, `FDD-019`, and `AC-19.1.1`..`19.2.2`:
+  1. Scrub every registered vault secret (`[REDACTED]`) from `redacted_audit_json` on BOTH allowed and denied paths (`<= 5 ms` sidecar injection, `ERR_SECRET_SCOPE_DENIED`).
+  2. Evaluate MCP JSON-RPC envelopes in strict order (`ERR_MCP_SERVER_UNAPPROVED` -> `ERR_MCP_SCHEMA_DRIFT` -> `ERR_MCP_TOOL_BLOCKED` -> `ERR_MCP_ARG_VIOLATION`) within `<= 2 ms`.
+  3. Enforce `EuEvidenceLedger::new(retention_days >= 180)` (`ERR_RETENTION_BELOW_EU_FLOOR`), verify empty chains safely as `Ok(())`, flag historical tamper as `ERR_LEDGER_CHAIN_BROKEN`, and complete `freeze_and_rollback()` within `<= 250 ms`.
+
+### LL-021 — Honest Fail-Closed Silicon Capability Probing, Protected-VM Exclusion & Parent Hash Invariance (`ADR-021`)
+- **Epic / Story:** Epic 020 / Stories 20.1 & 20.2 (`spec-20_1-b0350d62`, `spec-20_2-e26e3c99`)
+- **Scope:** Bare-metal Hyper-V silicon capability probe (`scripts/hyperv/run_silicon_hil_probe.ps1`) and HIL benchmark validator (`scripts/lib/silicon_hil_harness.py`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/silicon-hil-harness/SKILL.md`
+- **The Trap / Problem:** Fabricating passing TEE/GPU-P/NUMA verdicts on unsupported workstations masks real silicon deployment failures (`RISK-P4-03`), while unguarded `None`/bool-as-int fields or missing protected-VM checks risk touching live dev/user VMs (`Windows 11 Pro Dev`, `mxc-hv-930733af`) or mutating golden parents.
+- **The Root Cause:** Missing `NO_FAKED_HARDWARE_PASS` gating, Python `bool`-as-`int` / IEEE-754 `NaN`/`inf` bypasses, and non-deterministic benchmark validation order.
+- **Actionable Invariant / Rule:** Enforce `ADR-021`, `FDD-020`, and `AC-20.1.1`..`20.2.2`:
+  1. Fail closed on `None`, invalid types, `bool`-as-`int`, or negative counts (`ERR_CAPABILITY_PROBE_INVALID`) and emit honest capability verdicts (`ERR_TEE_UNSUPPORTED`, `ERR_GPUP_UNSUPPORTED`, `SKIPPED_NO_MULTISOCKET_NUMA`).
+  2. Enforce `verify_hil_benchmark_report()` precedence: invalid schema (`ERR_BENCHMARK_REPORT_INVALID`) -> case-insensitive `protected_vm_names` match (`ERR_PROTECTED_VM_TOUCHED`) -> constant-time parent SHA-256 mismatch (`ERR_PARENT_HASH_DRIFT`) -> finite SLA bounds (`ERR_BENCHMARK_SLA_FAILED`).
+  3. Keep `scripts/hyperv/run_silicon_hil_probe.ps1` strictly read-only emitting JSON without mutating VMs or disks.
+
+### LL-022 — Signed Offline MXC Embed Bundle Manifest Path/Digest Hygiene & Fail-Closed Egress/Integrity/Budget Precedence (`ADR-022`)
+- **Epic / Story:** Epic 021 / Stories 21.1 & 21.2 (`spec-21_1-6cf42f62`, `spec-21_2-e0a22b0e`)
+- **Scope:** Offline pilot bundle packager, constant-time SHA-256 verifier, and zero-cloud installer (`scripts/lib/mxc_embed_packager.py`, `scripts/hyperv/install_mxc_embed.ps1`)
+- **Date:** 2026-11-25
+- **Tier 2/3 Propagation Target:** `.claude/skills/mxc-embed-packager/SKILL.md`
+- **The Trap / Problem:** Allowing rooted or `..` traversal paths in bundle manifests, comparing SHA-256 digests with `==`, or evaluating install duration budgets before blocking outbound internet attempts can mask airgap violations or tampered pilot binaries.
+- **The Root Cause:** Loose manifest validation and unordered offline verification checks.
+- **Actionable Invariant / Rule:** Enforce `ADR-022`, `FDD-021`, and `AC-21.1.1`..`21.2.2`:
+  1. Reject `None`/blank `bundle_version`, rooted/`..` paths, and non-64-hex digests (`^[0-9a-fA-F]{64}\Z`) with `ValueError`, emitting frozen `EmbedBundleManifest(offline_only=True)` with lowercase digests.
+  2. Execute `verify_embed_bundle_offline()` 100% offline in strict order: `ERR_NETWORK_EGRESS_ATTEMPTED` -> `ERR_BUNDLE_INTEGRITY_FAILED` (exact key-set + `hmac.compare_digest`) -> `ERR_INSTALL_BUDGET_EXCEEDED` (finite non-bool `(0.0, 15.0]`) -> `(True, "OK")`.
+  3. Keep `scripts/hyperv/install_mxc_embed.ps1` 100% offline (`Get-FileHash -Algorithm SHA256`, `-DryRun`, gated 5-Act HIL self-test).

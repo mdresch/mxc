@@ -14,6 +14,8 @@ mxc-sdk.workspace = true
 clap.workspace = true
 windows.workspace = true
 windows-core.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
 
 [target.'cfg(windows)'.build-dependencies]
 cc = "1"

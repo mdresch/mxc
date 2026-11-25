@@ -12,7 +12,7 @@ inputs:
 process: "Decompose native Rust wxc-exec and mxc-sdk Phase 3 parity into testable user stories"
 outputs:
   - "docs/user-stories/epic-018-native-rust-wxc-exec-phase3-parity.md"
-status: "Approved — Ready for Implementation"
+status: "Closed — Implemented & Validated"
 ---
 
 # Epic 018: Native Rust `wxc-exec` & `mxc-sdk` Phase 3 Runtime Parity
@@ -26,7 +26,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 18.1 — Native Rust UTF-8 BOM Manifest Parser, CLI Precedence & Chunked VMBus Framing
 - **WBS:** 19.1
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As a** Windows Hyper-V Platform Engineer,  
   **I want** `wxc-exec` and `mxc-sdk` to parse UTF-8 BOM manifests with CLI flag precedence and stream arbitrary payloads via SHA-256 chunked binary frames in compiled Rust,  
   **so that** Windows PowerShell scripts never fail on `\xEF\xBB\xBF` BOM bytes and `>= 100 MB` transfers bypass the `cmd.exe` 8 KB ceiling.
@@ -38,7 +38,7 @@ status: "Approved — Ready for Implementation"
 
 ## Story 18.2 — Native Rust Bounded Parallel Snapshot Forking & Zero-Secret Git Sync Scanner
 - **WBS:** 19.2
-- **Status:** Planned
+- **Status:** Implemented & Validated
 - **As an** Autonomous Coding Agent Orchestrator,  
   **I want** compiled Rust implementations of bounded `.avhdx` snapshot forking (`--hyperv-op fork`) and token-boundary static secret scanning (`--hyperv-op git-sync`),  
   **so that** `wxc-exec.exe` forks 3–5 sibling sandboxes in `<= 500 ms` per branch with zero guest PAT/key exposure.
