@@ -25,10 +25,10 @@ outputs:
 
 | Field | Value |
 |---|---|
-| Version | 1.1 (Phase 1 Baseline Conformance Audit) |
-| Date | 2026-11-21 |
-| Status | Complete — All Phase 1 ADRs and Governance Exercises Verified |
-| Source | 162/162 Automated Contract Test Runs across Epics 001..006 |
+| Version | 1.3 (Phases 1–3 Complete Baseline Conformance Audit) |
+| Date | 2026-11-25 |
+| Status | Complete — All Phase 1–3 ADRs (`ADR-001..006`, `ADR-008..018`) and Governance Exercises Verified |
+| Source | 358/358 Automated Python Contract & Governance Tests across Epics 001..017 |
 
 Centralized, not scattered. Every real audit finding (an ADR's accuracy checked against actual code) and every real Governance Exercise (a real-world prerequisite or claim checked against production reality) lives here once, with a stable ID — other documents **reference** the ID rather than copying the finding into their own text.
 
@@ -47,6 +47,14 @@ This register is conceptually distinct from governance-type documents (the polic
 | `AUDIT-007` | [ADR-009](../../07-architecture/ADR-009-multi-tier-standby-pools.md) | `TP-07` | Multi-tier standby hierarchy (Hot <=5ms, Warm ~200ms, Cold 2-4s), SLA dispatch routing, and dynamic promotion/demotion lifecycle verified (`scripts/lib/watermark_pool.py`). | `confirmed_accurate` | `Story 7.1`, `Story 7.2`, `Story 7.3` |
 | `AUDIT-008` | [ADR-010](../../07-architecture/ADR-010-predictive-wake-interception.md) | `TP-08` | Early TLS SNI extraction within <= 5ms, concurrent async unpause during TLS handshake, and time-series workload forecasting >=60s in advance verified (`scripts/lib/tls_snooper.py`, `scripts/lib/workload_forecaster.py`). | `confirmed_accurate` | `Story 8.1`, `Story 8.2` |
 | `AUDIT-009` | [ADR-011](../../07-architecture/ADR-011-hyperv-memory-combining-deduplication.md) | `TP-09` | Hyper-V memory combining configuration, diagnostic performance counters, effective host RAM <= 450 MB floor, and COW hardware page isolation verified (`scripts/lib/memory_combining_probe.py`). | `confirmed_accurate` | `Story 9.1`, `Story 9.2` |
+| `AUDIT-010` | [ADR-012](../07-architecture/ADR-012-cryptographic-supply-chain-slsa.md) | `TP-10` | Airgapped SLSA v1.0 provenance, CycloneDX 1.5 SBOM, fail-closed `PoolRegistrationGuard`, and O(1) hot-path admission cache verified (`scripts/lib/supply_chain_attestation.py`). | `confirmed_accurate` | `Story 10.1`, `Story 10.2` |
+| `AUDIT-011` | [ADR-013](../07-architecture/ADR-013-autonomous-fleet-economics-scheduler.md) | `TP-11` | Autonomous RAM pressure autotuner (`<75%`/`75-85%`/`>85%`), critical hysteresis override, and `desktop_gui >= 4096 MB` archetype floor guard verified (`scripts/lib/fleet_economics.py`). | `confirmed_accurate` | `Story 11.1`, `Story 11.2` |
+| `AUDIT-012` | [ADR-008](../07-architecture/ADR-008-authentication-gated-session-provisioning.md) | `TP-02` | Opt-in `auth_gated` ingress (0 unauthenticated wakes), deny-by-default OIDC/SAML & Entra Agent ID claims mapping, and TTL-bounded identity binding (`[300s, 86400s]`) verified (`scripts/lib/auth_gated_leasing.py`). | `confirmed_accurate` | `Story 12.1`, `Story 12.2` |
+| `AUDIT-013` | [ADR-014](../07-architecture/ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | `TP-12` | Zero-secret host git bundle sync (`mxc-sync`), credential-injecting sidecar proxy (`<= 5 ms`, `[REDACTED]` logs), and ordered MCP JSON-RPC firewall (`<= 2 ms`) verified (`scripts/lib/zero_secret_mcp_gateway.py`). | `confirmed_accurate` | `Story 13.1`, `Story 13.2` |
+| `AUDIT-014` | [ADR-015](../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | `TP-13` | Bounded parallel `.avhdx` snapshot forking (`max_depth <= 4`, `max_parallel <= 5`), SHA-256 chunked VMBus streaming, BOM-tolerant manifest parsing, and zero-secret IDE worker validation verified (`scripts/lib/snapshot_fork_and_vmbus.py`). | `confirmed_accurate` | `Story 14.1`, `Story 14.2`, `Story 14.3` |
+| `AUDIT-015` | [ADR-016](../07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | `TP-14` | Tamper-evident EU Evidence Ledger (`>= 180d` retention), Entra Conditional Access gate, `<= 250 ms` freeze-and-rollback circuit breaker, and offline vTPM 2.0 / SEV-SNP / TDX attestation with O(1) cache verified (`scripts/lib/eu_evidence_and_enclave.py`). | `confirmed_accurate` | `Story 15.1`, `Story 15.2` |
+| `AUDIT-016` | [ADR-017](../07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | `TP-15` | Reproducible ISO-to-Lean auto-registry builder, zero-cloud `<= 15m` MXC Embed preflight validator, and immutable parent 5-Act HIL release gate verified (`scripts/lib/mxc_embed_appliance.py`). | `confirmed_accurate` | `Story 16.1`, `Story 16.2` |
+| `AUDIT-017` | [ADR-018](../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | `TP-16` | 640 MB paused floor / CrossGen2 `< 350 MB` effective RAM / local NUMA pinning, RAM-disk/DAX overlay, kernel TLS safe pass-through, WMI/COM+/Services/GPO telemetry matrix, and `GPU-P` capability/SLA gate verified (`scripts/lib/frontier_density_and_gpu.py`). | `confirmed_accurate` | `Story 17.1`, `Story 17.2`, `Story 17.3` |
 
 **Verdict taxonomy** (matches `classify-audit-finding`'s real action set, once this project has evidence to build that policy — see "Governance Exercises" below for the parallel reasoning): `confirmed_accurate`, `confirmed_with_drift`, `partially_confirmed`, `contradicted`, `stale_superseded`, `unauditable`, `flag_for_human_review`.
 
@@ -57,6 +65,8 @@ A distinct sub-type from the ADR-accuracy audits above — these check a real-wo
 | ID | Checks | Status | Blocker |
 |---|---|---|---|
 | `GOV-EX-001` | Phase 1 Integrated Acceptance & Verification Coverage (162/162 contract tests passing across 6 Epics, 0 regressions, lifecycle invariants verified). | `confirmed_accurate` | None |
+| `GOV-EX-002` | Phase 2 Integrated Acceptance & Verification Coverage (204/204 Python contracts + 83 Rust Hyper-V unit tests passing across Epics 007..012, live 9s Windows 11 Lean boot & 5-Act verification). | `confirmed_accurate` | None |
+| `GOV-EX-003` | Phase 3 Integrated Acceptance & Verification Coverage (358/358 Python tests passing across Epics 001..017, 12/12 Phase 3 `spec_gate.py` episodes passed, 5/5 Tier-2 skills citing `LL-014..018`, 31/31 Continuous Improvements Delivered, `validate_lifecycle.py` `Invariants: PASS`). | `confirmed_accurate` | None |
 
 ## Building `classify-audit-finding` for this project
 

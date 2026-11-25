@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Execution Complete (Epics 013–017) |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — **Closed (Stage 17/18 Complete)** |
 | **Current PMP Baseline** | `PMP-BL-v3.0.0` |
-| **Session close-off checkpoint** | Phase 3 Epics 013–017 (`12/12` stories, `154` new contract tests, `358` total passing, `31/31` improvements delivered) Validated; Ready for Stage 17/18 Closeout |
-| **Current macro Stage** | Stage 10 Complete $\rightarrow$ Stage 17 / 18 (Phase 3 Actual Outcomes & Closeout) |
-| **Last Epic/unit of work fully completed** | Epics 013–017 Parallel Blitz (`12/12` stories across `TP-12`..`TP-16`; `21/21` Phase 3 improvements, `358` total Python tests green) |
-| **Next Epic/unit of work to implement** | Phase 3 Stage 17/18 Closeout (`OUTCOME-Phase-3-Actual-Outcomes.md` & `Intent-Refinement-Proposal-Phase-3.md`) |
-| **Last commit on the base branch** | `d9f1b393` (Phase 3 Stage 5–8 approved baseline; Phase 3 execution commit pending) |
+| **Session close-off checkpoint** | Phase 3 Closed via `OUTCOME-Phase-3-Actual-Outcomes.md` & `IR-PROP-MXC-Phase3-Closeout` (`17/17` Epics, `358/358` Python tests, `31/31` IMPs delivered, `AUDIT-010..017` & `GOV-EX-003` confirmed accurate) |
+| **Current macro Stage** | Stage 18 Complete (Phase 3 Closed — Awaiting Sponsor Decision on Phase 4 Rust/Silicon Productionization or Program Close) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stage 17/18 Closeout (`OUTCOME-Phase-3-Actual-Outcomes.md`, `Intent-Refinement-Proposal-Phase-3.md`, `Audit-Register.md` `AUDIT-010..017` / `GOV-EX-003`) |
+| **Next Epic/unit of work to implement** | Sponsor decision: Initiate Phase 4 (Rust `wxc-exec` & bare-metal silicon productionization) or conclude program at `PMP-BL-v3.0.0` |
+| **Last commit on the base branch** | `29a64829` (Phase 3 Epics 013–017 implementation; Stage 17/18 closeout commit pending) |
 | **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0` | Execution Complete — Ready for Stage 17/18 Closeout (All Epics 013..017 implemented & verified; `358` Python tests pass, `31/31` IMPs delivered) | [Project-Management-Plan-Phase-3.md](../project-docs/Project-Management-Plan-Phase-3.md), [Stage-8-Implementation-Authorization-Notice-Phase-3.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md) |
+| Phase 3 | `PMP-BL-v3.0.0` | Complete (All Epics 013..017 implemented & verified; `358/358` Python tests pass, `31/31` IMPs delivered) | [OUTCOME-Phase-3-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-3-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-3.md](../project-docs/Intent-Refinement-Proposal-Phase-3.md) (`IR-PROP-MXC-Phase3-Closeout`) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
