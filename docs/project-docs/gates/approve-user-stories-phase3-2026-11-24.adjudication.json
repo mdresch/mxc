@@ -1,0 +1,129 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-user-stories",
+  "policy_id": "f864addc-593f-46b1-93e0-0720f6d18a6b",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human sponsor approved Phase 3 Stage 6 Epics 013-017 user stories.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_user_stories",
+    "description": "Epics 013-017 user stories are testable, spec_gate-verified, and traceable -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.817,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_user_stories",
+        "description": "Epics 013-017 user stories are testable, spec_gate-verified, and traceable -- approve",
+        "name": null
+      },
+      "expected_utility": 0.935,
+      "robust_utility": 0.927,
+      "criteria": {
+        "testable_ac": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "traceable_to_brd_fdd": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "suite_alignment": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        },
+        "not_forced_shape": {
+          "support": 0.935,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.927
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Epics 013-017 stories need AC refinements before approval",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.11,
+      "criteria": {
+        "testable_ac": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "traceable_to_brd_fdd": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "suite_alignment": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "not_forced_shape": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_user_stories",
+        "description": "Epics 013-017 stories lack testable acceptance criteria -- reject",
+        "name": null
+      },
+      "expected_utility": 0.04,
+      "robust_utility": 0.029,
+      "criteria": {
+        "testable_ac": {
+          "support": 0.04,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.029
+        },
+        "traceable_to_brd_fdd": {
+          "support": 0.04,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.029
+        },
+        "suite_alignment": {
+          "support": 0.04,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.029
+        },
+        "not_forced_shape": {
+          "support": 0.04,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.029
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-24T21:38:10.689675+00:00",
+  "artifacts": [
+    "docs/user-stories/epic-013..017"
+  ]
+}

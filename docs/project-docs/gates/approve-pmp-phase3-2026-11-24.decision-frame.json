@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 Project Management Plan (PMP-BL-v3.0.0): approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_pmp",
+        "description": "Project-Management-Plan-Phase-3.md integrates all subsidiary baselines coherently -- approve PMP-BL-v3.0.0",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_pmp",
+        "description": "Project-Management-Plan-Phase-3.md has unresolved baseline contradictions -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "Project-Management-Plan-Phase-3.md needs baseline refinement",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "adaptation_responsiveness",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source_id": "docs/project-docs/Project-Charter-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "subsidiary_plan_completeness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Project-Management-Plan-Phase-3.md integrates all 9 PMBOK 8 subsidiary plans (Scope, Schedule, Cost, Quality, Resource, Communications, Risk, Procurement, Stakeholder)."
+    },
+    {
+      "id": "baseline_coherence",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "WBS 14.0-18.0 aligns cleanly with Sprints 13-18 Waves 1-2 and carried USD 50,000 / $0 new external capital envelope."
+    },
+    {
+      "id": "adaptation_responsiveness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Directly incorporates all 21 remaining/queued Continuous Improvement Register entries (IMP-MXC-001..031)."
+    },
+    {
+      "id": "governance_traceability",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Full traceability from Spark-Capture-Phase-3 and Project-Charter-Phase-3 through ADR-014..018 and Epics 013-017."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0"
+  }
+}

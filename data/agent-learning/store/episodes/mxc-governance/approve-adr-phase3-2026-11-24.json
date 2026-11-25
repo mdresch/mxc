@@ -1,0 +1,19 @@
+{
+  "id": "approve-adr-phase3-2026-11-24",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_adr",
+  "task_id": "approve-adr",
+  "task_name": "Phase 3 Stage 5/6 PILLARS & ADR-014..018 Approval",
+  "policy_id": "0063adbf-5659-426d-950b-b2eaab87fb34",
+  "policy_version": 1,
+  "intent_summary": "Phase 3 approve-adr gate adjudication under PMP-BL-v3.0.0",
+  "user_input": "approve Phase 3 Stage 5/6 (approve-adr, approve-brd, approve-fdd, approve-user-stories), complete Stage 7 (Project-Management-Plan-Phase-3.md / approve-pmp for PMP-BL-v3.0.0) & Stage 8 Implementation Authorization",
+  "assistant_output": "Phase 3 PILLARS-Phase-3 and ADR-014..018 approved.",
+  "metadata": {
+    "phase": 3,
+    "pmp_baseline": "PMP-BL-v3.0.0",
+    "margin": 0.8121,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-24T21:38:10.674215+00:00"
+}

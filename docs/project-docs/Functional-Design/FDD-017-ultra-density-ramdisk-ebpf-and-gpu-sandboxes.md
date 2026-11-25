@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -11,7 +11,7 @@ inputs:
 process: "Specify density/NUMA planner, RAM-disk differencing controller, kernel TLS/neural forecaster, subsystem differential probe, and GPU-P sandbox interfaces"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-017: Ultra-Density Memory, RAM-Disk/DAX Differencing, Kernel TLS Probes & GPU-P Sandboxes
@@ -19,7 +19,7 @@ status: "Proposed"
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Source ADR:** [ADR-018](../../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | **Source BRD:** [BRD-017](../Business-Requirements/BRD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md)  
-> **Governing Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24)
 
 ---
 

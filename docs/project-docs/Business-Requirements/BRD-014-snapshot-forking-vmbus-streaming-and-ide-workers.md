@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -13,14 +13,14 @@ inputs:
 process: "Define business requirements for parallel snapshot branching, chunked VMBus streaming, BOM-tolerant CLI manifest handling, and IDE worker profiles"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # BRD-014: Parallel Snapshot Branching, Chunked VMBus Streaming, BOM-Tolerant CLI & IDE Workers
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-015](../../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | **Topic Pillar:** `TP-13` | **Status:** Proposed
+> **Source ADR:** [ADR-015](../../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | **Topic Pillar:** `TP-13` | **Status:** Approved (2026-11-24)
 
 ---
 

@@ -1,0 +1,19 @@
+{
+  "id": "approve-user-stories-phase3-2026-11-24",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_user_stories",
+  "task_id": "approve-user-stories",
+  "task_name": "Phase 3 Stage 6 Epics 013-017 User Stories Approval",
+  "policy_id": "f864addc-593f-46b1-93e0-0720f6d18a6b",
+  "policy_version": 1,
+  "intent_summary": "Phase 3 approve-user-stories gate adjudication under PMP-BL-v3.0.0",
+  "user_input": "approve Phase 3 Stage 5/6 (approve-adr, approve-brd, approve-fdd, approve-user-stories), complete Stage 7 (Project-Management-Plan-Phase-3.md / approve-pmp for PMP-BL-v3.0.0) & Stage 8 Implementation Authorization",
+  "assistant_output": "Phase 3 Epics 013-017 user stories approved.",
+  "metadata": {
+    "phase": 3,
+    "pmp_baseline": "PMP-BL-v3.0.0",
+    "margin": 0.817,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-24T21:38:10.690571+00:00"
+}

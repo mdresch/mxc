@@ -4,8 +4,8 @@ pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Architectural Strategy Formulation (Phase 3)"
 lifecycle_stage: "Stage 5 (Pillars & Architecture)"
 governance_policy: "approve-adr"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
-status: "Proposed"
+pmp_baseline: "PMP-BL-v3.0.0"
+status: "Approved"
 inputs:
   - "docs/project-docs/Project-Charter-Phase-3.md"
   - "docs/project-docs/Ideation-Document-Phase-3.md"
@@ -21,7 +21,7 @@ outputs:
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Architectural Strategy Formulation (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 5 (Pillars & Architecture)`  
-> **Governing Candidate Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed (`2026-11-24`)  
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24) (`2026-11-24`)  
 > **Inputs:** [Project-Charter-Phase-3.md](../project-docs/Project-Charter-Phase-3.md), [Ideation-Document-Phase-3.md](../project-docs/Ideation-Document-Phase-3.md), [Business-Case-Phase-3.md](../project-docs/Business-Case-Phase-3.md), [Benefits-Statement-Phase-3.md](../project-docs/Benefits-Statement-Phase-3.md), [Continuous-Improvement-Register.md](../registers/Continuous-Improvement-Register.md)  
 > **Outputs:** PILLARS-Phase-3.md, Full-Traceability Architecture Matrix (Phase 3)
 
@@ -84,11 +84,11 @@ Phase 3 structures the **21 remaining open and partially delivered improvements*
 
 | Pillar | ADR | BRD | FDD | Epic | WBS | Target Status |
 |---|---|---|---|---|:---:|---|
-| **`TP-12`** | [ADR-014](ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | [BRD-013](../project-docs/Business-Requirements/BRD-013-zero-secret-sidecar-and-mcp-firewall.md) | [FDD-013](../project-docs/Functional-Design/FDD-013-zero-secret-sidecar-and-mcp-firewall.md) | [Epic 013](../user-stories/epic-013-zero-secret-sidecar-and-mcp-firewall.md) | 14.0 | Proposed (Ready for Gate Approval) |
-| **`TP-13`** | [ADR-015](ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [BRD-014](../project-docs/Business-Requirements/BRD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [FDD-014](../project-docs/Functional-Design/FDD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [Epic 014](../user-stories/epic-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | 15.0 | Proposed (Ready for Gate Approval) |
-| **`TP-14`** | [ADR-016](ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | [BRD-015](../project-docs/Business-Requirements/BRD-015-eu-evidence-ledger-and-confidential-attestation.md) | [FDD-015](../project-docs/Functional-Design/FDD-015-eu-evidence-ledger-and-confidential-attestation.md) | [Epic 015](../user-stories/epic-015-eu-evidence-ledger-and-confidential-attestation.md) | 16.0 | Proposed (Ready for Gate Approval) |
-| **`TP-15`** | [ADR-017](ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | [BRD-016](../project-docs/Business-Requirements/BRD-016-mxc-embed-sovereign-appliance-and-image-factory.md) | [FDD-016](../project-docs/Functional-Design/FDD-016-mxc-embed-sovereign-appliance-and-image-factory.md) | [Epic 016](../user-stories/epic-016-mxc-embed-sovereign-appliance-and-image-factory.md) | 17.0 | Proposed (Ready for Gate Approval) |
-| **`TP-16`** | [ADR-018](ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [BRD-017](../project-docs/Business-Requirements/BRD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [FDD-017](../project-docs/Functional-Design/FDD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [Epic 017](../user-stories/epic-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | 18.0 | Proposed (Ready for Gate Approval) |
+| **`TP-12`** | [ADR-014](ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | [BRD-013](../project-docs/Business-Requirements/BRD-013-zero-secret-sidecar-and-mcp-firewall.md) | [FDD-013](../project-docs/Functional-Design/FDD-013-zero-secret-sidecar-and-mcp-firewall.md) | [Epic 013](../user-stories/epic-013-zero-secret-sidecar-and-mcp-firewall.md) | 14.0 | Approved — Ready for Implementation |
+| **`TP-13`** | [ADR-015](ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [BRD-014](../project-docs/Business-Requirements/BRD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [FDD-014](../project-docs/Functional-Design/FDD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | [Epic 014](../user-stories/epic-014-snapshot-forking-vmbus-streaming-and-ide-workers.md) | 15.0 | Approved — Ready for Implementation |
+| **`TP-14`** | [ADR-016](ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | [BRD-015](../project-docs/Business-Requirements/BRD-015-eu-evidence-ledger-and-confidential-attestation.md) | [FDD-015](../project-docs/Functional-Design/FDD-015-eu-evidence-ledger-and-confidential-attestation.md) | [Epic 015](../user-stories/epic-015-eu-evidence-ledger-and-confidential-attestation.md) | 16.0 | Approved — Ready for Implementation |
+| **`TP-15`** | [ADR-017](ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | [BRD-016](../project-docs/Business-Requirements/BRD-016-mxc-embed-sovereign-appliance-and-image-factory.md) | [FDD-016](../project-docs/Functional-Design/FDD-016-mxc-embed-sovereign-appliance-and-image-factory.md) | [Epic 016](../user-stories/epic-016-mxc-embed-sovereign-appliance-and-image-factory.md) | 17.0 | Approved — Ready for Implementation |
+| **`TP-16`** | [ADR-018](ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [BRD-017](../project-docs/Business-Requirements/BRD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [FDD-017](../project-docs/Functional-Design/FDD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | [Epic 017](../user-stories/epic-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | 18.0 | Approved — Ready for Implementation |
 
 ---
 

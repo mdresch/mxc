@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -11,7 +11,7 @@ inputs:
 process: "Specify zero-secret git bundle sync, outbound credential-injecting sidecar proxy, and protocol-aware MCP JSON-RPC firewall interfaces"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-013-zero-secret-sidecar-and-mcp-firewall.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-013: Zero-Secret Guest Git Sync, Credential-Injecting Sidecar Proxy & MCP Firewall
@@ -19,7 +19,7 @@ status: "Proposed"
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Source ADR:** [ADR-014](../../07-architecture/ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | **Source BRD:** [BRD-013](../Business-Requirements/BRD-013-zero-secret-sidecar-and-mcp-firewall.md)  
-> **Governing Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24)
 
 ---
 

@@ -1,0 +1,122 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-fdd",
+  "policy_id": "ada1bc73-753a-450b-b640-6b6fedd5493c",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "approve_fdd",
+    "description": "FDD-013..017 specify testable module contracts and explicit error codes -- approve",
+    "name": null
+  },
+  "decision_margin": 0.7961,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_fdd",
+        "description": "FDD-013..017 specify testable module contracts and explicit error codes -- approve",
+        "name": null
+      },
+      "expected_utility": 0.9201,
+      "robust_utility": 0.9111,
+      "criteria": {
+        "traceable_to_brd_adr": {
+          "support": 0.9201,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9111
+        },
+        "grounded_in_suite": {
+          "support": 0.9201,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9111
+        },
+        "code_shaped_honesty": {
+          "support": 0.9201,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9111
+        },
+        "out_of_scope_accurate": {
+          "support": 0.9201,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.9111
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "FDD-013..017 need interface adjustments before approval",
+        "name": null
+      },
+      "expected_utility": 0.13,
+      "robust_utility": 0.115,
+      "criteria": {
+        "traceable_to_brd_adr": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        },
+        "grounded_in_suite": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        },
+        "code_shaped_honesty": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        },
+        "out_of_scope_accurate": {
+          "support": 0.13,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.115
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_fdd",
+        "description": "FDD-013..017 fail traceability or contain ungrounded claims -- reject",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.038,
+      "criteria": {
+        "traceable_to_brd_adr": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "grounded_in_suite": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "code_shaped_honesty": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "out_of_scope_accurate": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        }
+      }
+    }
+  ]
+}

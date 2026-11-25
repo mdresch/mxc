@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 PILLARS-Phase-3 (TP-12..TP-16) & ADR-014..018: approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "The Phase 3 Topic Pillars and ADRs (ADR-014..018) are architecturally sound and consistent -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.92,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.92,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "The Phase 3 ADRs have a fundamental unfixed flaw -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.05,
+          "confidence": 0.88
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 ADRs require revision before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "architectural_soundness",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.12,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "adr_consistency",
+          "source_id": "docs/07-architecture/ADR-014..018",
+          "support": 0.13,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "PILLARS-Phase-3 (TP-12..TP-16) and ADR-014..018 specify sound boundaries across zero-secret sidecar, snapshot forking, EU ledger/TEE, MXC Embed, and ultra-density GPU-P."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each ADR (ADR-014..018) names concrete rejected alternatives and hardware/airgap constraints."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Each ADR states latency, nesting-depth, DRAM/NVMe trade-offs, and hardware fallback mitigations honestly."
+    },
+    {
+      "id": "adr_consistency",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Preserves all Phase 1-2 immutable invariants (ADR-001..013)."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0"
+  }
+}

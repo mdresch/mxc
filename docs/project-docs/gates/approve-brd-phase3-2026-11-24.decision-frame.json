@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 BRD-013..017: approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_brd",
+        "description": "BRD-013..017 define concrete, traceable business rules across all 21 improvements -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.92,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_brd",
+        "description": "BRD-013..017 fail traceability or contain contradictions -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.05,
+          "confidence": 0.87
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "BRD-013..017 need refinement before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "traceable_to_adr",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source_id": "docs/07-architecture/PILLARS-Phase-3.md",
+          "support": 0.14,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "traceable_to_adr",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "BRD-013..017 trace directly to ADR-014..018 and TP-12..TP-16."
+    },
+    {
+      "id": "honest_metrics",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Thresholds match formulated hypotheses HYP-mxc-023..030, 019, 021 cleanly."
+    },
+    {
+      "id": "out_of_scope_accurate",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Respects Charter exclusions and Phase 1-2 baseline boundaries."
+    },
+    {
+      "id": "rules_actionable",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "BRU-013..017 rules specify concrete fail-closed error codes and latency/density ceilings."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0"
+  }
+}

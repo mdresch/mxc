@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -13,14 +13,14 @@ inputs:
 process: "Define business requirements for reproducible ISO-to-Lean image CI factory, turnkey zero-cloud MXC Embed installer, and gated 5-Act HIL release check"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-016-mxc-embed-sovereign-appliance-and-image-factory.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # BRD-016: Turnkey "MXC Embed" Sovereign Appliance & Reproducible ISO-to-Lean Factory
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-017](../../07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | **Topic Pillar:** `TP-15` | **Status:** Proposed
+> **Source ADR:** [ADR-017](../../07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | **Topic Pillar:** `TP-15` | **Status:** Approved (2026-11-24)
 
 ---
 

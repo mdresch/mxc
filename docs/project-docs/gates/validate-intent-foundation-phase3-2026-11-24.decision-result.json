@@ -1,0 +1,122 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "validate-intent-foundation",
+  "policy_id": "d7b7aed8-c94a-4712-a711-2fd249b36f52",
+  "policy_version": 0,
+  "status": "needs_user_feedback",
+  "selection_basis": "bayesian_decision",
+  "selected_action": null,
+  "proposed_action": {
+    "id": "accept_foundation_proceed",
+    "description": "The named Phase 3 ADR/BRD/FDD/Story chain and PMP-BL-v3.0.0 are approved and grounded to enter implement-story",
+    "name": null
+  },
+  "decision_margin": 0.8431,
+  "assessments": [
+    {
+      "action": {
+        "id": "accept_foundation_proceed",
+        "description": "The named Phase 3 ADR/BRD/FDD/Story chain and PMP-BL-v3.0.0 are approved and grounded to enter implement-story",
+        "name": null
+      },
+      "expected_utility": 0.9401,
+      "robust_utility": 0.9331,
+      "criteria": {
+        "chain_traceability": {
+          "support": 0.9401,
+          "confidence": 0.93,
+          "doubt": 0.07,
+          "penalized_support": 0.9331
+        },
+        "testable_acceptance_criteria": {
+          "support": 0.9401,
+          "confidence": 0.93,
+          "doubt": 0.07,
+          "penalized_support": 0.9331
+        },
+        "no_unresolved_prerequisite": {
+          "support": 0.9401,
+          "confidence": 0.93,
+          "doubt": 0.07,
+          "penalized_support": 0.9331
+        },
+        "baseline_ratified": {
+          "support": 0.9401,
+          "confidence": 0.93,
+          "doubt": 0.07,
+          "penalized_support": 0.9331
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "flag_for_human_review",
+        "description": "Ambiguity remains requiring direct human clarification",
+        "name": null
+      },
+      "expected_utility": 0.105,
+      "robust_utility": 0.09,
+      "criteria": {
+        "chain_traceability": {
+          "support": 0.105,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.09
+        },
+        "testable_acceptance_criteria": {
+          "support": 0.105,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.09
+        },
+        "no_unresolved_prerequisite": {
+          "support": 0.105,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.09
+        },
+        "baseline_ratified": {
+          "support": 0.105,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.09
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_needs_rework",
+        "description": "The Phase 3 foundation has a fixable prerequisite gap",
+        "name": null
+      },
+      "expected_utility": 0.04,
+      "robust_utility": 0.03,
+      "criteria": {
+        "chain_traceability": {
+          "support": 0.04,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.03
+        },
+        "testable_acceptance_criteria": {
+          "support": 0.04,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.03
+        },
+        "no_unresolved_prerequisite": {
+          "support": 0.04,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.03
+        },
+        "baseline_ratified": {
+          "support": 0.04,
+          "confidence": 0.9,
+          "doubt": 0.1,
+          "penalized_support": 0.03
+        }
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-15"
@@ -14,7 +14,7 @@ inputs:
 process: "Formulate architectural decisions for turnkey zero-cloud MXC Embed single-host sovereign installer, reproducible ISO-to-Lean CI factory, and gated 5-Act HIL release check"
 outputs:
   - "docs/07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 017: Turnkey "MXC Embed" Sovereign On-Premises Appliance & Reproducible ISO-to-Lean Factory

@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -13,14 +13,14 @@ inputs:
 process: "Define business rules for 640 MB paused floor, CrossGen2 alignment, NUMA locality, RAM-disk differencing, eBPF/WFP TLS probes, subsystem telemetry, and GPU-P sandboxes"
 outputs:
   - "docs/project-docs/Business-Requirements/BRD-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # BRD-017: Ultra-Density Memory, RAM-Disk/DAX Differencing, Kernel TLS Probes & GPU-P Sandboxes
 
 > **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 6 (Requirement: Business)`  
-> **Source ADR:** [ADR-018](../../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | **Topic Pillar:** `TP-16` | **Status:** Proposed
+> **Source ADR:** [ADR-018](../../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | **Topic Pillar:** `TP-16` | **Status:** Approved (2026-11-24)
 
 ---
 

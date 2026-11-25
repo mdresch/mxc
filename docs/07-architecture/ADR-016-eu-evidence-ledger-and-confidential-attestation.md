@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-14"
@@ -15,7 +15,7 @@ inputs:
 process: "Formulate architectural decisions for append-only EU AI Act/DORA/NIS2 evidence ledger, Entra Conditional Access lease hooks, Hit-L freeze-and-rollback circuit breaker, and vTPM/SEV-SNP/TDX attestation"
 outputs:
   - "docs/07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 016: Unified EU Regulatory Evidence Ledger, Hit-L Kill Switch, Entra Conditional Access & Confidential Enclave Attestation

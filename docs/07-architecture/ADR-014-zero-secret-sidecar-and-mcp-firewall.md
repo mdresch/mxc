@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-12"
@@ -14,7 +14,7 @@ inputs:
 process: "Formulate architectural decisions for host-side mxc-sync git bundles, outbound credential-injecting sidecar proxy, and protocol-aware MCP firewall over VMBus"
 outputs:
   - "docs/07-architecture/ADR-014-zero-secret-sidecar-and-mcp-firewall.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 014: Zero-Secret Guest Git Sync, Credential-Injecting Sidecar Proxy & Protocol-Aware MCP Firewall

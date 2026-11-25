@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -11,7 +11,7 @@ inputs:
 process: "Specify SHA-256 hash-chained EvidenceLedger, Entra Conditional Access evaluator, FreezeRollbackCircuitBreaker, and ConfidentialEnclaveAttestor interfaces"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-015-eu-evidence-ledger-and-confidential-attestation.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-015: Unified EU Regulatory Evidence Ledger, Kill Switch & Confidential Enclave Attestation
@@ -19,7 +19,7 @@ status: "Proposed"
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Source ADR:** [ADR-016](../../07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | **Source BRD:** [BRD-015](../Business-Requirements/BRD-015-eu-evidence-ledger-and-confidential-attestation.md)  
-> **Governing Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24)
 
 ---
 

@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 Stage 8 Readiness (AUTH-NOTICE-MXC-Phase3-001): accept foundation and authorize Sprint 13 execution",
+  "options": [
+    {
+      "action": {
+        "id": "accept_foundation_proceed",
+        "description": "The named Phase 3 ADR/BRD/FDD/Story chain and PMP-BL-v3.0.0 are approved and grounded to enter implement-story",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.93,
+          "confidence": 0.92
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_needs_rework",
+        "description": "The Phase 3 foundation has a fixable prerequisite gap",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.04,
+          "confidence": 0.89
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "flag_for_human_review",
+        "description": "Ambiguity remains requiring direct human clarification",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.1,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "chain_traceability",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.1,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.1,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "no_unresolved_prerequisite",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md",
+          "support": 0.1,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "baseline_ratified",
+          "source_id": "docs/project-docs/Project-Management-Plan-Phase-3.md",
+          "support": 0.11,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "chain_traceability",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Full Stages 1-7 chain verified across Spark, Ideation, Business Case, Benefits, Charter, PILLARS-Phase-3, ADRs, BRDs, FDDs, Epics, and PMP-BL-v3.0.0."
+    },
+    {
+      "id": "testable_acceptance_criteria",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "All 12 stories passed scripts/spec_gate.py --no-persist with positive margins."
+    },
+    {
+      "id": "no_unresolved_prerequisite",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Phase 2 Epics 007-012 complete (204 Python contracts passing) and live Hyper-V host verified."
+    },
+    {
+      "id": "baseline_ratified",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "PMP-BL-v3.0.0 and Stage-8-Implementation-Authorization-Notice-Phase-3.md formally issued."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 ---
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
@@ -11,7 +11,7 @@ inputs:
 process: "Specify snapshot-fork manager, chunked binary VMBus streamer, BOM-tolerant manifest parser, and IDE worker profile validator"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-014: Parallel Snapshot Branching, Chunked VMBus Streaming, BOM-Tolerant CLI & IDE Workers
@@ -19,7 +19,7 @@ status: "Proposed"
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Source ADR:** [ADR-015](../../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | **Source BRD:** [BRD-014](../Business-Requirements/BRD-014-snapshot-forking-vmbus-streaming-and-ide-workers.md)  
-> **Governing Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24)
 
 ---
 

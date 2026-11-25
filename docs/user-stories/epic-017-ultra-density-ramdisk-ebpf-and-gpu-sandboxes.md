@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -12,7 +12,7 @@ inputs:
 process: "Decompose ultra-density memory floor, CrossGen2 normalization, NUMA pinning, RAM-disk/DAX differencing, kernel TLS probes, subsystem telemetry, and GPU-P sandboxes into testable user stories"
 outputs:
   - "docs/user-stories/epic-017-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 017: Ultra-Density Memory, RAM-Disk/DAX Differencing, Kernel TLS Probes & GPU-P Sandboxes
@@ -20,7 +20,7 @@ status: "Proposed — Ready for Gate Approval"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-018](../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | **WBS:** `18.0` | **Topic Pillar:** `TP-16`  
-> **Status:** Proposed — Ready for Gate Approval (`IMP-MXC-001`, `005`, `006`, `012`, `014`, `015`, `016`, `029` + `HYP-mxc-019`, `021`)
+> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-001`, `005`, `006`, `012`, `014`, `015`, `016`, `029` + `HYP-mxc-019`, `021`)
 
 ---
 

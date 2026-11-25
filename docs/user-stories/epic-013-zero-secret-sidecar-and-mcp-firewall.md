@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -12,7 +12,7 @@ inputs:
 process: "Decompose Zero-Secret Git Sync, Credential Sidecar Proxy, and Protocol-Aware MCP Firewall into testable user stories"
 outputs:
   - "docs/user-stories/epic-013-zero-secret-sidecar-and-mcp-firewall.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 013: Zero-Secret Guest Git Sync, Credential-Injecting Sidecar Proxy & MCP Firewall
@@ -20,7 +20,7 @@ status: "Proposed — Ready for Gate Approval"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-014](../07-architecture/ADR-014-zero-secret-sidecar-and-mcp-firewall.md) | **WBS:** `14.0` | **Topic Pillar:** `TP-12`  
-> **Status:** Proposed — Ready for Gate Approval (`IMP-MXC-017`, `024`, `026`)
+> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-017`, `024`, `026`)
 
 ---
 

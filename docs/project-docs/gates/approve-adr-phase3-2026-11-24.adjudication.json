@@ -1,0 +1,130 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-adr",
+  "policy_id": "0063adbf-5659-426d-950b-b2eaab87fb34",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human sponsor approved Phase 3 Stage 5/6 Pillars and ADR-014..018.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_adr",
+    "description": "The Phase 3 Topic Pillars and ADRs (ADR-014..018) are architecturally sound and consistent -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.8121,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_adr",
+        "description": "The Phase 3 Topic Pillars and ADRs (ADR-014..018) are architecturally sound and consistent -- approve",
+        "name": null
+      },
+      "expected_utility": 0.9301,
+      "robust_utility": 0.9221,
+      "criteria": {
+        "architectural_soundness": {
+          "support": 0.9301,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9221
+        },
+        "alternatives_considered": {
+          "support": 0.9301,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9221
+        },
+        "consequences_honest": {
+          "support": 0.9301,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9221
+        },
+        "adr_consistency": {
+          "support": 0.9301,
+          "confidence": 0.92,
+          "doubt": 0.08,
+          "penalized_support": 0.9221
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "The Phase 3 ADRs require revision before approval",
+        "name": null
+      },
+      "expected_utility": 0.125,
+      "robust_utility": 0.11,
+      "criteria": {
+        "architectural_soundness": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "alternatives_considered": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "consequences_honest": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        },
+        "adr_consistency": {
+          "support": 0.125,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.11
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_adr",
+        "description": "The Phase 3 ADRs have a fundamental unfixed flaw -- reject",
+        "name": null
+      },
+      "expected_utility": 0.045,
+      "robust_utility": 0.034,
+      "criteria": {
+        "architectural_soundness": {
+          "support": 0.045,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.034
+        },
+        "alternatives_considered": {
+          "support": 0.045,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.034
+        },
+        "consequences_honest": {
+          "support": 0.045,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.034
+        },
+        "adr_consistency": {
+          "support": 0.045,
+          "confidence": 0.89,
+          "doubt": 0.11,
+          "penalized_support": 0.034
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-24T21:38:10.673349+00:00",
+  "artifacts": [
+    "docs/07-architecture/PILLARS-Phase-3.md",
+    "docs/07-architecture/ADR-014..018"
+  ]
+}

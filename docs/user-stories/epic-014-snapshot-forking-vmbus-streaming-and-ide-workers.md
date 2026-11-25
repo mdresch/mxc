@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -12,7 +12,7 @@ inputs:
 process: "Decompose parallel snapshot forking, chunked VMBus streaming, BOM-tolerant CLI parsing, and IDE worker profiles into testable user stories"
 outputs:
   - "docs/user-stories/epic-014-snapshot-forking-vmbus-streaming-and-ide-workers.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 014: Parallel Snapshot Branching, Chunked VMBus Streaming, BOM-Tolerant CLI & IDE Workers
@@ -20,7 +20,7 @@ status: "Proposed — Ready for Gate Approval"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-015](../07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md) | **WBS:** `15.0` | **Topic Pillar:** `TP-13`  
-> **Status:** Proposed — Ready for Gate Approval (`IMP-MXC-019`, `021`, `022`, `027`)
+> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-019`, `021`, `022`, `027`)
 
 ---
 

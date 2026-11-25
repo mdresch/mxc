@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 5 & Stage 6 Drafted |
-| **Current PMP Baseline** | `PMP-BL-v2.0.0` (Closed) $\rightarrow$ `PMP-BL-v3.0.0-candidate` |
-| **Session close-off checkpoint** | Phase 3 Stages 1–4 Approved; Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 (`ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017`, 12/12 stories `spec_gate --no-persist` PASSED) Drafted across all 21 improvements |
-| **Current macro Stage** | Stage 5 & Stage 6 Drafted (Proposed) $\rightarrow$ Awaiting Stage 5/6 Gate Approvals (`approve-adr`, `approve-brd`, `approve-fdd`, `approve-user-stories`) & Stage 7 (`PMP`) |
-| **Last Epic/unit of work fully completed** | Phase 3 Stage 5 (`PILLARS-Phase-3.md`) & Stage 6 Suites (`Epics 013–017` Drafted & `spec_gate` Verified) |
-| **Next Epic/unit of work to implement** | Approve Phase 3 Stage 5/6 (`ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017`), complete Stage 7 (`Project-Management-Plan-Phase-3.md` / `approve-pmp`), and authorize Stage 8 execution |
-| **Last commit on the base branch** | `4b55b05a` (Phase 3 Stage 2 & Stage 4 Charter/Business Case/Benefits gates) |
+| **Current Phase** | Phase 3 (Sovereign Zero-Secret Agentic Execution Fabric & EU Regulated Appliance) — Stage 8 Implementation Authorized |
+| **Current PMP Baseline** | `PMP-BL-v3.0.0` |
+| **Session close-off checkpoint** | Phase 3 Stages 1–8 Approved & Ratified under `PMP-BL-v3.0.0` (`AUTH-NOTICE-MXC-Phase3-001`); Epics 013–017 Ready for Execution |
+| **Current macro Stage** | Stage 8 Complete $\rightarrow$ Stage 9 / 10 (Execution & Verification: Phase 3 Sprints) |
+| **Last Epic/unit of work fully completed** | Phase 3 Stages 5–8 (Stage 5/6 Approvals, `PMP-BL-v3.0.0`, Stage 8 Implementation Authorization) |
+| **Next Epic/unit of work to implement** | Epic 013: Zero-Secret Guest Git Sync, Sidecar Proxy & MCP Firewall (`Story 13.1`, WBS 14.1, TP-12) |
+| **Last commit on the base branch** | `cc96c4b3` (Phase 3 Stage 5/6 suites across all 21 improvements) |
 | **Open side-thread outside the formal loop** | None |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -57,7 +57,7 @@ caused this, both worth guarding against here:
 |---|---|---|---|
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
-| Phase 3 | `PMP-BL-v3.0.0-candidate` | Stage 5 & Stage 6 Drafted (`Proposed`, 12/12 `spec_gate` PASS) | [PILLARS-Phase-3.md](../07-architecture/PILLARS-Phase-3.md), `ADR-014..018`, `BRD-013..017`, `FDD-013..017`, `Epics 013–017` |
+| Phase 3 | `PMP-BL-v3.0.0` | Authorized for Execution (Stages 1–8 Approved 2026-11-24) | [Project-Management-Plan-Phase-3.md](../project-docs/Project-Management-Plan-Phase-3.md), [Stage-8-Implementation-Authorization-Notice-Phase-3.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-3.md) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
@@ -75,11 +75,11 @@ caused this, both worth guarding against here:
 | Epic 010 | Cryptographic image supply chain and SLSA attestation (`ADR-012`) | Phase 2 | Complete | Story 10.1, Story 10.2 (2/2) |
 | Epic 011 | Autonomous fleet economics and dynamic sizing scheduler (`ADR-013`) | Phase 2 | Complete | Story 11.1, Story 11.2 (2/2) |
 | Epic 012 | Authentication-gated provisioning and identity-bound leasing (`ADR-008`) | Phase 2 | Complete | Story 12.1, Story 12.2 (2/2) |
-| Epic 013 | Zero-secret guest git sync, sidecar proxy & MCP firewall (`ADR-014`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 13.1, 13.2 (0/2) |
-| Epic 014 | Parallel snapshot branching, chunked VMBus & IDE workers (`ADR-015`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 14.1, 14.2, 14.3 (0/3) |
-| Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 15.1, 15.2 (0/2) |
-| Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 16.1, 16.2 (0/2) |
-| Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Proposed — Ready for Gate Approval | Pending Stories 17.1, 17.2, 17.3 (0/3) |
+| Epic 013 | Zero-secret guest git sync, sidecar proxy & MCP firewall (`ADR-014`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 13.1, 13.2 (0/2) |
+| Epic 014 | Parallel snapshot branching, chunked VMBus & IDE workers (`ADR-015`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 14.1, 14.2, 14.3 (0/3) |
+| Epic 015 | Unified EU evidence ledger, kill switch & enclave attestation (`ADR-016`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 15.1, 15.2 (0/2) |
+| Epic 016 | Turnkey "MXC Embed" appliance & ISO-to-Lean CI factory (`ADR-017`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 16.1, 16.2 (0/2) |
+| Epic 017 | Ultra-density RAM-disk/DAX, eBPF TLS probes, telemetry & `GPU-P` (`ADR-018`) | Phase 3 | Approved — Ready for Implementation | Pending Stories 17.1, 17.2, 17.3 (0/3) |
 
 ## 4. How to keep this current
 

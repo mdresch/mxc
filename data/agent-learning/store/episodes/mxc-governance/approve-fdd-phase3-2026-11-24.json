@@ -1,0 +1,19 @@
+{
+  "id": "approve-fdd-phase3-2026-11-24",
+  "agent_id": "mxc-governance",
+  "action_id": "approve_fdd",
+  "task_id": "approve-fdd",
+  "task_name": "Phase 3 Stage 6 FDD-013..017 Approval",
+  "policy_id": "ada1bc73-753a-450b-b640-6b6fedd5493c",
+  "policy_version": 1,
+  "intent_summary": "Phase 3 approve-fdd gate adjudication under PMP-BL-v3.0.0",
+  "user_input": "approve Phase 3 Stage 5/6 (approve-adr, approve-brd, approve-fdd, approve-user-stories), complete Stage 7 (Project-Management-Plan-Phase-3.md / approve-pmp for PMP-BL-v3.0.0) & Stage 8 Implementation Authorization",
+  "assistant_output": "Phase 3 FDD-013..017 approved.",
+  "metadata": {
+    "phase": 3,
+    "pmp_baseline": "PMP-BL-v3.0.0",
+    "margin": 0.7961,
+    "feedback_status": "accepted"
+  },
+  "created_at": "2026-11-24T21:38:10.684669+00:00"
+}

@@ -1,0 +1,212 @@
+{
+  "task": "Phase 3 FDD-013..017: approve, reject, or request revision",
+  "options": [
+    {
+      "action": {
+        "id": "approve_fdd",
+        "description": "FDD-013..017 specify testable module contracts and explicit error codes -- approve",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.91,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.91,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "reject_fdd",
+        "description": "FDD-013..017 fail traceability or contain ungrounded claims -- reject",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.87
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.05,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.05,
+          "confidence": 0.87
+        }
+      ]
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "FDD-013..017 need interface adjustments before approval",
+        "name": null
+      },
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "grounded_in_suite",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "code_shaped_honesty",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Functional-Design/FDD-013..017",
+          "support": 0.13,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source_id": "docs/project-docs/Business-Requirements/BRD-013..017",
+          "support": 0.13,
+          "confidence": 0.84
+        }
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "FDD-013..017 implement BRD-013..017 rules and ADR-014..018 architecture."
+    },
+    {
+      "id": "grounded_in_suite",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Module interfaces under scripts/lib/ and error codes align with Phase 1-2 repository conventions."
+    },
+    {
+      "id": "code_shaped_honesty",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Hardware-specific SEV-SNP/TDX and GPU-P gates explicitly return unsupported codes rather than faking hardware."
+    },
+    {
+      "id": "out_of_scope_accurate",
+      "weight": 1.0,
+      "minimum_sources": 2,
+      "description": "Scope boundaries remain aligned with Charter and BRDs."
+    }
+  ],
+  "uncertainty_penalty": 0.1,
+  "minimum_margin": 0.05,
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "context": {
+    "phase": 3,
+    "spark_id": "SPARK-MXC-Phase3-v3.0.0",
+    "pmp_baseline": "PMP-BL-v3.0.0"
+  }
+}

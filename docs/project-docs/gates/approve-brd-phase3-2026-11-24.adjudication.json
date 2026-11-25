@@ -1,0 +1,129 @@
+{
+  "agent_id": "mxc-governance",
+  "task_id": "approve-brd",
+  "policy_id": "d72b24a8-0fb3-4735-aade-81ec7991c837",
+  "policy_version": 0,
+  "status": "resolved",
+  "reason": "Human sponsor approved Phase 3 Stage 6 BRD-013..017.",
+  "selection_basis": "bayesian_decision",
+  "selected_action": {
+    "id": "approve_brd",
+    "description": "BRD-013..017 define concrete, traceable business rules across all 21 improvements -- approve",
+    "name": null
+  },
+  "proposed_action": null,
+  "decision_margin": 0.796,
+  "assessments": [
+    {
+      "action": {
+        "id": "approve_brd",
+        "description": "BRD-013..017 define concrete, traceable business rules across all 21 improvements -- approve",
+        "name": null
+      },
+      "expected_utility": 0.925,
+      "robust_utility": 0.916,
+      "criteria": {
+        "traceable_to_adr": {
+          "support": 0.925,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.916
+        },
+        "honest_metrics": {
+          "support": 0.925,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.916
+        },
+        "out_of_scope_accurate": {
+          "support": 0.925,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.916
+        },
+        "rules_actionable": {
+          "support": 0.925,
+          "confidence": 0.91,
+          "doubt": 0.09,
+          "penalized_support": 0.916
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "request_revision_before_decision",
+        "description": "BRD-013..017 need refinement before approval",
+        "name": null
+      },
+      "expected_utility": 0.135,
+      "robust_utility": 0.12,
+      "criteria": {
+        "traceable_to_adr": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "honest_metrics": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "out_of_scope_accurate": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        },
+        "rules_actionable": {
+          "support": 0.135,
+          "confidence": 0.85,
+          "doubt": 0.15,
+          "penalized_support": 0.12
+        }
+      }
+    },
+    {
+      "action": {
+        "id": "reject_brd",
+        "description": "BRD-013..017 fail traceability or contain contradictions -- reject",
+        "name": null
+      },
+      "expected_utility": 0.05,
+      "robust_utility": 0.038,
+      "criteria": {
+        "traceable_to_adr": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "honest_metrics": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "out_of_scope_accurate": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        },
+        "rules_actionable": {
+          "support": 0.05,
+          "confidence": 0.88,
+          "doubt": 0.12,
+          "penalized_support": 0.038
+        }
+      }
+    }
+  ],
+  "authorization_basis": "user_acceptance",
+  "decision_authority": "full",
+  "adjudicated_at": "2026-11-24T21:38:10.678480+00:00",
+  "artifacts": [
+    "docs/project-docs/Business-Requirements/BRD-013..017"
+  ]
+}

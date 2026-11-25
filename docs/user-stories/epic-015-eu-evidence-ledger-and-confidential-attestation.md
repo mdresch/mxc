@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -12,7 +12,7 @@ inputs:
 process: "Decompose unified EU evidence ledger, Entra Conditional Access hook, Hit-L freeze-and-rollback kill switch, and vTPM/TEE attestation into testable user stories"
 outputs:
   - "docs/user-stories/epic-015-eu-evidence-ledger-and-confidential-attestation.md"
-status: "Proposed — Ready for Gate Approval"
+status: "Approved — Ready for Implementation"
 ---
 
 # Epic 015: Unified EU Regulatory Evidence Ledger, Kill Switch & Confidential Enclave Attestation
@@ -20,7 +20,7 @@ status: "Proposed — Ready for Gate Approval"
 > **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 6 (Requirement: Story)`  
 > **Source ADR:** [ADR-016](../07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | **WBS:** `16.0` | **Topic Pillar:** `TP-14`  
-> **Status:** Proposed — Ready for Gate Approval (`IMP-MXC-025`, `028`, `030`)
+> **Status:** Approved — Ready for Implementation (2026-11-24) (`IMP-MXC-025`, `028`, `030`)
 
 ---
 

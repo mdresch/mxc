@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -11,7 +11,7 @@ inputs:
 process: "Specify ISO-to-Lean CI factory manifest builder, zero-cloud MXC Embed installer validator, and 5-Act HIL release gate"
 outputs:
   - "docs/project-docs/Functional-Design/FDD-016-mxc-embed-sovereign-appliance-and-image-factory.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # FDD-016: Turnkey "MXC Embed" Sovereign Appliance & Reproducible ISO-to-Lean Factory
@@ -19,7 +19,7 @@ status: "Proposed"
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design (Phase 3)` (Planning)  
 > **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
 > **Source ADR:** [ADR-017](../../07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | **Source BRD:** [BRD-016](../Business-Requirements/BRD-016-mxc-embed-sovereign-appliance-and-image-factory.md)  
-> **Governing Baseline:** `PMP-BL-v3.0.0-candidate` | **Status:** Proposed
+> **Governing Baseline:** `PMP-BL-v3.0.0` | **Status:** Approved (2026-11-24)
 
 ---
 

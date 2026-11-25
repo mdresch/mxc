@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning (Phase 3)"
-pmp_baseline: "PMP-BL-v3.0.0-candidate"
+pmp_baseline: "PMP-BL-v3.0.0"
 lifecycle_stage: "Stage 6 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 topic_pillar: "TP-13"
@@ -14,7 +14,7 @@ inputs:
 process: "Formulate architectural decisions for nested .avhdx snapshot branching, chunked binary VMBus streaming, BOM-tolerant wxc-exec manifest parsing, and declarative IDE worker profiles"
 outputs:
   - "docs/07-architecture/ADR-015-snapshot-forking-vmbus-streaming-and-ide-workers.md"
-status: "Proposed"
+status: "Approved"
 ---
 
 # ADR 015: Parallel Snapshot Branching, Chunked VMBus Streaming, BOM-Tolerant CLI & IDE Workers
