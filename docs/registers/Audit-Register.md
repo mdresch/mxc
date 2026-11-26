@@ -25,10 +25,10 @@ outputs:
 
 | Field | Value |
 |---|---|
-| Version | 1.3 (Phases 1–3 Complete Baseline Conformance Audit) |
+| Version | 1.4 (Phases 1–4 Complete Baseline Conformance Audit) |
 | Date | 2026-11-25 |
-| Status | Complete — All Phase 1–3 ADRs (`ADR-001..006`, `ADR-008..018`) and Governance Exercises Verified |
-| Source | 358/358 Automated Python Contract & Governance Tests across Epics 001..017 |
+| Status | Complete — All Phase 1–4 ADRs (`ADR-001..006`, `ADR-008..022`) and Governance Exercises Verified |
+| Source | 460/460 Python Contract Tests + 18/18 Phase 4 Compiled Rust Tests across Epics 001..021 |
 
 Centralized, not scattered. Every real audit finding (an ADR's accuracy checked against actual code) and every real Governance Exercise (a real-world prerequisite or claim checked against production reality) lives here once, with a stable ID — other documents **reference** the ID rather than copying the finding into their own text.
 
@@ -55,6 +55,10 @@ This register is conceptually distinct from governance-type documents (the polic
 | `AUDIT-015` | [ADR-016](../07-architecture/ADR-016-eu-evidence-ledger-and-confidential-attestation.md) | `TP-14` | Tamper-evident EU Evidence Ledger (`>= 180d` retention), Entra Conditional Access gate, `<= 250 ms` freeze-and-rollback circuit breaker, and offline vTPM 2.0 / SEV-SNP / TDX attestation with O(1) cache verified (`scripts/lib/eu_evidence_and_enclave.py`). | `confirmed_accurate` | `Story 15.1`, `Story 15.2` |
 | `AUDIT-016` | [ADR-017](../07-architecture/ADR-017-mxc-embed-sovereign-appliance-and-image-factory.md) | `TP-15` | Reproducible ISO-to-Lean auto-registry builder, zero-cloud `<= 15m` MXC Embed preflight validator, and immutable parent 5-Act HIL release gate verified (`scripts/lib/mxc_embed_appliance.py`). | `confirmed_accurate` | `Story 16.1`, `Story 16.2` |
 | `AUDIT-017` | [ADR-018](../07-architecture/ADR-018-ultra-density-ramdisk-ebpf-and-gpu-sandboxes.md) | `TP-16` | 640 MB paused floor / CrossGen2 `< 350 MB` effective RAM / local NUMA pinning, RAM-disk/DAX overlay, kernel TLS safe pass-through, WMI/COM+/Services/GPO telemetry matrix, and `GPU-P` capability/SLA gate verified (`scripts/lib/frontier_density_and_gpu.py`). | `confirmed_accurate` | `Story 17.1`, `Story 17.2`, `Story 17.3` |
+| `AUDIT-018` | [ADR-019](../07-architecture/ADR-019-native-rust-wxc-exec-phase3-parity.md) | `TP-17` | Compiled Rust UTF-8 BOM manifest parsing, CLI override precedence, SHA-256 chunked VMBus framing, bounded `.avhdx` snapshot forking, and token-boundary secret scanning verified offline (`src/tools/wxc/src/phase3_parity.rs`, `10/10` Rust tests). | `confirmed_accurate` | `Story 18.1`, `Story 18.2` |
+| `AUDIT-019` | [ADR-020](../07-architecture/ADR-020-compiled-host-sidecar-mcp-and-eu-evidence-daemon.md) | `TP-18` | Compiled Rust host credential sidecar (`<= 5 ms`, `[REDACTED]`), deterministic MCP JSON-RPC firewall (`<= 2 ms`), `>= 180d` EU Evidence Ledger, and `<= 250 ms` freeze-and-rollback verified offline (`src/host/wxc_winhttp_proxy_shim/src/phase4_security_ledger.rs`, `8/8` Rust tests). | `confirmed_accurate` | `Story 19.1`, `Story 19.2` |
+| `AUDIT-020` | [ADR-021](../07-architecture/ADR-021-bare-metal-silicon-hil-verification-harness.md) | `TP-19` | Honest fail-closed silicon capability probing (`NO_FAKED_HARDWARE_PASS`), protected-VM exclusion (`Windows 11 Pro Dev`), parent SHA-256 invariance, and read-only PowerShell probe verified (`scripts/lib/silicon_hil_harness.py`, `scripts/hyperv/run_silicon_hil_probe.ps1`, `45/45` tests). | `confirmed_accurate` | `Story 20.1`, `Story 20.2` |
+| `AUDIT-021` | [ADR-022](../07-architecture/ADR-022-signed-offline-mxc-embed-pilot-installer.md) | `TP-20` | Deterministic offline pilot bundle manifest builder, constant-time SHA-256 verifier, zero-egress `<= 15m` preflight, and offline PowerShell installer verified (`scripts/lib/mxc_embed_packager.py`, `scripts/hyperv/install_mxc_embed.ps1`, `57/57` tests). | `confirmed_accurate` | `Story 21.1`, `Story 21.2` |
 
 **Verdict taxonomy** (matches `classify-audit-finding`'s real action set, once this project has evidence to build that policy — see "Governance Exercises" below for the parallel reasoning): `confirmed_accurate`, `confirmed_with_drift`, `partially_confirmed`, `contradicted`, `stale_superseded`, `unauditable`, `flag_for_human_review`.
 
@@ -67,6 +71,7 @@ A distinct sub-type from the ADR-accuracy audits above — these check a real-wo
 | `GOV-EX-001` | Phase 1 Integrated Acceptance & Verification Coverage (162/162 contract tests passing across 6 Epics, 0 regressions, lifecycle invariants verified). | `confirmed_accurate` | None |
 | `GOV-EX-002` | Phase 2 Integrated Acceptance & Verification Coverage (204/204 Python contracts + 83 Rust Hyper-V unit tests passing across Epics 007..012, live 9s Windows 11 Lean boot & 5-Act verification). | `confirmed_accurate` | None |
 | `GOV-EX-003` | Phase 3 Integrated Acceptance & Verification Coverage (358/358 Python tests passing across Epics 001..017, 12/12 Phase 3 `spec_gate.py` episodes passed, 5/5 Tier-2 skills citing `LL-014..018`, 31/31 Continuous Improvements Delivered, `validate_lifecycle.py` `Invariants: PASS`). | `confirmed_accurate` | None |
+| `GOV-EX-004` | Phase 4 Integrated Acceptance & Verification Coverage (460/460 Python tests + 18/18 Phase 4 compiled Rust offline tests passing across Epics 001..021, 8/8 Phase 4 `spec_gate.py` episodes passed, 4/4 Tier-2 skills citing `LL-019..022`, 2/2 PowerShell scripts `0` AST parse errors, `validate_lifecycle.py` `Invariants: PASS`). | `confirmed_accurate` | None |
 
 ## Building `classify-audit-finding` for this project
 

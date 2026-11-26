@@ -41,13 +41,13 @@ caused this, both worth guarding against here:
 
 | Field | Value |
 |---|---|
-| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Execution Complete (Epics 018–021)** |
+| **Current Phase** | Phase 4 (Native Rust `wxc-exec` Runtime Parity & Bare-Metal Silicon Productionization) — **Closed (Stage 17/18 Complete)** |
 | **Current PMP Baseline** | **`PMP-BL-v4.0.0`** |
-| **Session close-off checkpoint** | Phase 4 Epics 018–021 (`8/8` stories, `460/460` Python tests + `18/18` new Phase 4 Rust tests pass) Validated; Ready for Stage 17/18 Closeout |
-| **Current macro Stage** | Stage 10 Complete $\rightarrow$ Stage 17 / 18 (Phase 4 Actual Outcomes & Closeout) |
-| **Last Epic/unit of work fully completed** | Epics 018–021 4-Way Parallel Blitz (`8/8` stories across `TP-17..TP-20`; `460` Python + `18` Phase 4 Rust tests green) |
-| **Next Epic/unit of work to implement** | Phase 4 Stage 17/18 Closeout (`OUTCOME-Phase-4-Actual-Outcomes.md`, `Intent-Refinement-Proposal-Phase-4.md`, `Audit-Register.md` `AUDIT-018..021` / `GOV-EX-004`) |
-| **Last commit on the base branch** | `9b0136ab` (Phase 4 Stage 5–8 ratified baseline; Phase 4 execution commit pending) |
+| **Session close-off checkpoint** | Phase 4 Closed via `OUTCOME-Phase-4-Actual-Outcomes.md` & `IR-PROP-MXC-Phase4-Closeout` (`21/21` Epics, `460/460` Python + `18/18` Phase 4 Rust tests, `31/31` IMPs, `AUDIT-001..021` & `GOV-EX-001..004` confirmed accurate) |
+| **Current macro Stage** | Stage 18 Complete (Program Complete at `PMP-BL-v4.0.0` — Ready for Commercial Pilots / Live Server 2025 Silicon Runs) |
+| **Last Epic/unit of work fully completed** | Phase 4 Stage 17/18 Closeout (`OUTCOME-Phase-4-Actual-Outcomes.md`, `Intent-Refinement-Proposal-Phase-4.md`, `Audit-Register.md` `AUDIT-018..021` / `GOV-EX-004`) |
+| **Next Epic/unit of work to implement** | None (Program Complete at `PMP-BL-v4.0.0`; optional Server 2025 hardware pilot execution when target silicon is provisioned) |
+| **Last commit on the base branch** | `a2d45f99` (Phase 4 Epics 018–021 implementation; Stage 17/18 closeout commit pending) |
 | **Open side-thread outside the formal loop** | None (live Hyper-V agent sandbox `hv:930733af` / `mxc-hv-930733af` kept running untouched) |
 | **Stage-label overload caveat (if this project's docs exhibit it)** | Standard SIDPA convention: Stage 6 decomposes ADR/BRD/FDD/Stories, Stage 7 ratifies subsidiary plans & PMP, Stage 10 tracks execution. |
 
@@ -58,7 +58,7 @@ caused this, both worth guarding against here:
 | Phase 1 | `PMP-BL-v1.0.0` | Complete (All Epics 001..006 implemented & verified) | 162 contract tests pass; closed via `IR-PROP-MXC-Phase1-Closeout` |
 | Phase 2 | `PMP-BL-v2.0.0` | Complete (All Epics 007..012 implemented & verified) | 204 Python contracts + 83 Rust tests; closed via `IR-PROP-MXC-Phase2-Closeout` |
 | Phase 3 | `PMP-BL-v3.0.0` | Complete (All Epics 013..017 implemented & verified; `358/358` Python tests pass, `31/31` IMPs delivered) | [OUTCOME-Phase-3-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-3-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-3.md](../project-docs/Intent-Refinement-Proposal-Phase-3.md) (`IR-PROP-MXC-Phase3-Closeout`) |
-| Phase 4 | `PMP-BL-v4.0.0` | Execution Complete — Ready for Stage 17/18 Closeout (`460/460` Python + `18/18` new Phase 4 Rust tests pass) | [Project-Management-Plan-Phase-4.md](../project-docs/Project-Management-Plan-Phase-4.md), [Stage-8-Implementation-Authorization-Notice-Phase-4.md](../project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice-Phase-4.md) |
+| Phase 4 | `PMP-BL-v4.0.0` | Complete (All Epics 018..021 implemented & verified; `460/460` Python + `18/18` Phase 4 Rust tests pass) | [OUTCOME-Phase-4-Actual-Outcomes.md](../project-docs/OUTCOME-Phase-4-Actual-Outcomes.md), [Intent-Refinement-Proposal-Phase-4.md](../project-docs/Intent-Refinement-Proposal-Phase-4.md) (`IR-PROP-MXC-Phase4-Closeout`) |
 
 ## 3. Epic/Unit-of-Work Status (all phases)
 
